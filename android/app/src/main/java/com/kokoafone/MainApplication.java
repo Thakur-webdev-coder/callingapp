@@ -1,4 +1,4 @@
-package com.froggy;
+package com.kokoafone;
 
 import android.app.Application;
 import com.facebook.react.PackageList;
@@ -10,7 +10,6 @@ import com.facebook.react.defaults.DefaultReactNativeHost;
 import com.facebook.soloader.SoLoader;
 import java.util.List;
 import com.BV.LinearGradient.LinearGradientPackage;
-import com.reactnativecommunity.webview.RNCWebViewPackage;
 
 
 public class MainApplication extends Application implements ReactApplication {
