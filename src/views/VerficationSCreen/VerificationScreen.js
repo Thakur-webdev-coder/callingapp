@@ -10,6 +10,12 @@ import colors from "../../../assets/colors";
 import { hitEncryptionApi, hitSendOtpApi } from "../../constants/APi";
 import { isValidPhoneNumber, parsePhoneNumber } from "libphonenumber-js";
 import * as RNLocalize from "react-native-localize";
+import CustomImage from "../../components/CustomImage";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
+import { ic_app_logo } from "../../routes/imageRoutes";
 
 let phoneEncryptedCode = null;
 let countryEncryptedCode = null;
@@ -19,8 +25,6 @@ const VerificationScreen = ({ navigation }) => {
   const [countryCode, setcountryCode] = useState("");
 
   console.log("phpne", phoneInput);
-
-  
 
   const hitCountryEncryptionApi = async () => {
     if (isValidPhoneNumber(phoneInput)) {
@@ -66,23 +70,22 @@ const VerificationScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={AppStyle.wrapper}>
-      <View style={AppStyle.secondWrapper}>
-        <CustomText
-          text={"VERIFY YOUR NUMBER"}
-          textSize={20}
-          marginTop={140}
-          fontWeight={"bold"}
-          textColor={colors.white}
-          alignText={"center"}
+    <SafeAreaView style={styles.wrapper}>
+      <View style={{ flex: 1 }}>
+        <CustomImage
+          alignSelf={"center"}
+          marginTop={wp(20)}
+          imgSrc={ic_app_logo}
         />
+      </View>
+      <View style={styles.wrapper2}>
         <CustomText
-          text={"Kindly provide your phone number to verify your account."}
-          textAlign={"center"}
-          horzontalPadding={30}
-          marginTop={10}
+          text={"Enter Phone Number to Login or Signup"}
           textColor={colors.white}
+          textSize={20}
+          fontWeight={"bold"}
           alignText={"center"}
+          marginTop={hp(8)}
         />
 
         <ReactNativePhoneInput
@@ -99,18 +102,12 @@ const VerificationScreen = ({ navigation }) => {
         />
 
         <CustomButton
-          title={"Next"}
+          title={"Continue"}
           primary
-          horzontalPadding={40}
-          marginTop={80}
-          onPress={() => hitCountryEncryptionApi()}
-        />
-
-        <CustomText
-          text={"Click “Next” to get OTP"}
-          marginTop={5}
-          textColor={colors.white}
-          alignText={"center"}
+          horzontalPadding={wp(15)}
+          marginTop={hp(8)}
+          // onPress={() => hitCountryEncryptionApi()}
+          onPress={() => navigation.navigate(OTP_SCREEN)}
         />
       </View>
     </SafeAreaView>
