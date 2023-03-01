@@ -33,7 +33,7 @@ const BoardingScreen = ({navigation}) => {
           imgSrc={require("../../../assets/images/logo.png")}
         />
         <CustomButton
-          onPress={() => navigation.navigate(VERIFY_SCREEN)}
+          onPress={() => navigation.navigate('Login')}
           primary
           title={"Get Started!"}
           horzontalPadding={10}

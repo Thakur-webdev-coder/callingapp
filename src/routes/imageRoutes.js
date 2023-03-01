@@ -45,3 +45,4 @@ export const ic_location = require("../../assets/images/location.png");
 export const ic_star = require("../../assets/images/star.png");
 export const ic_logo_medium = require("../../assets/images/logo_medium.png");
 export const ic_CallingBg = require("../../assets/images/callingBackground.png");
+export const ic_app_logo = require("../../assets/images/appLogo.png");
