@@ -8,7 +8,7 @@ export default StyleSheet.create({
     },
     wrapper2: {
         backgroundColor: colors.secondary,
-        flex: 1.2,
+        flex: 1,
         borderTopLeftRadius: 50
     }
 });
