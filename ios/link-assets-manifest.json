@@ -1,0 +1,21 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Futura Bold font.ttf",
+      "sha1": "68fab471b5d366f87ade01b7f6c810d3a078a298"
+    },
+    {
+      "path": "assets/fonts/Futura Light font.ttf",
+      "sha1": "58fa3b9c7a828c600e15b1a86dd70f6ac8c76bfe"
+    },
+    {
+      "path": "assets/fonts/futur.ttf",
+      "sha1": "77aab0b78e5f9b3d89df070cfb763fb17606fa7e"
+    },
+    {
+      "path": "assets/fonts/futura medium bt.ttf",
+      "sha1": "738e0588a2b321c45c7eeca39f87e78a263b1d82"
+    }
+  ]
+}
