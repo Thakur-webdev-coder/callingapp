@@ -12,6 +12,7 @@ import OtpScreen from "../views/OtpScreen/OtpScreen";
 import { useSelector } from "react-redux";
 import WebViewScreen from "../views/webView";
 import Loading from "react-native-whc-loading";
+import Login from "../views/LoginSignupScreen/Login";
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +35,7 @@ const RootNavigation = () => {
     >
       <Stack.Screen name="StackNavigator" component={StackNavigator} />
       <Stack.Screen name={BOARDING_SCREEN} component={BoardingScreen} />
+      <Stack.Screen name={"Login"} component={Login} />
       <Stack.Screen name={VERIFY_SCREEN} component={VerificationScreen} />
       <Stack.Screen name={OTP_SCREEN} component={OtpScreen} />
       <Stack.Screen name={"WebViewScreen"} component={WebViewScreen} />
