@@ -93,9 +93,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.froggy"
+    namespace "com.kokoafone"
     defaultConfig {
-        applicationId "com.froggy"
+        applicationId "com.kokoafone"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
