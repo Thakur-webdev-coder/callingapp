@@ -33,7 +33,7 @@ const BoardingScreen = ({navigation}) => {
           imgSrc={require("../../../assets/images/logo.png")}
         />
         <CustomButton
-          onPress={() => navigation.navigate('Login')}
+          onPress={() => navigation.navigate('UpdateProfile')}
           primary
           title={"Get Started!"}
           horzontalPadding={10}

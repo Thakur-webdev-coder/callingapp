@@ -26,6 +26,7 @@ export default StyleSheet.create({
   },
 
   cardStyle: {
+    backgroundColor:colors.secondary,
     marginTop: hp(1),
     borderRadius: 10,
     padding: 20,

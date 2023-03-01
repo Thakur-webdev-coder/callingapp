@@ -13,7 +13,7 @@ import colors from "../../../assets/colors";
 import {
   logo_smallfrog,
   ic_setting,
-  ic_froggyText,
+  ic_app_logo,
   ic_call,
   ic_callrate,
   ic_phonebook,
@@ -193,7 +193,7 @@ const Home = ({ navigation }) => {
             encryptUser: usernameEncryptedCode,
             encryptPassword: passwordEncryptedCode,
           }
-         
+
         )
       );
 
@@ -276,26 +276,26 @@ const Home = ({ navigation }) => {
   const RenderList = ({ item, index }) => {
     return (
       <TouchableOpacity
-            onPress={() => ViewItemClicked_Method(item.name)}
-            style={styles.tabViewSyle}
-          >
+        onPress={() => ViewItemClicked_Method(item.name)}
+        style={styles.tabViewSyle}
+      >
         <LinearGradient
           colors={[colors.greenTop, colors.greenMid, colors.greenMid]}
           style={styles.linearGradient}
         >
-          
-            <Image source={item.image} />
-            <CustomText
-              textColor={colors.white}
-              textAlign={"center"}
-              marginTop={hp(1)}
-              text={item.name}
-              fontWeight={"700"}
-              textSize={15}
-            />
-          
+
+          <Image source={item.image} />
+          <CustomText
+            textColor={colors.white}
+            textAlign={"center"}
+            marginTop={hp(1)}
+            text={item.name}
+            fontWeight={"700"}
+            textSize={15}
+          />
+
         </LinearGradient>
-        </TouchableOpacity>
+      </TouchableOpacity>
     );
   };
 
@@ -309,10 +309,7 @@ const Home = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        <LinearGradient
-          colors={[colors.blueTop, colors.blueMid, colors.blueBottom]}
-          style={styles.cardStyle}
-        >
+        <View style={styles.cardStyle} >
           <CustomText
             text={"Registered Number"}
             textColor={colors.white}
@@ -329,7 +326,7 @@ const Home = ({ navigation }) => {
               textSize={18}
               textColor={colors.white}
             />
-            <Image source={ic_froggyText} />
+            <Image style={{height:hp(6),width:wp(20)}} source={ic_app_logo} />
           </View>
           <CustomText
             text={
@@ -340,12 +337,12 @@ const Home = ({ navigation }) => {
             textSize={18}
             textColor={colors.white}
           />
-        </LinearGradient>
+        </View>
         <CustomText
-          text={"MY FROGGY SERVICES"}
+          text={" SERVICES"}
           textSize={18}
           fontWeight={"bold"}
-          textColor={colors.derkGreen}
+          textColor={colors.black}
           marginTop={wp(4)}
         />
 

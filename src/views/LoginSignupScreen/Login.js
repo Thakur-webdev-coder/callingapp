@@ -7,8 +7,8 @@ const Login = ({navigation}) => {
  
 
   return (
-    <SafeAreaView style={styles.wrapper} >
-    <View style={{flex:1}}>
+    <SafeAreaView style={{flex:1}} >
+    <View style={styles.wrapper}>
         <Image source={ic_app_logo}/>
     </View> 
     <View style={styles.wrapper2}>
