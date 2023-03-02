@@ -21,6 +21,7 @@ import {
   ic_buycredit,
   ic_calldetails,
   ic_users,
+  logo_small_kokoa,
 } from "../../routes/imageRoutes";
 import styles from "./styles";
 import AppStyle from "../../components/AppStyle";
@@ -303,7 +304,7 @@ const Home = ({ navigation }) => {
     <SafeAreaView style={AppStyle.wrapper}>
       <View style={AppStyle.secondWrapper}>
         <View style={styles.headerStyle}>
-          <Image source={logo_smallfrog} />
+          <Image source={logo_small_kokoa} />
           <TouchableOpacity onPress={() => setLogOutModal(true)}>
             <Image style={styles.settingLogoStyle} source={ic_setting} />
           </TouchableOpacity>
@@ -326,7 +327,7 @@ const Home = ({ navigation }) => {
               textSize={18}
               textColor={colors.white}
             />
-            <Image style={{height:hp(6),width:wp(20)}} source={ic_app_logo} />
+            <Image source={logo_small_kokoa} />
           </View>
           <CustomText
             text={
@@ -338,6 +339,8 @@ const Home = ({ navigation }) => {
             textColor={colors.white}
           />
         </View>
+      </View>
+      <View style={styles.wrapper2}>
         <CustomText
           text={" SERVICES"}
           textSize={18}
@@ -467,6 +470,7 @@ const Home = ({ navigation }) => {
         }}
         loading={isLoading}
       /> */}
+
     </SafeAreaView>
   );
 };

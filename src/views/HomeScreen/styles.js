@@ -19,6 +19,14 @@ export default StyleSheet.create({
       },
     }),
   },
+ 
+  wrapper2: {
+    backgroundColor: colors.secondary,
+    flex: 2,
+    borderTopLeftRadius: 15,
+    
+
+},
   settingLogoStyle: {
     alignSelf: "center",
     marginLeft: wp(33),

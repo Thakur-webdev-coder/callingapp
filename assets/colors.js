@@ -41,6 +41,7 @@ export default {
   searchBarTxt:"#919191",
   primary: "#FF0000",
   white: "#ffffff",
+  backColor:'#F2F2F2'
 
 };
 
