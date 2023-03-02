@@ -19,6 +19,14 @@ export default StyleSheet.create({
       },
     }),
   },
+ 
+  wrapper2: {
+    backgroundColor: colors.secondary,
+    flex: 2,
+    borderTopLeftRadius: 15,
+    
+
+},
   settingLogoStyle: {
     alignSelf: "center",
     marginLeft: wp(33),
@@ -26,6 +34,7 @@ export default StyleSheet.create({
   },
 
   cardStyle: {
+    backgroundColor:colors.secondary,
     marginTop: hp(1),
     borderRadius: 10,
     padding: 20,

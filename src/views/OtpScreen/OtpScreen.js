@@ -162,7 +162,7 @@ const OtpScreen = ({ navigation, route }) => {
           primary
           horzontalPadding={wp(22)}
           marginTop={20}
-          onPress={() => hitOtpEncryptionAPI()}
+          onPress={() => navigation.navigate("UpdateProfile")}
         />
 
         <CustomButton

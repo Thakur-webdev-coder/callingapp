@@ -13,7 +13,7 @@ import colors from "../../../assets/colors";
 import {
   logo_smallfrog,
   ic_setting,
-  ic_froggyText,
+  ic_app_logo,
   ic_call,
   ic_callrate,
   ic_phonebook,
@@ -21,6 +21,7 @@ import {
   ic_buycredit,
   ic_calldetails,
   ic_users,
+  logo_small_kokoa,
 } from "../../routes/imageRoutes";
 import styles from "./styles";
 import AppStyle from "../../components/AppStyle";
@@ -193,7 +194,7 @@ const Home = ({ navigation }) => {
             encryptUser: usernameEncryptedCode,
             encryptPassword: passwordEncryptedCode,
           }
-         
+
         )
       );
 
@@ -276,26 +277,26 @@ const Home = ({ navigation }) => {
   const RenderList = ({ item, index }) => {
     return (
       <TouchableOpacity
-            onPress={() => ViewItemClicked_Method(item.name)}
-            style={styles.tabViewSyle}
-          >
+        onPress={() => ViewItemClicked_Method(item.name)}
+        style={styles.tabViewSyle}
+      >
         <LinearGradient
           colors={[colors.greenTop, colors.greenMid, colors.greenMid]}
           style={styles.linearGradient}
         >
-          
-            <Image source={item.image} />
-            <CustomText
-              textColor={colors.white}
-              textAlign={"center"}
-              marginTop={hp(1)}
-              text={item.name}
-              fontWeight={"700"}
-              textSize={15}
-            />
-          
+
+          <Image source={item.image} />
+          <CustomText
+            textColor={colors.white}
+            textAlign={"center"}
+            marginTop={hp(1)}
+            text={item.name}
+            fontWeight={"700"}
+            textSize={15}
+          />
+
         </LinearGradient>
-        </TouchableOpacity>
+      </TouchableOpacity>
     );
   };
 
@@ -303,16 +304,13 @@ const Home = ({ navigation }) => {
     <SafeAreaView style={AppStyle.wrapper}>
       <View style={AppStyle.secondWrapper}>
         <View style={styles.headerStyle}>
-          <Image source={logo_smallfrog} />
+          <Image source={logo_small_kokoa} />
           <TouchableOpacity onPress={() => setLogOutModal(true)}>
             <Image style={styles.settingLogoStyle} source={ic_setting} />
           </TouchableOpacity>
         </View>
 
-        <LinearGradient
-          colors={[colors.blueTop, colors.blueMid, colors.blueBottom]}
-          style={styles.cardStyle}
-        >
+        <View style={styles.cardStyle} >
           <CustomText
             text={"Registered Number"}
             textColor={colors.white}
@@ -329,7 +327,7 @@ const Home = ({ navigation }) => {
               textSize={18}
               textColor={colors.white}
             />
-            <Image source={ic_froggyText} />
+            <Image source={logo_small_kokoa} />
           </View>
           <CustomText
             text={
@@ -340,12 +338,14 @@ const Home = ({ navigation }) => {
             textSize={18}
             textColor={colors.white}
           />
-        </LinearGradient>
+        </View>
+      </View>
+      <View style={styles.wrapper2}>
         <CustomText
-          text={"MY FROGGY SERVICES"}
+          text={" SERVICES"}
           textSize={18}
           fontWeight={"bold"}
-          textColor={colors.derkGreen}
+          textColor={colors.black}
           marginTop={wp(4)}
         />
 
@@ -470,6 +470,7 @@ const Home = ({ navigation }) => {
         }}
         loading={isLoading}
       /> */}
+
     </SafeAreaView>
   );
 };

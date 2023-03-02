@@ -8,9 +8,7 @@ export const ic_contact = require("../../assets/images/contact.png");
 export const ic_contact_s = require("../../assets/images/contact_s.png");
 export const ic_livechat = require("../../assets/images/livechat.png");
 
-export const logo_smallfrog = require("../../assets/images/smalllogo.png");
 export const ic_setting = require("../../assets/images/setting.png");
-export const ic_froggyText = require("../../assets/images/froggyText.png");
 export const ic_recent = require("../../assets/images/recent.png");
 export const ic_back = require("../../assets/images/back.png");
 export const ic_call = require("../../assets/images/call.png");
@@ -19,7 +17,6 @@ export const ic_callrecive = require("../../assets/images/callrecive.png");
 export const ic_phonebook = require("../../assets/images/phonebook.png");
 export const ic_user = require("../../assets/images/user.png");
 export const ic_voucher = require("../../assets/images/voucher.png");
-export const ic_backspace = require("../../assets/images/backspace.png");
 export const ic_people = require("../../assets/images/people.png");
 export const ic_buycredit = require("../../assets/images/buycredit.png");
 export const ic_calldetails = require("../../assets/images/calldetails.png");
@@ -32,19 +29,16 @@ export const ic_mic_fill = require("../../assets/images/mic-fill.png");
 export const ic_mic = require("../../assets/images/mic-off.png");
 export const ic_mute = require("../../assets/images/mute.png");
 export const ic_callKeyPad = require("../../assets/images/call_keypad.png");
-export const ic_bluetooth = require("../../assets/images/bluetooth.png");
 export const ic_endcall = require("../../assets/images/endcall.png");
-export const ic_confirm = require("../../assets/images/confirm.png");
 export const ic_invite = require("../../assets/images/invite.png");
 export const ic_users = require("../../assets/images/users.png");
 export const ic_restu = require("../../assets/images/restu.png");
-export const ic_grocery = require("../../assets/images/grocery.png");
 export const ic_stores = require("../../assets/images/stores.png");
 export const ic_time = require("../../assets/images/time.png");
 export const ic_location = require("../../assets/images/location.png");
 export const ic_star = require("../../assets/images/star.png");
 export const ic_logo_medium = require("../../assets/images/logo_medium.png");
-export const ic_CallingBg = require("../../assets/images/callingBackground.png");
 
-// Kokoafone Icons
+//koka
 export const ic_app_logo = require("../../assets/images/appLogo.png");
+export const logo_small_kokoa = require("../../assets/images/smallLogo.png");
