@@ -35,13 +35,13 @@ export default StyleSheet.create({
     },
     inputTxtBoxStyle: {
         borderRadius: 15,
-        marginHorizontal: wp(5),
+        marginHorizontal: wp(8),
         //width: wp(85),
         height: hp(7),
         backgroundColor: colors.searchBar,
         color: colors.black,
         paddingHorizontal: wp(5),
         fontSize: 20,
-        marginTop:hp(4)
+        marginTop:hp(5)
     },
 });

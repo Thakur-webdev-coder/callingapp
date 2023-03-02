@@ -5,8 +5,8 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 export default StyleSheet.create({
     flatListStyle: {
         flexDirection: 'row',
-        marginBottom:hp(2)
-
+        marginBottom:hp(2),
+marginHorizontal:wp(5)
     },
     containerStyle:
     {

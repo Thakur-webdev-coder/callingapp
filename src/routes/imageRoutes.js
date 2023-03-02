@@ -1,12 +1,7 @@
-export const ic_home = require("../../assets/images/home.png");
-export const ic_home_s = require("../../assets/images/home_s.png");
+
 export const ic_recentcall = require("../../assets/images/recentcall.png");
-export const ic_recentcall_s = require("../../assets/images/recentcall_s.png");
 export const ic_dialpad = require("../../assets/images/dialpad.png");
-export const ic_dialpad_s = require("../../assets/images/dialpad_s.png");
 export const ic_contact = require("../../assets/images/contact.png");
-export const ic_contact_s = require("../../assets/images/contact_s.png");
-export const ic_livechat = require("../../assets/images/livechat.png");
 
 export const ic_setting = require("../../assets/images/setting.png");
 export const ic_recent = require("../../assets/images/recent.png");
@@ -17,7 +12,7 @@ export const ic_callrecive = require("../../assets/images/callrecive.png");
 export const ic_phonebook = require("../../assets/images/phonebook.png");
 export const ic_user = require("../../assets/images/user.png");
 export const ic_voucher = require("../../assets/images/voucher.png");
-export const ic_people = require("../../assets/images/people.png");
+export const ic_people = require("../../assets/images/phone_book.png");
 export const ic_buycredit = require("../../assets/images/buycredit.png");
 export const ic_calldetails = require("../../assets/images/calldetails.png");
 export const ic_callingPerson = require("../../assets/images/callingPerson.png");
@@ -42,3 +37,9 @@ export const ic_logo_medium = require("../../assets/images/logo_medium.png");
 //koka
 export const ic_app_logo = require("../../assets/images/appLogo.png");
 export const logo_small_kokoa = require("../../assets/images/smallLogo.png");
+export const ic_logout =require("../../assets/images/logout.png");
+export const ic_popup =require("../../assets/images/Mobilepopup.png");
+export const ic_home = require("../../assets/images/home-white.png");
+export const ic_home_s = require("../../assets/images/home_s.png");
+export const ic_chat = require("../../assets/images/ic_chat.png");
+export const ic_delete = require("../../assets/images/delete.png");

@@ -14,14 +14,15 @@ export default StyleSheet.create({
       //   backgroundColor: 'red',
       // },
       android: {
-        marginTop:hp(2.5),
+        //marginTop:hp(2.5),
       },
     }),
     // marginTop:  (Platform.OS === 'ios') ? 80 : 100,
-    
+    backgroundColor: colors.secondary,
     alignItems: "center",
     justifyContent: "space-between",
-    marginHorizontal: wp(1),
+    padding: 15
   },
-  
+
+
 })

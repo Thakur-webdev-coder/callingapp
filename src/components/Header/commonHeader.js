@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacity, View } from "react-native";
+import { Image, TouchableOpacity, View } from "react-native";
 import colors from "../../../assets/colors";
 import { ic_back } from "../../routes/imageRoutes";
 import CustomImage from "../CustomImage";
@@ -12,7 +12,7 @@ const CommonHeader = ({ headerText, paddingHorizontal }) => {
   return (
     <View style={[styles.toolBar, { paddingHorizontal: paddingHorizontal }]}>
       <TouchableOpacity onPress={() => navigation.goBack()}>
-        <CustomImage imgSrc={ic_back} />
+        <Image style={styles.imgStyle} source={ic_back} />
       </TouchableOpacity>
       <CustomText
         fontWeight={"bold"}

@@ -39,12 +39,13 @@ export default {
   secondary: "#4D3E3E",
   searchBar:'#D9D9D9',
   searchBarTxt:"#919191",
-  primsary: "#FF0000",
   white: "#ffffff",
   backColor:'#F2F2F2',
   buttonColor: "#FF0000",
   grayColor: "#403F3F",
-
+  shadowColor:"#b0b0b0",
+  keypadColor:"#FAFAFA",
+  offWhite:"#E1E1E1"
 };
 
 
