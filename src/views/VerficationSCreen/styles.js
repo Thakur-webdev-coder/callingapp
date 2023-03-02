@@ -1,16 +1,19 @@
 import { StyleSheet } from "react-native";
 import colors from "../../../assets/colors";
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 
 export default StyleSheet.create({
   phoneViewStyle: {
-    backgroundColor: colors.inputColor,
+    backgroundColor: colors.white,
     elevation: 20,
     paddingVertical: 20,
-    marginHorizontal: wp(3),
     paddingHorizontal: 10,
-    marginTop: 50,
+    marginTop: hp(8),
     borderRadius: 10,
+    marginHorizontal: wp(5),
   },
 
   flagStyle: {
@@ -19,7 +22,17 @@ export default StyleSheet.create({
   },
 
   inputTextStyle: {
-    color: colors.white,
+    color: colors.black,
     fontSize: 16,
+  },
+
+  wrapper: {
+    flex: 1,
+    backgroundColor: "#FFFFFF",
+  },
+  wrapper2: {
+    backgroundColor: colors.secondary,
+    flex: 1,
+    borderTopLeftRadius: 50,
   },
 });

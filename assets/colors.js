@@ -11,8 +11,8 @@ export default {
   bordercolor: "#1C49B4",
   tabTextColor: "#2F9F54",
   cardcolor: "#088BD2",
-  grayColor:"#797171",
-  
+  searchBar: "#201F1F",
+  searchBarTxt: "#5E5D5D",
   derkGreen: "#2F9B5F",
   grayColor: "#797171",
   textGray: "#888484",
@@ -39,9 +39,11 @@ export default {
   secondary: "#4D3E3E",
   searchBar:'#D9D9D9',
   searchBarTxt:"#919191",
-  primary: "#FF0000",
+  primsary: "#FF0000",
   white: "#ffffff",
-  backColor:'#F2F2F2'
+  backColor:'#F2F2F2',
+  buttonColor: "#FF0000",
+  grayColor: "#403F3F",
 
 };
 

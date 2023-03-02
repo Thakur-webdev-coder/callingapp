@@ -8,7 +8,6 @@ export const ic_contact = require("../../assets/images/contact.png");
 export const ic_contact_s = require("../../assets/images/contact_s.png");
 export const ic_livechat = require("../../assets/images/livechat.png");
 
-export const logo_smallfrog = require("../../assets/images/smalllogo.png");
 export const ic_setting = require("../../assets/images/setting.png");
 export const ic_recent = require("../../assets/images/recent.png");
 export const ic_back = require("../../assets/images/back.png");

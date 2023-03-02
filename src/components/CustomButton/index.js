@@ -17,10 +17,10 @@ const CustomButton = ({
 }) => {
   const getBgColor = () => {
     if (disabled) {
-      return colors.primary;
+      return colors.buttonColor;
     }
     if (primary) {
-      return colors.primary;
+      return colors.buttonColor;
     }
     if (danger) {
       return colors.danger;
@@ -41,7 +41,15 @@ const CustomButton = ({
         disabled={disabled}
         style={[styles.wrapper, { backgroundColor: getBgColor() }]}
       >
-        <Text style={[styles.buttonText, { paddingVertical: paddingVertical ,color:disabled?colors.disableColor:colors.white}]}>
+        <Text
+          style={[
+            styles.buttonText,
+            {
+              paddingVertical: paddingVertical,
+              color: disabled ? colors.disableColor : colors.white,
+            },
+          ]}
+        >
           {title}
         </Text>
       </TouchableOpacity>
