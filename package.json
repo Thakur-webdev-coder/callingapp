@@ -12,6 +12,7 @@
   "dependencies": {
     "@khateeb00/react-jssip": "^1.0.16",
     "@react-native-async-storage/async-storage": "^1.17.11",
+    "@react-native-community/checkbox": "^0.5.14",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-picker/picker": "^2.4.8",
     "@react-navigation/bottom-tabs": "^6.5.4",

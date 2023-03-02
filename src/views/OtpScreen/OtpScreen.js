@@ -24,15 +24,15 @@ let otpEncryptedCode = null;
 
 const OtpScreen = ({ navigation, route }) => {
   // const [state,setState]=useState({})
-  
+
   const [counter, setCounter] = useState(90);
   const [otpText, setOtpText] = useState("");
 
-  const { phoneInput } = route.params;
-  const { countryCode } = route.params;
+  // const { phoneInput } = route.params;
+  // const { countryCode } = route.params;
   const dispatch = useDispatch();
 
-    useEffect(() => {
+  useEffect(() => {
     const interval =
       counter > 0 &&
       setInterval(() => {
@@ -174,8 +174,6 @@ const OtpScreen = ({ navigation, route }) => {
           onPress={() => hitOtpSendApi()}
         />
       </View>
-
-      
     </SafeAreaView>
   );
 };
