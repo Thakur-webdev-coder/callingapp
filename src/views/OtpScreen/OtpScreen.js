@@ -1,7 +1,5 @@
 import { SafeAreaView, View } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
-import AppStyle from "../../components/AppStyle";
-import CustomImage from "../../components/CustomImage";
+import React, { useEffect, useState } from "react";
 import CustomText from "../../components/CustomText";
 import colors from "../../../assets/colors";
 import CustomButton from "../../components/CustomButton";
@@ -10,7 +8,6 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import OTPTextView from "react-native-otp-textinput";
-import { ic_logo_medium } from "../../routes/imageRoutes";
 import {
   hitEncryptionApi,
   hitOtpVerificationAPI,
@@ -20,6 +17,7 @@ import { showErrorMessage } from "../../utils/commonUtils";
 
 import { useDispatch } from "react-redux";
 import { saveLoginDetails } from "../../redux/reducer";
+import styles from "./styles";
 let otpEncryptedCode = null;
 
 const OtpScreen = ({ navigation, route }) => {
@@ -95,82 +93,63 @@ const OtpScreen = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={AppStyle.wrapper}>
-      <View style={AppStyle.secondWrapper}>
-        <CustomImage
-          alignSelf={"center"}
-          marginTop={60}
-          imgSrc={ic_logo_medium}
-        />
-
+    <SafeAreaView style={styles.wrapper}>
+      <View>
         <CustomText
-          text={"Enter OTP"}
-          marginTop={40}
-          textSize={20}
+          text={"Enter OTP Here"}
           textColor={colors.white}
-          horzontalPadding={20}
+          textSize={32}
           fontWeight={"bold"}
+          alignText={"center"}
+          marginTop={hp(8)}
+        />
+      </View>
+      <View style={styles.wrapper2}>
+        <CustomText
+          text={
+            "Please enter the One Time PIN which you received on your phone +2349852145236 or Resend the One Time PIN"
+          }
+          textColor={colors.lightBlack}
+          textSize={17}
+          alignText={"center"}
+          marginTop={hp(10)}
+          horzontalPadding={wp(8)}
         />
 
         <CustomText
-          text={" A 4 digit code has been sent to your mobile number."}
-          textColor={colors.textGray}
-          horzontalPadding={15}
-          textAlign={"left"}
-          textSize={14}
+          text={"Your OTP code expire in 90 Seconds"}
+          textColor={colors.lightBlack}
+          textSize={17}
+          alignText={"center"}
+          marginTop={hp(10)}
         />
 
         <OTPTextView
-          textInputStyle={{
-            color: colors.white,
-            backgroundColor: colors.otpInputColor,
-            borderRadius: 10,
-            marginTop: 20,
-            borderBottomWidth: 0,
-          }}
+          textInputStyle={styles.inputStyle}
           containerStyle={{
-            marginHorizontal: 40,
+            marginHorizontal: wp(15),
           }}
           tintColor={colors.otpInputColor}
           offTintColor={colors.otpInputColor}
           inputCount={4}
           handleTextChange={(text) => setOtpText(text)}
         />
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            alignSelf: "center",
-            marginTop: hp(5),
-          }}
-        >
-          <CustomText
-            text={"Request code again:"}
-            textColor={colors.textGray}
-            horzontalPadding={5}
-          />
-
-          <CustomText
-            text={`${counter} Secs`}
-            textColor={colors.white}
-            fontWeight={"bold"}
-          />
-        </View>
 
         <CustomButton
           title={"Verify"}
           primary
-          horzontalPadding={wp(22)}
-          marginTop={20}
+          horzontalPadding={wp(15)}
+          marginTop={hp(8)}
           onPress={() => navigation.navigate("UpdateProfile")}
         />
 
         <CustomButton
           title={"Resend"}
-          primary
-          horzontalPadding={wp(22)}
-          marginTop={10}
-          disabled={counter != 0}
+          secondary
+          horzontalPadding={wp(15)}
+          marginTop={hp(2)}
+          // disabled={counter != 0}
+          // disabled
           onPress={() => hitOtpSendApi()}
         />
       </View>

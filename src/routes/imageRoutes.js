@@ -41,4 +41,4 @@ export const ic_logo_medium = require("../../assets/images/logo_medium.png");
 
 //koka
 export const ic_app_logo = require("../../assets/images/appLogo.png");
-export const logo_small_kokoa = require("../../assets/images/smallLogo.png");
+export const logo_small_kokoa = require("../../assets/images/smalllogo.png");
