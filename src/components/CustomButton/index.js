@@ -17,7 +17,7 @@ const CustomButton = ({
 }) => {
   const getBgColor = () => {
     if (disabled) {
-      return colors.buttonColor;
+      return colors.secondary;
     }
     if (primary) {
       return colors.buttonColor;

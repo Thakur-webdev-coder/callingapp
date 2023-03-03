@@ -56,6 +56,13 @@ const TabNavigator = () => {
           return (
             <View
               key={route.key}
+               // onStartShouldSetResponder={()=>{        //needed comment
+              //   if(route.name === "LiveChat"){
+              //     Linking.openURL('https://tawk.to/chat/63de1f18c2f1ac1e20315d9d/1godqiuj4')
+              //     return true
+              //   }
+              //   return false
+              // }}
               style={{
                 alignItems: "center",
                 paddingTop: hp(3),

@@ -24,6 +24,9 @@ import {
   logo_small_kokoa,
   ic_logout,
   ic_popup,
+  ic_databundle,
+  ic_electricity,
+  ic_transfer,
 } from "../../routes/imageRoutes";
 import styles from "./styles";
 import AppStyle from "../../components/AppStyle";
@@ -69,9 +72,9 @@ const Home = ({ navigation }) => {
 
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   hitBalanceAPi();
-  // }, []);
+  useEffect(() => {
+    hitBalanceAPi();
+  }, []);
 
   const isFocused = useIsFocused();
 
@@ -96,12 +99,12 @@ const Home = ({ navigation }) => {
     {
       id: 0,
       name: "Invite Friends",
-      image: ic_call,
+      image: ic_users,
     },
     {
       id: 1,
       name: "My Balance",
-      image: ic_users,
+      image: ic_call,
     },
     {
       id: 2,
@@ -111,22 +114,22 @@ const Home = ({ navigation }) => {
     {
       id: 3,
       name: "Transfer Credit",
-      image: ic_voucher,
+      image: ic_calldetails,
     },
     {
       id: 4,
       name: "Transfer History",
-      image: ic_callrate,
+      image: ic_transfer,
     },
     {
       id: 5,
       name: "Voucher Recharge",
-      image: ic_calldetails,
+      image: ic_voucher,
     },
     {
       id: 6,
       name: "Call Details Report",
-      image: ic_phonebook,
+      image: ic_calldetails,
     },
     {
       id: 7,
@@ -141,12 +144,12 @@ const Home = ({ navigation }) => {
     {
       id: 9,
       name: "Data Bundle",
-      image: ic_phonebook,
+      image: ic_databundle,
     },
     {
       id: 10,
       name: "Electricity Bill Pay",
-      image: ic_phonebook,
+      image: ic_electricity,
     },
     {
       id: 11,
@@ -186,6 +189,9 @@ const Home = ({ navigation }) => {
         break;
       case "Redeem Voucher":
         setVoucherModal(true);
+        break;
+        case "Logout":
+          LogoutMethod();
         break;
       default:
         console.log("Redeem Voucher");
@@ -295,7 +301,7 @@ const Home = ({ navigation }) => {
     Show_Toast("Successfully recharged by Voucher");
   };
   const LogoutMethod = () => {
-    setLogOutModal(false);
+   // setLogOutModal(false);
     navigation?.dispatch(
       CommonActions.reset({
         index: 0,
@@ -460,38 +466,7 @@ const Home = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </Modal>
-        <Modal
-          animationIn="slideInUp"
-          animationOut="slideOutDown"
-          isVisible={LogoutModal}
-        >
-          <View style={styles.rechargeModalStyle}>
-            <CustomText
-              text={"Are you sure you want to Logout."}
-              textColor={colors.appColor}
-              textSize={16}
-            />
-            <View style={styles.btnStyle}>
-              <TouchableOpacity onPress={() => setLogOutModal(false)}>
-                <CustomText
-                  text={"CANCEL"}
-                  textSize={16}
-                  fontWeight={"600"}
-                  textColor={colors.dodgeBlue}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => LogoutMethod()}>
-                <CustomText
-                  text={"OK"}
-                  textSize={16}
-                  fontWeight={"600"}
-                  textColor={colors.dodgeBlue}
-                  marginLeft={wp(10)}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
+       
       </View>
 
       {/* <Loading

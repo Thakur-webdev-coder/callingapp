@@ -62,8 +62,9 @@ const VerificationScreen = ({ navigation }) => {
 
     if (myResponse.data.result == "success") {
       navigation.navigate(OTP_SCREEN, {
-        phoneInput: phoneEncryptedCode,
+        phoneEncryptedCode: phoneEncryptedCode,
         countryCode: countryEncryptedCode,
+        phoneInput:phoneInput
       });
     } else {
     }
