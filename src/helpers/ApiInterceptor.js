@@ -17,6 +17,8 @@ apiClient.interceptors.request.use(
     if (accessToken) {
       config.headers["x-auth-token"] = accessToken;
     }
+    console.log("request api", config);
+
     return config;
   },
   (error) => {
@@ -41,7 +43,7 @@ apiClient.interceptors.response.use(
   },
   async (error) => {
     Store.dispatch(changeLoadingStatus(false));
-console.log('error------>',error)
+    console.log("error------>", error);
     Show_Toast("Something went wrong Please Try Again!");
     return Promise.reject(error);
   }

@@ -1,4 +1,3 @@
-
 export const ic_recentcall = require("../../assets/images/recentcall.png");
 export const ic_dialpad = require("../../assets/images/dialpad.png");
 export const ic_contact = require("../../assets/images/contact.png");
@@ -36,10 +35,13 @@ export const ic_logo_medium = require("../../assets/images/logo_medium.png");
 
 //koka
 export const ic_app_logo = require("../../assets/images/appLogo.png");
-export const logo_small_kokoa = require("../../assets/images/smallLogo.png");
-export const ic_logout =require("../../assets/images/logout.png");
-export const ic_popup =require("../../assets/images/Mobilepopup.png");
+// export const logo_small_kokoa = require("../../assets/images/smallLogo.png");
+export const ic_logout = require("../../assets/images/logout.png");
+export const ic_popup = require("../../assets/images/Mobilepopup.png");
 export const ic_home = require("../../assets/images/home-white.png");
 export const ic_home_s = require("../../assets/images/home_s.png");
 export const ic_chat = require("../../assets/images/ic_chat.png");
 export const ic_delete = require("../../assets/images/delete.png");
+export const logo_small_kokoaa = require("../../assets/images/smalllogo.png");
+export const ic_avatar = require("../../assets/images/avatar.png");
+export const ic_black_arrow = require("../../assets/images/ic_black_arrow.png");
