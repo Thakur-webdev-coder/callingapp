@@ -26,8 +26,8 @@ const OtpScreen = ({ navigation, route }) => {
   const [counter, setCounter] = useState(90);
   const [otpText, setOtpText] = useState("");
 
-  // const { phoneInput } = route.params;
-  // const { countryCode } = route.params;
+  const { phoneInput } = route.params;
+  const { countryCode } = route.params;
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -94,6 +94,7 @@ const OtpScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.wrapper}>
+      
       <View>
         <CustomText
           text={"Enter OTP Here"}
@@ -140,7 +141,7 @@ const OtpScreen = ({ navigation, route }) => {
           primary
           horzontalPadding={wp(15)}
           marginTop={hp(8)}
-          onPress={() => navigation.navigate("UpdateProfile")}
+          onPress={() => hitOtpEncryptionAPI()}
         />
 
         <CustomButton

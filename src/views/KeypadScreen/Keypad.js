@@ -15,6 +15,7 @@ import {
   ic_people,
   ic_backspace,
   ic_callrecive,
+  ic_delete,
 } from "../../routes/imageRoutes";
 import LinearGradient from "react-native-linear-gradient";
 import { CommonHeader } from "../../components";
@@ -68,98 +69,114 @@ const Keypad = ({ navigation }) => {
     newStr = dialedNumber.split(""); // or newStr = [...str];
     newStr.splice(-1);
     newStr = newStr.join("");
-    console.log("newStr--", newStr);
     _setState({ dialedNumber: newStr });
   };
   // console.log('inputNumber--', inputNumber)
   const RenderList = ({ item }) => {
     const { dialedNumber } = state;
     return (
-      <View>
-        <TouchableOpacity
-          onPress={() => DialNumberMethod(item)}
-          onLongPress={() =>
-            item.num == "0"
-              ? _setState({ dialedNumber: dialedNumber + "+" })
-              : null
-          }
-          style={[
-            styles.dialerStyle,
-            { paddingTop: item.num == "*" ? hp(2.5) : null },
-          ]}
-        >
-          <CustomText
-            textColor={colors.white}
-            textAlign={"center"}
-            text={item.num}
-            fontWeight={"bold"}
-            textSize={25}
-          />
-          <CustomText
-            textColor={colors.white}
-            textAlign={"center"}
-            fontWeight={"100"}
-            text={item.char}
-            textSize={10}
-          />
-        </TouchableOpacity>
-      </View>
+
+      <TouchableOpacity
+        onPress={() => DialNumberMethod(item)}
+        onLongPress={() =>
+          item.num == "0"
+            ? _setState({ dialedNumber: dialedNumber + "+" })
+            : null
+        }
+        style={[
+          styles.dialerStyle,
+          { paddingTop: item.num == "*" ? hp(2.5) : null },
+        ]}
+      >
+        <CustomText
+          textColor={colors.secondary}
+          textAlign={"center"}
+          text={item.num}
+        fontWeight={"bold"}
+        textSize={25}
+        />
+        <CustomText
+          textColor={colors.secondary}
+          textAlign={"center"}
+          fontWeight={"500"}
+          text={item.char}
+          textSize={10}
+        />
+      </TouchableOpacity>
+
     );
   };
   const { dialedNumber } = state;
   return (
-    <SafeAreaView style={AppStyle.wrapper}>
-      <View style={AppStyle.secondWrapper}>
-        <CommonHeader />
+    <SafeAreaView style={[AppStyle.wrapper, { backgroundColor: colors.offWhite }]}>
+      <View style={styles.secondWrapper}>
+        <CommonHeader
+          headerText={"Dialpad"} />
 
+        <View style={styles.registerBox}>
+          <CustomText
+            textColor={colors.black}
+            textAlign={"center"}
+            text={'Registered'}
+            fontWeight={"bold"}
+            textSize={17}
+          />
+              <CustomText
+            textColor={colors.black}
+            textAlign={"center"}
+            text={'015247845'}
+            //fontWeight={"bold"}
+            marginLeft={wp(2)}
+            textSize={17}
+          />
+        </View>
         <TextInput
           style={styles.inputTxtBoxStyle}
           value={dialedNumber}
           showSoftInputOnFocus={false}
-          // caretHidden={true}
-          //onFocus={()=>}
+
         />
-        <View>
-          <FlatList
-            style={{}}
-            columnWrapperStyle={{ justifyContent: "space-between" }}
-            data={DialerData}
-            renderItem={RenderList}
-            keyExtractor={(item, index) => item.num}
-            numColumns={3}
-          />
-
-          <View style={styles.bottomRowStyle}>
-            <Image style={styles.bottomImgStyle} source={ic_people} />
-
-            <TouchableOpacity
-              onPress={() => {
-                if (balanceDetail.credit > 0) {
-                  Sip.makeCall(dialedNumber);
-                  navigation.navigate("CallingScreen", {
-                    callData: dialedNumber,
-                  });
-                } else {
-                  Show_Toast(
-                    "Insufficient balance. Please recharge your account."
-                  );
-                }
-              }}
-            >
-              <LinearGradient
-                colors={[colors.greenTop, colors.greenMid, colors.greenMid]}
-                style={styles.linearGradient}
-              >
-                <Image source={ic_callrecive} />
-              </LinearGradient>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={() => BackSpaceMethod()}>
-              <Image style={styles.bottomImgStyle} source={ic_backspace} />
-            </TouchableOpacity>
-          </View>
-        </View>
       </View>
+      <View style={styles.wrapper3}>
+        <FlatList
+          columnWrapperStyle={{ justifyContent: "space-between" }}
+          data={DialerData}
+          renderItem={RenderList}
+          keyExtractor={(item, index) => item.num}
+          numColumns={3}
+        />
+      </View>
+      <View style={[styles.bottomRowStyle]}>
+        <Image style={styles.bottomImgStyle} source={ic_people} />
+
+        <TouchableOpacity
+          onPress={() => {
+            if (balanceDetail.credit > 0) {
+              Sip.makeCall(dialedNumber);
+              navigation.navigate("CallingScreen", {
+                callData: dialedNumber,
+              });
+            } else {
+              Show_Toast(
+                "Insufficient balance. Please recharge your account."
+              );
+            }
+          }}
+        >
+          <LinearGradient
+            colors={[colors.greenTop, colors.greenMid, colors.greenMid]}
+            style={styles.linearGradient}
+          >
+            <Image source={ic_callrecive} />
+          </LinearGradient>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => BackSpaceMethod()}>
+          <Image style={styles.bottomImgStyle} source={ic_delete} />
+        </TouchableOpacity>
+      </View>
+
+
     </SafeAreaView>
   );
 };

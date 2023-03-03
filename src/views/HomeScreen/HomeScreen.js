@@ -22,6 +22,8 @@ import {
   ic_calldetails,
   ic_users,
   logo_small_kokoa,
+  ic_logout,
+  ic_popup,
 } from "../../routes/imageRoutes";
 import styles from "./styles";
 import AppStyle from "../../components/AppStyle";
@@ -30,7 +32,6 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import CustomText from "../../components/CustomText";
-import LinearGradient from "react-native-linear-gradient";
 import Modal from "react-native-modal";
 import { Show_Toast } from "../../utils/toast";
 import { useDispatch, useSelector } from "react-redux";
@@ -49,6 +50,7 @@ import {
   CommonActions,
   useIsFocused,
 } from "@react-navigation/native";
+import CommonHeader from "../../components/Header/commonHeader";
 
 let myBalanceData = null;
 let usernameEncryptedCode = null;
@@ -67,9 +69,9 @@ const Home = ({ navigation }) => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    hitBalanceAPi();
-  }, []);
+  // useEffect(() => {
+  //   hitBalanceAPi();
+  // }, []);
 
   const isFocused = useIsFocused();
 
@@ -93,12 +95,12 @@ const Home = ({ navigation }) => {
   const DATA = [
     {
       id: 0,
-      name: "Call",
+      name: "Invite Friends",
       image: ic_call,
     },
     {
       id: 1,
-      name: "Invite Friends",
+      name: "My Balance",
       image: ic_users,
     },
     {
@@ -108,23 +110,53 @@ const Home = ({ navigation }) => {
     },
     {
       id: 3,
-      name: "Redeem Voucher",
+      name: "Transfer Credit",
       image: ic_voucher,
     },
     {
       id: 4,
-      name: "Call Rates",
+      name: "Transfer History",
       image: ic_callrate,
     },
     {
       id: 5,
-      name: "Call Details Reports",
+      name: "Voucher Recharge",
       image: ic_calldetails,
     },
     {
       id: 6,
-      name: "Directory",
+      name: "Call Details Report",
       image: ic_phonebook,
+    },
+    {
+      id: 7,
+      name: "Mobile Money",
+      image: ic_phonebook,
+    },
+    {
+      id: 8,
+      name: "Mobile Topup",
+      image: ic_popup,
+    },
+    {
+      id: 9,
+      name: "Data Bundle",
+      image: ic_phonebook,
+    },
+    {
+      id: 10,
+      name: "Electricity Bill Pay",
+      image: ic_phonebook,
+    },
+    {
+      id: 11,
+      name: "TV Recharge",
+      image: ic_phonebook,
+    },
+    {
+      id: 12,
+      name: "Logout",
+      image: ic_logout,
     },
   ];
 
@@ -278,24 +310,19 @@ const Home = ({ navigation }) => {
     return (
       <TouchableOpacity
         onPress={() => ViewItemClicked_Method(item.name)}
-        style={styles.tabViewSyle}
+        style={styles.linearGradient}
       >
-        <LinearGradient
-          colors={[colors.greenTop, colors.greenMid, colors.greenMid]}
-          style={styles.linearGradient}
-        >
 
-          <Image source={item.image} />
-          <CustomText
-            textColor={colors.white}
-            textAlign={"center"}
-            marginTop={hp(1)}
-            text={item.name}
-            fontWeight={"700"}
-            textSize={15}
-          />
+        <Image source={item.image} />
+        <CustomText
+          textColor={colors.secondary}
+          textAlign={"center"}
+          marginTop={hp(1)}
+          text={item.name}
+          fontWeight={"600"}
+          textSize={13}
+        />
 
-        </LinearGradient>
       </TouchableOpacity>
     );
   };
@@ -303,12 +330,8 @@ const Home = ({ navigation }) => {
   return (
     <SafeAreaView style={AppStyle.wrapper}>
       <View style={AppStyle.secondWrapper}>
-        <View style={styles.headerStyle}>
-          <Image source={logo_small_kokoa} />
-          <TouchableOpacity onPress={() => setLogOutModal(true)}>
-            <Image style={styles.settingLogoStyle} source={ic_setting} />
-          </TouchableOpacity>
-        </View>
+        <CommonHeader
+          headerText={"Home"} />
 
         <View style={styles.cardStyle} >
           <CustomText
@@ -321,15 +344,15 @@ const Home = ({ navigation }) => {
             textSize={20}
             textColor={colors.white}
           />
-          <View style={styles.froggyStyle}>
+          <View style={styles.balanceStyle}>
+            <View>
             <CustomText
               text={"Balance"}
               textSize={18}
               textColor={colors.white}
             />
-            <Image source={logo_small_kokoa} />
-          </View>
-          <CustomText
+          
+            <CustomText
             text={
               balanceDetail?.credit == "0"
                 ? "€" + "0.00"
@@ -338,18 +361,26 @@ const Home = ({ navigation }) => {
             textSize={18}
             textColor={colors.white}
           />
+          </View>
+          <View style={styles.imgView}>
+            <Image  source={logo_small_kokoa} />
+            </View>
+          </View>
+          
         </View>
       </View>
       <View style={styles.wrapper2}>
         <CustomText
-          text={" SERVICES"}
-          textSize={18}
+          text={" Services"}
+          textSize={20}
           fontWeight={"bold"}
           textColor={colors.black}
-          marginTop={wp(4)}
+          marginTop={wp(2)}
+          marginLeft={wp(2)}
         />
 
         <FlatList
+
           columnWrapperStyle={{ justifyContent: "space-between" }}
           data={DATA}
           renderItem={RenderList}

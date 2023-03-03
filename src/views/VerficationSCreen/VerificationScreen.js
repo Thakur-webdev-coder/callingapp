@@ -106,8 +106,8 @@ const VerificationScreen = ({ navigation }) => {
           primary
           horzontalPadding={wp(15)}
           marginTop={hp(8)}
-          // onPress={() => hitCountryEncryptionApi()}
-          onPress={() => navigation.navigate(OTP_SCREEN)}
+          onPress={() => hitCountryEncryptionApi()}
+         // onPress={() => navigation.navigate(OTP_SCREEN)}
         />
       </View>
     </SafeAreaView>

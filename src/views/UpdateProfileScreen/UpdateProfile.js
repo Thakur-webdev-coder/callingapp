@@ -27,7 +27,7 @@ const UpdateProfile = ({navigation}) => {
      textSize={26}
      fontWeight={'bold'}
      marginTop={hp(2)}
-     marginLeft={wp(3)}
+     marginLeft={wp(5)}
     />
     <TextInput
     placeholder="Enter Your Name Here "
@@ -38,7 +38,7 @@ const UpdateProfile = ({navigation}) => {
     <CustomText
      text={"This name will visible to Kokoafone Contacts "}
      textColor={colors.white}
-     textSize={23}
+     textSize={22}
      marginTop={hp(5)}
      alignText={'center'}
     />
@@ -48,7 +48,7 @@ const UpdateProfile = ({navigation}) => {
     primary
     title={"Save"}
     horzontalPadding={wp(18)}
-    marginTop={20}
+    marginTop={hp(4)}
     />
     </View> 
     </SafeAreaView>

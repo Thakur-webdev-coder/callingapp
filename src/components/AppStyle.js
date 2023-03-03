@@ -12,7 +12,9 @@ export default StyleSheet.create({
   },
   secondWrapper:{
     flex:1,
-    marginHorizontal:wp(5)},
-    backgroundColor:colors.white
+  
+     backgroundColor:colors.white
+  },
+   
 
 });

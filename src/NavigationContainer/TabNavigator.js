@@ -20,17 +20,17 @@ const Tab = createBottomTabNavigator();
 const TabNavigator = () => {
   const { loginDetails = {} } = useSelector((store) => store);
 
-  useEffect(() => {
-    const { password, username } = loginDetails;
+  // useEffect(() => {
+  //   const { password, username } = loginDetails;
 
-    Sip.register({
-      websocket: "wss://billing.hifroggy.com:8089/ws",
-      username,
-      domain: "billing.hifroggy.com",
-      password,
-      name: username,
-    });
-  }, []);
+  //   Sip.register({
+  //     websocket: "wss://billing.hifroggy.com:8089/ws",
+  //     username,
+  //     domain: "billing.hifroggy.com",
+  //     password,
+  //     name: username,
+  //   });
+  // }, []);
 
   return (
     <Tab.Navigator
@@ -67,21 +67,22 @@ const TabNavigator = () => {
           );
         },
         tabBarStyle: {
-          backgroundColor: colors.appColor,
-          borderTopColor: colors.bordercolor,
-          borderTopWidth: wp(0.2),
+          backgroundColor: colors.secondary,
+          // borderTopColor: colors.bordercolor,
+          // borderTopWidth: wp(0.2),
           height: hp(9),
           paddingBottom: hp(0.8),
         },
-        tabBarActiveTintColor: colors.tabTextColor,
-        tabBarInactiveTintColor: colors.tabTextColor,
+        tabBarActiveTintColor: colors.buttonColor,
+        tabBarInactiveTintColor: colors.white,
       })}
     >
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Recent Call" component={RecentCall} />
-      <Tab.Screen name="Keypad" component={Keypad} />
-      <Tab.Screen name="Contacts" component={Contacts} />
       <Tab.Screen name="LiveChat" component={LiveChat} />
+      <Tab.Screen name="Keypad" component={Keypad} />
+      <Tab.Screen name="Recent Call" component={RecentCall} />
+      <Tab.Screen name="Contacts" component={Contacts} />
+     
     </Tab.Navigator>
   );
 };
