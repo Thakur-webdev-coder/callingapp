@@ -24,6 +24,7 @@ import {
   logo_small_kokoa,
   ic_logout,
   ic_popup,
+  logo_small_kokoaa,
 } from "../../routes/imageRoutes";
 import styles from "./styles";
 import AppStyle from "../../components/AppStyle";
@@ -46,10 +47,7 @@ import {
   saveEncrLoginDetails,
   saveLoginDetails,
 } from "../../redux/reducer";
-import {
-  CommonActions,
-  useIsFocused,
-} from "@react-navigation/native";
+import { CommonActions, useIsFocused } from "@react-navigation/native";
 import CommonHeader from "../../components/Header/commonHeader";
 
 let myBalanceData = null;
@@ -221,13 +219,10 @@ const Home = ({ navigation }) => {
     if (myResponse.data.result == "success") {
       passwordEncryptedCode = myResponse?.data?.value;
       dispatch(
-        saveEncrLoginDetails(
-          {
-            encryptUser: usernameEncryptedCode,
-            encryptPassword: passwordEncryptedCode,
-          }
-
-        )
+        saveEncrLoginDetails({
+          encryptUser: usernameEncryptedCode,
+          encryptPassword: passwordEncryptedCode,
+        })
       );
 
       if (usernameEncryptedCode || passwordEncryptedCode) hitFetchBalanceApi();
@@ -312,7 +307,6 @@ const Home = ({ navigation }) => {
         onPress={() => ViewItemClicked_Method(item.name)}
         style={styles.linearGradient}
       >
-
         <Image source={item.image} />
         <CustomText
           textColor={colors.secondary}
@@ -322,7 +316,6 @@ const Home = ({ navigation }) => {
           fontWeight={"600"}
           textSize={13}
         />
-
       </TouchableOpacity>
     );
   };
@@ -330,10 +323,9 @@ const Home = ({ navigation }) => {
   return (
     <SafeAreaView style={AppStyle.wrapper}>
       <View style={AppStyle.secondWrapper}>
-        <CommonHeader
-          headerText={"Home"} />
+        <CommonHeader headerText={"Home"} />
 
-        <View style={styles.cardStyle} >
+        <View style={styles.cardStyle}>
           <CustomText
             text={"Registered Number"}
             textColor={colors.white}
@@ -346,27 +338,26 @@ const Home = ({ navigation }) => {
           />
           <View style={styles.balanceStyle}>
             <View>
-            <CustomText
-              text={"Balance"}
-              textSize={18}
-              textColor={colors.white}
-            />
-          
-            <CustomText
-            text={
-              balanceDetail?.credit == "0"
-                ? "€" + "0.00"
-                : "€" + balanceDetail?.credit
-            }
-            textSize={18}
-            textColor={colors.white}
-          />
-          </View>
-          <View style={styles.imgView}>
-            <Image  source={logo_small_kokoa} />
+              <CustomText
+                text={"Balance"}
+                textSize={18}
+                textColor={colors.white}
+              />
+
+              <CustomText
+                text={
+                  balanceDetail?.credit == "0"
+                    ? "€" + "0.00"
+                    : "€" + balanceDetail?.credit
+                }
+                textSize={18}
+                textColor={colors.white}
+              />
+            </View>
+            <View style={styles.imgView}>
+              <Image source={logo_small_kokoaa} />
             </View>
           </View>
-          
         </View>
       </View>
       <View style={styles.wrapper2}>
@@ -380,7 +371,6 @@ const Home = ({ navigation }) => {
         />
 
         <FlatList
-
           columnWrapperStyle={{ justifyContent: "space-between" }}
           data={DATA}
           renderItem={RenderList}
@@ -501,7 +491,6 @@ const Home = ({ navigation }) => {
         }}
         loading={isLoading}
       /> */}
-
     </SafeAreaView>
   );
 };

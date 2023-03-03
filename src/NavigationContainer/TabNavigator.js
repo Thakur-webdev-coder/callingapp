@@ -20,17 +20,17 @@ const Tab = createBottomTabNavigator();
 const TabNavigator = () => {
   const { loginDetails = {} } = useSelector((store) => store);
 
-  // useEffect(() => {
-  //   const { password, username } = loginDetails;
+  useEffect(() => {
+    // const { password, username } = loginDetails;
 
-  //   Sip.register({
-  //     websocket: "wss://billing.hifroggy.com:8089/ws",
-  //     username,
-  //     domain: "billing.hifroggy.com",
-  //     password,
-  //     name: username,
-  //   });
-  // }, []);
+    Sip.register({
+      websocket: "wss://billing.kokoafone.com:8089/ws",
+      username: "919588220190",
+      domain: "billing.kokoafone.com",
+      password: "16250",
+      name: "919588220190",
+    });
+  }, []);
 
   return (
     <Tab.Navigator
@@ -82,7 +82,6 @@ const TabNavigator = () => {
       <Tab.Screen name="Keypad" component={Keypad} />
       <Tab.Screen name="Recent Call" component={RecentCall} />
       <Tab.Screen name="Contacts" component={Contacts} />
-     
     </Tab.Navigator>
   );
 };

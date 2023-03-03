@@ -75,7 +75,6 @@ const Keypad = ({ navigation }) => {
   const RenderList = ({ item }) => {
     const { dialedNumber } = state;
     return (
-
       <TouchableOpacity
         onPress={() => DialNumberMethod(item)}
         onLongPress={() =>
@@ -92,8 +91,8 @@ const Keypad = ({ navigation }) => {
           textColor={colors.secondary}
           textAlign={"center"}
           text={item.num}
-        fontWeight={"bold"}
-        textSize={25}
+          fontWeight={"bold"}
+          textSize={25}
         />
         <CustomText
           textColor={colors.secondary}
@@ -103,28 +102,28 @@ const Keypad = ({ navigation }) => {
           textSize={10}
         />
       </TouchableOpacity>
-
     );
   };
   const { dialedNumber } = state;
   return (
-    <SafeAreaView style={[AppStyle.wrapper, { backgroundColor: colors.offWhite }]}>
+    <SafeAreaView
+      style={[AppStyle.wrapper, { backgroundColor: colors.offWhite }]}
+    >
       <View style={styles.secondWrapper}>
-        <CommonHeader
-          headerText={"Dialpad"} />
+        <CommonHeader headerText={"Dialpad"} />
 
         <View style={styles.registerBox}>
           <CustomText
             textColor={colors.black}
             textAlign={"center"}
-            text={'Registered'}
+            text={"Registered"}
             fontWeight={"bold"}
             textSize={17}
           />
-              <CustomText
+          <CustomText
             textColor={colors.black}
             textAlign={"center"}
-            text={'015247845'}
+            text={"015247845"}
             //fontWeight={"bold"}
             marginLeft={wp(2)}
             textSize={17}
@@ -134,7 +133,6 @@ const Keypad = ({ navigation }) => {
           style={styles.inputTxtBoxStyle}
           value={dialedNumber}
           showSoftInputOnFocus={false}
-
         />
       </View>
       <View style={styles.wrapper3}>
@@ -151,16 +149,16 @@ const Keypad = ({ navigation }) => {
 
         <TouchableOpacity
           onPress={() => {
-            if (balanceDetail.credit > 0) {
-              Sip.makeCall(dialedNumber);
-              navigation.navigate("CallingScreen", {
-                callData: dialedNumber,
-              });
-            } else {
-              Show_Toast(
-                "Insufficient balance. Please recharge your account."
-              );
-            }
+            // if (balanceDetail.credit > 0) {
+            Sip.makeCall(dialedNumber);
+            navigation.navigate("CallingScreen", {
+              callData: dialedNumber,
+            });
+            // } else {
+            //   Show_Toast(
+            //     "Insufficient balance. Please recharge your account."
+            //   );
+            // }
           }}
         >
           <LinearGradient
@@ -175,8 +173,6 @@ const Keypad = ({ navigation }) => {
           <Image style={styles.bottomImgStyle} source={ic_delete} />
         </TouchableOpacity>
       </View>
-
-
     </SafeAreaView>
   );
 };

@@ -66,7 +66,7 @@ const OtpScreen = ({ navigation, route }) => {
 
     if (myResponse.data.result == "success") {
       dispatch(saveLoginDetails(myResponse.data.userinfo));
-      navigation.navigate("StackNavigator");
+      navigation.navigate("UpdateProfile");
     } else {
       showErrorMessage(myResponse.data.OTP);
     }
@@ -94,7 +94,6 @@ const OtpScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.wrapper}>
-      
       <View>
         <CustomText
           text={"Enter OTP Here"}
