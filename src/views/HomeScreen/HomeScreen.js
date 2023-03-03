@@ -95,12 +95,12 @@ const Home = ({ navigation }) => {
   const DATA = [
     {
       id: 0,
-      name: "Call",
+      name: "Invite Friends",
       image: ic_call,
     },
     {
       id: 1,
-      name: "Invite Friends",
+      name: "My Balance",
       image: ic_users,
     },
     {
@@ -110,22 +110,22 @@ const Home = ({ navigation }) => {
     },
     {
       id: 3,
-      name: "Redeem Voucher",
+      name: "Transfer Credit",
       image: ic_voucher,
     },
     {
       id: 4,
-      name: "Call Rates",
+      name: "Transfer History",
       image: ic_callrate,
     },
     {
       id: 5,
-      name: "Call Details Reports",
+      name: "Voucher Recharge",
       image: ic_calldetails,
     },
     {
       id: 6,
-      name: "Directory",
+      name: "Call Details Report",
       image: ic_phonebook,
     },
     {

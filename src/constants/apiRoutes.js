@@ -1,5 +1,6 @@
 let ApiRoutes = {
-  BASE_URL: process.env.DEV_BACKEND_URL,
+   BASE_URL: process.env.DEV_BACKEND_URL,
+  //BASE_URL: 'https://billing.hifroggy.com/billing/froggy_api/',
   API_ENCRYPTION: "billing_encryption/encrypt_value.php",
   API_SEND_OTP: "billing_auto_register/otp_send.php",
   API_VERIFY_OTP: "billing_auto_register/otp_secure.php",

@@ -1,6 +1,4 @@
 export default {
- 
-  
   accent: "#4895ef",
   danger: "#f72585",
   success: "#4cc9f0",
@@ -22,30 +20,32 @@ export default {
   darkGreenText: "#398357",
   inviteTextBg: "#446A50",
   inviteCardBg: "#252B27",
-  greenTop:"#309C60",
-  greenMid:"#4AE18A",
-  darkGreenUp:"#497333",
-  darkGreenMid:"#68A64B",
-  blueTop:'#1D44A6',
-  blueMid:'#1C49A9',
-  blueBottom:'#198ECD',
-  dodgeBlue:'#0094FF',
-  offWhite:'#FDFDFD',
-  borderBottomColor:'#0071D9',
-  disableColor:"#B4F0CA",
-
+  greenTop: "#309C60",
+  greenMid: "#4AE18A",
+  darkGreenUp: "#497333",
+  darkGreenMid: "#68A64B",
+  blueTop: "#1D44A6",
+  blueMid: "#1C49A9",
+  blueBottom: "#198ECD",
+  dodgeBlue: "#0094FF",
+  offWhite: "#FDFDFD",
+  borderBottomColor: "#0071D9",
 
   //kokoafone
   secondary: "#4D3E3E",
   searchBar:'#D9D9D9',
   searchBarTxt:"#919191",
+  searchBar: "#D9D9D9",
+  searchBarTxt: "#919191",
+  primsary: "#FF0000",
   white: "#ffffff",
-  backColor:'#F2F2F2',
+  backColor: "#F2F2F2",
   buttonColor: "#FF0000",
   grayColor: "#403F3F",
   shadowColor:"#b0b0b0",
   keypadColor:"#FAFAFA",
-  offWhite:"#E1E1E1"
+  offWhite:"#E1E1E1",
+  otpBgColor: "#D9D9D9",
+  lightBlack: "#010101",
+  disableColor: "#FBFBFB",
 };
-
-

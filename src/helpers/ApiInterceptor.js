@@ -41,7 +41,7 @@ apiClient.interceptors.response.use(
   },
   async (error) => {
     Store.dispatch(changeLoadingStatus(false));
-
+console.log('error------>',error)
     Show_Toast("Something went wrong Please Try Again!");
     return Promise.reject(error);
   }
