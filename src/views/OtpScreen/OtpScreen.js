@@ -1,4 +1,4 @@
-import { SafeAreaView, View } from "react-native";
+import { Alert, Modal, SafeAreaView, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import CustomText from "../../components/CustomText";
 import colors from "../../../assets/colors";
@@ -18,19 +18,29 @@ import { showErrorMessage } from "../../utils/commonUtils";
 import { useDispatch } from "react-redux";
 import { saveLoginDetails } from "../../redux/reducer";
 import styles from "./styles";
+import { ScrollView } from "react-native-gesture-handler";
 let otpEncryptedCode = null;
 
 const OtpScreen = ({ navigation, route }) => {
-  // const [state,setState]=useState({})
+ 
 
   const [counter, setCounter] = useState(90);
   const [otpText, setOtpText] = useState("");
 
-  const { phoneInput } = route.params;
-  const { countryCode } = route.params;
+  const { phoneEncryptedCode,countryCode,phoneInput } = route.params;
+  // console.log('dadada==>',route.params)
   const dispatch = useDispatch();
+  console.log('phoneEncryptedCode-----',phoneEncryptedCode,'countryEncryptedCode',countryCode,'phoneInput',phoneInput)
 
   useEffect(() => {
+
+    Alert.alert('OTP', `Your OTP is sent to your Mobile Number  ${phoneInput}`, [
+
+      {text: 'OK', onPress: () => console.log('OK Pressed')},
+    ]);
+  }, []);
+  useEffect(() => {
+
     const interval =
       counter > 0 &&
       setInterval(() => {
@@ -39,14 +49,18 @@ const OtpScreen = ({ navigation, route }) => {
     return () => clearInterval(interval);
   }, [counter]);
 
+ 
+ 
+
   const hitOtpEncryptionAPI = async () => {
     if (otpText.length == 4) {
       const data = new FormData();
       data.append("source", otpText);
       const myResponse = await hitEncryptionApi(data);
-
+ console.log('1atapi=======>',myResponse.data.value)
       if (myResponse.data.result == "success") {
         otpEncryptedCode = myResponse.data.value;
+        console.log()
         hitVerifyOtpApi();
       }
     } else {
@@ -56,17 +70,18 @@ const OtpScreen = ({ navigation, route }) => {
 
   const hitVerifyOtpApi = async () => {
     const data = new FormData();
-    data.append("phone_user", phoneInput);
+    data.append("phone_user", phoneEncryptedCode);
     data.append("otp", otpEncryptedCode);
     data.append("ccode", countryCode);
 
-    console.log("dataaaa", data);
+    console.log("dataaaa=======>", data);
 
     const myResponse = await hitOtpVerificationAPI(data);
+    console.log('2ntapi=======>',myResponse.data.result)
 
     if (myResponse.data.result == "success") {
       dispatch(saveLoginDetails(myResponse.data.userinfo));
-      navigation.navigate("UpdateProfile");
+      navigation.navigate("StackNavigator");
     } else {
       showErrorMessage(myResponse.data.OTP);
     }
@@ -94,7 +109,8 @@ const OtpScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.wrapper}>
-      <View>
+      {/* <View style={{flex: 0.2}}> */}
+
         <CustomText
           text={"Enter OTP Here"}
           textColor={colors.white}
@@ -103,11 +119,13 @@ const OtpScreen = ({ navigation, route }) => {
           alignText={"center"}
           marginTop={hp(8)}
         />
-      </View>
-      <View style={styles.wrapper2}>
+
+      {/* </View> */}
+    
+      <ScrollView style={styles.wrapper2}>
         <CustomText
           text={
-            "Please enter the One Time PIN which you received on your phone +2349852145236 or Resend the One Time PIN"
+            `Please enter the One Time PIN which you received on your phone ${phoneInput} or Resend the One Time PIN`
           }
           textColor={colors.lightBlack}
           textSize={17}
@@ -117,7 +135,7 @@ const OtpScreen = ({ navigation, route }) => {
         />
 
         <CustomText
-          text={"Your OTP code expire in 90 Seconds"}
+          text={`Your OTP code expire in ${counter} Seconds`}
           textColor={colors.lightBlack}
           textSize={17}
           alignText={"center"}
@@ -145,14 +163,20 @@ const OtpScreen = ({ navigation, route }) => {
 
         <CustomButton
           title={"Resend"}
-          secondary
+          primary
           horzontalPadding={wp(15)}
           marginTop={hp(2)}
-          // disabled={counter != 0}
+           disabled={counter != 0}
           // disabled
-          onPress={() => hitOtpSendApi()}
+          onPress={() =>
+            //navigation.navigate("StackNavigator")
+             hitOtpSendApi()
+            }
         />
-      </View>
+
+        
+      </ScrollView>
+    
     </SafeAreaView>
   );
 };

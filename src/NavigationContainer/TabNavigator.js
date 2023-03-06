@@ -21,14 +21,14 @@ const TabNavigator = () => {
   const { loginDetails = {} } = useSelector((store) => store);
 
   useEffect(() => {
-    // const { password, username } = loginDetails;
+     const { password, username } = loginDetails;
 
     Sip.register({
       websocket: "wss://billing.kokoafone.com:8089/ws",
-      username: "919588220190",
+      username,
       domain: "billing.kokoafone.com",
-      password: "16250",
-      name: "919588220190",
+      password,
+      name: username,
     });
   }, []);
 
@@ -56,6 +56,13 @@ const TabNavigator = () => {
           return (
             <View
               key={route.key}
+               // onStartShouldSetResponder={()=>{        //needed comment
+              //   if(route.name === "LiveChat"){
+              //     Linking.openURL('https://tawk.to/chat/63de1f18c2f1ac1e20315d9d/1godqiuj4')
+              //     return true
+              //   }
+              //   return false
+              // }}
               style={{
                 alignItems: "center",
                 paddingTop: hp(3),

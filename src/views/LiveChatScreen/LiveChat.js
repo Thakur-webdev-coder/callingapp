@@ -9,6 +9,8 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+import { Text } from "react-native";
+import colors from "../../../assets/colors";
 const LiveChat = () => {
   const URL = `https://tawk.to/chat/63de1f18c2f1ac1e20315d9d/1godqiuj4`;
   const [isLoading, setIsLoading] = useState(false);
@@ -23,7 +25,10 @@ const LiveChat = () => {
 
   return (
     <SafeAreaView style={AppStyle.wrapper}>
-      <CommonHeader paddingHorizontal={wp(5)} headerText={"Live Chat"} />
+      <View style={{justifyContent:'center',flex:1}}>
+      <Text style={{color:colors.black,textAlign:'center',fontSize:20}}>Not implemented yet</Text>
+      </View>
+      {/* <CommonHeader paddingHorizontal={wp(5)} headerText={"Live Chat"} />
       <WebView
         style={styles.mainViewStyle}
         javaScriptEnabled={true}
@@ -37,7 +42,7 @@ const LiveChat = () => {
           justifyContent: "center",
         }}
         loading={isLoading}
-      />
+      /> */}
     </SafeAreaView>
   );
 };

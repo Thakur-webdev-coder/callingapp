@@ -126,7 +126,10 @@ const Contacts = ({ navigation }) => {
 
   return (
     <SafeAreaView style={AppStyle.wrapper}>
-      <View style={AppStyle.secondWrapper}>
+      <View style={{justifyContent:'center',flex:1}}>
+      <Text style={{color:colors.black,textAlign:'center',fontSize:20}}>Not implemented yet</Text>
+      </View>
+      {/* <View style={AppStyle.secondWrapper}>
         <View style={styles.headerSearchBar}>
           <TouchableOpacity
             style={{ alignSelf: "center" }}
@@ -150,7 +153,7 @@ const Contacts = ({ navigation }) => {
           keyExtractor={keyExtractor}
           
         />
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 };

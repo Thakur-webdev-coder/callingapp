@@ -104,7 +104,10 @@ const RecentCall = ({ navigation }) => {
     );
     return (
         <SafeAreaView style={AppStyle.wrapper}>
-            <View style={AppStyle.secondWrapper}>
+             <View style={{justifyContent:'center',flex:1}}>
+      <Text style={{color:colors.black,textAlign:'center',fontSize:20}}>Not implemented yet</Text>
+      </View>
+            {/* <View style={AppStyle.secondWrapper}>
             <CommonHeader
                 headerText={"Recent Call"} />
             <FlatList
@@ -114,7 +117,7 @@ const RecentCall = ({ navigation }) => {
                 showsVerticalScrollIndicator={false}
                 keyExtractor={(item) => item.id}
             />
-            </View>
+            </View> */}
         </SafeAreaView>
     )
 }

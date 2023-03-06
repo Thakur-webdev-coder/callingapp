@@ -11,11 +11,18 @@ import {
 import { CustomButton } from "../../components";
 import { hitApiAssignDid } from "../../constants/APi";
 import { Show_Toast } from "../../utils/toast";
-const DIDScreen = ({ navigation }) => {
-  const hitAssignDidApi = async () => {
-    const myResponse = await hitApiAssignDid("919588220190");
+import { OTP_SCREEN } from "../../routes/routeNames";
+const DIDScreen = ({ navigation,route }) => {
+  const { phoneEncryptedCode,countryCode,phoneInput } = route.params;
 
-    navigation.navigate("StackNavigator");
+  const hitAssignDidApi = async () => {
+    const myResponse = await hitApiAssignDid(phoneInput);
+
+    navigation.navigate(OTP_SCREEN, {
+      phoneEncryptedCode: phoneEncryptedCode,
+      countryCode: countryCode,
+      phoneInput:phoneInput
+    });
   };
   return (
     <SafeAreaView style={styles.mainView}>
