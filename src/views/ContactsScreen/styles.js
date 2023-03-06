@@ -8,7 +8,8 @@ import {
 export default StyleSheet.create({
   flatListStyle: {
     flexDirection: "row",
-    marginBottom: hp(2),
+    marginVertical: hp(2),
+    paddingHorizontal: wp(5),
   },
 
   nameTextColoumn: {
@@ -34,7 +35,7 @@ export default StyleSheet.create({
   },
   nameTxtStyle: {
     paddingLeft: wp(4),
-    color: colors.white,
+    color: colors.black,
     fontSize: 16,
   },
   headerSearchBar: {
@@ -42,13 +43,9 @@ export default StyleSheet.create({
     marginHorizontal: wp(1),
     marginTop: wp(2.5),
   },
-  inputTxtBoxStyle: {
-    borderRadius: 10,
-    marginLeft: wp(5),
-    width: wp(75),
-    height: hp(5.5),
-    backgroundColor: colors.searchBar,
-    color: colors.white,
-    paddingHorizontal: wp(5),
+
+  horizontalLine: {
+    borderWidth: 0.3,
+    borderColor: colors.black,
   },
 });
