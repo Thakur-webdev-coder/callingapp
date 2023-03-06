@@ -21,8 +21,10 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'Froggy' do
+target 'Kokoafone' do
   config = use_native_modules!
+  permissions_path = '../node_modules/react-native-permissions/ios'
+  pod 'Permission-Contacts', :path => "#{permissions_path}/Contacts"
 
   # Flags change depending on the env values.
   flags = get_default_flags()

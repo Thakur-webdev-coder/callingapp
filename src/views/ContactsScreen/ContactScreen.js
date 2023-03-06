@@ -33,14 +33,14 @@ const Contacts = ({ navigation }) => {
   })
   const [searchTxt, setSearchTxt] = useState("");
   const { balanceDetail = {} } = useSelector((store) => store);
-  useEffect(() => {
-    checkPeermission();
-    const unsubscribe = navigation.addListener("blur", () => {
-      setSearchTxt("");
-      filterContacts("");
-    });
-    return unsubscribe;
-  }, []);
+  // useEffect(() => {
+  //   checkPeermission();
+  //   const unsubscribe = navigation.addListener("blur", () => {
+  //     setSearchTxt("");
+  //     filterContacts("");
+  //   });
+  //   return unsubscribe;
+  // }, []);
   const permissions =
       Platform.OS === 'ios'
         ? PERMISSIONS.IOS.READ_CONTACTS

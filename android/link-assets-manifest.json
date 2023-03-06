@@ -2,20 +2,20 @@
   "migIndex": 1,
   "data": [
     {
-      "path": "assets/fonts/Futura Bold font.ttf",
-      "sha1": "68fab471b5d366f87ade01b7f6c810d3a078a298"
+      "path": "assets/fonts/Inter-Bold.ttf",
+      "sha1": "48747b7a60086f97af0d373febcbd1f1bee87f17"
     },
     {
-      "path": "assets/fonts/Futura Light font.ttf",
-      "sha1": "58fa3b9c7a828c600e15b1a86dd70f6ac8c76bfe"
+      "path": "assets/fonts/Inter-Medium.ttf",
+      "sha1": "a418a8ba73bbcfa8c131c426ab836d78457afa9b"
     },
     {
-      "path": "assets/fonts/futur.ttf",
-      "sha1": "77aab0b78e5f9b3d89df070cfb763fb17606fa7e"
+      "path": "assets/fonts/Inter-Regular.ttf",
+      "sha1": "7237d9cf55f177702066a28a4dde1e4c7e8ab576"
     },
     {
-      "path": "assets/fonts/futura medium bt.ttf",
-      "sha1": "738e0588a2b321c45c7eeca39f87e78a263b1d82"
+      "path": "assets/fonts/Inter-SemiBold.ttf",
+      "sha1": "431007da316de60d85174aeec9b8389b5c73e7d6"
     }
   ]
 }

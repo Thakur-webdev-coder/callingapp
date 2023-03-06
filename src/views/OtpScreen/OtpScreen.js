@@ -30,7 +30,7 @@ const OtpScreen = ({ navigation, route }) => {
   const { phoneEncryptedCode,countryCode,phoneInput } = route.params;
   // console.log('dadada==>',route.params)
   const dispatch = useDispatch();
-  console.log('phoneEncryptedCode-----',phoneEncryptedCode,'countryEncryptedCode',countryCode,'phoneInput',phoneInput)
+  // console.log('phoneEncryptedCode-----',phoneEncryptedCode,'countryEncryptedCode',countryCode,'phoneInput',phoneInput)
 
   useEffect(() => {
 
@@ -166,11 +166,10 @@ const OtpScreen = ({ navigation, route }) => {
           primary
           horzontalPadding={wp(15)}
           marginTop={hp(2)}
-           disabled={counter != 0}
-          // disabled
+           //disabled={counter != 0}
           onPress={() =>
-            //navigation.navigate("StackNavigator")
-             hitOtpSendApi()
+            navigation.navigate("StackNavigator")
+            // hitOtpSendApi()
             }
         />
 

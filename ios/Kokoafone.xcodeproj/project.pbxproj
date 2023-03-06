@@ -8,16 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* FroggyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* FroggyTests.m */; };
-		0C80B921A6F3F58F76C31292 /* libPods-Froggy.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-Froggy.a */; };
+		0F7E559FCE0C4E968FD68688 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FE05F530D2CA45B4BC61D4C6 /* Inter-Regular.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		468D04A8D240408F82EB9AD8 /* Futura Light font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2D07387149E144EEAEB7E265 /* Futura Light font.ttf */; };
-		57198BB1E6934532B5AF7AE6 /* futura medium bt.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8BDC1445F2DA411AB1344279 /* futura medium bt.ttf */; };
-		61764322E3FF42598AFC8B1C /* futur.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7BFCF67233454EE7A170074D /* futur.ttf */; };
-		7699B88040F8A987B510C191 /* libPods-Froggy-FroggyTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-Froggy-FroggyTests.a */; };
-		7A2EF7CEA9494C3A81ACF5FA /* Futura Bold font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D13B111282F6456EB0F5892F /* Futura Bold font.ttf */; };
+		3BC05C8F38BA1984A1283371 /* libPods-Kokoafone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 06A092D8839FB9FA107726C0 /* libPods-Kokoafone.a */; };
+		439F4F9DBE45824B88212F37 /* libPods-Kokoafone-FroggyTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1E3D92543EFD8262FCC7FCC /* libPods-Kokoafone-FroggyTests.a */; };
+		A1A5AAD113104E358DFB7823 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1809F634779D487BB899D32D /* Inter-SemiBold.ttf */; };
 		B6360A012996726100E497B7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6360A002996726100E497B7 /* LaunchScreen.storyboard */; };
+		DB97B4635CAE4DC99CB6B39A /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E5F5C193C1F842D4916D9F15 /* Inter-Bold.ttf */; };
+		EE53360BC50B4A3EB637ECF7 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 46D254873A0545C68ED93283 /* Inter-Medium.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,24 +34,28 @@
 		00E356EE1AD99517003FC87E /* FroggyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FroggyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* FroggyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FroggyTests.m; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* Froggy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Froggy.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		06A092D8839FB9FA107726C0 /* libPods-Kokoafone.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Kokoafone.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* Kokoafone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kokoafone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Froggy/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = Froggy/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Froggy/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Froggy/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Froggy/main.m; sourceTree = "<group>"; };
-		19F6CBCC0A4E27FBF8BF4A61 /* libPods-Froggy-FroggyTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Froggy-FroggyTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2D07387149E144EEAEB7E265 /* Futura Light font.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Futura Light font.ttf"; path = "../assets/fonts/Futura Light font.ttf"; sourceTree = "<group>"; };
+		1809F634779D487BB899D32D /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-SemiBold.ttf"; path = "../assets/fonts/Inter-SemiBold.ttf"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-Froggy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Froggy.debug.xcconfig"; path = "Target Support Files/Pods-Froggy/Pods-Froggy.debug.xcconfig"; sourceTree = "<group>"; };
+		46C06E724A311DE0530194CC /* Pods-Kokoafone-FroggyTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kokoafone-FroggyTests.release.xcconfig"; path = "Target Support Files/Pods-Kokoafone-FroggyTests/Pods-Kokoafone-FroggyTests.release.xcconfig"; sourceTree = "<group>"; };
+		46D254873A0545C68ED93283 /* Inter-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Medium.ttf"; path = "../assets/fonts/Inter-Medium.ttf"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-Froggy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Froggy.release.xcconfig"; path = "Target Support Files/Pods-Froggy/Pods-Froggy.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-Froggy-FroggyTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Froggy-FroggyTests.debug.xcconfig"; path = "Target Support Files/Pods-Froggy-FroggyTests/Pods-Froggy-FroggyTests.debug.xcconfig"; sourceTree = "<group>"; };
-		5DCACB8F33CDC322A6C60F78 /* libPods-Froggy.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Froggy.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7BFCF67233454EE7A170074D /* futur.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = futur.ttf; path = ../assets/fonts/futur.ttf; sourceTree = "<group>"; };
+		668778564E28D5BF208CED2F /* Pods-Kokoafone.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kokoafone.debug.xcconfig"; path = "Target Support Files/Pods-Kokoafone/Pods-Kokoafone.debug.xcconfig"; sourceTree = "<group>"; };
+		768170946564744F7508B02D /* Pods-Kokoafone-FroggyTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kokoafone-FroggyTests.debug.xcconfig"; path = "Target Support Files/Pods-Kokoafone-FroggyTests/Pods-Kokoafone-FroggyTests.debug.xcconfig"; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-Froggy-FroggyTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Froggy-FroggyTests.release.xcconfig"; path = "Target Support Files/Pods-Froggy-FroggyTests/Pods-Froggy-FroggyTests.release.xcconfig"; sourceTree = "<group>"; };
-		8BDC1445F2DA411AB1344279 /* futura medium bt.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "futura medium bt.ttf"; path = "../assets/fonts/futura medium bt.ttf"; sourceTree = "<group>"; };
+		A1E3D92543EFD8262FCC7FCC /* libPods-Kokoafone-FroggyTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Kokoafone-FroggyTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6360A002996726100E497B7 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
-		D13B111282F6456EB0F5892F /* Futura Bold font.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Futura Bold font.ttf"; path = "../assets/fonts/Futura Bold font.ttf"; sourceTree = "<group>"; };
+		CD957D183330E05E398970CF /* Pods-Kokoafone.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kokoafone.release.xcconfig"; path = "Target Support Files/Pods-Kokoafone/Pods-Kokoafone.release.xcconfig"; sourceTree = "<group>"; };
+		E5F5C193C1F842D4916D9F15 /* Inter-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Bold.ttf"; path = "../assets/fonts/Inter-Bold.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		FE05F530D2CA45B4BC61D4C6 /* Inter-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Regular.ttf"; path = "../assets/fonts/Inter-Regular.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,7 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7699B88040F8A987B510C191 /* libPods-Froggy-FroggyTests.a in Frameworks */,
+				439F4F9DBE45824B88212F37 /* libPods-Kokoafone-FroggyTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,7 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C80B921A6F3F58F76C31292 /* libPods-Froggy.a in Frameworks */,
+				3BC05C8F38BA1984A1283371 /* libPods-Kokoafone.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,7 +95,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		13B07FAE1A68108700A75B9A /* Froggy */ = {
+		13B07FAE1A68108700A75B9A /* Kokoafone */ = {
 			isa = PBXGroup;
 			children = (
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -101,15 +105,15 @@
 				B6360A002996726100E497B7 /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
-			name = Froggy;
+			name = Kokoafone;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				5DCACB8F33CDC322A6C60F78 /* libPods-Froggy.a */,
-				19F6CBCC0A4E27FBF8BF4A61 /* libPods-Froggy-FroggyTests.a */,
+				06A092D8839FB9FA107726C0 /* libPods-Kokoafone.a */,
+				A1E3D92543EFD8262FCC7FCC /* libPods-Kokoafone-FroggyTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -124,7 +128,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				13B07FAE1A68108700A75B9A /* Froggy */,
+				13B07FAE1A68108700A75B9A /* Kokoafone */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* FroggyTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
@@ -140,7 +144,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* Froggy.app */,
+				13B07F961A680F5B00A75B9A /* Kokoafone.app */,
 				00E356EE1AD99517003FC87E /* FroggyTests.xctest */,
 			);
 			name = Products;
@@ -153,6 +157,10 @@
 				5709B34CF0A7D63546082F79 /* Pods-Froggy.release.xcconfig */,
 				5B7EB9410499542E8C5724F5 /* Pods-Froggy-FroggyTests.debug.xcconfig */,
 				89C6BE57DB24E9ADA2F236DE /* Pods-Froggy-FroggyTests.release.xcconfig */,
+				668778564E28D5BF208CED2F /* Pods-Kokoafone.debug.xcconfig */,
+				CD957D183330E05E398970CF /* Pods-Kokoafone.release.xcconfig */,
+				768170946564744F7508B02D /* Pods-Kokoafone-FroggyTests.debug.xcconfig */,
+				46C06E724A311DE0530194CC /* Pods-Kokoafone-FroggyTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -160,10 +168,10 @@
 		CB7915BE10C241A5B78B424B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				D13B111282F6456EB0F5892F /* Futura Bold font.ttf */,
-				2D07387149E144EEAEB7E265 /* Futura Light font.ttf */,
-				7BFCF67233454EE7A170074D /* futur.ttf */,
-				8BDC1445F2DA411AB1344279 /* futura medium bt.ttf */,
+				E5F5C193C1F842D4916D9F15 /* Inter-Bold.ttf */,
+				46D254873A0545C68ED93283 /* Inter-Medium.ttf */,
+				FE05F530D2CA45B4BC61D4C6 /* Inter-Regular.ttf */,
+				1809F634779D487BB899D32D /* Inter-SemiBold.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -192,9 +200,9 @@
 			productReference = 00E356EE1AD99517003FC87E /* FroggyTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		13B07F861A680F5B00A75B9A /* Froggy */ = {
+		13B07F861A680F5B00A75B9A /* Kokoafone */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Froggy" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Kokoafone" */;
 			buildPhases = (
 				C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
@@ -209,9 +217,9 @@
 			);
 			dependencies = (
 			);
-			name = Froggy;
+			name = Kokoafone;
 			productName = Froggy;
-			productReference = 13B07F961A680F5B00A75B9A /* Froggy.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* Kokoafone.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -231,7 +239,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Froggy" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Kokoafone" */;
 			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -244,7 +252,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* Froggy */,
+				13B07F861A680F5B00A75B9A /* Kokoafone */,
 				00E356ED1AD99517003FC87E /* FroggyTests */,
 			);
 		};
@@ -263,11 +271,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				7A2EF7CEA9494C3A81ACF5FA /* Futura Bold font.ttf in Resources */,
-				468D04A8D240408F82EB9AD8 /* Futura Light font.ttf in Resources */,
 				B6360A012996726100E497B7 /* LaunchScreen.storyboard in Resources */,
-				61764322E3FF42598AFC8B1C /* futur.ttf in Resources */,
-				57198BB1E6934532B5AF7AE6 /* futura medium bt.ttf in Resources */,
+				DB97B4635CAE4DC99CB6B39A /* Inter-Bold.ttf in Resources */,
+				EE53360BC50B4A3EB637ECF7 /* Inter-Medium.ttf in Resources */,
+				0F7E559FCE0C4E968FD68688 /* Inter-Regular.ttf in Resources */,
+				A1A5AAD113104E358DFB7823 /* Inter-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,15 +304,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Froggy/Pods-Froggy-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Kokoafone/Pods-Kokoafone-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Froggy/Pods-Froggy-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Kokoafone/Pods-Kokoafone-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Froggy/Pods-Froggy-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Kokoafone/Pods-Kokoafone-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */ = {
@@ -322,7 +330,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Froggy-FroggyTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Kokoafone-FroggyTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -344,7 +352,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Froggy-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Kokoafone-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -357,15 +365,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Froggy-FroggyTests/Pods-Froggy-FroggyTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Kokoafone-FroggyTests/Pods-Kokoafone-FroggyTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Froggy-FroggyTests/Pods-Froggy-FroggyTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Kokoafone-FroggyTests/Pods-Kokoafone-FroggyTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Froggy-FroggyTests/Pods-Froggy-FroggyTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Kokoafone-FroggyTests/Pods-Kokoafone-FroggyTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E235C05ADACE081382539298 /* [CP] Copy Pods Resources */ = {
@@ -374,15 +382,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Froggy/Pods-Froggy-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Kokoafone/Pods-Kokoafone-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Froggy/Pods-Froggy-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Kokoafone/Pods-Kokoafone-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Froggy/Pods-Froggy-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Kokoafone/Pods-Kokoafone-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */ = {
@@ -391,15 +399,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Froggy-FroggyTests/Pods-Froggy-FroggyTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Kokoafone-FroggyTests/Pods-Kokoafone-FroggyTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Froggy-FroggyTests/Pods-Froggy-FroggyTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Kokoafone-FroggyTests/Pods-Kokoafone-FroggyTests-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Froggy-FroggyTests/Pods-Froggy-FroggyTests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Kokoafone-FroggyTests/Pods-Kokoafone-FroggyTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -446,7 +454,7 @@
 /* Begin PBXTargetDependency section */
 		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* Froggy */;
+			target = 13B07F861A680F5B00A75B9A /* Kokoafone */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -454,7 +462,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-Froggy-FroggyTests.debug.xcconfig */;
+			baseConfigurationReference = 768170946564744F7508B02D /* Pods-Kokoafone-FroggyTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = C39F4ZZUM8;
@@ -482,7 +490,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-Froggy-FroggyTests.release.xcconfig */;
+			baseConfigurationReference = 46C06E724A311DE0530194CC /* Pods-Kokoafone-FroggyTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -507,12 +515,12 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-Froggy.debug.xcconfig */;
+			baseConfigurationReference = 668778564E28D5BF208CED2F /* Pods-Kokoafone.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = C39F4ZZUM8;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Froggy/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -525,8 +533,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.app.froggy;
-				PRODUCT_NAME = Froggy;
+				PRODUCT_BUNDLE_IDENTIFIER = com.app.kokoafone;
+				PRODUCT_NAME = Kokoafone;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -535,12 +543,12 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-Froggy.release.xcconfig */;
+			baseConfigurationReference = CD957D183330E05E398970CF /* Pods-Kokoafone.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = C39F4ZZUM8;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Froggy/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -552,8 +560,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.app.froggy;
-				PRODUCT_NAME = Froggy;
+				PRODUCT_BUNDLE_IDENTIFIER = com.app.kokoafone;
+				PRODUCT_NAME = Kokoafone;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -627,6 +635,7 @@
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
 				);
+				PRODUCT_NAME = Kokoafone;
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 			};
@@ -692,6 +701,7 @@
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
 				);
+				PRODUCT_NAME = Kokoafone;
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -710,7 +720,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Froggy" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Kokoafone" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -719,7 +729,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Froggy" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Kokoafone" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
