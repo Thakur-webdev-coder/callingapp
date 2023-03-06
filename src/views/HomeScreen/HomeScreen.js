@@ -73,7 +73,7 @@ const Home = ({ navigation }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    hitBalanceAPi();
+    // hitBalanceAPi();
   }, []);
 
   const isFocused = useIsFocused();
@@ -166,7 +166,7 @@ const Home = ({ navigation }) => {
   const ViewItemClicked_Method = (name) => {
     switch (name) {
       case "Call":
-       // navigation.navigate("Keypad");
+        // navigation.navigate("Keypad");
         break;
 
       case "Invite Friends":
@@ -174,11 +174,11 @@ const Home = ({ navigation }) => {
         break;
 
       case "Buy Credits":
-      //  navigation.navigate("BuyCredit");
+        //  navigation.navigate("BuyCredit");
         break;
 
       case "Call Rates":
-       // navigation.navigate("CallRatesScreen");
+        // navigation.navigate("CallRatesScreen");
         break;
 
       case "Call Details Reports":
@@ -190,8 +190,8 @@ const Home = ({ navigation }) => {
       case "Redeem Voucher":
         setVoucherModal(true);
         break;
-        case "Logout":
-          LogoutMethod();
+      case "Logout":
+        LogoutMethod();
         break;
       default:
         console.log("Redeem Voucher");
@@ -298,7 +298,7 @@ const Home = ({ navigation }) => {
     Show_Toast("Successfully recharged by Voucher");
   };
   const LogoutMethod = () => {
-   // setLogOutModal(false);
+    // setLogOutModal(false);
     navigation?.dispatch(
       CommonActions.reset({
         index: 0,
@@ -458,7 +458,6 @@ const Home = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </Modal>
-       
       </View>
 
       {/* <Loading

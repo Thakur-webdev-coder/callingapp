@@ -35,9 +35,9 @@ export const ic_logo_medium = require("../../assets/images/logo_medium.png");
 
 //koka
 export const ic_app_logo = require("../../assets/images/appLogo.png");
-export const logo_small_kokoa = require("../../assets/images/smallLogo.png");
-export const ic_logout =require("../../assets/images/logout.png");
-export const ic_popup =require("../../assets/images/mobilepopup.png");
+export const logo_small_kokoa = require("../../assets/images/smalllogo.png");
+export const ic_logout = require("../../assets/images/logout.png");
+export const ic_popup = require("../../assets/images/mobilepopup.png");
 export const ic_home = require("../../assets/images/home-white.png");
 export const ic_home_s = require("../../assets/images/home_s.png");
 export const ic_chat = require("../../assets/images/ic_chat.png");
@@ -50,5 +50,12 @@ export const ic_avatar = require("../../assets/images/avatar.png");
 export const ic_black_arrow = require("../../assets/images/ic_black_arrow.png");
 export const ic_money = require("../../assets/images/money.png");
 export const ic_mybalance = require("../../assets/images/mybalance.png");
-
-
+export const ic_contact_avatar = require("../../assets/images/default_contact_avatar.png");
+export const ic_free_call = require("../../assets/images/free_call_btn.png");
+export const ic_free_msg = require("../../assets/images/free_message_btn.png");
+export const ic_free_video = require("../../assets/images/free_video_btn.png");
+export const ic_paid_call = require("../../assets/images/paidCall_btn.png");
+export const ic_chat_search = require("../../assets/images/chat_search.png");
+export const ic_chat_call = require("../../assets/images/chat_call.png");
+export const ic_chat_attach = require("../../assets/images/chat_attach.png");
+export const ic_chat_bg = require("../../assets/images/chat_bg.png");

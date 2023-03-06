@@ -1,49 +1,99 @@
 import React, { useState } from "react";
-import { SafeAreaView, View } from "react-native";
-import WebView from "react-native-webview";
+import {
+  FlatList,
+  Image,
+  SafeAreaView,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import AppStyle from "../../components/AppStyle";
 import { CommonHeader } from "../../components";
 import styles from "./styles";
-import Loading from "react-native-whc-loading";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { Text } from "react-native";
 import colors from "../../../assets/colors";
-const LiveChat = () => {
-  const URL = `https://tawk.to/chat/63de1f18c2f1ac1e20315d9d/1godqiuj4`;
-  const [isLoading, setIsLoading] = useState(false);
+import LinearGradient from "react-native-linear-gradient";
+import { ic_contact_avatar } from "../../routes/imageRoutes";
+const LiveChat = ({ navigation }) => {
+  const chatData = [
+    {
+      name: "Banoj Tripathy",
+      msg: "918800810156  : Ho How are you ?",
+      date: "12/01/2023",
+    },
+    {
+      name: "Banoj Tripathy",
+      msg: "918800810156  : Ho How are you ?",
+      date: "12/01/2023",
+    },
+    {
+      name: "Banoj Tripathy",
+      msg: "918800810156  : Ho How are you ?",
+      date: "12/01/2023",
+    },
+    {
+      name: "Banoj Tripathy",
+      msg: "918800810156  : Ho How are you ?",
+      date: "12/01/2023",
+    },
+  ];
 
-  const handleLoadStart = () => {
-    setIsLoading(true);
-  };
+  const renderItem = ({ item }) => (
+    <TouchableOpacity
+      onPress={() => {
+        // if (balanceDetail.credit > 0) {
+        //   Sip.makeCall(item?.phoneNumbers[0]?.number);
+        //   navigation.navigate("CallingScreen", { callData: item });
+        // } else {
+        //   Show_Toast("Insufficient balance. Please recharge your account.");
+        // }
+        navigation.navigate("UserChatsScreen");
+      }}
+    >
+      <View style={styles.flatListStyle}>
+        <LinearGradient
+          colors={[colors.greenTop, colors.greenMid, colors.greenMid]}
+          style={styles.linearGradient}
+        >
+          <Image style={styles.imgstyle} source={ic_contact_avatar} />
+        </LinearGradient>
+        <View style={styles.nameTextColoumn}>
+          <Text style={styles.nameTxtStyle}>{item?.name}</Text>
+          <Text style={styles.msgTxtStyle}>{item?.msg}</Text>
+        </View>
 
-  const handleLoadEnd = () => {
-    setIsLoading(false);
-  };
+        <Text style={styles.dateTxtStyle}>{item?.date}</Text>
+      </View>
+      <View style={styles.horizontalLine}></View>
+    </TouchableOpacity>
+  );
 
   return (
-    <SafeAreaView style={AppStyle.wrapper}>
-      <View style={{justifyContent:'center',flex:1}}>
+    <SafeAreaView>
+      {/* <View style={{justifyContent:'center',flex:1}}>
       <Text style={{color:colors.black,textAlign:'center',fontSize:20}}>Not implemented yet</Text>
-      </View>
-      {/* <CommonHeader paddingHorizontal={wp(5)} headerText={"Live Chat"} />
-      <WebView
-        style={styles.mainViewStyle}
-        javaScriptEnabled={true}
-        onLoadStart={handleLoadStart}
-        onLoadEnd={handleLoadEnd}
-        source={{ uri: URL }}
+      </View> */}
+
+      <FlatList
+        style={{ marginTop: hp(2) }}
+        data={chatData}
+        renderItem={renderItem}
+        showsVerticalScrollIndicator={false}
       />
-      <Loading
-        style={{
-          flex: 1,
-          justifyContent: "center",
-        }}
-        loading={isLoading}
-      /> */}
     </SafeAreaView>
   );
+
+  // return (
+  //   // <SafeAreaView style={AppStyle.wrapper}>
+  //   //   {/* <View style={{justifyContent:'center',flex:1}}>
+  //   //   <Text style={{color:colors.black,textAlign:'center',fontSize:20}}>Not implemented yet</Text>
+  //   //   </View> */}
+
+  //   // </SafeAreaView>
+
+  // );
 };
 export default LiveChat;
