@@ -1,4 +1,10 @@
-import { Alert, Modal, SafeAreaView, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  Modal,
+  SafeAreaView,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import CustomText from "../../components/CustomText";
 import colors from "../../../assets/colors";
@@ -22,25 +28,22 @@ import { ScrollView } from "react-native-gesture-handler";
 let otpEncryptedCode = null;
 
 const OtpScreen = ({ navigation, route }) => {
- 
-
   const [counter, setCounter] = useState(90);
   const [otpText, setOtpText] = useState("");
 
-  const { phoneEncryptedCode,countryCode,phoneInput } = route.params;
+  const { phoneEncryptedCode, countryCode, phoneInput } = route.params;
   // console.log('dadada==>',route.params)
   const dispatch = useDispatch();
   // console.log('phoneEncryptedCode-----',phoneEncryptedCode,'countryEncryptedCode',countryCode,'phoneInput',phoneInput)
 
   useEffect(() => {
-
-    Alert.alert('OTP', `Your OTP is sent to your Mobile Number  ${phoneInput}`, [
-
-      {text: 'OK', onPress: () => console.log('OK Pressed')},
-    ]);
+    Alert.alert(
+      "OTP",
+      `Your OTP is sent to your Mobile Number  ${phoneInput}`,
+      [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+    );
   }, []);
   useEffect(() => {
-
     const interval =
       counter > 0 &&
       setInterval(() => {
@@ -49,18 +52,15 @@ const OtpScreen = ({ navigation, route }) => {
     return () => clearInterval(interval);
   }, [counter]);
 
- 
- 
-
   const hitOtpEncryptionAPI = async () => {
     if (otpText.length == 4) {
       const data = new FormData();
       data.append("source", otpText);
       const myResponse = await hitEncryptionApi(data);
- console.log('1atapi=======>',myResponse.data.value)
+      console.log("1atapi=======>", myResponse.data.value);
       if (myResponse.data.result == "success") {
         otpEncryptedCode = myResponse.data.value;
-        console.log()
+        console.log();
         hitVerifyOtpApi();
       }
     } else {
@@ -77,7 +77,7 @@ const OtpScreen = ({ navigation, route }) => {
     console.log("dataaaa=======>", data);
 
     const myResponse = await hitOtpVerificationAPI(data);
-    console.log('2ntapi=======>',myResponse.data.result)
+    console.log("2ntapi=======>", myResponse.data.result);
 
     if (myResponse.data.result == "success") {
       dispatch(saveLoginDetails(myResponse.data.userinfo));
@@ -111,22 +111,20 @@ const OtpScreen = ({ navigation, route }) => {
     <SafeAreaView style={styles.wrapper}>
       {/* <View style={{flex: 0.2}}> */}
 
-        <CustomText
-          text={"Enter OTP Here"}
-          textColor={colors.white}
-          textSize={32}
-          fontWeight={"bold"}
-          alignText={"center"}
-          marginTop={hp(8)}
-        />
+      <CustomText
+        text={"Enter OTP Here"}
+        textColor={colors.white}
+        textSize={32}
+        fontWeight={"bold"}
+        alignText={"center"}
+        marginTop={hp(8)}
+      />
 
       {/* </View> */}
-    
+
       <ScrollView style={styles.wrapper2}>
         <CustomText
-          text={
-            `Please enter the One Time PIN which you received on your phone ${phoneInput} or Resend the One Time PIN`
-          }
+          text={`Please enter the One Time PIN which you received on your phone ${phoneInput} or Resend the One Time PIN`}
           textColor={colors.lightBlack}
           textSize={17}
           alignText={"center"}
@@ -158,7 +156,10 @@ const OtpScreen = ({ navigation, route }) => {
           primary
           horzontalPadding={wp(15)}
           marginTop={hp(8)}
-          onPress={() => hitOtpEncryptionAPI()}
+          onPress={() =>
+            // hitOtpEncryptionAPI()
+            navigation.navigate("StackNavigator")
+          }
         />
 
         <CustomButton
@@ -172,10 +173,7 @@ const OtpScreen = ({ navigation, route }) => {
             // hitOtpSendApi()
             }
         />
-
-        
       </ScrollView>
-    
     </SafeAreaView>
   );
 };

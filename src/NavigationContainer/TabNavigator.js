@@ -49,14 +49,14 @@ const TabNavigator = () => {
             index = 2;
           } else if (route.name === "Contacts") {
             index = 3;
-          } else if (route.name === "LiveChat") {
+          } else if (route.name === "Chat") {
             index = 4;
           }
 
           return (
             <View
               key={route.key}
-               // onStartShouldSetResponder={()=>{        //needed comment
+              // onStartShouldSetResponder={()=>{        //needed comment
               //   if(route.name === "LiveChat"){
               //     Linking.openURL('https://tawk.to/chat/63de1f18c2f1ac1e20315d9d/1godqiuj4')
               //     return true
@@ -85,7 +85,7 @@ const TabNavigator = () => {
       })}
     >
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="LiveChat" component={LiveChat} />
+      <Tab.Screen name="Chat" component={LiveChat} />
       <Tab.Screen name="Keypad" component={Keypad} />
       <Tab.Screen name="Recent Call" component={RecentCall} />
       <Tab.Screen name="Contacts" component={Contacts} />
