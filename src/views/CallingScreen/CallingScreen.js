@@ -1,9 +1,9 @@
 import {
   View,
   Text,
-  ImageBackground,
   SafeAreaView,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import AppStyle from "../../components/AppStyle";
@@ -21,6 +21,8 @@ import {
   ic_pause,
   ic_mic,
   ic_mic_fill,
+  ic_avatar,
+  ic_black_arrow,
 } from "../../routes/imageRoutes";
 import CustomText from "../../components/CustomText";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
@@ -102,71 +104,67 @@ const CallingScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView style={AppStyle.wrapper}>
       <View style={AppStyle.secondWrapper}>
-        <ImageBackground
-          style={{ flex: 1, flexDirection: "column", paddingHorizontal: 20 }}
-          source={ic_CallingBg}
-        >
-          <CustomImage
-            imgSrc={ic_callingPerson}
-            alignSelf={"center"}
-            marginTop={hp(15)}
-          />
-
-          <CustomText
-            textColor={colors.white}
-            text={Sip.getRemoteNumber(Sip.ActiveCallId)}
-            alignText={"center"}
-            textSize={18}
-            marginTop={5}
-          />
-
-          <Text style={styles.timerText}>
-            {timerCount > 0 ? secondsToHMS(timerCount) : "Calling"}
-          </Text>
-
-          <View>
-            <View style={styles.callingView}>
-              <View>
-                <CustomImage
-                  onpress={callFeatures}
-                  imgSrc={!speaker ? ic_speaker : ic_speaker_fill}
-                  alignSelf={"center"}
-                />
-                <CustomText
-                  text={"Speaker"}
-                  alignText={"center"}
-                  textColor={colors.white}
-                />
-              </View>
-
-              <View style={{ marginEnd: 15 }}>
-                <CustomImage
-                  onpress={() => callFeatures("MUTE")}
-                  imgSrc={!mute ? ic_mic : ic_mic_fill}
-                  alignSelf={"center"}
-                />
-                <CustomText
-                  text={"Mute"}
-                  alignText={"center"}
-                  textColor={colors.white}
-                />
-              </View>
-              <View>
-                <CustomImage
-                  onpress={() => callFeatures("HOLD")}
-                  imgSrc={!hold ? ic_pause : ic_pause_fill}
-                  alignSelf={"center"}
-                />
-                <CustomText
-                  text={"Hold"}
-                  alignText={"center"}
-                  marginTop={5}
-                  textColor={colors.white}
-                />
-              </View>
+        {/* <TouchableOpacity onpress={() => callDisconnect()}>
+          <Image source={ic_black_arrow} style={{ margin: 20 }} />
+        </TouchableOpacity> */}
+        <CustomText
+          textColor={colors.black}
+          text={Sip.getRemoteNumber(Sip.ActiveCallId)}
+          alignText={"center"}
+          textSize={26}
+          marginTop={hp(10)}
+        />
+        <Text style={styles.timerText}>
+          {timerCount > 0 ? secondsToHMS(timerCount) : "Calling"}
+        </Text>
+        <CustomImage
+          imgSrc={ic_avatar}
+          alignSelf={"center"}
+          marginTop={hp(10)}
+        />
+        <View>
+          <View style={styles.callingView}>
+            <View>
+              <CustomImage
+                onpress={callFeatures}
+                imgSrc={!speaker ? ic_speaker : ic_speaker_fill}
+                alignSelf={"center"}
+              />
+              <CustomText
+                text={"Speaker"}
+                alignText={"center"}
+                textColor={colors.white}
+              />
             </View>
 
-            {/* <View style={styles.callingView}>
+            <View style={{ marginEnd: 15 }}>
+              <CustomImage
+                onpress={() => callFeatures("MUTE")}
+                imgSrc={!mute ? ic_mic : ic_mic_fill}
+                alignSelf={"center"}
+              />
+              <CustomText
+                text={"Mute"}
+                alignText={"center"}
+                textColor={colors.white}
+              />
+            </View>
+            <View>
+              <CustomImage
+                onpress={() => callFeatures("HOLD")}
+                imgSrc={!hold ? ic_pause : ic_pause_fill}
+                alignSelf={"center"}
+              />
+              <CustomText
+                text={"Hold"}
+                alignText={"center"}
+                marginTop={5}
+                textColor={colors.white}
+              />
+            </View>
+          </View>
+
+          {/* <View style={styles.callingView}>
               <View>
                 <CustomImage imgSrc={ic_callKeyPad} alignSelf={"center"} />
                 <CustomText
@@ -190,19 +188,17 @@ const CallingScreen = ({ navigation, route }) => {
                 />
               </View>
             </View> */}
-          </View>
-
-          <View>
-            <CustomImage
-              imgSrc={ic_endcall}
-              alignSelf={"center"}
-              marginTop={hp(8)}
-              onpress={() => {
-                callDisconnect();
-              }}
-            />
-          </View>
-        </ImageBackground>
+        </View>
+        <View>
+          <CustomImage
+            imgSrc={ic_endcall}
+            alignSelf={"center"}
+            marginTop={hp(8)}
+            onpress={() => {
+              callDisconnect();
+            }}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );

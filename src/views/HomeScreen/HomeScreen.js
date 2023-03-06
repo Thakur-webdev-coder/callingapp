@@ -27,6 +27,9 @@ import {
   ic_databundle,
   ic_electricity,
   ic_transfer,
+  logo_small_kokoaa,
+  ic_mybalance,
+  ic_money,
 } from "../../routes/imageRoutes";
 import styles from "./styles";
 import AppStyle from "../../components/AppStyle";
@@ -49,10 +52,7 @@ import {
   saveEncrLoginDetails,
   saveLoginDetails,
 } from "../../redux/reducer";
-import {
-  CommonActions,
-  useIsFocused,
-} from "@react-navigation/native";
+import { CommonActions, useIsFocused } from "@react-navigation/native";
 import CommonHeader from "../../components/Header/commonHeader";
 
 let myBalanceData = null;
@@ -104,17 +104,17 @@ const Home = ({ navigation }) => {
     {
       id: 1,
       name: "My Balance",
-      image: ic_call,
+      image: ic_mybalance,
     },
     {
       id: 2,
       name: "Buy Credits",
-      image: ic_buycredit,
+      image: ic_money,
     },
     {
       id: 3,
       name: "Transfer Credit",
-      image: ic_calldetails,
+      image: ic_money,
     },
     {
       id: 4,
@@ -134,7 +134,7 @@ const Home = ({ navigation }) => {
     {
       id: 7,
       name: "Mobile Money",
-      image: ic_phonebook,
+      image: ic_money,
     },
     {
       id: 8,
@@ -154,7 +154,7 @@ const Home = ({ navigation }) => {
     {
       id: 11,
       name: "TV Recharge",
-      image: ic_phonebook,
+      image: ic_money,
     },
     {
       id: 12,
@@ -166,26 +166,26 @@ const Home = ({ navigation }) => {
   const ViewItemClicked_Method = (name) => {
     switch (name) {
       case "Call":
-        navigation.navigate("Keypad");
+       // navigation.navigate("Keypad");
         break;
 
       case "Invite Friends":
-        navigation.navigate("InviteScreen");
+        //navigation.navigate("InviteScreen");
         break;
 
       case "Buy Credits":
-        navigation.navigate("BuyCredit");
+      //  navigation.navigate("BuyCredit");
         break;
 
       case "Call Rates":
-        navigation.navigate("CallRatesScreen");
+       // navigation.navigate("CallRatesScreen");
         break;
 
       case "Call Details Reports":
-        navigation.navigate("CallReportsScreen");
+        //navigation.navigate("CallReportsScreen");
         break;
       case "Directory":
-        navigation.navigate("Directory");
+        //navigation.navigate("Directory");
         break;
       case "Redeem Voucher":
         setVoucherModal(true);
@@ -227,13 +227,10 @@ const Home = ({ navigation }) => {
     if (myResponse.data.result == "success") {
       passwordEncryptedCode = myResponse?.data?.value;
       dispatch(
-        saveEncrLoginDetails(
-          {
-            encryptUser: usernameEncryptedCode,
-            encryptPassword: passwordEncryptedCode,
-          }
-
-        )
+        saveEncrLoginDetails({
+          encryptUser: usernameEncryptedCode,
+          encryptPassword: passwordEncryptedCode,
+        })
       );
 
       if (usernameEncryptedCode || passwordEncryptedCode) hitFetchBalanceApi();
@@ -318,7 +315,6 @@ const Home = ({ navigation }) => {
         onPress={() => ViewItemClicked_Method(item.name)}
         style={styles.linearGradient}
       >
-
         <Image source={item.image} />
         <CustomText
           textColor={colors.secondary}
@@ -328,7 +324,6 @@ const Home = ({ navigation }) => {
           fontWeight={"600"}
           textSize={13}
         />
-
       </TouchableOpacity>
     );
   };
@@ -336,10 +331,9 @@ const Home = ({ navigation }) => {
   return (
     <SafeAreaView style={AppStyle.wrapper}>
       <View style={AppStyle.secondWrapper}>
-        <CommonHeader
-          headerText={"Home"} />
+        <CommonHeader headerText={"Home"} />
 
-        <View style={styles.cardStyle} >
+        <View style={styles.cardStyle}>
           <CustomText
             text={"Registered Number"}
             textColor={colors.white}
@@ -352,27 +346,26 @@ const Home = ({ navigation }) => {
           />
           <View style={styles.balanceStyle}>
             <View>
-            <CustomText
-              text={"Balance"}
-              textSize={18}
-              textColor={colors.white}
-            />
-          
-            <CustomText
-            text={
-              balanceDetail?.credit == "0"
-                ? "€" + "0.00"
-                : "€" + balanceDetail?.credit
-            }
-            textSize={18}
-            textColor={colors.white}
-          />
-          </View>
-          <View style={styles.imgView}>
-            <Image  source={logo_small_kokoa} />
+              <CustomText
+                text={"Balance"}
+                textSize={18}
+                textColor={colors.white}
+              />
+
+              <CustomText
+                text={
+                  balanceDetail?.credit == "0"
+                    ? "€" + "0.00"
+                    : "€" + balanceDetail?.credit
+                }
+                textSize={18}
+                textColor={colors.white}
+              />
+            </View>
+            <View style={styles.imgView}>
+              <Image source={logo_small_kokoa} />
             </View>
           </View>
-          
         </View>
       </View>
       <View style={styles.wrapper2}>
@@ -386,7 +379,6 @@ const Home = ({ navigation }) => {
         />
 
         <FlatList
-
           columnWrapperStyle={{ justifyContent: "space-between" }}
           data={DATA}
           renderItem={RenderList}
@@ -476,7 +468,6 @@ const Home = ({ navigation }) => {
         }}
         loading={isLoading}
       /> */}
-
     </SafeAreaView>
   );
 };

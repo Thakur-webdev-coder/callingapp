@@ -62,3 +62,11 @@ export const hitCallRatesApi = () => {
     url: ApiRoutes.API_RATES,
   });
 };
+
+export const hitApiAssignDid = (username) => {
+  return apiClient({
+    method: "post",
+    url: ApiRoutes.API_ASSIGN_DID,
+    params: { pr_login: username },
+  });
+};

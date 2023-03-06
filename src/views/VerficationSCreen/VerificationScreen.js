@@ -61,7 +61,8 @@ const VerificationScreen = ({ navigation }) => {
     const myResponse = await hitSendOtpApi(data);
 
     if (myResponse.data.result == "success") {
-      navigation.navigate(OTP_SCREEN, {
+      console.log('phoneEncryptedCode-----',phoneEncryptedCode,'countryEncryptedCode',countryEncryptedCode,'phoneInput',phoneInput)
+      navigation.navigate("DIDScreen", {
         phoneEncryptedCode: phoneEncryptedCode,
         countryCode: countryEncryptedCode,
         phoneInput:phoneInput

@@ -1,4 +1,3 @@
-
 export const ic_recentcall = require("../../assets/images/recentcall.png");
 export const ic_dialpad = require("../../assets/images/dialpad.png");
 export const ic_contact = require("../../assets/images/contact.png");
@@ -46,3 +45,10 @@ export const ic_delete = require("../../assets/images/delete.png");
 export const ic_databundle = require("../../assets/images/Databundle.png");
 export const ic_electricity = require("../../assets/images/Electricity.png");
 export const ic_transfer = require("../../assets/images/transferhistory.png");
+//export const logo_small_kokoaa = require("../../assets/images/smalllogo.png");
+export const ic_avatar = require("../../assets/images/avatar.png");
+export const ic_black_arrow = require("../../assets/images/ic_black_arrow.png");
+export const ic_money = require("../../assets/images/money.png");
+export const ic_mybalance = require("../../assets/images/mybalance.png");
+
+

@@ -7,10 +7,10 @@ import colors from "../../../assets/colors";
 
 export default StyleSheet.create({
   timerText: {
-    color: colors.primary,
+    color: colors.black,
     alignSelf: "center",
-    marginTop: hp(8),
-    fontSize: 18,
+    marginTop: hp(2),
+    fontSize: 12,
     fontWeight: "bold",
   },
 

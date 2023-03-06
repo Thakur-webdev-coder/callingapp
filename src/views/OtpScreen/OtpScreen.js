@@ -28,8 +28,9 @@ const OtpScreen = ({ navigation, route }) => {
   const [otpText, setOtpText] = useState("");
 
   const { phoneEncryptedCode,countryCode,phoneInput } = route.params;
-  
+  // console.log('dadada==>',route.params)
   const dispatch = useDispatch();
+  console.log('phoneEncryptedCode-----',phoneEncryptedCode,'countryEncryptedCode',countryCode,'phoneInput',phoneInput)
 
   useEffect(() => {
 
@@ -56,9 +57,10 @@ const OtpScreen = ({ navigation, route }) => {
       const data = new FormData();
       data.append("source", otpText);
       const myResponse = await hitEncryptionApi(data);
-
+ console.log('1atapi=======>',myResponse.data.value)
       if (myResponse.data.result == "success") {
         otpEncryptedCode = myResponse.data.value;
+        console.log()
         hitVerifyOtpApi();
       }
     } else {
@@ -72,9 +74,10 @@ const OtpScreen = ({ navigation, route }) => {
     data.append("otp", otpEncryptedCode);
     data.append("ccode", countryCode);
 
-    console.log("dataaaa", data);
+    console.log("dataaaa=======>", data);
 
     const myResponse = await hitOtpVerificationAPI(data);
+    console.log('2ntapi=======>',myResponse.data.result)
 
     if (myResponse.data.result == "success") {
       dispatch(saveLoginDetails(myResponse.data.userinfo));
@@ -86,7 +89,7 @@ const OtpScreen = ({ navigation, route }) => {
 
   const hitOtpSendApi = async () => {
     const data = new FormData();
-    data.append("phone", phoneEncryptedCode);
+    data.append("phone", phoneInput);
     data.append("ccode", countryCode);
 
     const myResponse = await hitSendOtpApi(data);
@@ -165,7 +168,10 @@ const OtpScreen = ({ navigation, route }) => {
           marginTop={hp(2)}
            disabled={counter != 0}
           // disabled
-          onPress={() => hitOtpSendApi()}
+          onPress={() =>
+            //navigation.navigate("StackNavigator")
+             hitOtpSendApi()
+            }
         />
 
         
