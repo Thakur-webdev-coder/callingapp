@@ -16,7 +16,7 @@ import {
 import { Text } from "react-native";
 import colors from "../../../assets/colors";
 import LinearGradient from "react-native-linear-gradient";
-import { ic_contact_avatar } from "../../routes/imageRoutes";
+import { ic_back, ic_contact_avatar } from "../../routes/imageRoutes";
 const LiveChat = ({ navigation }) => {
   const chatData = [
     {
@@ -54,15 +54,14 @@ const LiveChat = ({ navigation }) => {
       }}
     >
       <View style={styles.flatListStyle}>
-        <LinearGradient
-          colors={[colors.greenTop, colors.greenMid, colors.greenMid]}
-          style={styles.linearGradient}
-        >
+       
           <Image style={styles.imgstyle} source={ic_contact_avatar} />
-        </LinearGradient>
+      
         <View style={styles.nameTextColoumn}>
           <Text style={styles.nameTxtStyle}>{item?.name}</Text>
-          <Text style={styles.msgTxtStyle}>{item?.msg}</Text>
+          <Text
+          numberOfLines={1}
+           style={styles.msgTxtStyle}>{item?.msg}</Text>
         </View>
 
         <Text style={styles.dateTxtStyle}>{item?.date}</Text>
@@ -72,17 +71,20 @@ const LiveChat = ({ navigation }) => {
   );
 
   return (
-    <SafeAreaView>
-      {/* <View style={{justifyContent:'center',flex:1}}>
-      <Text style={{color:colors.black,textAlign:'center',fontSize:20}}>Not implemented yet</Text>
-      </View> */}
-
+    <SafeAreaView style={{flex:1}}>
+      
+      <CommonHeader headerText={"Chat"} />
       <FlatList
-        style={{ marginTop: hp(2) }}
+        //style={{ marginTop: hp(2) }}
         data={chatData}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
       />
+      <View style={styles.btnStyle}>
+      <Image
+       style={{ transform: [{ rotate: '180deg' }],alignSelf:'center' }} 
+      source={ic_back} />
+      </View>
     </SafeAreaView>
   );
 

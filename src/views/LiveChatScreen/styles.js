@@ -8,13 +8,14 @@ import {
 export default StyleSheet.create({
   flatListStyle: {
     flexDirection: "row",
-    marginVertical: hp(2),
-    paddingHorizontal: wp(5),
+    marginVertical: hp(1.5),
+    paddingLeft: wp(5),
   },
 
   nameTextColoumn: {
     flexDirection: "column",
     alignSelf: "center",
+    width:wp(62)
   },
   containerStyle: {
     marginTop: hp(2),
@@ -43,13 +44,13 @@ export default StyleSheet.create({
   msgTxtStyle: {
     paddingLeft: wp(2),
     color: colors.black,
-    fontSize: 10,
+    fontSize: 11,
   },
 
   dateTxtStyle: {
     color: colors.black,
     fontSize: 10,
-    marginStart: wp(20),
+   // marginLeft: wp(15),
     alignSelf: "center",
   },
   headerSearchBar: {
@@ -62,4 +63,14 @@ export default StyleSheet.create({
     borderWidth: 0.3,
     borderColor: colors.black,
   },
+  btnStyle:{
+    height:70,
+    width:70,
+    borderRadius:40,
+    backgroundColor:colors.secondary,
+    justifyContent:'center',
+    position:'absolute',
+    bottom: 10,
+right: 10, 
+  }
 });
