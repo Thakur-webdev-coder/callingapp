@@ -21,14 +21,14 @@ const TabNavigator = () => {
   const { loginDetails = {} } = useSelector((store) => store);
 
   useEffect(() => {
-    const { password, username } = loginDetails;
+    const { password, did } = loginDetails;
 
     Sip.register({
       websocket: "wss://billing.kokoafone.com:8089/ws",
-      username,
+      username: did,
       domain: "billing.kokoafone.com",
       password,
-      name: username,
+      name: did,
     });
   }, []);
 
