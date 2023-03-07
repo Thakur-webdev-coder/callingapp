@@ -149,16 +149,14 @@ const Keypad = ({ navigation }) => {
 
         <TouchableOpacity
           onPress={() => {
-            // if (balanceDetail.credit > 0) {
-            Sip.makeCall(dialedNumber);
-            navigation.navigate("CallingScreen", {
-              callData: dialedNumber,
-            });
-            // } else {
-            //   Show_Toast(
-            //     "Insufficient balance. Please recharge your account."
-            //   );
-            // }
+            if (balanceDetail.credit > 0) {
+              Sip.makeCall(dialedNumber);
+              navigation.navigate("CallingScreen", {
+                callData: dialedNumber,
+              });
+            } else {
+              Show_Toast("Insufficient balance. Please recharge your account.");
+            }
           }}
         >
           <LinearGradient

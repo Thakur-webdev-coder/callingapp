@@ -17,27 +17,23 @@ import { Text } from "react-native";
 import colors from "../../../assets/colors";
 import LinearGradient from "react-native-linear-gradient";
 import { ic_back, ic_contact_avatar } from "../../routes/imageRoutes";
-const LiveChat = ({ navigation }) => {
+const startChatScreen = ({ navigation }) => {
   const chatData = [
     {
       name: "Banoj Tripathy",
-      msg: "918800810156  : Ho How are you ?",
-      date: "12/01/2023",
+      number: "918800810156",
     },
     {
       name: "Banoj Tripathy",
-      msg: "918800810156  : Ho How are you ?",
-      date: "12/01/2023",
+      number: "918800810156",
     },
     {
       name: "Banoj Tripathy",
-      msg: "918800810156  : Ho How are you ?",
-      date: "12/01/2023",
+      number: "918800810156",
     },
     {
       name: "Banoj Tripathy",
-      msg: "918800810156  : Ho How are you ?",
-      date: "12/01/2023",
+      number: "918800810156",
     },
   ];
 
@@ -53,11 +49,9 @@ const LiveChat = ({ navigation }) => {
         <View style={styles.nameTextColoumn}>
           <Text style={styles.nameTxtStyle}>{item?.name}</Text>
           <Text numberOfLines={1} style={styles.msgTxtStyle}>
-            {item?.msg}
+            {item?.number}
           </Text>
         </View>
-
-        <Text style={styles.dateTxtStyle}>{item?.date}</Text>
       </View>
       <View style={styles.horizontalLine}></View>
     </TouchableOpacity>
@@ -65,30 +59,14 @@ const LiveChat = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <CommonHeader headerText={"Chat"} />
+      <CommonHeader headerText={"Start Chat"} />
       <FlatList
         //style={{ marginTop: hp(2) }}
         data={chatData}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
       />
-
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("startChatScreen");
-        }}
-      >
-        <View style={styles.btnStyle}>
-          <Image
-            style={{
-              transform: [{ rotate: "180deg" }],
-              alignSelf: "center",
-            }}
-            source={ic_back}
-          />
-        </View>
-      </TouchableOpacity>
     </SafeAreaView>
   );
 };
-export default LiveChat;
+export default startChatScreen;

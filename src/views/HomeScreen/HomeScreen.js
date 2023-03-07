@@ -75,7 +75,7 @@ const Home = ({ navigation }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // hitBalanceAPi();
+    hitBalanceAPi();
   }, []);
 
   const isFocused = useIsFocused();
@@ -202,12 +202,12 @@ const Home = ({ navigation }) => {
 
   const hitBalanceAPi = async () => {
     console.log("herrreee=========");
-    const { username, password } = loginDetails;
+    const { username, password, did } = loginDetails;
 
     // setIsLoading(true);
 
     const data = new FormData();
-    data.append("source", username);
+    data.append("source", did);
     const myResponse = await hitEncryptionApi(data);
 
     if (myResponse.data.result == "success") {
@@ -357,8 +357,8 @@ const Home = ({ navigation }) => {
               <CustomText
                 text={
                   balanceDetail?.credit == "0"
-                    ? "€" + "0.00"
-                    : "€" + balanceDetail?.credit
+                    ? "₦" + "0.00"
+                    : "₦" + balanceDetail?.credit
                 }
                 textSize={18}
                 textColor={colors.white}

@@ -156,9 +156,9 @@ const OtpScreen = ({ navigation, route }) => {
           primary
           horzontalPadding={wp(15)}
           marginTop={hp(8)}
-          onPress={() =>
-            // hitOtpEncryptionAPI()
-            navigation.navigate("StackNavigator")
+          onPress={
+            () => hitOtpEncryptionAPI()
+            // navigation.navigate("StackNavigator")
           }
         />
 
