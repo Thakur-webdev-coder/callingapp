@@ -55,16 +55,20 @@ const UserChatsScreen = ({ navigation }) => {
               style={styles.searchTnputStyleee}
               placeholder="Type  message here"
               placeholderTextColor={colors.searchBarTxt}
+              
             />
 
             <TouchableOpacity style={{ justifyContent: "center" }}>
               <Image source={ic_chat_attach} />
             </TouchableOpacity>
+            <TouchableOpacity style={{ alignSelf: "center" }}>
+              <Image source={ic_chat_call} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.arrowStyle} >
+            <Image style={{ transform: [{ rotate: '180deg' }],alignSelf:'center' }} source={ic_back} />
           </View>
 
-          <TouchableOpacity style={{ alignSelf: "center", marginTop: hp(3) }}>
-            <Image source={ic_chat_call} />
-          </TouchableOpacity>
         </View>
       </ImageBackground>
     </SafeAreaView>

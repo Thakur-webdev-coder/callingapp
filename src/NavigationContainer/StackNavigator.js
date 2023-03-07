@@ -10,6 +10,7 @@ import InviteScreen from "../views/InviteScreen/InviteScreen";
 import Directory from "../views/SpecialServices/Directory";
 import CallDetailsScreen from "../views/CallDetailsScreen/CallDetailsScreen";
 import UserChatsScreen from "../views/UserChatsScreen/UserChatsScreen";
+import startChatScreen from "../views/startChatScreen/startChatScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +31,7 @@ const StackNavigator = () => {
       <Stack.Screen name="Directory" component={Directory} />
       <Stack.Screen name="CallDetailsScreen" component={CallDetailsScreen} />
       <Stack.Screen name="UserChatsScreen" component={UserChatsScreen} />
+      <Stack.Screen name="startChatScreen" component={startChatScreen} />
     </Stack.Navigator>
   );
 };
