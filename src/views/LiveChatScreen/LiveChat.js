@@ -16,7 +16,7 @@ import {
 import { Text } from "react-native";
 import colors from "../../../assets/colors";
 import LinearGradient from "react-native-linear-gradient";
-import { ic_contact_avatar } from "../../routes/imageRoutes";
+import { ic_back, ic_contact_avatar } from "../../routes/imageRoutes";
 const LiveChat = ({ navigation }) => {
   const chatData = [
     {
@@ -71,7 +71,7 @@ const LiveChat = ({ navigation }) => {
   );
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{flex:1}}>
       
       <CommonHeader headerText={"Chat"} />
       <FlatList
@@ -80,6 +80,11 @@ const LiveChat = ({ navigation }) => {
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
       />
+      <View style={styles.btnStyle}>
+      <Image
+       style={{ transform: [{ rotate: '180deg' }],alignSelf:'center' }} 
+      source={ic_back} />
+      </View>
     </SafeAreaView>
   );
 

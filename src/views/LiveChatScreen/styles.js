@@ -63,4 +63,14 @@ export default StyleSheet.create({
     borderWidth: 0.3,
     borderColor: colors.black,
   },
+  btnStyle:{
+    height:70,
+    width:70,
+    borderRadius:40,
+    backgroundColor:colors.secondary,
+    justifyContent:'center',
+    position:'absolute',
+    bottom: 10,
+right: 10, 
+  }
 });

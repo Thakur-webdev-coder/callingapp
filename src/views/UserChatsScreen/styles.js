@@ -22,31 +22,43 @@ export default StyleSheet.create({
   searchTnputStyle: {
     borderRadius: 10,
     backgroundColor: colors.white,
-    width: wp(70),
-    height: hp(10),
-    marginTop: hp(3),
-    alignSelf: "center",
+    width: wp(80),
+    // // height: hp(10),
+    // marginTop: hp(3),
+    // marginBottom:hp(1),
+    // alignSelf: "center",
     borderWidth: 1,
-    borderColor: colors.black,
+    // borderColor: colors.black,
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    // justifyContent: "space-evenly",
   },
 
   sendMessageImg: {
-    marginTop: hp(65),
+    marginTop: hp(78),
+    marginBottom: hp(1),
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    marginHorizontal:wp(3),
+    justifyContent: "space-between",
+    alignItems:'center'
   },
 
   searchTnputStyleee: {
-    width: wp(50),
-    height: hp(10),
-    fontSize: 20,
-    color: colors.black,
+     width: wp(60),
+    // height: hp(10),
+    // fontSize: 20,
+     color: colors.black,
+  },
+  arrowStyle: {
+    height: 40,
+    width: 40,
+    borderRadius:20,
+    backgroundColor: colors.secondary,
+    justifyContent:'center'
   },
 
   dateBg: {
     backgroundColor: colors.white,
     padding: 10,
   },
+
 });

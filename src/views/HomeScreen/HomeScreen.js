@@ -30,6 +30,8 @@ import {
   logo_small_kokoaa,
   ic_mybalance,
   ic_money,
+  ic_transfer_credit,
+  ic_tvrecharge,
 } from "../../routes/imageRoutes";
 import styles from "./styles";
 import AppStyle from "../../components/AppStyle";
@@ -109,12 +111,12 @@ const Home = ({ navigation }) => {
     {
       id: 2,
       name: "Buy Credits",
-      image: ic_money,
+      image: ic_buycredit,
     },
     {
       id: 3,
       name: "Transfer Credit",
-      image: ic_money,
+      image: ic_transfer_credit,
     },
     {
       id: 4,
@@ -154,7 +156,7 @@ const Home = ({ navigation }) => {
     {
       id: 11,
       name: "TV Recharge",
-      image: ic_money,
+      image: ic_tvrecharge,
     },
     {
       id: 12,
