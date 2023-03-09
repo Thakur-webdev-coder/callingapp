@@ -15,6 +15,8 @@ import {
   ic_chat_bg,
   ic_chat_call,
   ic_chat_search,
+  ic_menu,
+  ic_small_plus,
 } from "../../routes/imageRoutes";
 import colors from "../../../assets/colors";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
@@ -27,20 +29,21 @@ const UserChatsScreen = ({ navigation }) => {
           <Image source={ic_back} />
         </TouchableOpacity>
 
-        <View>
-          <Text style={styles.textStyleToolbar}>Banoj Tri....</Text>
+        <View style={styles.nameContainer}>
+          <Text style={[styles.textStyleToolbar,{fontWeight:'700'}]}>Banoj Tri....</Text>
           <Text style={styles.textStyleToolbar}>Last Seen</Text>
         </View>
-
-        <TouchableOpacity>
-          <Image source={ic_chat_search} />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Image source={ic_chat_call} />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Image source={ic_chat_search} />
-        </TouchableOpacity>
+        <View style={styles.headerComponent}>
+          <TouchableOpacity>
+            <Image source={ic_chat_search} />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Image source={ic_small_plus} />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Image source={ic_menu} />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <ImageBackground source={ic_chat_bg}>
@@ -55,7 +58,7 @@ const UserChatsScreen = ({ navigation }) => {
               style={styles.searchTnputStyleee}
               placeholder="Type  message here"
               placeholderTextColor={colors.searchBarTxt}
-              
+
             />
 
             <TouchableOpacity style={{ justifyContent: "center" }}>
@@ -66,7 +69,7 @@ const UserChatsScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
           <View style={styles.arrowStyle} >
-            <Image style={{ transform: [{ rotate: '180deg' }],alignSelf:'center' }} source={ic_back} />
+            <Image style={{ transform: [{ rotate: '180deg' }], alignSelf: 'center' }} source={ic_back} />
           </View>
 
         </View>

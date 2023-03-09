@@ -333,8 +333,14 @@ const Home = ({ navigation }) => {
   return (
     <SafeAreaView style={AppStyle.wrapper}>
       <View style={AppStyle.secondWrapper}>
-        <CommonHeader headerText={"Home"} />
-
+        <View style={styles.headerStyle}>
+      <CustomText
+        fontWeight={"bold"}
+        text={"Home"}
+        textColor={colors.white}
+        textSize={20}
+      />
+</View>
         <View style={styles.cardStyle}>
           <CustomText
             text={"Registered Number"}

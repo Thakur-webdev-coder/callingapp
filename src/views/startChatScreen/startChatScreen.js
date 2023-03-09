@@ -17,7 +17,7 @@ import { Text } from "react-native";
 import colors from "../../../assets/colors";
 import LinearGradient from "react-native-linear-gradient";
 import { ic_back, ic_contact_avatar } from "../../routes/imageRoutes";
-const startChatScreen = ({ navigation }) => {
+const StartChatScreen = ({ navigation }) => {
   const chatData = [
     {
       name: "Banoj Tripathy",
@@ -69,4 +69,4 @@ const startChatScreen = ({ navigation }) => {
     </SafeAreaView>
   );
 };
-export default startChatScreen;
+export default StartChatScreen;

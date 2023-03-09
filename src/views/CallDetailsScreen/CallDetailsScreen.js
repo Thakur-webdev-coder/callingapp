@@ -11,7 +11,7 @@ import {
 } from "../../routes/imageRoutes";
 import CommonHeader from "../../components/Header/commonHeader";
 
-const CallDetailsScreen = () => {
+const CallDetailsScreen = ({navigation}) => {
   return (
     <SafeAreaView style={AppStyle.wrapper}>
       <CommonHeader headerText={"Contacts Details"} />
@@ -44,14 +44,14 @@ const CallDetailsScreen = () => {
           </View>
         </View>
       </View>
-      <View style={styles.horizontalLine}></View>
+     
 
-      <View style={{ margin: 10 }}>
+      <View style={styles.numBox}>
         <Text style={styles.mobileNumberText}>+919818220122</Text>
         <Text style={styles.mobileNumberText}>Mobile</Text>
       </View>
 
-      <View style={styles.horizontalLine}></View>
+     
     </SafeAreaView>
   );
 };

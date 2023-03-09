@@ -8,18 +8,22 @@ import {
 export default StyleSheet.create({
   flatListStyle: {
     flexDirection: "row",
-    marginVertical: hp(2),
+    //marginTop: hp(2),
     paddingHorizontal: wp(5),
+    alignItems:'center',
+    // backgroundColor:'skyblue',
+    borderBottomWidth:1,
+    borderBottomColor:colors.darkGray,
+    paddingVertical:hp(1)
   },
 
   nameTextColoumn: {
     flexDirection: "column",
   },
   containerStyle: {
-    marginTop: hp(2),
+    marginBottom: hp(7),
   },
-  linearGradient: {
-    backgroundColor: colors.primary,
+  imgBox: {
     height: 48,
     width: 48,
     borderRadius: 25,
@@ -37,6 +41,8 @@ export default StyleSheet.create({
     paddingLeft: wp(4),
     color: colors.black,
     fontSize: 16,
+    fontWeight:"600",
+    width:wp(67)
   },
   headerSearchBar: {
     flexDirection: "row",
