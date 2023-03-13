@@ -172,7 +172,7 @@ const Home = ({ navigation }) => {
         break;
 
       case "Invite Friends":
-        //navigation.navigate("InviteScreen");
+        navigation.navigate("InviteScreen");
         break;
 
       case "Buy Credits":
@@ -183,20 +183,20 @@ const Home = ({ navigation }) => {
         // navigation.navigate("CallRatesScreen");
         break;
 
-      case "Call Details Reports":
-        //navigation.navigate("CallReportsScreen");
+      case "Call Details Report":
+        navigation.navigate("CallReportsScreen");
         break;
       case "Directory":
         //navigation.navigate("Directory");
         break;
-      case "Redeem Voucher":
+      case "Voucher Recharge":
         setVoucherModal(true);
         break;
       case "Logout":
         LogoutMethod();
         break;
       default:
-        console.log("Redeem Voucher");
+        console.log("Voucher Recharge");
     }
   };
 
@@ -333,8 +333,14 @@ const Home = ({ navigation }) => {
   return (
     <SafeAreaView style={AppStyle.wrapper}>
       <View style={AppStyle.secondWrapper}>
-        <CommonHeader headerText={"Home"} />
-
+        <View style={styles.headerStyle}>
+      <CustomText
+        fontWeight={"bold"}
+        text={"Home"}
+        textColor={colors.white}
+        textSize={20}
+      />
+</View>
         <View style={styles.cardStyle}>
           <CustomText
             text={"Registered Number"}
@@ -394,7 +400,7 @@ const Home = ({ navigation }) => {
         >
           <View style={styles.voucherModalStyle}>
             <CustomText
-              text={"Redeem Voucher"}
+              text={"Voucher Recharge"}
               textSize={20}
               fontWeight={"bold"}
               textColor={colors.appColor}

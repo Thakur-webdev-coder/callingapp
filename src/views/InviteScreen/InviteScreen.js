@@ -19,7 +19,7 @@ const InviteScreen = () => {
     try {
       const result = await Share.share({
         message:
-          "Join me on Froggy, download Froggy app https://play.google.com/store/apps/details?id=com.froggy",
+          "Join me on Kokoafone, download Kokoafone app https://play.google.com/store/apps/details?id=com.froggy",
       });
       if (result.action === Share.sharedAction) {
         console.log("Invited successfully");
@@ -50,7 +50,7 @@ const InviteScreen = () => {
         <View style={styles.inviteText}>
           <CustomText
             text={
-              "Join me on Froggy, download Froggy app https://play.google.com/store/apps/details?id=com.froggy"
+              "Join me on Kokoafone, download Froggy app https://play.google.com/store/apps/details?id=com.froggy"
             }
             textColor={colors.white}
             horzontalPadding={10}

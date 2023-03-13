@@ -6,20 +6,32 @@ import {
   Image,
   TextInput,
   ImageBackground,
+  Modal,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import styles from "./styles";
 import {
+  ic_audiocall,
   ic_back,
   ic_chat_attach,
   ic_chat_bg,
   ic_chat_call,
   ic_chat_search,
+  ic_menu,
+  ic_small_plus,
+  ic_videocall,
 } from "../../routes/imageRoutes";
 import colors from "../../../assets/colors";
-import { heightPercentageToDP as hp } from "react-native-responsive-screen";
-
+import CustomText from "../../components/CustomText";
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from "react-native-responsive-screen";
 const UserChatsScreen = ({ navigation }) => {
+  const [state, setState] = useState({
+    callModal: false
+  })
+  //const [callModal,setCallModal]=useState(false)
   return (
     <SafeAreaView>
       <View style={styles.toolBar}>
@@ -27,20 +39,22 @@ const UserChatsScreen = ({ navigation }) => {
           <Image source={ic_back} />
         </TouchableOpacity>
 
-        <View>
-          <Text style={styles.textStyleToolbar}>Banoj Tri....</Text>
+        <View style={styles.nameContainer}>
+          <Text style={[styles.textStyleToolbar, { fontWeight: '700' }]}>Banoj Tri....</Text>
           <Text style={styles.textStyleToolbar}>Last Seen</Text>
         </View>
-
-        <TouchableOpacity>
-          <Image source={ic_chat_search} />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Image source={ic_chat_call} />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Image source={ic_chat_search} />
-        </TouchableOpacity>
+        <View style={styles.headerComponent}>
+          <TouchableOpacity >
+            <Image source={ic_chat_search} />
+          </TouchableOpacity>
+          <TouchableOpacity style={{ marginHorizontal: 25 }}
+            onPress={() => navigation.navigate("SelectScreen")}>
+            <Image source={ic_small_plus} />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Image source={ic_menu} />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <ImageBackground source={ic_chat_bg}>
@@ -55,23 +69,87 @@ const UserChatsScreen = ({ navigation }) => {
               style={styles.searchTnputStyleee}
               placeholder="Type  message here"
               placeholderTextColor={colors.searchBarTxt}
-              
+
             />
 
             <TouchableOpacity style={{ justifyContent: "center" }}>
               <Image source={ic_chat_attach} />
             </TouchableOpacity>
-            <TouchableOpacity style={{ alignSelf: "center" }}>
+            <TouchableOpacity style={{ alignSelf: "center" }}
+              onPress={() => setState({ callModal: true })}>
+
               <Image source={ic_chat_call} />
             </TouchableOpacity>
           </View>
-          <View style={styles.arrowStyle} >
-            <Image style={{ transform: [{ rotate: '180deg' }],alignSelf:'center' }} source={ic_back} />
-          </View>
+          <TouchableOpacity
+            style={styles.arrowStyle}
+
+          >
+            <Image style={{ transform: [{ rotate: '180deg' }], alignSelf: 'center' }} source={ic_back} />
+          </TouchableOpacity>
 
         </View>
+
       </ImageBackground>
+      <Modal
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
+        backdropColor={colors.white}
+        transparent={true}
+        visible={state.callModal}>
+        <View style={styles.callModalStyle}>
+          <TouchableOpacity
+            style={styles.callBoxStyle}
+            onPress={() => {
+              navigation.navigate('CallScreen',{
+                voiceCall:true
+              });
+              setState({ callModal: false })
+            }}
+          >
+            <Image source={ic_audiocall} />
+
+            <CustomText
+              //fontWeight={"bold"}
+              text={"Voice Call"}
+              textColor={colors.secondary}
+              textSize={22}
+              marginLeft={wp(6)}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }}
+           onPress={() => {
+            navigation.navigate('CallScreen',{
+              voiceCall:false
+            });
+            setState({ callModal: false })
+          }}
+          >
+            <Image source={ic_videocall} />
+            <CustomText
+              //fontWeight={"bold"}
+              text={"Video Call"}
+              textColor={colors.secondary}
+              textSize={22}
+              marginLeft={wp(3)}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ alignItems: 'flex-end' }}
+            onPress={() => setState({ callModal: false })}>
+            <CustomText
+              //fontWeight={"bold"}
+              text={"CANCEL"}
+              textColor={colors.secondary}
+              textSize={20}
+            //textAlign={'center'}
+            //marginLeft={wp(50)}
+            />
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </SafeAreaView>
+
   );
 };
 

@@ -5,21 +5,16 @@ import {
   Platform,
   SafeAreaView,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
-import LinearGradient from "react-native-linear-gradient";
-import colors from "../../../assets/colors";
-import AppStyle from "../../components/AppStyle";
-import { ic_back, ic_contact_avatar, ic_user } from "../../routes/imageRoutes";
+import { ic_contact_avatar, logo_contact_kokoa } from "../../routes/imageRoutes";
 import styles from "./styles";
 import ContactList from "react-native-contacts";
 import { useSelector } from "react-redux";
-import Sip from "@khateeb00/react-jssip";
-import { Show_Toast } from "../../utils/toast";
 
 import { request, RESULTS, PERMISSIONS } from "react-native-permissions";
+import { CommonHeader } from "../../components";
 
 const Contacts = ({ navigation }) => {
   const [state, setState] = useState({
@@ -87,6 +82,7 @@ const Contacts = ({ navigation }) => {
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
+    style={styles.flatListStyle}
       onPress={() => {
         // if (balanceDetail.credit > 0) {
         //   Sip.makeCall(item?.phoneNumbers[0]?.number);
@@ -97,10 +93,7 @@ const Contacts = ({ navigation }) => {
         navigation.navigate("CallDetailsScreen");
       }}
     >
-      <View style={styles.flatListStyle}>
-        <LinearGradient
-          colors={[colors.greenTop, colors.greenMid, colors.greenMid]}
-          style={styles.linearGradient}
+        <View style={styles.imgBox}
         >
           <Image
             style={styles.imgstyle}
@@ -110,15 +103,13 @@ const Contacts = ({ navigation }) => {
                 : ic_contact_avatar
             }
           />
-        </LinearGradient>
-        <View style={styles.nameTextColoumn}>
-          <Text style={styles.nameTxtStyle}>{item?.givenName}</Text>
-          <Text style={styles.nameTxtStyle}>
-            {item?.phoneNumbers[0]?.number}
-          </Text>
         </View>
-      </View>
-      <View style={styles.horizontalLine}></View>
+          <Text style={styles.nameTxtStyle}>{item?.givenName}</Text>
+          <Image source={logo_contact_kokoa}/>
+          {/* <Text style={styles.nameTxtStyle}>
+            {item?.phoneNumbers[0]?.number}
+          </Text> */}
+
     </TouchableOpacity>
   );
 
@@ -127,6 +118,8 @@ const Contacts = ({ navigation }) => {
       {/* <View style={{justifyContent:'center',flex:1}}>
       <Text style={{color:colors.black,textAlign:'center',fontSize:20}}>Not implemented yet</Text>
       </View> */}
+      <CommonHeader headerText={"Contact"} />
+
 
       <FlatList
         style={styles.containerStyle}

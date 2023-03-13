@@ -11,12 +11,23 @@ export default StyleSheet.create({
 
     backgroundColor: colors.secondary,
     alignItems: "center",
-    justifyContent: "space-between",
-    padding: 15,
+    //justifyContent: "space-between",
+    paddingVertical: hp(1.4),
+    paddingHorizontal: wp(5)
+  },
+  nameContainer: {
+    width: wp(55),
+    paddingLeft: wp(5)
+  },
+  headerComponent: {
+    flexDirection: 'row',
+    // justifyContent: "space-around",
+    alignItems: "center",
   },
 
   textStyleToolbar: {
     color: colors.white,
+    fontSize: 13,
   },
 
   searchTnputStyle: {
@@ -37,28 +48,49 @@ export default StyleSheet.create({
     marginTop: hp(78),
     marginBottom: hp(1),
     flexDirection: "row",
-    marginHorizontal:wp(3),
+    marginHorizontal: wp(3),
     justifyContent: "space-between",
-    alignItems:'center'
+    alignItems: 'center'
   },
 
   searchTnputStyleee: {
-     width: wp(60),
+    width: wp(60),
     // height: hp(10),
     // fontSize: 20,
-     color: colors.black,
+    color: colors.black,
   },
   arrowStyle: {
     height: 40,
     width: 40,
-    borderRadius:20,
+    borderRadius: 20,
     backgroundColor: colors.secondary,
-    justifyContent:'center'
+    justifyContent: 'center'
+  },
+  voucherModalStyle: {
+    backgroundColor: colors.backColor,
+
+    margin: 0,
+    // paddingHorizontal:wp(3)
   },
 
   dateBg: {
     backgroundColor: colors.white,
     padding: 10,
   },
+  callModalStyle: {
+    padding: 15,
+    marginHorizontal: wp(5),
+    backgroundColor: 'white',
+    marginTop: hp(40),
+    justifyContent: "center",
+
+    //elevation: 5,
+
+  },
+  callBoxStyle:{
+    flexDirection:'row',
+    alignItems:'center'
+  }
+
 
 });

@@ -7,14 +7,16 @@ import colors from "../../../assets/colors";
 
 export default StyleSheet.create({
   mainView: {
-    padding: wp(5),
+//padding: wp(5),
+marginTop:hp(1),
+paddingHorizontal:wp(5)
   },
 
   container_view: {
     flexDirection: "row",
   },
   container_view2: {
-    marginTop: hp(10),
+    marginTop: hp(6),
     flexDirection: "row",
     justifyContent: "space-between",
   },
@@ -24,17 +26,21 @@ export default StyleSheet.create({
     fontSize: 14,
     alignSelf: "center",
     marginStart: wp(5),
+    fontWeight:'600'
   },
   mobileNumberText: {
     color: colors.black,
     fontSize: 14,
     marginHorizontal: wp(5),
+    fontWeight:'600'
   },
 
   iconTilteStle: {
     color: colors.secondary,
-    fontSize: 14,
+    fontSize: 12,
     alignSelf: "center",
+    fontWeight:'600',
+    paddingVertical:hp(1)
   },
 
   horizontalLine: {
@@ -42,4 +48,11 @@ export default StyleSheet.create({
     borderWidth: 0.3,
     borderColor: colors.black,
   },
+  numBox: { 
+    //margin: 10,
+    borderBottomWidth:0.5,
+    borderTopWidth:0.5,
+    paddingVertical:hp(2) 
+  }
+  
 });
