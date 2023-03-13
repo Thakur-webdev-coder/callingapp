@@ -7,33 +7,45 @@ import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { CommonHeader } from "../../components";
 import { hitGetCallDetailsApi } from "../../constants/APi";
 import { useSelector } from "react-redux";
-// import Loading from "react-native-whc-loading";
+import Loading from "react-native-whc-loading";
 
 const CallReportsScreen = () => {
   const [state, setState] = useState({
     callDetailRes: "",
+    isLoading: false,
   });
 
   const { encrypt_detail } = useSelector((store) => store);
-  // const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     hitCallDetail();
   }, []);
 
   const hitCallDetail = async () => {
-    // setIsLoading(true);
+    setState({ isLoading: true })
     const data = new FormData();
     data.append("cust_id", encrypt_detail?.encryptUser);
-    const myResponse = await hitGetCallDetailsApi(data);
 
-    if (myResponse.data.result == "success") {
+
+   hitGetCallDetailsApi(data) .then((response) => {
+    console.log('res------->>',response.data)
+    setState({isLoading:false})
+    if (response.data.result == "success") {
       setState({
-        callDetailRes: myResponse.data.msg,
+        callDetailRes: response.data.msg,
       });
 
-      // setIsLoading(false);
-    }
+    } 
+  })
+    .catch((err) => {
+      console.log('reeeeeeeeerrrrrrrr====>>>>>>',err)
+      setState({isLoading:false})
+    });
+
+
+
+
+    
   };
 
   const renderItem = ({ item }) => (
@@ -43,19 +55,19 @@ const CallReportsScreen = () => {
           width={wp(22)}
           text={item.date}
           textSize={14}
-          textColor={colors.white}
+          textColor={colors.black}
         />
         <CustomText
           text={item.called_user}
           textSize={14}
-          textColor={colors.white}
+          textColor={colors.black}
         />
         <CustomText
           text={item.duration.slice(0, 4)}
           textSize={14}
-          textColor={colors.white}
+          textColor={colors.black}
         />
-        <CustomText text={item.cost} textSize={14} textColor={colors.white} />
+        <CustomText text={item.cost} textSize={14} textColor={colors.black} />
       </View>
       <View style={styles.listHorizontalLine}></View>
     </View>
@@ -75,36 +87,32 @@ const CallReportsScreen = () => {
             width={wp(22)}
             text={"Date"}
             textSize={16}
-            textColor={colors.darkGreenText}
+            textColor={colors.black}
           />
           <CustomText
             text={"Destination"}
             textSize={16}
-            textColor={colors.darkGreenText}
+            textColor={colors.black}
           />
           <CustomText
             text={"Duration"}
             textSize={16}
-            textColor={colors.darkGreenText}
+            textColor={colors.black}
           />
 
           <CustomText
             text={"Cost"}
             textSize={16}
-            textColor={colors.darkGreenText}
+            textColor={colors.black}
           />
         </View>
         <View style={styles.horizontalLine}></View>
 
         <FlatList data={state?.callDetailRes} renderItem={renderItem} />
       </View>
-      {/* <Loading
-        style={{
-          flex: 1,
-          justifyContent: "center",
-        }}
-        loading={isLoading}
-      /> */}
+      <Loading
+        loading={state.isLoading}
+      />
     </SafeAreaView>
   );
 };

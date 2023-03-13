@@ -23,7 +23,7 @@ let countryEncryptedCode = null;
 const VerificationScreen = ({ navigation }) => {
   const [phoneInput, setPhoneInput] = useState("");
   const [countryCode, setcountryCode] = useState("");
-
+  const [isLoading, setIsLoading] = useState(false);
   console.log("phpne", phoneInput);
 
   const hitCountryEncryptionApi = async () => {

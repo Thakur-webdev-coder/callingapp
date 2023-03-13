@@ -66,3 +66,14 @@ export const ic_small_plus = require("../../assets/images/small_plus.png");
 export const logo_small_kokoa = require("../../assets/images/smallLogo.png");
 export const logo_contact_kokoa = require("../../assets/images/logoContact.png")
 export const ic_menu = require("../../assets/images/menu.png");
+export const ic_audiocall = require("../../assets/images/audiocall.png");
+export const ic_videocall = require("../../assets/images/videocall.png");
+export const ic_recentcall_small = require("../../assets/images/recentCall_small.png");
+export const ic_brownArrow = require("../../assets/images/brown_arrow.png")
+export const ic_callAvatar = require("../../assets/images/CallingAvatar.png")
+export const ic_msg = require("../../assets/images/msg.png")
+export const ic_speaker_small = require("../../assets/images/speaker.png")
+export const ic_mute_call = require("../../assets/images/mute_call.png");
+export const ic_camera_switch = require("../../assets/images/cameraSwitch.png");
+export const ic_camera_off = require("../../assets/images/cameraoff.png");
+

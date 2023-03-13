@@ -16,15 +16,14 @@ export default StyleSheet.create({
     paddingHorizontal: wp(5)
   },
   nameContainer: {
-    width: wp(60),
+    width: wp(55),
     paddingLeft: wp(5)
   },
   headerComponent: {
     flexDirection: 'row',
     // justifyContent: "space-around",
-    backgroundColor: 'red',
     alignItems: "center",
-    },
+  },
 
   textStyleToolbar: {
     color: colors.white,
@@ -67,10 +66,31 @@ export default StyleSheet.create({
     backgroundColor: colors.secondary,
     justifyContent: 'center'
   },
+  voucherModalStyle: {
+    backgroundColor: colors.backColor,
+
+    margin: 0,
+    // paddingHorizontal:wp(3)
+  },
 
   dateBg: {
     backgroundColor: colors.white,
     padding: 10,
   },
+  callModalStyle: {
+    padding: 15,
+    marginHorizontal: wp(5),
+    backgroundColor: 'white',
+    marginTop: hp(40),
+    justifyContent: "center",
+
+    //elevation: 5,
+
+  },
+  callBoxStyle:{
+    flexDirection:'row',
+    alignItems:'center'
+  }
+
 
 });

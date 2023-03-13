@@ -4,7 +4,7 @@ import colors from "../../../assets/colors";
 export default StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: colors.black,
+    backgroundColor: colors.backColor,
     flexDirection: "column",
   },
 
@@ -18,7 +18,7 @@ export default StyleSheet.create({
 
   horizontalLine: {
     borderWidth: 1,
-    borderColor: colors.white,
+    borderColor: colors.secondary,
   },
   listContainer: {
     marginTop: 20,
@@ -40,6 +40,6 @@ export default StyleSheet.create({
 
   listHorizontalLine: {
     borderWidth: 0.2,
-    borderColor: colors.white,
+    borderColor: colors.secondary,
   },
 });

@@ -5,12 +5,16 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 export default StyleSheet.create({
     flatListStyle: {
         flexDirection: 'row',
-        marginBottom:hp(2),
-marginHorizontal:wp(5)
+        marginBottom:hp(1),
+        // marginTop:hp(1),
+        paddingHorizontal: wp(5),
+        paddingTop: hp(0.5),
+        paddingBottom: hp(1.5),
+        borderBottomWidth: 1
     },
     containerStyle:
     {
-        marginTop:hp(4),
+        // marginTop:hp(4),
     },
     linearGradient: {
         backgroundColor: colors.primary,
@@ -21,14 +25,15 @@ marginHorizontal:wp(5)
         alignItems: "center",
     },
     userDetailView: {
-        marginLeft: wp(4)
+        marginLeft: wp(4),
+        width:wp(65)
     },
 
     imgstyle: {
         alignSelf: 'center'
     },
     nameTxtStyle: {
-        color: colors.white,
+        color: colors.black,
         fontSize: 16
     },
     dateTxtStyle: {
