@@ -11,6 +11,9 @@ import Directory from "../views/SpecialServices/Directory";
 import CallDetailsScreen from "../views/CallDetailsScreen/CallDetailsScreen";
 import UserChatsScreen from "../views/UserChatsScreen/UserChatsScreen";
 import StartChatScreen from "../views/StartChatScreen/StartChatScreen";
+import SelectScreen from "../views/SelectScreen/SelectScreen";
+import CallScreen from "../views/VoiceCall/VoiceCallScreen";
+import WebViewScreen from "../views/webView";
 
 const Stack = createNativeStackNavigator();
 
@@ -31,7 +34,10 @@ const StackNavigator = () => {
       <Stack.Screen name="Directory" component={Directory} />
       <Stack.Screen name="CallDetailsScreen" component={CallDetailsScreen} />
       <Stack.Screen name="UserChatsScreen" component={UserChatsScreen} />
-      <Stack.Screen name="StartChatScreen" component={StartChatScreen} />
+      <Stack.Screen name="startChatScreen" component={StartChatScreen} />
+      <Stack.Screen name="SelectScreen" component={SelectScreen} />
+      <Stack.Screen name="CallScreen" component={CallScreen} />
+      <Stack.Screen name={"WebViewScreen"} component={WebViewScreen} />
     </Stack.Navigator>
   );
 };

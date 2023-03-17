@@ -1,6 +1,5 @@
 let ApiRoutes = {
   BASE_URL: process.env.DEV_BACKEND_URL,
-  //BASE_URL: 'https://billing.hifroggy.com/billing/froggy_api/',
   API_ENCRYPTION: "billing_encryption/encrypt_value.php",
   API_SEND_OTP: "billing_auto_register/otp_send.php",
   API_VERIFY_OTP: "billing_auto_register/otp_secure.php",
@@ -10,6 +9,8 @@ let ApiRoutes = {
   API_RATES: "billing_rates/get_rates.php",
   API_ASSIGN_DID:
     "https://billing.kokoafone.com/billing/customer/billing_did_success.php",
+  API_TRANSFER_CREDIT:
+    "billing_balance_transfer_balance/balance_transfer_org.php",
 };
 
 export default ApiRoutes;

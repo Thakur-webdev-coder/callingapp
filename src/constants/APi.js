@@ -70,3 +70,12 @@ export const hitApiAssignDid = (username) => {
     params: { pr_login: username },
   });
 };
+
+export const hitCreditTransferApi = (payload) => {
+  return apiClient({
+    baseURL: ApiRoutes.BASE_URL,
+    method: "post",
+    url: ApiRoutes.API_TRANSFER_CREDIT,
+    data: payload,
+  });
+};

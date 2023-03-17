@@ -11,12 +11,23 @@ export default StyleSheet.create({
 
     backgroundColor: colors.secondary,
     alignItems: "center",
-    justifyContent: "space-between",
-    padding: 15,
+    //justifyContent: "space-between",
+    paddingVertical: hp(1.4),
+    paddingHorizontal: wp(5),
+  },
+  nameContainer: {
+    width: wp(55),
+    paddingLeft: wp(5),
+  },
+  headerComponent: {
+    flexDirection: "row",
+    // justifyContent: "space-around",
+    alignItems: "center",
   },
 
   textStyleToolbar: {
     color: colors.white,
+    fontSize: 13,
   },
 
   searchTnputStyle: {
@@ -49,15 +60,34 @@ export default StyleSheet.create({
     color: colors.black,
   },
   arrowStyle: {
-    height: 50,
-    width: 50,
-    borderRadius: 50,
+    height: 40,
+    width: 40,
+    borderRadius: 20,
     backgroundColor: colors.secondary,
     justifyContent: "center",
+  },
+  voucherModalStyle: {
+    backgroundColor: colors.backColor,
+
+    margin: 0,
+    // paddingHorizontal:wp(3)
   },
 
   dateBg: {
     backgroundColor: colors.white,
     padding: 10,
+  },
+  callModalStyle: {
+    padding: 15,
+    marginHorizontal: wp(5),
+    backgroundColor: "white",
+    marginTop: hp(40),
+    justifyContent: "center",
+
+    //elevation: 5,
+  },
+  callBoxStyle: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });

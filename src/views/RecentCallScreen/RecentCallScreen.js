@@ -1,124 +1,103 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
-    FlatList,
-    Image,
-    SafeAreaView,
-    Text,
-    View
-} from 'react-native';
+  FlatList,
+  Image,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import {
-    ic_user,
-    ic_recent
+  ic_user,
+  ic_recent,
+  ic_contact_avatar,
+  ic_recentcall_small,
 } from "../../routes/imageRoutes";
-import styles from './styles'
+import styles from "./styles";
 import AppStyle from "../../components/AppStyle";
 import LinearGradient from "react-native-linear-gradient";
 import colors from "../../../assets/colors";
 import { CommonHeader } from "../../components";
+import { useSelector } from "react-redux";
+import { hitGetCallDetailsApi } from "../../constants/APi";
+import { dateFormater } from "../../utils/commonUtils";
+import { parsePhoneNumber } from "libphonenumber-js";
+import { Show_Toast } from "../../utils/toast";
+import Sip from "@khateeb00/react-jssip";
 
 const RecentCall = ({ navigation }) => {
-    const countries = [
-        {
-            id: '1',
-            name: 'United States',
-            time: '11:11 AM',
-            date: '10 Dec 2022'
-        },
-        {
-            id: '2',
-            name: 'United Kingdom',
-            time: '11:11 AM',
-            date: '10 Dec 2022'
-        },
-        {
-            id: '3',
-            name: 'Israel',
-            time: '11:11 AM',
-            date: '10 Dec 2022'
-        },
-        {
-            id: '4',
-            name: 'India',
-            time: '11:11 AM',
-            date: '10 Dec 2022'
-        },
-        {
-            id: '5',
-            name: 'Nigeria',
-            time: '11:11 AM',
-            date: '10 Dec 2022'
-        },
-        {
-            id: '6',
-            name: 'Uganda',
-            time: '11:11 AM',
-            date: '10 Dec 2022'
-        },
-        {
-            id: '7',
-            name: 'Israel',
-            time: '11:11 AM',
-            date: '10 Dec 2022'
-        },
-        {
-            id: '8',
-            name: 'India',
-            time: '11:11 AM',
-            date: '10 Dec 2022'
-        },
-        {
-            id: '9',
-            name: 'Nigeria',
-            time: '11:11 AM',
-            date: '10 Dec 2022'
-        },
-        {
-            id: '10',
-            name: 'Uganda',
-            time: '11:11 AM',
-            date: '10 Dec 2022'
-        },
-        {
-            id: '11',
-            name: 'wakanda forever',
-            time: '11:11 AM',
-            date: '10 Dec 2022'
+  const [state, setState] = useState({
+    callDetailRes: "",
+    contacts: [],
+  });
 
-        },
-    ];
-    const renderItem = ({ item }) => (
-        <View style={styles.flatListStyle}>
-            <LinearGradient colors={[colors.greenTop, colors.greenMid, colors.greenMid]}
-                style={styles.linearGradient}>
-                <Image style={styles.imgstyle} source={ic_user} />
-            </LinearGradient>
-            <View style={styles.userDetailView}>
-                <Text style={styles.nameTxtStyle}>{item.name}</Text>
-                <View style={{ flexDirection: 'row' }}>
-                    <Image source={ic_recent} />
-                    <Text style={styles.dateTxtStyle}>{item.time}, {item.date}</Text>
-                </View>
-            </View>
-        </View>
+  useEffect(() => {
+    hitCallDetail();
+    const unsubscribe = navigation.addListener("focus", () => {
+      hitCallDetail();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
-    );
-    return (
-        <SafeAreaView style={AppStyle.wrapper}>
-             <View style={{justifyContent:'center',flex:1}}>
-      <Text style={{color:colors.black,textAlign:'center',fontSize:20}}>Not implemented yet</Text>
+  const {
+    allContacts = {},
+    encrypt_detail,
+    balanceDetail = {},
+  } = useSelector((store) => store);
+  const hitCallDetail = async () => {
+    const data = new FormData();
+    data.append("cust_id", encrypt_detail?.encryptUser);
+    const myResponse = await hitGetCallDetailsApi(data);
+    console.log("hitCallDetailApi----res----->>>", myResponse.data.msg);
+    if (myResponse.data.result == "success") {
+      setState({
+        callDetailRes: myResponse.data.msg,
+      });
+    }
+  };
+
+  const renderItem = ({ item }) => (
+    <View style={styles.flatListStyle}>
+      <View style={styles.linearGradient}>
+        <Image style={styles.imgstyle} source={ic_contact_avatar} />
       </View>
-            {/* <View style={AppStyle.secondWrapper}>
-            <CommonHeader
-                headerText={"Recent Call"} />
-            <FlatList
-                style={styles.containerStyle}
-                data={countries}
-                renderItem={renderItem}
-                showsVerticalScrollIndicator={false}
-                keyExtractor={(item) => item.id}
-            />
-            </View> */}
-        </SafeAreaView>
-    )
-}
+      <View style={styles.userDetailView}>
+        <Text style={styles.nameTxtStyle}>
+          {" "}
+          {parsePhoneNumber("+" + item.called_user).formatInternational()}
+        </Text>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Image source={ic_recent} />
+          <Text style={styles.dateTxtStyle}>{dateFormater(item.date)}</Text>
+        </View>
+      </View>
+      <TouchableOpacity
+        onPress={() => {
+          if (balanceDetail.credit > 0) {
+            Sip.makeCall(item.called_user.replace(/ /g, ""));
+            navigation.navigate("CallingScreen", { callData: item });
+          } else {
+            Show_Toast("Insufficient balance. Please recharge your account.");
+          }
+        }}
+      >
+        <Image style={{ alignSelf: "center" }} source={ic_recentcall_small} />
+      </TouchableOpacity>
+    </View>
+  );
+  return (
+    <SafeAreaView style={AppStyle.wrapper}>
+      <View style={AppStyle.secondWrapper}>
+        <CommonHeader headerText={"Recent Call"} />
+        <FlatList
+          style={styles.containerStyle}
+          data={state?.callDetailRes}
+          renderItem={renderItem}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item) => item.id}
+        />
+      </View>
+    </SafeAreaView>
+  );
+};
 export default RecentCall;

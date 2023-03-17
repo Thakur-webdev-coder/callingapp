@@ -9,10 +9,6 @@ import {
 import AppStyle from "../../components/AppStyle";
 import { CommonHeader } from "../../components";
 import styles from "./styles";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
 import { Text } from "react-native";
 import colors from "../../../assets/colors";
 import LinearGradient from "react-native-linear-gradient";

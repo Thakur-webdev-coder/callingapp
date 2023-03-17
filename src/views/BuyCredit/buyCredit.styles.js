@@ -8,7 +8,7 @@ export default StyleSheet.create({
   mainViewStyle: {
     marginTop: hp(3),
     marginBottom: hp(0.5),
-    backgroundColor: "black",
-    color: "black",
+    backgroundColor: "white",
+    color: "white",
   },
 });

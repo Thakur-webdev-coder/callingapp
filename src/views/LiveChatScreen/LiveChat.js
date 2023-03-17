@@ -16,7 +16,7 @@ import {
 import { Text } from "react-native";
 import colors from "../../../assets/colors";
 import LinearGradient from "react-native-linear-gradient";
-import { ic_back, ic_contact_avatar, ic_plus } from "../../routes/imageRoutes";
+import { ic_add, ic_back, ic_contact_avatar } from "../../routes/imageRoutes";
 const LiveChat = ({ navigation }) => {
   const chatData = [
     {
@@ -74,19 +74,15 @@ const LiveChat = ({ navigation }) => {
       />
 
       <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("StartChatScreen");
-        }}
+        style={styles.btnStyle}
+        onPress={() => navigation.navigate("startChatScreen")}
       >
-        <View style={styles.btnStyle}>
-          <Image
-            style={{
-              transform: [{ rotate: "180deg" }],
-              alignSelf: "center",
-            }}
-            source={ic_plus}
-          />
-        </View>
+        <Image
+          style={{
+            alignSelf: "center",
+          }}
+          source={ic_add}
+        />
       </TouchableOpacity>
     </SafeAreaView>
   );

@@ -29,7 +29,9 @@ import { Show_Toast } from "../../utils/toast";
 
 const Keypad = ({ navigation }) => {
   // const [inputNumber, setInputNumber] = useState('')
-  const { balanceDetail = {} } = useSelector((store) => store);
+  const { balanceDetail = {}, loginDetails = {} } = useSelector(
+    (store) => store
+  );
   const [state, _setState] = useState({
     dialedNumber: "",
     // // country_code: 'cc',
@@ -123,7 +125,7 @@ const Keypad = ({ navigation }) => {
           <CustomText
             textColor={colors.black}
             textAlign={"center"}
-            text={"015247845"}
+            text={loginDetails.did}
             //fontWeight={"bold"}
             marginLeft={wp(2)}
             textSize={17}
@@ -145,7 +147,9 @@ const Keypad = ({ navigation }) => {
         />
       </View>
       <View style={[styles.bottomRowStyle]}>
-        <Image style={styles.bottomImgStyle} source={ic_people} />
+        <TouchableOpacity onPress={() => navigation.navigate("Contacts")}>
+          <Image style={styles.bottomImgStyle} source={ic_people} />
+        </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => {

@@ -63,6 +63,12 @@ export default StyleSheet.create({
   tabViewSyle: {
     alignItems: "center",
   },
+  headerStyle:{
+    backgroundColor: colors.secondary,
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 15
+  },
   balanceStyle: {
     flexDirection: "row",
     justifyContent: "space-between",
