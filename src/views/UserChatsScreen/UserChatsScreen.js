@@ -15,6 +15,8 @@ import {
   ic_chat_bg,
   ic_chat_call,
   ic_chat_search,
+  ic_plus,
+  ic_send_chat,
 } from "../../routes/imageRoutes";
 import colors from "../../../assets/colors";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
@@ -36,7 +38,7 @@ const UserChatsScreen = ({ navigation }) => {
           <Image source={ic_chat_search} />
         </TouchableOpacity>
         <TouchableOpacity>
-          <Image source={ic_chat_call} />
+          <Image source={ic_plus} />
         </TouchableOpacity>
         <TouchableOpacity>
           <Image source={ic_chat_search} />
@@ -55,7 +57,6 @@ const UserChatsScreen = ({ navigation }) => {
               style={styles.searchTnputStyleee}
               placeholder="Type  message here"
               placeholderTextColor={colors.searchBarTxt}
-              
             />
 
             <TouchableOpacity style={{ justifyContent: "center" }}>
@@ -65,10 +66,9 @@ const UserChatsScreen = ({ navigation }) => {
               <Image source={ic_chat_call} />
             </TouchableOpacity>
           </View>
-          <View style={styles.arrowStyle} >
-            <Image style={{ transform: [{ rotate: '180deg' }],alignSelf:'center' }} source={ic_back} />
+          <View style={styles.arrowStyle}>
+            <Image style={{ alignSelf: "center" }} source={ic_send_chat} />
           </View>
-
         </View>
       </ImageBackground>
     </SafeAreaView>

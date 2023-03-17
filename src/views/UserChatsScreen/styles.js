@@ -37,28 +37,27 @@ export default StyleSheet.create({
     marginTop: hp(78),
     marginBottom: hp(1),
     flexDirection: "row",
-    marginHorizontal:wp(3),
+    marginHorizontal: wp(3),
     justifyContent: "space-between",
-    alignItems:'center'
+    alignItems: "center",
   },
 
   searchTnputStyleee: {
-     width: wp(60),
+    width: wp(60),
     // height: hp(10),
     // fontSize: 20,
-     color: colors.black,
+    color: colors.black,
   },
   arrowStyle: {
-    height: 40,
-    width: 40,
-    borderRadius:20,
+    height: 50,
+    width: 50,
+    borderRadius: 50,
     backgroundColor: colors.secondary,
-    justifyContent:'center'
+    justifyContent: "center",
   },
 
   dateBg: {
     backgroundColor: colors.white,
     padding: 10,
   },
-
 });

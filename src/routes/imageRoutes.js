@@ -35,7 +35,7 @@ export const ic_logo_medium = require("../../assets/images/logo_medium.png");
 
 //koka
 export const ic_app_logo = require("../../assets/images/appLogo.png");
-// export const logo_small_kokoa = require("../../assets/images/smalllogo.png");
+export const logo_small_kokoa = require("../../assets/images/smalllogo.png");
 export const ic_logout = require("../../assets/images/logout.png");
 export const ic_popup = require("../../assets/images/mobiletopup.png");
 export const ic_home = require("../../assets/images/home-white.png");
@@ -61,3 +61,5 @@ export const ic_chat_attach = require("../../assets/images/pin.png");
 export const ic_chat_bg = require("../../assets/images/chat_bg.png");
 export const ic_transfer_credit = require("../../assets/images/transfer.png");
 export const ic_tvrecharge = require("../../assets/images/tvrecharge.png");
+export const ic_plus = require("../../assets/images/plus.png");
+export const ic_send_chat = require("../../assets/images/send_chat.png");
