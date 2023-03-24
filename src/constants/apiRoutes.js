@@ -9,6 +9,8 @@ let ApiRoutes = {
   API_RATES: "billing_rates/get_rates.php",
   API_ASSIGN_DID:
     "https://billing.kokoafone.com/billing/customer/billing_did_success.php",
+  API_TRANSFER_CREDIT:
+    "billing_balance_transfer_balance/balance_transfer_org.php",
 };
 
 export default ApiRoutes;

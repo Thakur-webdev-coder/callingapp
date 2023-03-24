@@ -13,7 +13,7 @@ import buyCreditStyles from "./buyCredit.styles";
 
 const BuyCredit = ({ navigation }) => {
   const { username, password } = useSelector((store) => store.loginDetails);
-  const URL = `https://billing.hifroggy.com/billing/customer/mobile_payment.php?pr_login=${username}&pr_password=${password}&mobiledone=submit_log`;
+  const URL = `https://billing.kokoafone.com/billing/customer/mobile_payment.php?pr_login=${username}&pr_password=${password}&mobiledone=submit_log`;
 
   const [isLoading, setIsLoading] = useState(false);
 

@@ -13,14 +13,14 @@ export default StyleSheet.create({
     alignItems: "center",
     //justifyContent: "space-between",
     paddingVertical: hp(1.4),
-    paddingHorizontal: wp(5)
+    paddingHorizontal: wp(5),
   },
   nameContainer: {
     width: wp(55),
-    paddingLeft: wp(5)
+    paddingLeft: wp(5),
   },
   headerComponent: {
-    flexDirection: 'row',
+    flexDirection: "row",
     // justifyContent: "space-around",
     alignItems: "center",
   },
@@ -50,7 +50,7 @@ export default StyleSheet.create({
     flexDirection: "row",
     marginHorizontal: wp(3),
     justifyContent: "space-between",
-    alignItems: 'center'
+    alignItems: "center",
   },
 
   searchTnputStyleee: {
@@ -64,7 +64,7 @@ export default StyleSheet.create({
     width: 40,
     borderRadius: 20,
     backgroundColor: colors.secondary,
-    justifyContent: 'center'
+    justifyContent: "center",
   },
   voucherModalStyle: {
     backgroundColor: colors.backColor,
@@ -80,17 +80,14 @@ export default StyleSheet.create({
   callModalStyle: {
     padding: 15,
     marginHorizontal: wp(5),
-    backgroundColor: 'white',
+    backgroundColor: "white",
     marginTop: hp(40),
     justifyContent: "center",
 
     //elevation: 5,
-
   },
-  callBoxStyle:{
-    flexDirection:'row',
-    alignItems:'center'
-  }
-
-
+  callBoxStyle: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
 });

@@ -72,19 +72,17 @@ const LiveChat = ({ navigation }) => {
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
       />
-      
-        <TouchableOpacity style={styles.btnStyle}
-        onPress={() => 
-          navigation.navigate("startChatScreen")
-        }>
-          <Image
-            style={{
-          
-              alignSelf: "center",
-            }}
-            source={ic_add}
-          />
-       
+
+      <TouchableOpacity
+        style={styles.btnStyle}
+        onPress={() => navigation.navigate("startChatScreen")}
+      >
+        <Image
+          style={{
+            alignSelf: "center",
+          }}
+          source={ic_add}
+        />
       </TouchableOpacity>
     </SafeAreaView>
   );

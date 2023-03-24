@@ -1,5 +1,10 @@
+import moment from "moment";
+
 export function showErrorMessage(Message) {
   alert(Message);
+}
+export function dateFormater(date) {
+  return moment.utc(date).local().format("DD MMM YYYY");
 }
 
 export function secondsToHMS(seconds) {

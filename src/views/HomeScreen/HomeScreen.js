@@ -45,6 +45,7 @@ import { Show_Toast } from "../../utils/toast";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
+  hitCreditTransferApi,
   hitEncryptionApi,
   hitFetchUserBalanceApi,
   hitVoucherApi,
@@ -62,15 +63,21 @@ let usernameEncryptedCode = null;
 let passwordEncryptedCode = null;
 let activeScreen = true;
 const Home = ({ navigation }) => {
+  const [recepientNum, setRecepientNum] = useState("");
+  const [transfreAmt, setTransferAmt] = useState("");
+
   const [state, setState] = useState({
     voucherNum: "",
   });
   const [voucherModal, setVoucherModal] = useState(false);
-  const [rechargeModal, setRechargerModal] = useState(false);
+  const [balanceModal, setBalanceModal] = useState(false);
+  const [transferModal, setTransferModal] = useState(false);
+
   const [LogoutModal, setLogOutModal] = useState(false);
   const { loginDetails = {}, balanceDetail = {} } = useSelector(
     (store) => store
   );
+  const { username, password, did } = loginDetails;
 
   const dispatch = useDispatch();
 
@@ -167,16 +174,20 @@ const Home = ({ navigation }) => {
 
   const ViewItemClicked_Method = (name) => {
     switch (name) {
-      case "Call":
-        // navigation.navigate("Keypad");
-        break;
-
       case "Invite Friends":
         navigation.navigate("InviteScreen");
         break;
 
+      case "My Balance":
+        setBalanceModal(true);
+        break;
+
       case "Buy Credits":
-        //  navigation.navigate("BuyCredit");
+        navigation.navigate("BuyCredit");
+        break;
+
+      case "Transfer Credit":
+        setTransferModal(true);
         break;
 
       case "Call Rates":
@@ -186,6 +197,21 @@ const Home = ({ navigation }) => {
       case "Call Details Report":
         navigation.navigate("CallReportsScreen");
         break;
+
+      case "Mobile Money":
+        navigation.navigate("WebViewScreen", {
+          url: `https://billing.kokoafone.com/billing/customer/billing_mobile_money.php?pr_login=${username}&pr_password=${password}&mobiledone=submit_log`,
+          title: "Mobile Money",
+        });
+        break;
+
+      case "Mobile Topup":
+        navigation.navigate("WebViewScreen", {
+          url: `https://billing.kokoafone.com/billing/customer/billing_airtime.php?pr_login=${username}&pr_password=${password}&mobiledone=submit_log`,
+          title: "Mobile Topup",
+        });
+        break;
+
       case "Directory":
         //navigation.navigate("Directory");
         break;
@@ -202,7 +228,6 @@ const Home = ({ navigation }) => {
 
   const hitBalanceAPi = async () => {
     console.log("herrreee=========");
-    const { username, password, did } = loginDetails;
 
     // setIsLoading(true);
 
@@ -279,6 +304,45 @@ const Home = ({ navigation }) => {
     //setRechargerModal(true);
   };
 
+  const TransferCreditMethod = async () => {
+    console.log("rrrrrrrr--------", recepientNum);
+    if (recepientNum.length >= 6 && transfreAmt.length > 0) {
+      console.log("numberr", recepientNum);
+
+      setTransferModal(false);
+      const data = new FormData();
+      data.append("source", recepientNum);
+      const myResponse = await hitEncryptionApi(data);
+
+      console.log("myResponse", myResponse.data);
+
+      if (myResponse.data.result == "success") {
+        const recepientEncryptedNumber = myResponse.data.value;
+        hitTransferCreditApi(recepientEncryptedNumber);
+      } else {
+      }
+    } else {
+      Alert.alert("", "Please Enter Valid recepient number or amount");
+    }
+  };
+
+  const hitTransferCreditApi = async (recepientAccount) => {
+    const { transfreAmt } = state;
+
+    const data = new FormData();
+    data.append("cust_id", usernameEncryptedCode);
+    data.append("cust_pass", passwordEncryptedCode);
+    data.append("credit", transfreAmt);
+    data.append("transferaccount", recepientAccount);
+    const myResponse = await hitCreditTransferApi(data);
+
+    if (myResponse.data.result == "sucess") {
+      Show_Toast(myResponse.data.msg);
+    } else {
+      Show_Toast(myResponse.data.msg);
+    }
+  };
+
   const hitVoucherApi_Method = async (vouchereCode) => {
     const data = new FormData();
     data.append("username", usernameEncryptedCode);
@@ -296,8 +360,7 @@ const Home = ({ navigation }) => {
   };
 
   const RechargeDoneMethod = () => {
-    setRechargerModal(false);
-    Show_Toast("Successfully recharged by Voucher");
+    setBalanceModal(false);
   };
   const LogoutMethod = () => {
     // setLogOutModal(false);
@@ -334,13 +397,13 @@ const Home = ({ navigation }) => {
     <SafeAreaView style={AppStyle.wrapper}>
       <View style={AppStyle.secondWrapper}>
         <View style={styles.headerStyle}>
-      <CustomText
-        fontWeight={"bold"}
-        text={"Home"}
-        textColor={colors.white}
-        textSize={20}
-      />
-</View>
+          <CustomText
+            fontWeight={"bold"}
+            text={"Home"}
+            textColor={colors.white}
+            textSize={20}
+          />
+        </View>
         <View style={styles.cardStyle}>
           <CustomText
             text={"Registered Number"}
@@ -440,17 +503,17 @@ const Home = ({ navigation }) => {
         <Modal
           animationIn="slideInUp"
           animationOut="slideOutDown"
-          isVisible={rechargeModal}
+          isVisible={balanceModal}
         >
           <View style={styles.rechargeModalStyle}>
             <CustomText
-              text={"Froggy"}
+              text={"Kokoafone"}
               textSize={20}
               fontWeight={"bold"}
               textColor={colors.appColor}
             />
             <CustomText
-              text={"Balance : Euro 4.00"}
+              text={"Balance : " + "₦" + balanceDetail?.credit}
               textColor={colors.appColor}
               paddingVertical={hp(3)}
             />
@@ -464,6 +527,59 @@ const Home = ({ navigation }) => {
                 textAlign={"right"}
               />
             </TouchableOpacity>
+          </View>
+        </Modal>
+        <Modal
+          animationIn="slideInUp"
+          animationOut="slideOutDown"
+          isVisible={transferModal}
+        >
+          <View style={styles.voucherModalStyle}>
+            <CustomText
+              text={"Transfer Credit"}
+              textSize={20}
+              fontWeight={"bold"}
+              textColor={colors.appColor}
+            />
+
+            <TextInput
+              style={styles.textInputStyle}
+              placeholder="Enter the Recepient Number"
+              placeholderTextColor={colors.appColor}
+              keyboardType="numeric"
+              onChangeText={(txt) => {
+                setRecepientNum(txt);
+              }}
+              maxLength={20}
+            />
+
+            <TextInput
+              style={styles.textInputStyle}
+              placeholder="Enter Amount"
+              placeholderTextColor={colors.appColor}
+              onChangeText={(txt) => setTransferAmt(txt)}
+              maxLength={10}
+              keyboardType="numeric"
+            />
+            <View style={styles.btnStyle}>
+              <TouchableOpacity onPress={() => setTransferModal(false)}>
+                <CustomText
+                  text={"Cancel"}
+                  textSize={16}
+                  fontWeight={"600"}
+                  textColor={colors.dodgeBlue}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => TransferCreditMethod()}>
+                <CustomText
+                  text={"Transfer"}
+                  textSize={16}
+                  fontWeight={"600"}
+                  textColor={colors.dodgeBlue}
+                  marginLeft={wp(10)}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         </Modal>
       </View>

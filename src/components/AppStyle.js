@@ -10,11 +10,9 @@ export default StyleSheet.create({
     backgroundColor: colors.white,
     flexDirection: "column",
   },
-  secondWrapper:{
-    flex:1,
-  
-     backgroundColor:colors.white
-  },
-   
+  secondWrapper: {
+    flex: 1,
 
+    backgroundColor: colors.white,
+  },
 });

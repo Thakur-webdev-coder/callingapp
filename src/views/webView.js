@@ -1,15 +1,19 @@
 import { SafeAreaView } from "react-native";
 import WebView from "react-native-webview";
+import { CommonHeader } from "../components";
 
-const WebViewScreen = () => {
-  const { loginDetails } = useSelector((store) => store);
+const WebViewScreen = ({ navigation, route }) => {
+  const url = route.params.url;
 
+  const title = route.params.title;
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <CommonHeader headerText={title} />
+
       <WebView
         // startInLoadingState={true}
         source={{
-          uri: "https://billing.hifroggy.com/billing/customer/mobile_payment.php?pr_login=919459840876&pr_password=45351&mobiledone=submit_log",
+          uri: url,
         }}
       />
     </SafeAreaView>

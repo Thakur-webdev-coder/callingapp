@@ -8,20 +8,12 @@ import {
 export default StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: colors.black,
+    backgroundColor: colors.white,
     flexDirection: "column",
   },
 
-  tansparentView: {
-    backgroundColor: colors.inviteCardBg,
-    borderWidth: 2,
-    marginVertical: 10,
-    marginHorizontal: 10,
-    flex: 1,
-  },
-
   inviteText: {
-    backgroundColor: colors.inviteTextBg,
+    backgroundColor: colors.white,
     marginTop: hp(5),
     marginHorizontal: 20,
   },

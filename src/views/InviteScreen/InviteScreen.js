@@ -19,7 +19,7 @@ const InviteScreen = () => {
     try {
       const result = await Share.share({
         message:
-          "Join me on Kokoafone, download Kokoafone app https://play.google.com/store/apps/details?id=com.froggy",
+          "Join me on Kokoafone, download Kokoafone app https://play.google.com/store/apps/details?id=com.kokoafone",
       });
       if (result.action === Share.sharedAction) {
         console.log("Invited successfully");
@@ -32,40 +32,34 @@ const InviteScreen = () => {
   };
   return (
     <SafeAreaView style={styles.wrapper}>
-      <CommonHeader paddingHorizontal={18} />
-      <View style={styles.tansparentView}>
-        <CustomImage
-          imgSrc={ic_invite}
-          alignSelf={"center"}
-          marginTop={hp(15)}
-        />
+      <CommonHeader headerText={"Invite Friend"} paddingHorizontal={18} />
+      <CustomImage imgSrc={ic_invite} alignSelf={"center"} marginTop={hp(15)} />
+      <CustomText
+        text={"Invite your friend"}
+        textColor={colors.black}
+        textSize={20}
+        textAlign={"center"}
+        marginTop={hp(10)}
+      />
+
+      <View style={styles.inviteText}>
         <CustomText
-          text={"Invite your friend"}
-          textColor={colors.white}
-          textSize={20}
-          textAlign={"center"}
-          marginTop={hp(10)}
-        />
-
-        <View style={styles.inviteText}>
-          <CustomText
-            text={
-              "Join me on Kokoafone, download Froggy app https://play.google.com/store/apps/details?id=com.froggy"
-            }
-            textColor={colors.white}
-            horzontalPadding={10}
-            paddingVertical={10}
-          />
-        </View>
-
-        <CustomButton
-          title={"Invite Friends"}
-          primary
-          marginTop={hp(5)}
-          horzontalPadding={wp(15)}
-          onPress={() => shareLink()}
+          text={
+            "Join me on Kokoafone, download Kokoafone app https://play.google.com/store/apps/details?id=com.kokoafone"
+          }
+          textColor={colors.black}
+          horzontalPadding={10}
+          paddingVertical={10}
         />
       </View>
+
+      <CustomButton
+        title={"Invite Friends"}
+        primary
+        marginTop={hp(5)}
+        horzontalPadding={wp(15)}
+        onPress={() => shareLink()}
+      />
     </SafeAreaView>
   );
 };
