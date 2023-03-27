@@ -36,7 +36,9 @@ const CallRatesScreen = () => {
       rate: "0.015",
     },
   ];
-  const { encrypt_detail, loginDetails = {} } = useSelector((store) => store);
+  const { encrypt_detail, loginDetails = {} } = useSelector(
+    (store) => store.sliceReducer
+  );
   const { encryptPassword, encryptUser } = encrypt_detail;
   const number = `+${loginDetails.username}`;
   console.log("----->>>>>", state.ratesData);

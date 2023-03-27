@@ -15,37 +15,31 @@ const CallReportsScreen = () => {
     isLoading: false,
   });
 
-  const { encrypt_detail } = useSelector((store) => store);
+  const { encrypt_detail } = useSelector((store) => store.sliceReducer);
 
   useEffect(() => {
     hitCallDetail();
   }, []);
 
   const hitCallDetail = async () => {
-    setState({ isLoading: true })
+    setState({ isLoading: true });
     const data = new FormData();
     data.append("cust_id", encrypt_detail?.encryptUser);
 
-
-   hitGetCallDetailsApi(data) .then((response) => {
-    console.log('res------->>',response.data)
-    setState({isLoading:false})
-    if (response.data.result == "success") {
-      setState({
-        callDetailRes: response.data.msg,
+    hitGetCallDetailsApi(data)
+      .then((response) => {
+        console.log("res------->>", response.data);
+        setState({ isLoading: false });
+        if (response.data.result == "success") {
+          setState({
+            callDetailRes: response.data.msg,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("reeeeeeeeerrrrrrrr====>>>>>>", err);
+        setState({ isLoading: false });
       });
-
-    } 
-  })
-    .catch((err) => {
-      console.log('reeeeeeeeerrrrrrrr====>>>>>>',err)
-      setState({isLoading:false})
-    });
-
-
-
-
-    
   };
 
   const renderItem = ({ item }) => (
@@ -100,19 +94,13 @@ const CallReportsScreen = () => {
             textColor={colors.black}
           />
 
-          <CustomText
-            text={"Cost"}
-            textSize={16}
-            textColor={colors.black}
-          />
+          <CustomText text={"Cost"} textSize={16} textColor={colors.black} />
         </View>
         <View style={styles.horizontalLine}></View>
 
         <FlatList data={state?.callDetailRes} renderItem={renderItem} />
       </View>
-      <Loading
-        loading={state.isLoading}
-      />
+      <Loading loading={state.isLoading} />
     </SafeAreaView>
   );
 };

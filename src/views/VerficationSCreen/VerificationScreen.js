@@ -65,7 +65,7 @@ const VerificationScreen = ({ navigation }) => {
       navigation.navigate("DIDScreen", {
         phoneEncryptedCode: phoneEncryptedCode,
         countryCode: countryEncryptedCode,
-        phoneInput:phoneInput
+        phoneInput: phoneInput,
       });
     } else {
     }
@@ -109,7 +109,7 @@ const VerificationScreen = ({ navigation }) => {
           horzontalPadding={wp(15)}
           marginTop={hp(8)}
           onPress={() => hitCountryEncryptionApi()}
-         // onPress={() => navigation.navigate(OTP_SCREEN)}
+          // onPress={() => navigation.navigate(OTP_SCREEN)}
         />
       </View>
     </SafeAreaView>

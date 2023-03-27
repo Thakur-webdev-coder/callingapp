@@ -43,7 +43,7 @@ const RecentCall = ({ navigation }) => {
     allContacts = {},
     encrypt_detail,
     balanceDetail = {},
-  } = useSelector((store) => store);
+  } = useSelector((store) => store.sliceReducer);
   const hitCallDetail = async () => {
     const data = new FormData();
     data.append("cust_id", encrypt_detail?.encryptUser);

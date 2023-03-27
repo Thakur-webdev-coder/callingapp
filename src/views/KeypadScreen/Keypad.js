@@ -30,7 +30,7 @@ import { Show_Toast } from "../../utils/toast";
 const Keypad = ({ navigation }) => {
   // const [inputNumber, setInputNumber] = useState('')
   const { balanceDetail = {}, loginDetails = {} } = useSelector(
-    (store) => store
+    (store) => store.sliceReducer
   );
   const [state, _setState] = useState({
     dialedNumber: "",

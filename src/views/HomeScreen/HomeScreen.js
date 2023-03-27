@@ -75,8 +75,9 @@ const Home = ({ navigation }) => {
 
   const [LogoutModal, setLogOutModal] = useState(false);
   const { loginDetails = {}, balanceDetail = {} } = useSelector(
-    (store) => store
+    (store) => store.sliceReducer
   );
+
   const { username, password, did } = loginDetails;
 
   const dispatch = useDispatch();
@@ -200,14 +201,14 @@ const Home = ({ navigation }) => {
 
       case "Mobile Money":
         navigation.navigate("WebViewScreen", {
-          url: `https://billing.kokoafone.com/billing/customer/billing_mobile_money.php?pr_login=${username}&pr_password=${password}&mobiledone=submit_log`,
+          url: `https://billing.kokoafone.com/billing/customer/billing_mobile_money.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
           title: "Mobile Money",
         });
         break;
 
       case "Mobile Topup":
         navigation.navigate("WebViewScreen", {
-          url: `https://billing.kokoafone.com/billing/customer/billing_airtime.php?pr_login=${username}&pr_password=${password}&mobiledone=submit_log`,
+          url: `https://billing.kokoafone.com/billing/customer/billing_airtime.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
           title: "Mobile Topup",
         });
         break;

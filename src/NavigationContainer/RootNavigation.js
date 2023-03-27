@@ -20,7 +20,9 @@ const Stack = createNativeStackNavigator();
 const RootNavigation = () => {
   //const asa= useSelector((store) => store);
   // const { loginDetails,isLoadingEnable } = useSelector((store) => store.reducer);
-  const { loginDetails, isLoadingEnable } = useSelector((store) => store);
+  const { loginDetails, isLoadingEnable } = useSelector(
+    (store) => store.sliceReducer
+  );
 
   console.log("qwe---", loginDetails, isLoadingEnable);
   return (

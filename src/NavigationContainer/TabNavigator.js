@@ -18,7 +18,7 @@ import Sip from "@khateeb00/react-jssip";
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
-  const { loginDetails = {} } = useSelector((store) => store);
+  const { loginDetails = {} } = useSelector((store) => store.sliceReducer);
 
   useEffect(() => {
     const { password, did } = loginDetails;
