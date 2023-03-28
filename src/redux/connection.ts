@@ -17,9 +17,13 @@ export const connection = createSlice({
             state = initialState
         },
         connectionEstablished(state, action) {
+            console.log("check connection" , action.payload?.connection);
+            
             state.connection = action.payload?.connection
             state.connecting = undefined
             state.timeEstablished = action.payload?.time
+            
+
         }
     },
 });

@@ -6,12 +6,11 @@ import {
     addConferenceListeners, addLocalTracksToConference, constructConfig, createLocalTracksF, disposeTracks, getBackendSafeRoomName, getConferenceOptions,
     getCurrentConference, getLocalParticipant, getLocalTrack, getLocalTracks, getRemoteParticipants, loadConfig, sendCommandOnce, sendLocalParticipant, setMuted, shouldMirror
 } from "./functions"
-import JitsiMeetJS from "lib-jitsi-meet"
+import JitsiMeetJS from 'lib-jitsi-meet'
 import { CAMERA_FACING_MODE, CustomConferenceEvents, JitsiConnectionEvents, JitsiTrackEvents, JITSI_CONNECTION_CONFERENCE_KEY, JITSI_URL_KEY, MEDIA_TYPE } from "./constants"
 import { connectionEstablished, connectionWillConnect, destroyConnection } from "../redux/connection"
 import { trackRemoved, trackUpdated, TRACK_ADDED } from "../redux/tracks"
-import { PARTICIPANT_JOINED } from "../redux/participants"
-import { useSelector } from "react-redux"
+import { participantUpdated, PARTICIPANT_JOINED, raiseHandUpdated } from "../redux/participants"
 
 export const initConfig = createAsyncThunk(
     'config/init',
@@ -46,39 +45,17 @@ export const startMeeting = createAsyncThunk(
 export const initJitsi = createAsyncThunk(
     'jitsi/init',
     async (room: string | undefined, { dispatch, getState }) => {
-        console.log("hererere" , room);
-        
-        const  state = getState()
-        // const str = useSelector(
-        //     (store) => store
-        //   );
-        console.log("hererere22" , state);
-
+        const state = getState()
         var { config, locationURL, settings: { startAudioOnly, startWithAudioMuted, startWithVideoMuted } } = state['meetConfig']
         if (!config) {
-            console.log("hererere1" , room);
-
             config = await loadConfig(`${locationURL}config.js`)
         }
-        console.log("hererere2" , config);
-
         dispatch(setConfig(config))
-        console.log("isromm-->3" , room);
-
-        try {
-            JitsiMeetJS.init(config);
+        JitsiMeetJS.init(config);
         JitsiMeetJS.setNetworkInfo({
             isOnline: true
         });
-            } catch (e) {
-            console.log('Errorrrr' , e)
-            }
-       
-        console.log("isromm-->" , room);
-        
         if (room) {
-            console.log("hererere3" , room);
-
             dispatch(setRoom(getBackendSafeRoomName(room)))
             if (startAudioOnly) {
                 dispatch(setAudioMuted(false))
@@ -91,9 +68,6 @@ export const initJitsi = createAsyncThunk(
                     dispatch(setAudioMuted(false))
                 }
             }
-
-            console.log(" jitsi initlized");
-            
             dispatch(createConnection())
         }
     }
@@ -204,10 +178,7 @@ export const createConnection = createAsyncThunk(
 export const connectConf = createAsyncThunk(
     'jitsi/connect_conference',
     async function (overrideRoom: string, { dispatch, getState }) {
-        
         const state: any = getState();
-        console.log("connectConference" , state);
-
         const { locationURL } = state['meetConfig']
         const { connection: connection_, connecting } = state['connection'];
         const { tracks } = state
@@ -243,8 +214,6 @@ export const connectConf = createAsyncThunk(
 export const hangupMeeting = createAsyncThunk(
     'meeting/hangup',
     (args, { getState, dispatch }) => {
-        console.log("hangup Meeting" , "hangup Meeting");
-        
         dispatch(disconnectConf())
     }
 )
@@ -587,7 +556,6 @@ export function muteLocal(enable: boolean, mediaType: MEDIA_TYPE, stopScreenShar
 export const toggleCamera = createAsyncThunk(
     'camera/toggle',
     (args: any, { dispatch, getState }) => {
-        
         const state = getState()
         const localTrack = getLocalTrack(state['tracks'], MEDIA_TYPE.VIDEO);
         let jitsiTrack;
@@ -611,29 +579,29 @@ export const toggleCamera = createAsyncThunk(
     }
 )
 
-// export const localParticipantRaiseHand = createAsyncThunk(
-//     'local/raise_lower/hand',
-//     async (enabled: boolean, { getState, dispatch }) => {
-//         const localId = getLocalParticipant(getState())?.id;
-//         const raisedHandTimestamp = enabled ? Date.now() : 0
-//         getCurrentConference(getState())?.setLocalParticipantProperty('raisedHand', raisedHandTimestamp)
-//         dispatch(participantUpdated({
-//             // XXX Only the local participant is allowed to update without
-//             // stating the JitsiConference instance (i.e. participant property
-//             // `conference` for a remote participant) because the local
-//             // participant is uniquely identified by the very fact that there is
-//             // only one local participant.
+export const localParticipantRaiseHand = createAsyncThunk(
+    'local/raise_lower/hand',
+    async (enabled: boolean, { getState, dispatch }) => {
+        const localId = getLocalParticipant(getState())?.id;
+        const raisedHandTimestamp = enabled ? Date.now() : 0
+        getCurrentConference(getState())?.setLocalParticipantProperty('raisedHand', raisedHandTimestamp)
+        dispatch(participantUpdated({
+            // XXX Only the local participant is allowed to update without
+            // stating the JitsiConference instance (i.e. participant property
+            // `conference` for a remote participant) because the local
+            // participant is uniquely identified by the very fact that there is
+            // only one local participant.
 
-//             id: localId,
-//             local: true,
-//             raisedHandTimestamp
-//         }));
-//         dispatch(raiseHandUpdated({
-//             id: localId,
-//             raisedHandTimestamp
-//         }));
-//     }
-// )
+            id: localId,
+            local: true,
+            raisedHandTimestamp
+        }));
+        dispatch(raiseHandUpdated({
+            id: localId,
+            raisedHandTimestamp
+        }));
+    }
+)
 
 export const grantModerator = createAsyncThunk(
     'grant_moderator',

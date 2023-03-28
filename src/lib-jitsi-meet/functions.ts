@@ -247,6 +247,7 @@ export function sendLocalParticipant(
         setDisplayName: Function,
         setLocalParticipantProperty: Function
     }): void {
+        console.log('---sendLocalParticipant---',state)
     const {
         avatarURL,
         email,
@@ -296,7 +297,7 @@ export function addConferenceListeners(conference: any, dispatch: Dispatch, stat
         (...args) => {
             console.log('---CONFERENCE_JOINED---', ...args)
             dispatch(conferenceJoined(conference))
-            navigate(strings.NavigationKeys.conference)
+            // navigate(strings.NavigationKeys.conference)
         });
     conference.on(
         JitsiConferenceEvents.CONFERENCE_LEFT,

@@ -18,7 +18,14 @@ import sliceReducer from "./reducer";
 import meetConfig from "./meetConfig";
 import conference from "./conference";
 import connection from "./connection";
+import participants from "./participants";
 import tracks from "./tracks";
+import {
+  conference_middleware,
+  meetConfig_middleware,
+  participants_middleware,
+  tracks_middleware,
+} from "../middlewares";
 
 const rootReducer = combineReducers({
   sliceReducer,
@@ -26,13 +33,14 @@ const rootReducer = combineReducers({
   tracks,
   connection,
   conference,
+  participants,
 });
 
 const persist_reducer = {
   storage: AsyncStorage,
   key: "root",
   //   whitelist: ["userDetails"],
-  blacklist: ["meetConfig", "tracks", "connection", "conference"],
+  blacklist: ["tracks", "connection", "conference"],
 };
 const persistedReducer = persistReducer(persist_reducer, rootReducer);
 let Store = configureStore({
@@ -40,7 +48,11 @@ let Store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }),
+    })
+      .concat(conference_middleware)
+      .concat(meetConfig_middleware)
+      .concat(tracks_middleware)
+      .concat(participants_middleware),
 });
 export const persistor = persistStore(Store);
 export default Store;

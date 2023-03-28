@@ -1,4 +1,5 @@
 import { createAction, createSlice } from "@reduxjs/toolkit";
+import { localParticipantIdChanged } from "../lib-jitsi-meet/actions";
 import { LOCAL_PARTICIPANT_DEFAULT_ID, PARTICIPANT_ROLE } from "../lib-jitsi-meet/constants";
 
 interface StateType {
@@ -76,12 +77,12 @@ export const participants = createSlice({
                 }
             }
         })
-        builder.addCase(localParticipantIdChanged.fulfilled, (state, action) => {
-            const { local } = state
-            if (local) {
-                state.local.id = action.payload?.newValue;
-            }
-        })
+        // builder.addCase(localParticipantIdChanged.fulfilled, (state, action) => {
+        //     const { local } = state
+        //     if (local) {
+        //         state.local.id = action.payload?.newValue;
+        //     }
+        // })
     }
 });
 

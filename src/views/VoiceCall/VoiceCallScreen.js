@@ -34,25 +34,62 @@ import {
 import CustomText from "../../components/CustomText";
 import {
   hangupMeeting,
-  initJitsi,
+  setAudioMuted,
+  setVideoMuted,
   startMeeting,
+  toggleCamera,
 } from "../../lib-jitsi-meet/actions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RTCView } from "react-native-webrtc";
 import { Show_Toast } from "../../utils/toast";
 import { DEFAULT_MEETING_URL } from "../../lib-jitsi-meet/constants";
+import {
+  getLocalVideoTrack,
+  getRemoteParticipants,
+} from "../../lib-jitsi-meet/functions";
 const CallScreen = ({ navigation, route }) => {
   const { voiceCall } = route.params;
   console.log("rouuu---", voiceCall);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    console.log("herreee---", "hereeee");
-    // dispatch(startMeeting("919588220190"));
+  // const dispatch = useDispatch();
+  // const { tracks } = useSelector((store) => store);
+  const [enableVideo, setEnableVideo] = useState(false);
+  const [enableAudio, setEnableAudio] = useState(false);
 
+  const { tracks, participants } = useSelector((state) => state);
+  const dispatch = useDispatch();
+  var localVideoTrack = getLocalVideoTrack(tracks);
+
+  console.log(
+    "---localVideoTrack---",
+    localVideoTrack?.jitsiTrack?.stream.toURL()
+  );
+
+  const videoEnable = () => {
+    if (enableVideo) {
+      setEnableVideo(false);
+    } else {
+      setEnableVideo(true);
+    }
+    console.log("herreee---", "hereeee");
+
+    dispatch(setVideoMuted(enableVideo));
+  };
+
+  const audioEnable = () => {
+    if (enableAudio) {
+      setEnableAudio(false);
+    } else {
+      setEnableAudio(true);
+    }
+    console.log("herreee---", "hereeee");
+
+    dispatch(setAudioMuted(enableAudio));
+  };
+
+  useEffect(() => {
     checkPeermission();
-    // dispatch(initJitsi("abcd"));
-    // dispatch(join)
-    // startMeeting("abcd");
+    // console.log("---Remoteeeeeparticipants---", getRemoteParticipants());
+    console.log("myyyy_tracksss", tracks);
   }, []);
   const permissions =
     Platform.OS === "ios" ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA;
@@ -99,7 +136,7 @@ const CallScreen = ({ navigation, route }) => {
     <SafeAreaView style={voiceCall ? AppStyle.wrapper : styles.wrapper}>
       <View style={{ flex: 4 }}>
         <TouchableOpacity
-          onPress={() => navigation.goBack()}
+          onPress={() => disconnectMeeting()}
           style={styles.backArrowBox}
         >
           <Image source={voiceCall ? ic_brownArrow : ic_back} />
@@ -122,7 +159,12 @@ const CallScreen = ({ navigation, route }) => {
           fontWeight={"400"}
         />
 
-        <RTCView streamURL={DEFAULT_MEETING_URL + "919588220190"} />
+        <RTCView
+          style={{ flex: 1 }}
+          objectFit="cover"
+          mirror={localVideoTrack?.mirror}
+          streamURL={localVideoTrack?.jitsiTrack?.stream.toURL() || ""}
+        />
 
         {/* <Image
           style={voiceCall ? styles.avatarStyle : styles.videoStyle}
@@ -139,16 +181,34 @@ const CallScreen = ({ navigation, route }) => {
       <View style={styles.bottomStyle}>
         <Image source={ic_msg} style={styles.avatarStyle} />
         <Image source={ic_speaker_small} style={styles.avatarStyle} />
-        {!voiceCall ? (
-          <Image source={ic_camera_switch} style={styles.avatarStyle} />
-        ) : null}
-        <TouchableOpacity onPress={() => disconnectMeeting()}>
-          <Image source={ic_endcall} style={styles.avatarStyle} />
+        {/* {!voiceCall ? ( */}
+        <TouchableOpacity
+          style={styles.avatarStyle}
+          onPress={() => dispatch(toggleCamera())}
+        >
+          <Image source={ic_camera_switch} />
         </TouchableOpacity>
-        {!voiceCall ? (
-          <Image source={ic_camera_off} style={styles.avatarStyle} />
-        ) : null}
-        <Image source={ic_mute_call} style={styles.avatarStyle} />
+        {/* ) : null} */}
+        <TouchableOpacity
+          style={styles.avatarStyle}
+          onPress={() => disconnectMeeting()}
+        >
+          <Image source={ic_endcall} />
+        </TouchableOpacity>
+        {/* {!voiceCall ? ( */}
+        <TouchableOpacity
+          style={styles.avatarStyle}
+          onPress={() => videoEnable()}
+        >
+          <Image source={ic_camera_off} />
+        </TouchableOpacity>
+        {/* ) : null} */}
+        <TouchableOpacity
+          style={styles.avatarStyle}
+          onPress={() => audioEnable()}
+        >
+          <Image source={ic_mute_call} />
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
