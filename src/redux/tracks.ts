@@ -1,5 +1,6 @@
 import { createAction, createSlice } from "@reduxjs/toolkit";
 import { JitsiTrackEvents } from "../lib-jitsi-meet/constants";
+import { localParticipantIdChanged } from "./participants";
 
 const initialState: any[] = [];
 
@@ -36,8 +37,15 @@ export const tracks = createSlice({
     },
     extraReducers(builder) {
         builder.addCase(TRACK_ADDED, (state, action) => {
-            state = [...state, action.payload]
-            return state
+            return [...state, action.payload]
+        })
+        builder.addCase(localParticipantIdChanged, (state, action) => {
+            state.map(track => {
+                if (track.local) {
+                    track.participantId = action.payload
+                }
+                return track
+            })
         })
     }
 });

@@ -3,9 +3,6 @@ import { DOMParser } from '@xmldom/xmldom';
 // import BackgroundTimer from 'react-native-background-timer'; 
 import 'react-native-url-polyfill/auto'; // Complete URL polyfill.
 import Storage from './Storage';
-
-
-console.log("ankit------->")
 /**
  * Implements an absolute minimum of the common logic of
  * {@code Document.querySelector} and {@code Element.querySelector}. Implements

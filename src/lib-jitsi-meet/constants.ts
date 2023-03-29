@@ -2,8 +2,6 @@ import JitsiMeetJS from 'lib-jitsi-meet'
 
 // export const DEFAULT_MEETING_URL = `https://${process.env.REACT_APP_MEET_DOMAIN}/`
 export const DEFAULT_MEETING_URL = `https://meet.jit.si/`
-// export const DEFAULT_MEETING_URL = `https://meet.jit.si/919588`
-
 
 /**
  * The name of the {@code JitsiConnection} property which identifies the location URL where the connection will be made.

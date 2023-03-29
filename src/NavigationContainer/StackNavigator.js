@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TabNavigator from "./TabNavigator";
 import BuyCredit from "../views/BuyCredit/BuyCredit";
@@ -14,10 +14,27 @@ import StartChatScreen from "../views/StartChatScreen/StartChatScreen";
 import SelectScreen from "../views/SelectScreen/SelectScreen";
 import CallScreen from "../views/VoiceCall/VoiceCallScreen";
 import WebViewScreen from "../views/webView";
+import { participantJoined } from "../lib-jitsi-meet/actions";
+import { useDispatch, useSelector } from "react-redux";
 
 const Stack = createNativeStackNavigator();
 
 const StackNavigator = () => {
+  const dispatch = useDispatch();
+
+  const { loginDetails, isLoadingEnable } = useSelector(
+    (store) => store.sliceReducer
+  );
+
+  useEffect(() => {
+    dispatch(
+      participantJoined({
+        id: "local",
+        name: loginDetails.username,
+        local: true,
+      })
+    );
+  }, []);
   return (
     <Stack.Navigator
       initialRouteName="TabNavigator"

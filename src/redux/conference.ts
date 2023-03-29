@@ -1,13 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { connectConf, disconnectConf } from "../lib-jitsi-meet/actions";
 
-const initialState = {
+type StateType = {
+    room: string,
+    conference: any,
+    joining: any,
+    leaving: any,
+    audioOnly: boolean,
+    conferenceTimestamp: number,
+    tileViewEnabled: undefined | boolean,
+    confData: any
+}
+
+const initialState: StateType = {
     room: '',
     conference: undefined,
     joining: undefined,
     leaving: undefined,
     audioOnly: false,
-    conferenceTimestamp: 0
+    conferenceTimestamp: 0,
+    tileViewEnabled: undefined,
+    confData: undefined
 };
 
 export const conference = createSlice({
@@ -29,12 +42,20 @@ export const conference = createSlice({
         },
         conferenceLeft(state, action: { type: string, payload: undefined }) {
             setConference(state, undefined, 'leaving')
+            state.tileViewEnabled = undefined
+            state.audioOnly = false
         },
-        setAudioOnly(state, action) {
+        setAudioOnly(state, action: { type: string, payload: boolean }) {
             state.audioOnly = action.payload
         },
         conferenceTimestampChanged(state, action: { type: string, payload: number }) {
             state.conferenceTimestamp = action.payload
+        },
+        setTileView(state, action: { type: string, payload: boolean }) {
+            state.tileViewEnabled = action.payload
+        },
+        setConfData(state, action) {
+            state.confData = action.payload
         }
     },
     extraReducers(builder) {
@@ -47,16 +68,16 @@ export const conference = createSlice({
     }
 });
 
-export const { setRoom, conferenceJoined, willjoinConference, willLeaveConference, conferenceLeft, conferenceTimestampChanged } = conference.actions;
+export const { setRoom, conferenceJoined, willjoinConference, willLeaveConference, conferenceLeft, conferenceTimestampChanged, setTileView, setConfData } = conference.actions;
 
 export default conference.reducer;
 
-function setConference(state: typeof initialState, conference: any, key: keyof Omit<typeof initialState, 'room'>) {
+function setConference(state: typeof initialState, conference: any, key: 'joining' | 'leaving' | 'conference') {
     for (const k in state) {
         if (k === key) {
             state[k] = conference
         }
-        else if (k !== 'room') {
+        else if (k === 'joining' || k === 'leaving' || k === 'conference') {
             state[k] = undefined
         }
     }

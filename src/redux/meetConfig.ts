@@ -9,9 +9,6 @@ type Settings = {
 }
 type StateType = { locationURL: string, config: any, settings: Partial<Settings> }
 
-console.log("meetConfig" , "meetConfig");
-
-
 const initialState: StateType = {
     locationURL: DEFAULT_MEETING_URL,
     config: undefined,
@@ -22,20 +19,17 @@ const initialState: StateType = {
     }
 };
 
-
 export const meetConfig = createSlice({
     name: 'meetConfig',
     initialState,
     reducers: {
         setConfig(state, action) {
-            console.log("setConfig" , action.payload);
-            
             state.config = action.payload
         },
         setMeetingDomain(state, action) {
             state.locationURL = action.payload || DEFAULT_MEETING_URL
         },
-        updateSettings(state, action: { type: string, payload: Settings }) {
+        updateSettings(state, action: { type: string, payload: Partial<Settings> }) {
             const settings = action.payload
             for (const key in settings) {
                 if (key in state.settings) {

@@ -39,8 +39,7 @@ const rootReducer = combineReducers({
 const persist_reducer = {
   storage: AsyncStorage,
   key: "root",
-  //   whitelist: ["userDetails"],
-  blacklist: ["tracks", "connection", "conference"],
+  whitelist: ["sliceReducer"],
 };
 const persistedReducer = persistReducer(persist_reducer, rootReducer);
 let Store = configureStore({

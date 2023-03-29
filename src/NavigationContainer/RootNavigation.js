@@ -25,18 +25,6 @@ const RootNavigation = () => {
     (store) => store.sliceReducer
   );
 
-  const dispatch = useDispatch();
-
-  console.log("qwe---", loginDetails, isLoadingEnable);
-  useEffect(() => {
-    dispatch(
-      participantJoined({
-        id: "local",
-        name: loginDetails.username,
-        local: true,
-      })
-    );
-  }, []);
   return (
     <>
       <Stack.Navigator

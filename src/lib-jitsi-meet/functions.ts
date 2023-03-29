@@ -1,13 +1,12 @@
 import _ from 'lodash'
 import { Dispatch } from 'redux';
 // import { DispatchType, strings } from '../features/resources';
-// import {DispatchType, strings} from "../"
 import { conferenceJoined, conferenceLeft, conferenceTimestampChanged } from '../redux/conference';
 import { trackRemoved } from '../redux/tracks';
 import { createLocalTracksA, participantJoined, trackAdded } from './actions';
 import { AVATAR_COLORS, AVATAR_URL_COMMAND, CAMERA_FACING_MODE, EMAIL_COMMAND, JitsiConferenceEvents, JitsiParticipantConnectionStatus, JitsiRecordingConstants, JitsiTrackErrors, MEDIA_TYPE, PARTICIPANT_ROLE } from './constants';
 import JitsiMeetJS from 'lib-jitsi-meet'
-// import { dominantSpeakerChanged, participantLeft, participantUpdated, raiseHandUpdated } from '../redux/participants';
+import { dominantSpeakerChanged, participantLeft, participantUpdated, raiseHandUpdated } from '../redux/participants';
 // import { navigate } from '../features/components/JitsiMeet/ConferenceNavigationRef';
 
 /**
@@ -247,7 +246,6 @@ export function sendLocalParticipant(
         setDisplayName: Function,
         setLocalParticipantProperty: Function
     }): void {
-        console.log('---sendLocalParticipant---',state)
     const {
         avatarURL,
         email,
@@ -622,8 +620,6 @@ function _raiseHandUpdated({ dispatch, getState }: { dispatch: DispatchType; get
  * @returns {Track[]}
  */
 export function getLocalTracks(tracks: Track[] = []): Track[] {
-    console.log("tracks" , tracks);
-    
     return tracks.filter(t => t.local && t.jitsiTrack);
 }
 
@@ -731,6 +727,9 @@ function commonUserJoinedHandling(
     user: any): void {
     const id = user.getId();
     const displayName = user.getDisplayName();
+
+    console.log("userJoined---->" , displayName);
+
     if (user.isHidden()) {
         // dispatch(hiddenParticipantJoined(id, displayName));
     } else {
