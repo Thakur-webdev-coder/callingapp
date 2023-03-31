@@ -7,10 +7,13 @@ import { RootSiblingParent } from "react-native-root-siblings";
 import SplashScreen from "react-native-splash-screen";
 import CustomLoader from "./src/helpers/CustomLoader";
 import Store, { persistor } from "./src/redux/store";
+import { checkToken, showNotification } from "./src/utils/notificationHandler";
 
 const App = () => {
   useEffect(() => {
     SplashScreen.hide(); //hides the splash screen on app load.
+    // checkToken();
+    showNotification();
   }, []);
   return (
     <Provider store={Store}>

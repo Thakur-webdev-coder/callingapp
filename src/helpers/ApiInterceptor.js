@@ -11,7 +11,7 @@ export const apiClient = axios.create({
 });
 apiClient.interceptors.request.use(
   (config) => {
-    Store.dispatch(changeLoadingStatus(true));
+    // Store.dispatch(changeLoadingStatus(true));
 
     const accessToken = AsyncStorage.getItem("token");
     if (accessToken) {
@@ -28,7 +28,7 @@ apiClient.interceptors.request.use(
 );
 apiClient.interceptors.response.use(
   (response) => {
-    Store.dispatch(changeLoadingStatus(false));
+    // Store.dispatch(changeLoadingStatus(false));
     if (
       response.data.result == "success" ||
       !response.data.hasOwnProperty("result")
@@ -42,7 +42,7 @@ apiClient.interceptors.response.use(
     }
   },
   async (error) => {
-    Store.dispatch(changeLoadingStatus(false));
+    // Store.dispatch(changeLoadingStatus(false));
     console.log("error------>", error);
     Show_Toast("Something went wrong Please Try Again!");
     return Promise.reject(error);

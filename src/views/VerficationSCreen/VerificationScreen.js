@@ -16,6 +16,7 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { ic_app_logo } from "../../routes/imageRoutes";
+import Loading from "react-native-whc-loading";
 
 let phoneEncryptedCode = null;
 let countryEncryptedCode = null;
@@ -27,17 +28,24 @@ const VerificationScreen = ({ navigation }) => {
   console.log("phpne", phoneInput);
 
   const hitCountryEncryptionApi = async () => {
+    setIsLoading(true);
+
     if (isValidPhoneNumber(phoneInput)) {
       const data = new FormData();
       data.append("source", countryCode);
-      const myResponse = await hitEncryptionApi(data);
-
-      if (myResponse.data.result == "success") {
-        countryEncryptedCode = myResponse.data.value;
-        hitPhoneEncryptionAPi();
-      }
+      hitEncryptionApi(data)
+        .then((response) => {
+          if (response.data.result == "success") {
+            countryEncryptedCode = response.data.value;
+            hitPhoneEncryptionAPi();
+          }
+        })
+        .catch((err) => {
+          setIsLoading(false);
+        });
     } else {
       alert("Please Enter a Valid Phone Number");
+      setIsLoading(false);
     }
   };
 
@@ -45,12 +53,16 @@ const VerificationScreen = ({ navigation }) => {
     const data = new FormData();
     data.append("source", parsePhoneNumber(phoneInput)?.nationalNumber);
 
-    const myResponse = await hitEncryptionApi(data);
-
-    if (myResponse.data.result == "success") {
-      phoneEncryptedCode = myResponse?.data?.value;
-      if (countryEncryptedCode || phoneEncryptedCode) hitOtpSendApi();
-    }
+    hitEncryptionApi(data)
+      .then((response) => {
+        if (response.data.result == "success") {
+          phoneEncryptedCode = response?.data?.value;
+          if (countryEncryptedCode || phoneEncryptedCode) hitOtpSendApi();
+        }
+      })
+      .catch((err) => {
+        setIsLoading(false);
+      });
   };
 
   const hitOtpSendApi = async () => {
@@ -58,17 +70,23 @@ const VerificationScreen = ({ navigation }) => {
     data.append("phone", phoneEncryptedCode);
     data.append("ccode", countryEncryptedCode);
 
-    const myResponse = await hitSendOtpApi(data);
-
-    if (myResponse.data.result == "success") {
-      // console.log('phoneEncryptedCode-----',phoneEncryptedCode,'countryEncryptedCode',countryEncryptedCode,'phoneInput',phoneInput)
-      navigation.navigate("DIDScreen", {
-        phoneEncryptedCode: phoneEncryptedCode,
-        countryCode: countryEncryptedCode,
-        phoneInput: phoneInput,
+    hitSendOtpApi(data)
+      .then((response) => {
+        if (response.data.result == "success") {
+          // console.log('phoneEncryptedCode-----',phoneEncryptedCode,'countryEncryptedCode',countryEncryptedCode,'phoneInput',phoneInput)
+          navigation.navigate("DIDScreen", {
+            phoneEncryptedCode: phoneEncryptedCode,
+            countryCode: countryEncryptedCode,
+            phoneInput: phoneInput,
+          });
+          setIsLoading(false);
+        } else {
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        setIsLoading(false);
       });
-    } else {
-    }
   };
 
   return (
@@ -112,6 +130,7 @@ const VerificationScreen = ({ navigation }) => {
           // onPress={() => navigation.navigate(OTP_SCREEN)}
         />
       </View>
+      <Loading loading={isLoading} />
     </SafeAreaView>
   );
 };

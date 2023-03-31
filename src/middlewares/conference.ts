@@ -12,7 +12,6 @@ const connection: ThunkMiddleware = (store) => (next) => (action) => {
     const { confData = {} } = getState()['conference']
     const { additional_moderators = [], screenSharingPermission = [] } = confData
     const { payload: participant = {}, type } = action;
-    const { id } = participant;
     switch (type) {
         case connectionEstablished.type:
             console.log('---conference-middleware-action---', action)
@@ -20,6 +19,7 @@ const connection: ThunkMiddleware = (store) => (next) => (action) => {
             break
 
         case PARTICIPANT_JOINED: {
+            const { id } = participant;
             if (conference && (localParticipant.role === PARTICIPANT_ROLE.MODERATOR)) {
                 sendCommandOnce(conference, CustomConferenceEvents.SYNC_CONF_DATA, JSON.stringify({ additional_moderators, screenSharingPermission, id }))
             }

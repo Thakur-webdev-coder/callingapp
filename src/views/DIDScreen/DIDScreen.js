@@ -1,5 +1,5 @@
 import { Image, SafeAreaView, TextInput, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import styles from "./styles";
 import { ic_app_logo } from "../../routes/imageRoutes";
 import CustomText from "../../components/CustomText";
@@ -12,17 +12,25 @@ import { CustomButton } from "../../components";
 import { hitApiAssignDid } from "../../constants/APi";
 import { Show_Toast } from "../../utils/toast";
 import { OTP_SCREEN } from "../../routes/routeNames";
-const DIDScreen = ({ navigation,route }) => {
-  const { phoneEncryptedCode,countryCode,phoneInput } = route.params;
+import Loading from "react-native-whc-loading";
+const DIDScreen = ({ navigation, route }) => {
+  const { phoneEncryptedCode, countryCode, phoneInput } = route.params;
+  const [isLoading, setIsLoading] = useState(false);
 
   const hitAssignDidApi = async () => {
-    const myResponse = await hitApiAssignDid(phoneInput);
+    setIsLoading(true);
 
-    navigation.navigate(OTP_SCREEN, {
-      phoneEncryptedCode: phoneEncryptedCode,
-      countryCode: countryCode,
-      phoneInput:phoneInput
-    });
+    hitApiAssignDid(phoneInput)
+      .then((response) => {
+        navigation.navigate(OTP_SCREEN, {
+          phoneEncryptedCode: phoneEncryptedCode,
+          countryCode: countryCode,
+          phoneInput: phoneInput,
+        });
+      })
+      .catch((err) => {
+        setIsLoading(false);
+      });
   };
   return (
     <SafeAreaView style={styles.mainView}>
@@ -46,6 +54,7 @@ const DIDScreen = ({ navigation,route }) => {
           marginTop={hp(7)}
         />
       </View>
+      <Loading loading={isLoading} />
     </SafeAreaView>
   );
 };

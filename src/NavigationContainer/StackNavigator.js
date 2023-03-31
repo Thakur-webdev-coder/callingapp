@@ -16,15 +16,14 @@ import CallScreen from "../views/VoiceCall/VoiceCallScreen";
 import WebViewScreen from "../views/webView";
 import { participantJoined } from "../lib-jitsi-meet/actions";
 import { useDispatch, useSelector } from "react-redux";
+import CustomAlert from "../utils/CustomAlertMessage";
 
 const Stack = createNativeStackNavigator();
 
 const StackNavigator = () => {
   const dispatch = useDispatch();
 
-  const { loginDetails, isLoadingEnable } = useSelector(
-    (store) => store.sliceReducer
-  );
+  const { loginDetails } = useSelector((store) => store.sliceReducer);
 
   useEffect(() => {
     dispatch(

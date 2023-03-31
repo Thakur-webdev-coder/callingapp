@@ -29,14 +29,17 @@ import {
 } from "../../lib-jitsi-meet/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { RTCView } from "react-native-webrtc";
-import { MEDIA_TYPE } from "../../lib-jitsi-meet/constants";
+import {
+  DEFAULT_MEETING_URL,
+  MEDIA_TYPE,
+} from "../../lib-jitsi-meet/constants";
 import { getTrackByMediaTypeAndParticipant } from "../../lib-jitsi-meet/functions";
+import { hitJoinVideoCallApi } from "../../constants/APi";
+import { Show_Toast } from "../../utils/toast";
 
 const CallScreen = ({ navigation, route }) => {
-  const { voiceCall } = route.params;
-  console.log("rouuu---", voiceCall);
-  // const dispatch = useDispatch();
-  // const { tracks } = useSelector((store) => store);
+  const { voiceCall, callData } = route.params;
+  console.log("rouuu---", voiceCall, callData);
   const { tracks, participants } = useSelector((state) => state);
   const [enableVideo, setEnableVideo] = useState(false);
   const [enableAudio, setEnableAudio] = useState(false);
@@ -44,6 +47,9 @@ const CallScreen = ({ navigation, route }) => {
     participants.sortedRemoteParticipants[0] || ""
   );
   const [smallVideoID, setSmallVideoId] = useState(participants.local.id);
+
+  const { loginDetails = {} } = useSelector((store) => store.sliceReducer);
+  const { username } = loginDetails;
 
   const dispatch = useDispatch();
   var largeVideoTrack = getTrackByMediaTypeAndParticipant(
@@ -94,8 +100,34 @@ const CallScreen = ({ navigation, route }) => {
     setSmallVideoId(largeVideoId);
   };
 
+  const hitJoinVideoApi = async () => {
+    const data = new FormData();
+    data.append("receiver_phone", callData);
+    data.append("sender_phone", username);
+    data.append("meeting_url", DEFAULT_MEETING_URL + "testRoom");
+
+    console.log("data -->", data);
+    hitJoinVideoCallApi(data).then((response) => {
+      if (response.data.result == "success") {
+        checkPeermission();
+        // setIsLoading(false);
+        // Show_Toast(response.data.msg);
+      } else {
+        // setIsLoading(false);
+        Show_Toast("Something went Wrong");
+        navigation.goBack();
+      }
+    });
+  };
+
   useEffect(() => {
-    checkPeermission();
+    if (callData == null) {
+      checkPeermission();
+    } else {
+      hitJoinVideoApi();
+    }
+    // checkPeermission();
+
     // console.log("---Remoteeeeeparticipants---", getRemoteParticipants());
     console.log("myyyy_tracksss", tracks);
   }, []);

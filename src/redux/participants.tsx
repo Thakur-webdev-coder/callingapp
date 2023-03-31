@@ -77,6 +77,10 @@ export const participants = createSlice({
                 state.pinnedParticipant = '';
             }
         },
+
+        removeLocalParticipant(state, action) {
+            state.local = undefined
+        },
         participantUpdated(state, action: { type: string, payload: any }) {
             const { payload: participant } = action;
             let { id } = participant;
@@ -186,7 +190,7 @@ export const participants = createSlice({
     }
 });
 
-export const { participantLeft, dominantSpeakerChanged, localParticipantIdChanged, participantUpdated, raiseHandUpdated } = participants.actions;
+export const { participantLeft, removeLocalParticipant, dominantSpeakerChanged, localParticipantIdChanged, participantUpdated, raiseHandUpdated } = participants.actions;
 
 export default participants.reducer;
 

@@ -57,6 +57,8 @@ import {
 } from "../../redux/reducer";
 import { CommonActions, useIsFocused } from "@react-navigation/native";
 import CommonHeader from "../../components/Header/commonHeader";
+import { removeLocalParticipant } from "../../redux/participants";
+import { navigateScreen } from "../../utils/notificationHandler";
 
 let myBalanceData = null;
 let usernameEncryptedCode = null;
@@ -77,12 +79,14 @@ const Home = ({ navigation }) => {
   const { loginDetails = {}, balanceDetail = {} } = useSelector(
     (store) => store.sliceReducer
   );
+  const { conference } = useSelector((state) => state);
 
   const { username, password, did } = loginDetails;
 
   const dispatch = useDispatch();
 
   useEffect(() => {
+    navigateScreen(navigation);
     hitBalanceAPi();
   }, []);
 
@@ -373,6 +377,7 @@ const Home = ({ navigation }) => {
     );
     dispatch(saveLoginDetails(null));
     dispatch(saveBalanceData(null));
+    dispatch(removeLocalParticipant());
   };
 
   const RenderList = ({ item, index }) => {

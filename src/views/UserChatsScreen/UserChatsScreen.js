@@ -27,10 +27,15 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
-const UserChatsScreen = ({ navigation }) => {
+const UserChatsScreen = ({ navigation, route }) => {
   const [state, setState] = useState({
     callModal: false,
   });
+
+  const callData = route.params;
+
+  console.log("callData---->", callData?.callData);
+
   //const [callModal,setCallModal]=useState(false)
   return (
     <SafeAreaView>
@@ -125,6 +130,7 @@ const UserChatsScreen = ({ navigation }) => {
             onPress={() => {
               navigation.navigate("CallScreen", {
                 voiceCall: false,
+                callData: callData?.callData,
               });
               setState({ callModal: false });
             }}
