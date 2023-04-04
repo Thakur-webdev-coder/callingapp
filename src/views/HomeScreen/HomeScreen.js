@@ -57,6 +57,8 @@ import {
 } from "../../redux/reducer";
 import { CommonActions, useIsFocused } from "@react-navigation/native";
 import CommonHeader from "../../components/Header/commonHeader";
+import { removeLocalParticipant } from "../../redux/participants";
+import { navigateScreen } from "../../utils/notificationHandler";
 
 let myBalanceData = null;
 let usernameEncryptedCode = null;
@@ -75,13 +77,16 @@ const Home = ({ navigation }) => {
 
   const [LogoutModal, setLogOutModal] = useState(false);
   const { loginDetails = {}, balanceDetail = {} } = useSelector(
-    (store) => store
+    (store) => store.sliceReducer
   );
+  const { conference } = useSelector((state) => state);
+
   const { username, password, did } = loginDetails;
 
   const dispatch = useDispatch();
 
   useEffect(() => {
+    navigateScreen(navigation);
     hitBalanceAPi();
   }, []);
 
@@ -200,14 +205,14 @@ const Home = ({ navigation }) => {
 
       case "Mobile Money":
         navigation.navigate("WebViewScreen", {
-          url: `https://billing.kokoafone.com/billing/customer/billing_mobile_money.php?pr_login=${username}&pr_password=${password}&mobiledone=submit_log`,
+          url: `https://billing.kokoafone.com/billing/customer/billing_mobile_money.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
           title: "Mobile Money",
         });
         break;
 
       case "Mobile Topup":
         navigation.navigate("WebViewScreen", {
-          url: `https://billing.kokoafone.com/billing/customer/billing_airtime.php?pr_login=${username}&pr_password=${password}&mobiledone=submit_log`,
+          url: `https://billing.kokoafone.com/billing/customer/billing_airtime.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
           title: "Mobile Topup",
         });
         break;
@@ -372,6 +377,7 @@ const Home = ({ navigation }) => {
     );
     dispatch(saveLoginDetails(null));
     dispatch(saveBalanceData(null));
+    dispatch(removeLocalParticipant());
   };
 
   const RenderList = ({ item, index }) => {

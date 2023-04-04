@@ -1,42 +1,39 @@
 import { StyleSheet } from "react-native";
 import {
-    heightPercentageToDP as hp,
-    widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 import colors from "../../../assets/colors";
 
 export default StyleSheet.create({
-    wrapper:{
-        flex: 1,
-        backgroundColor: colors.black,
-        flexDirection: "column",
-    },
-    backArrowBox: {
-        padding: 10
-    },
-    avatarStyle: {
-        alignSelf: 'center',
-        
-        //marginTop: hp(8)
-    },
-    videoStyle: {
-        height: 530,
-        width: 350,
-        alignSelf:'center',
-        marginTop: hp(3)
-    },
-    bottomStyle: {
+  wrapper: {
+    flex: 1,
+    backgroundColor: colors.black,
+    flexDirection: "column",
+  },
+  backArrowBox: {
+    padding: 10,
+  },
+  avatarStyle: {
+    alignSelf: "center",
 
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingHorizontal:wp(3),
-        backgroundColor:colors.white,
-        paddingBottom:hp(1),
-        flex:0.55,
-     
-        // alignContent:'flex-end',
-        // /backgroundColor:'red'
-    }
+    //marginTop: hp(8)
+  },
+  videoStyle: {
+    height: 530,
+    width: 350,
+    alignSelf: "center",
+    marginTop: hp(3),
+  },
+  bottomStyle: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: wp(3),
+    backgroundColor: colors.white,
+    paddingBottom: hp(1),
+    flex: 0.55,
 
-
+    // alignContent:'flex-end',
+    // /backgroundColor:'red'
+  },
 });

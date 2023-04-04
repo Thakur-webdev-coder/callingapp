@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import StackNavigator from "./StackNavigator";
 import {
@@ -9,20 +9,22 @@ import {
 import BoardingScreen from "../views/BoardingScreen/BoardingScreen";
 import VerificationScreen from "../views/VerficationSCreen/VerificationScreen";
 import OtpScreen from "../views/OtpScreen/OtpScreen";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Loading from "react-native-whc-loading";
 import Login from "../views/LoginSignupScreen/Login";
 import UpdateProfile from "../views/UpdateProfileScreen/UpdateProfile";
 import DIDScreen from "../views/DIDScreen/DIDScreen";
+import { participantJoined } from "../lib-jitsi-meet/actions";
 
 const Stack = createNativeStackNavigator();
 
 const RootNavigation = () => {
   //const asa= useSelector((store) => store);
   // const { loginDetails,isLoadingEnable } = useSelector((store) => store.reducer);
-  const { loginDetails, isLoadingEnable } = useSelector((store) => store);
+  const { loginDetails, isLoadingEnable } = useSelector(
+    (store) => store.sliceReducer
+  );
 
-  console.log("qwe---", loginDetails, isLoadingEnable);
   return (
     <>
       <Stack.Navigator

@@ -10,34 +10,51 @@
 
 // import { createStore } from 'redux';
 
+import { persistStore, persistReducer } from "redux-persist";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
-import { persistStore, persistReducer } from 'redux-persist';
-import { configureStore } from '@reduxjs/toolkit';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import sliceReducer from "./reducer";
+import meetConfig from "./meetConfig";
+import conference from "./conference";
+import connection from "./connection";
+import participants from "./participants";
+import tracks from "./tracks";
+import {
+  conference_middleware,
+  meetConfig_middleware,
+  participants_middleware,
+  tracks_middleware,
+} from "../middlewares";
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import sliceReducer from './reducer';
+const rootReducer = combineReducers({
+  sliceReducer,
+  meetConfig,
+  tracks,
+  connection,
+  conference,
+  participants,
+});
 
 const persist_reducer = {
-    storage: AsyncStorage,
-    key: 'root',
-    //whitelist: ['userDetails']
-}
-const persistedReducer = persistReducer(persist_reducer, sliceReducer)
- let Store = configureStore({
-    reducer: persistedReducer,
-    middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware({
-            serializableCheck: false,
-        }),
+  storage: AsyncStorage,
+  key: "root",
+  whitelist: ["sliceReducer"],
+};
+const persistedReducer = persistReducer(persist_reducer, rootReducer);
+let Store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    })
+      .concat(conference_middleware)
+      .concat(meetConfig_middleware)
+      .concat(tracks_middleware)
+      .concat(participants_middleware),
 });
-  export const persistor = persistStore(Store);
-  export default Store;
- 
-
-
-
-
-
+export const persistor = persistStore(Store);
+export default Store;
 
 // import {  persistReducer } from 'redux-persist';
 // import { configureStore } from '@reduxjs/toolkit';

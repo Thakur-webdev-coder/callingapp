@@ -8,7 +8,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { ic_contact_avatar, logo_contact_kokoa } from "../../routes/imageRoutes";
+import {
+  ic_contact_avatar,
+  logo_contact_kokoa,
+} from "../../routes/imageRoutes";
 import styles from "./styles";
 import ContactList from "react-native-contacts";
 import { useSelector } from "react-redux";
@@ -21,7 +24,7 @@ const Contacts = ({ navigation }) => {
     contacts: [],
   });
   const [searchTxt, setSearchTxt] = useState("");
-  const { balanceDetail = {} } = useSelector((store) => store);
+  const { balanceDetail = {} } = useSelector((store) => store.sliceReducer);
   useEffect(() => {
     checkPeermission();
     const unsubscribe = navigation.addListener("blur", () => {
@@ -82,7 +85,7 @@ const Contacts = ({ navigation }) => {
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
-    style={styles.flatListStyle}
+      style={styles.flatListStyle}
       onPress={() => {
         // if (balanceDetail.credit > 0) {
         //   Sip.makeCall(item?.phoneNumbers[0]?.number);
@@ -93,23 +96,21 @@ const Contacts = ({ navigation }) => {
         navigation.navigate("CallDetailsScreen");
       }}
     >
-        <View style={styles.imgBox}
-        >
-          <Image
-            style={styles.imgstyle}
-            source={
-              item?.hasThumbnail
-                ? { uri: item?.thumbnailPath }
-                : ic_contact_avatar
-            }
-          />
-        </View>
-          <Text style={styles.nameTxtStyle}>{item?.givenName}</Text>
-          <Image source={logo_contact_kokoa}/>
-          {/* <Text style={styles.nameTxtStyle}>
+      <View style={styles.imgBox}>
+        <Image
+          style={styles.imgstyle}
+          source={
+            item?.hasThumbnail
+              ? { uri: item?.thumbnailPath }
+              : ic_contact_avatar
+          }
+        />
+      </View>
+      <Text style={styles.nameTxtStyle}>{item?.givenName}</Text>
+      <Image source={logo_contact_kokoa} />
+      {/* <Text style={styles.nameTxtStyle}>
             {item?.phoneNumbers[0]?.number}
           </Text> */}
-
     </TouchableOpacity>
   );
 
@@ -119,7 +120,6 @@ const Contacts = ({ navigation }) => {
       <Text style={{color:colors.black,textAlign:'center',fontSize:20}}>Not implemented yet</Text>
       </View> */}
       <CommonHeader headerText={"Contact"} />
-
 
       <FlatList
         style={styles.containerStyle}

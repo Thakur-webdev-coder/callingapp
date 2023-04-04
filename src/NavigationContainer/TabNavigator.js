@@ -13,12 +13,12 @@ import Contacts from "../views/ContactsScreen/ContactScreen";
 import LiveChat from "../views/LiveChatScreen/LiveChat";
 import Keypad from "../views/KeypadScreen/Keypad";
 import IconTab from "../components/IconTab";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Sip from "@khateeb00/react-jssip";
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
-  const { loginDetails = {} } = useSelector((store) => store);
+  const { loginDetails = {} } = useSelector((store) => store.sliceReducer);
 
   useEffect(() => {
     const { password, did } = loginDetails;

@@ -1,6 +1,7 @@
 import {
   Alert,
   Modal,
+  Platform,
   SafeAreaView,
   TouchableOpacity,
   View,
@@ -25,11 +26,14 @@ import { useDispatch } from "react-redux";
 import { saveLoginDetails } from "../../redux/reducer";
 import styles from "./styles";
 import { ScrollView } from "react-native-gesture-handler";
+import Loading from "react-native-whc-loading";
+import { checkToken } from "../../utils/notificationHandler";
 let otpEncryptedCode = null;
 
 const OtpScreen = ({ navigation, route }) => {
   const [counter, setCounter] = useState(90);
   const [otpText, setOtpText] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const { phoneEncryptedCode, countryCode, phoneInput } = route.params;
   // console.log('dadada==>',route.params)
@@ -53,18 +57,25 @@ const OtpScreen = ({ navigation, route }) => {
   }, [counter]);
 
   const hitOtpEncryptionAPI = async () => {
+    setIsLoading(true);
+
     if (otpText.length == 4) {
       const data = new FormData();
       data.append("source", otpText);
-      const myResponse = await hitEncryptionApi(data);
-      console.log("1atapi=======>", myResponse.data.value);
-      if (myResponse.data.result == "success") {
-        otpEncryptedCode = myResponse.data.value;
-        console.log();
-        hitVerifyOtpApi();
-      }
+      hitEncryptionApi(data)
+        .then((response) => {
+          if (response.data.result == "success") {
+            otpEncryptedCode = response.data.value;
+            console.log();
+            hitVerifyOtpApi();
+          }
+        })
+        .catch((err) => {
+          setIsLoading(false);
+        });
     } else {
       alert("please Enter otp");
+      setIsLoading(false);
     }
   };
 
@@ -73,18 +84,25 @@ const OtpScreen = ({ navigation, route }) => {
     data.append("phone_user", phoneEncryptedCode);
     data.append("otp", otpEncryptedCode);
     data.append("ccode", countryCode);
+    data.append("device_token", await checkToken());
+    data.append("phone_type", Platform.OS);
 
     console.log("dataaaa=======>", data);
 
-    const myResponse = await hitOtpVerificationAPI(data);
-    console.log("2ntapi=======>", myResponse.data.result);
-
-    if (myResponse.data.result == "success") {
-      dispatch(saveLoginDetails(myResponse.data.userinfo));
-      navigation.navigate("StackNavigator");
-    } else {
-      showErrorMessage(myResponse.data.OTP);
-    }
+    hitOtpVerificationAPI(data)
+      .then((response) => {
+        if (response.data.result == "success") {
+          dispatch(saveLoginDetails(response.data.userinfo));
+          navigation.navigate("StackNavigator");
+          setIsLoading(false);
+        } else {
+          showErrorMessage(response.data.OTP);
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        setIsLoading(false);
+      });
   };
 
   const hitOtpSendApi = async () => {
@@ -167,13 +185,14 @@ const OtpScreen = ({ navigation, route }) => {
           primary
           horzontalPadding={wp(15)}
           marginTop={hp(2)}
-           //disabled={counter != 0}
-          onPress={() =>
-            navigation.navigate("StackNavigator")
+          //disabled={counter != 0}
+          onPress={
+            () => navigation.navigate("StackNavigator")
             // hitOtpSendApi()
-            }
+          }
         />
       </ScrollView>
+      <Loading loading={isLoading} />
     </SafeAreaView>
   );
 };

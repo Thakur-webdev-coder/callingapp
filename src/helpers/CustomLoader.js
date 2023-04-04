@@ -4,7 +4,7 @@ import colors from "../../assets/colors";
 import { useSelector } from "react-redux";
 
 const CustomLoader = () => {
-  const { isLoadingEnable } = useSelector((store) => store);
+  const { isLoadingEnable } = useSelector((store) => store.sliceReducer);
   console.log("herereeee", isLoadingEnable);
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>

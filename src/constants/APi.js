@@ -79,3 +79,20 @@ export const hitCreditTransferApi = (payload) => {
     data: payload,
   });
 };
+
+export const hitJoinVideoCallApi = (payload) => {
+  return apiClient({
+    baseURL: ApiRoutes.BASE_URL,
+    method: "post",
+    url: ApiRoutes.API_JOIN_VIDEO,
+    data: payload,
+  });
+};
+
+export const hitGetRegisteredNumberApi = () => {
+  return apiClient({
+    baseURL: ApiRoutes.BASE_URL,
+    method: "GET",
+    url: ApiRoutes.API_REGISTERED_NUMBER,
+  });
+};

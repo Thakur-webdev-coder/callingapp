@@ -11,6 +11,10 @@ let ApiRoutes = {
     "https://billing.kokoafone.com/billing/customer/billing_did_success.php",
   API_TRANSFER_CREDIT:
     "billing_balance_transfer_balance/balance_transfer_org.php",
+
+  API_JOIN_VIDEO: "join_video/join_video_call.php",
+
+  API_REGISTERED_NUMBER: "join_video/call_phone_number.php",
 };
 
 export default ApiRoutes;
