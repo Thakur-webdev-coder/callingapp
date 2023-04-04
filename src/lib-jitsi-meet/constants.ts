@@ -1,7 +1,14 @@
 import JitsiMeetJS from 'lib-jitsi-meet'
 
+//// webrtc lib
+export const DOMAIN = 'dev.cap-tek.com';
+export const MUC = 'conference.dev.cap-tek.com';
+export const FOCUS = 'focus.dev.cap-tek.com';
+export const SERVICEURL = 'wss://dev.cap-tek.com/xmpp-websocket';
+export const WEBSOCKETKEEPALIVEURL = 'https://dev.cap-tek.com';
+
 // export const DEFAULT_MEETING_URL = `https://${process.env.REACT_APP_MEET_DOMAIN}/`
-export const DEFAULT_MEETING_URL = `https://meet.jit.si/`
+export const DEFAULT_MEETING_URL = `https://dev.cap-tek.com/`
 
 /**
  * The name of the {@code JitsiConnection} property which identifies the location URL where the connection will be made.

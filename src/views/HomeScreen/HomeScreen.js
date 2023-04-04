@@ -180,7 +180,8 @@ const Home = ({ navigation }) => {
   const ViewItemClicked_Method = (name) => {
     switch (name) {
       case "Invite Friends":
-        navigation.navigate("InviteScreen");
+        // navigation.navigate("InviteScreen");
+        navigation.navigate("IncomingScreen");
         break;
 
       case "My Balance":

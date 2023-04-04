@@ -17,7 +17,7 @@ export default StyleSheet.create({
   avatarStyle: {
     alignSelf: "center",
 
-    //marginTop: hp(8)
+    marginTop: hp(3),
   },
   videoStyle: {
     height: 530,
@@ -27,7 +27,7 @@ export default StyleSheet.create({
   },
   bottomStyle: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     paddingHorizontal: wp(3),
     backgroundColor: colors.white,
     paddingBottom: hp(1),

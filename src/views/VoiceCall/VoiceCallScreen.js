@@ -1,23 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { Image, SafeAreaView, TouchableOpacity, View } from "react-native";
+import {
+  AppState,
+  Image,
+  SafeAreaView,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import AppStyle from "../../components/AppStyle";
 import styles from "./styles";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import colors from "../../../assets/colors";
 import { request, RESULTS, PERMISSIONS } from "react-native-permissions";
 
 import {
   ic_back,
   ic_brownArrow,
+  ic_callAvatar,
   ic_camera_off,
   ic_camera_switch,
   ic_endcall,
+  ic_mic_off,
+  ic_mic_on,
   ic_msg,
   ic_mute_call,
   ic_speaker_small,
+  ic_video_off,
+  ic_video_on,
 } from "../../routes/imageRoutes";
 import CustomText from "../../components/CustomText";
 import {
@@ -34,11 +44,15 @@ import {
   MEDIA_TYPE,
 } from "../../lib-jitsi-meet/constants";
 import { getTrackByMediaTypeAndParticipant } from "../../lib-jitsi-meet/functions";
-import { hitJoinVideoCallApi } from "../../constants/APi";
+import { hitJoinVideoCallApi, hithangUpCallApi } from "../../constants/APi";
 import { Show_Toast } from "../../utils/toast";
+import InCallManager from "react-native-incall-manager";
+import { updateSettings } from "../../redux/meetConfig";
+import colors from "../../../assets/colors";
+import { secondsToHMS } from "../../utils/commonUtils";
 
 const CallScreen = ({ navigation, route }) => {
-  const { voiceCall, callData } = route.params;
+  const { voiceCall, callData, fromNotification } = route.params;
   console.log("rouuu---", voiceCall, callData);
   const { tracks, participants } = useSelector((state) => state);
   const [enableVideo, setEnableVideo] = useState(false);
@@ -46,7 +60,11 @@ const CallScreen = ({ navigation, route }) => {
   const [largeVideoId, setLargeVideoId] = useState(
     participants.sortedRemoteParticipants[0] || ""
   );
+
+  console.log("getRemoteParticipants", participants);
+
   const [smallVideoID, setSmallVideoId] = useState(participants.local.id);
+  const [timerCount, setTimerCount] = useState(0);
 
   const { loginDetails = {} } = useSelector((store) => store.sliceReducer);
   const { username } = loginDetails;
@@ -64,6 +82,17 @@ const CallScreen = ({ navigation, route }) => {
     smallVideoID
   );
   useEffect(() => {
+    let interval;
+
+    if (participants.sortedRemoteParticipants[0]) {
+      interval = setInterval(() => {
+        setTimerCount((lastTimerCount) => {
+          return lastTimerCount + 1;
+        });
+      }, 1000);
+    }
+    InCallManager.setSpeakerphoneOn(true);
+
     setLargeVideoId(
       participants.sortedRemoteParticipants[0] || participants.local.id
     );
@@ -71,6 +100,10 @@ const CallScreen = ({ navigation, route }) => {
       setLargeVideoId(participants.sortedRemoteParticipants[0]);
       setSmallVideoId(participants.local.id);
     }
+
+    return () => {
+      clearInterval(interval);
+    };
   }, [participants.local.id, participants.sortedRemoteParticipants[0]]);
 
   const videoEnable = () => {
@@ -104,7 +137,8 @@ const CallScreen = ({ navigation, route }) => {
     const data = new FormData();
     data.append("receiver_phone", callData);
     data.append("sender_phone", username);
-    data.append("meeting_url", DEFAULT_MEETING_URL + "testRoom");
+    data.append("meeting_url", DEFAULT_MEETING_URL + "newRoom");
+    data.append("Type", voiceCall ? "A" : "V");
 
     console.log("data -->", data);
     hitJoinVideoCallApi(data).then((response) => {
@@ -120,8 +154,23 @@ const CallScreen = ({ navigation, route }) => {
     });
   };
 
+  const hitHanupCall = async () => {
+    const data = new FormData();
+    data.append("receiver_number", callData);
+
+    console.log("dataasfhas -->", data);
+    hithangUpCallApi(data).then((response) => {
+      disconnectMeeting();
+    });
+  };
+
   useEffect(() => {
-    if (callData == null) {
+    // if (voiceCall) {
+    //   dispatch(updateSettings({ startWithVideoMuted: true }));
+    // } else {
+    //   dispatch(updateSettings({ startWithVideoMuted: false }));
+    // }
+    if (fromNotification) {
       checkPeermission();
     } else {
       hitJoinVideoApi();
@@ -130,13 +179,30 @@ const CallScreen = ({ navigation, route }) => {
 
     // console.log("---Remoteeeeeparticipants---", getRemoteParticipants());
     console.log("myyyy_tracksss", tracks);
+
+    const handleAppStateChange = (nextAppState) => {
+      if (nextAppState === "inactive") {
+        hitHanupCall();
+      }
+    };
+
+    AppState.addEventListener("change", handleAppStateChange);
+
+    return () => {
+      AppState.removeEventListener("change", handleAppStateChange);
+    };
   }, []);
   const permissions =
     Platform.OS === "ios" ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA;
 
   const disconnectMeeting = () => {
+    InCallManager.setSpeakerphoneOn(false);
     dispatch(hangupMeeting());
-    navigation.goBack();
+    if (fromNotification) {
+      navigation.navigate("Home");
+    } else {
+      navigation.goBack();
+    }
   };
 
   const checkPeermission = () => {
@@ -159,7 +225,7 @@ const CallScreen = ({ navigation, route }) => {
             break;
           case RESULTS.GRANTED:
             console.log("granted------");
-            dispatch(startMeeting("testRoom"));
+            dispatch(startMeeting("newRoom"));
 
             break;
           case RESULTS.BLOCKED:
@@ -175,56 +241,64 @@ const CallScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView style={voiceCall ? AppStyle.wrapper : styles.wrapper}>
       <View style={{ flex: 4 }}>
-        {/* <TouchableOpacity
-          onPress={() => disconnectMeeting()}
-          style={styles.backArrowBox}
-        >
-          <Image source={voiceCall ? ic_brownArrow : ic_back} />
-        </TouchableOpacity>
+        {voiceCall ? (
+          <View>
+            <TouchableOpacity
+              onPress={() => disconnectMeeting()}
+              style={styles.backArrowBox}
+            >
+              <Image source={ic_brownArrow} />
+            </TouchableOpacity>
 
-        <CustomText
-          textColor={voiceCall ? colors.black : colors.white}
-          text={"918800810156"}
-          alignText={"center"}
-          textSize={20}
-          marginTop={hp(5)}
-          fontWeight={"500"}
-        />
-        <CustomText
-          textColor={voiceCall ? colors.black : colors.white}
-          text={"Calling..."}
-          alignText={"center"}
-          textSize={12}
-          marginTop={hp(1)}
-          fontWeight={"400"}
-        /> */}
-
-        <RTCView
-          style={{ flex: 1 }}
-          objectFit="cover"
-          mirror={largeVideoTrack?.mirror}
-          streamURL={largeVideoTrack?.jitsiTrack?.stream.toURL()}
-        />
-
-        {participants.sortedRemoteParticipants.length > 0 ? (
-          <TouchableOpacity
-            style={{
-              height: hp(25),
-              width: wp(40),
-              backgroundColor: "green",
-              position: "absolute",
-              right: 10,
-              bottom: hp(5),
-            }}
-            onPress={() => switchStreamUrl()}
-          >
-            <RTCView
-              style={{ height: hp(25), width: wp(40) }}
-              objectFit="cover"
-              streamURL={smallVideoTrack?.jitsiTrack?.stream.toURL()}
+            <CustomText
+              textColor={colors.black}
+              text={callData}
+              alignText={"center"}
+              textSize={20}
+              marginTop={hp(5)}
+              fontWeight={"500"}
             />
-          </TouchableOpacity>
-        ) : null}
+            <CustomText
+              textColor={colors.black}
+              text={timerCount > 0 ? secondsToHMS(timerCount) : "Calling"}
+              alignText={"center"}
+              textSize={12}
+              marginTop={hp(1)}
+              fontWeight={"400"}
+            />
+
+            <Image style={styles.avatarStyle} source={ic_callAvatar} />
+          </View>
+        ) : (
+          <View style={{ flex: 1 }}>
+            <RTCView
+              style={{ flex: 1 }}
+              objectFit="cover"
+              mirror={largeVideoTrack?.mirror}
+              streamURL={largeVideoTrack?.jitsiTrack?.stream.toURL()}
+            />
+
+            {participants.sortedRemoteParticipants.length > 0 ? (
+              <TouchableOpacity
+                style={{
+                  height: hp(25),
+                  width: wp(40),
+                  backgroundColor: "green",
+                  position: "absolute",
+                  right: 10,
+                  bottom: hp(5),
+                }}
+                onPress={() => switchStreamUrl()}
+              >
+                <RTCView
+                  style={{ height: hp(25), width: wp(40) }}
+                  objectFit="cover"
+                  streamURL={smallVideoTrack?.jitsiTrack?.stream.toURL()}
+                />
+              </TouchableOpacity>
+            ) : null}
+          </View>
+        )}
 
         {/* <Image
           style={voiceCall ? styles.avatarStyle : styles.videoStyle}
@@ -239,36 +313,38 @@ const CallScreen = ({ navigation, route }) => {
       </View>
 
       <View style={styles.bottomStyle}>
-        <Image source={ic_msg} style={styles.avatarStyle} />
-        <Image source={ic_speaker_small} style={styles.avatarStyle} />
-        {/* {!voiceCall ? ( */}
+        {/* <Image source={ic_msg} style={styles.avatarStyle} />
+        <Image source={ic_speaker_small} style={styles.avatarStyle} /> */}
+        {!voiceCall ? (
+          <TouchableOpacity
+            style={styles.avatarStyle}
+            onPress={() => dispatch(toggleCamera())}
+          >
+            <Image source={ic_camera_switch} />
+          </TouchableOpacity>
+        ) : null}
         <TouchableOpacity
           style={styles.avatarStyle}
-          onPress={() => dispatch(toggleCamera())}
-        >
-          <Image source={ic_camera_switch} />
-        </TouchableOpacity>
-        {/* ) : null} */}
-        <TouchableOpacity
-          style={styles.avatarStyle}
-          onPress={() => disconnectMeeting()}
+          onPress={() => hitHanupCall()}
         >
           <Image source={ic_endcall} />
         </TouchableOpacity>
-        {/* {!voiceCall ? ( */}
-        <TouchableOpacity
-          style={styles.avatarStyle}
-          onPress={() => videoEnable()}
-        >
-          <Image source={ic_camera_off} />
-        </TouchableOpacity>
-        {/* ) : null} */}
-        <TouchableOpacity
-          style={styles.avatarStyle}
-          onPress={() => audioEnable()}
-        >
-          <Image source={ic_mute_call} />
-        </TouchableOpacity>
+        {!voiceCall ? (
+          <TouchableOpacity
+            style={styles.avatarStyle}
+            onPress={() => videoEnable()}
+          >
+            <Image source={enableVideo ? ic_video_off : ic_video_on} />
+          </TouchableOpacity>
+        ) : null}
+        {!voiceCall ? (
+          <TouchableOpacity
+            style={styles.avatarStyle}
+            onPress={() => audioEnable()}
+          >
+            <Image source={enableAudio ? ic_mic_off : ic_mic_on} />
+          </TouchableOpacity>
+        ) : null}
       </View>
     </SafeAreaView>
   );

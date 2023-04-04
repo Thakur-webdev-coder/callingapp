@@ -44,7 +44,7 @@ const LiveChat = ({ navigation }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate("UserChatsScreen");
+        // navigation.navigate("UserChatsScreen");
       }}
     >
       <View style={styles.flatListStyle}>

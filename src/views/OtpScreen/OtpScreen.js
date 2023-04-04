@@ -35,17 +35,15 @@ const OtpScreen = ({ navigation, route }) => {
   const [otpText, setOtpText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const { phoneEncryptedCode, countryCode, phoneInput } = route.params;
+  const { phoneEncryptedCode, countryCode, phoneInput, otp } = route.params;
   // console.log('dadada==>',route.params)
   const dispatch = useDispatch();
   // console.log('phoneEncryptedCode-----',phoneEncryptedCode,'countryEncryptedCode',countryCode,'phoneInput',phoneInput)
 
   useEffect(() => {
-    Alert.alert(
-      "OTP",
-      `Your OTP is sent to your Mobile Number  ${phoneInput}`,
-      [{ text: "OK", onPress: () => console.log("OK Pressed") }]
-    );
+    Alert.alert("OTP", `${otp}`, [
+      { text: "OK", onPress: () => console.log("OK Pressed") },
+    ]);
   }, []);
   useEffect(() => {
     const interval =
@@ -92,6 +90,7 @@ const OtpScreen = ({ navigation, route }) => {
     hitOtpVerificationAPI(data)
       .then((response) => {
         if (response.data.result == "success") {
+          // otp = response.data.OTP;
           dispatch(saveLoginDetails(response.data.userinfo));
           navigation.navigate("StackNavigator");
           setIsLoading(false);
@@ -113,6 +112,8 @@ const OtpScreen = ({ navigation, route }) => {
     const myResponse = await hitSendOtpApi(data);
 
     if (myResponse.data.result == "success") {
+      otp = myResponse.data.OTP;
+
       setCounter(90);
       const interval =
         counter > 0 &&
@@ -186,10 +187,7 @@ const OtpScreen = ({ navigation, route }) => {
           horzontalPadding={wp(15)}
           marginTop={hp(2)}
           //disabled={counter != 0}
-          onPress={
-            () => navigation.navigate("StackNavigator")
-            // hitOtpSendApi()
-          }
+          onPress={() => null}
         />
       </ScrollView>
       <Loading loading={isLoading} />
