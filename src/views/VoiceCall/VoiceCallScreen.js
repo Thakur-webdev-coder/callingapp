@@ -25,6 +25,8 @@ import {
   ic_mic_on,
   ic_msg,
   ic_mute_call,
+  ic_speaker,
+  ic_speaker_fill,
   ic_speaker_small,
   ic_video_off,
   ic_video_on,
@@ -65,6 +67,7 @@ const CallScreen = ({ navigation, route }) => {
 
   const [smallVideoID, setSmallVideoId] = useState(participants.local.id);
   const [timerCount, setTimerCount] = useState(0);
+  const [speaker, setSpeaker] = useState(false);
 
   const { loginDetails = {} } = useSelector((store) => store.sliceReducer);
   const { username } = loginDetails;
@@ -84,14 +87,22 @@ const CallScreen = ({ navigation, route }) => {
   useEffect(() => {
     let interval;
 
-    if (participants.sortedRemoteParticipants[0]) {
-      interval = setInterval(() => {
-        setTimerCount((lastTimerCount) => {
-          return lastTimerCount + 1;
-        });
-      }, 1000);
+    if (voiceCall) {
+      if (participants.sortedRemoteParticipants[0]) {
+        InCallManager.stopRingback();
+        dispatch(setVideoMuted(true));
+
+        interval = setInterval(() => {
+          setTimerCount((lastTimerCount) => {
+            return lastTimerCount + 1;
+          });
+        }, 1000);
+      } else {
+        InCallManager.startRingback();
+      }
+    } else {
+      InCallManager.setSpeakerphoneOn(true);
     }
-    InCallManager.setSpeakerphoneOn(true);
 
     setLargeVideoId(
       participants.sortedRemoteParticipants[0] || participants.local.id
@@ -107,25 +118,27 @@ const CallScreen = ({ navigation, route }) => {
   }, [participants.local.id, participants.sortedRemoteParticipants[0]]);
 
   const videoEnable = () => {
-    if (enableVideo) {
-      setEnableVideo(false);
-    } else {
+    if (!enableVideo) {
+      dispatch(setVideoMuted(true));
       setEnableVideo(true);
+    } else {
+      dispatch(setVideoMuted(false));
+      setEnableVideo(false);
     }
-    console.log("herreee---", "hereeee");
 
-    dispatch(setVideoMuted(enableVideo));
+    console.log("herreee---", "hereeee");
   };
 
   const audioEnable = () => {
-    if (enableAudio) {
-      setEnableAudio(false);
-    } else {
+    if (!enableAudio) {
+      dispatch(setAudioMuted(true));
       setEnableAudio(true);
+    } else {
+      dispatch(setAudioMuted(false));
+      setEnableAudio(false);
     }
-    console.log("herreee---", "hereeee");
 
-    dispatch(setAudioMuted(enableAudio));
+    console.log("herreee---", "hereeee");
   };
 
   const switchStreamUrl = () => {
@@ -137,7 +150,12 @@ const CallScreen = ({ navigation, route }) => {
     const data = new FormData();
     data.append("receiver_phone", callData);
     data.append("sender_phone", username);
-    data.append("meeting_url", DEFAULT_MEETING_URL + "newRoom");
+    data.append(
+      "meeting_url",
+      fromNotification
+        ? DEFAULT_MEETING_URL + username
+        : DEFAULT_MEETING_URL + callData
+    );
     data.append("Type", voiceCall ? "A" : "V");
 
     console.log("data -->", data);
@@ -162,6 +180,16 @@ const CallScreen = ({ navigation, route }) => {
     hithangUpCallApi(data).then((response) => {
       disconnectMeeting();
     });
+  };
+
+  const enableSpeaker = () => {
+    if (!speaker) {
+      InCallManager.setSpeakerphoneOn(true);
+      setSpeaker(true);
+    } else {
+      InCallManager.setSpeakerphoneOn(false);
+      setSpeaker(false);
+    }
   };
 
   useEffect(() => {
@@ -196,6 +224,8 @@ const CallScreen = ({ navigation, route }) => {
     Platform.OS === "ios" ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA;
 
   const disconnectMeeting = () => {
+    InCallManager.stopRingback();
+
     InCallManager.setSpeakerphoneOn(false);
     dispatch(hangupMeeting());
     if (fromNotification) {
@@ -225,7 +255,13 @@ const CallScreen = ({ navigation, route }) => {
             break;
           case RESULTS.GRANTED:
             console.log("granted------");
-            dispatch(startMeeting("newRoom"));
+            dispatch(
+              startMeeting(
+                fromNotification
+                  ? DEFAULT_MEETING_URL + username
+                  : DEFAULT_MEETING_URL + callData
+              )
+            );
 
             break;
           case RESULTS.BLOCKED:
@@ -260,7 +296,7 @@ const CallScreen = ({ navigation, route }) => {
             />
             <CustomText
               textColor={colors.black}
-              text={timerCount > 0 ? secondsToHMS(timerCount) : "Calling"}
+              text={timerCount > 0 ? secondsToHMS(timerCount) : "Connecting"}
               alignText={"center"}
               textSize={12}
               marginTop={hp(1)}
@@ -323,6 +359,15 @@ const CallScreen = ({ navigation, route }) => {
             <Image source={ic_camera_switch} />
           </TouchableOpacity>
         ) : null}
+
+        {voiceCall ? (
+          <TouchableOpacity
+            style={styles.avatarStyle}
+            onPress={() => enableSpeaker()}
+          >
+            <Image source={!speaker ? ic_speaker : ic_speaker_fill} />
+          </TouchableOpacity>
+        ) : null}
         <TouchableOpacity
           style={styles.avatarStyle}
           onPress={() => hitHanupCall()}
@@ -337,14 +382,13 @@ const CallScreen = ({ navigation, route }) => {
             <Image source={enableVideo ? ic_video_off : ic_video_on} />
           </TouchableOpacity>
         ) : null}
-        {!voiceCall ? (
-          <TouchableOpacity
-            style={styles.avatarStyle}
-            onPress={() => audioEnable()}
-          >
-            <Image source={enableAudio ? ic_mic_off : ic_mic_on} />
-          </TouchableOpacity>
-        ) : null}
+
+        <TouchableOpacity
+          style={styles.avatarStyle}
+          onPress={() => audioEnable()}
+        >
+          <Image source={enableAudio ? ic_mic_off : ic_mic_on} />
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
