@@ -17,6 +17,7 @@ import WebViewScreen from "../views/webView";
 import { participantJoined } from "../lib-jitsi-meet/actions";
 import { useDispatch, useSelector } from "react-redux";
 import CustomAlert from "../utils/CustomAlertMessage";
+import IncomingScreen from "../views/IncomingCallScreen/IncomingScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -54,6 +55,7 @@ const StackNavigator = () => {
       <Stack.Screen name="SelectScreen" component={SelectScreen} />
       <Stack.Screen name="CallScreen" component={CallScreen} />
       <Stack.Screen name={"WebViewScreen"} component={WebViewScreen} />
+      <Stack.Screen name={"IncomingScreen"} component={IncomingScreen} />
     </Stack.Navigator>
   );
 };

@@ -111,6 +111,7 @@ const UserChatsScreen = ({ navigation, route }) => {
             onPress={() => {
               navigation.navigate("CallScreen", {
                 voiceCall: true,
+                callData: callData?.callData,
               });
               setState({ callModal: false });
             }}
