@@ -1,5 +1,12 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  AppState,
+  BackHandler,
+} from "react-native";
+import React, { useEffect } from "react";
 import { ic_avatar, ic_callrecive, ic_endcall } from "../../routes/imageRoutes";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import colors from "../../../assets/colors";
@@ -11,12 +18,39 @@ import { hangupMeeting } from "../../lib-jitsi-meet/actions";
 const IncomingScreen = ({ navigation, route }) => {
   const notificationData = route.params.callData;
 
+  useEffect(() => {
+    const handleAppStateChange = (nextAppState) => {
+      if (nextAppState === "inactive") {
+        rejectCall();
+      }
+    };
+
+    AppState.addEventListener("change", handleAppStateChange);
+
+    const backAction = () => {
+      console.log("Back button is pressed");
+      rejectCall();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => {
+      AppState.removeEventListener("change", handleAppStateChange);
+      backHandler.remove();
+    };
+  }, []);
+
   const acceptCall = () => {
     InCallManager.stopRingtone();
     navigation.navigate("CallScreen", {
       voiceCall: notificationData?.Type == "A" ? true : false,
       fromNotification: true,
       callData: notificationData?.sender_phone,
+      meetimgUrl: notificationData?.Meeting_url,
     });
   };
 
@@ -37,9 +71,20 @@ const IncomingScreen = ({ navigation, route }) => {
   };
   return (
     <View>
+      <Text
+        style={{
+          color: colors.black,
+          alignSelf: "center",
+          marginTop: hp(12),
+          fontSize: 18,
+          fontWeight: "bold",
+        }}
+      >
+        {notificationData?.Subject}
+      </Text>
       <Image
         source={ic_avatar}
-        style={{ alignSelf: "center", marginTop: hp(15) }}
+        style={{ alignSelf: "center", marginTop: hp(3) }}
       />
       <Text
         style={{

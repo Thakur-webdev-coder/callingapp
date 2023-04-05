@@ -12,6 +12,8 @@ export default StyleSheet.create({
     flexDirection: "column",
   },
   backArrowBox: {
+    height: hp(2),
+    width: wp(3),
     padding: 10,
   },
   avatarStyle: {

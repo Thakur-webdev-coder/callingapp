@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   AppState,
+  BackHandler,
   Image,
   SafeAreaView,
   TouchableOpacity,
@@ -49,12 +50,13 @@ import { getTrackByMediaTypeAndParticipant } from "../../lib-jitsi-meet/function
 import { hitJoinVideoCallApi, hithangUpCallApi } from "../../constants/APi";
 import { Show_Toast } from "../../utils/toast";
 import InCallManager from "react-native-incall-manager";
-import { updateSettings } from "../../redux/meetConfig";
 import colors from "../../../assets/colors";
-import { secondsToHMS } from "../../utils/commonUtils";
+import { generateRandomString, secondsToHMS } from "../../utils/commonUtils";
+
+let roomId = null;
 
 const CallScreen = ({ navigation, route }) => {
-  const { voiceCall, callData, fromNotification } = route.params;
+  const { voiceCall, callData, fromNotification, meetimgUrl } = route.params;
   console.log("rouuu---", voiceCall, callData);
   const { tracks, participants } = useSelector((state) => state);
   const [enableVideo, setEnableVideo] = useState(false);
@@ -87,19 +89,24 @@ const CallScreen = ({ navigation, route }) => {
   useEffect(() => {
     let interval;
 
-    if (voiceCall) {
+    if (fromNotification) {
+      InCallManager.stopRingback();
+    } else {
       if (participants.sortedRemoteParticipants[0]) {
         InCallManager.stopRingback();
-        dispatch(setVideoMuted(true));
-
-        interval = setInterval(() => {
-          setTimerCount((lastTimerCount) => {
-            return lastTimerCount + 1;
-          });
-        }, 1000);
       } else {
         InCallManager.startRingback();
       }
+    }
+
+    if (voiceCall && participants.sortedRemoteParticipants[0]) {
+      dispatch(setVideoMuted(true));
+
+      interval = setInterval(() => {
+        setTimerCount((lastTimerCount) => {
+          return lastTimerCount + 1;
+        });
+      }, 1000);
     } else {
       InCallManager.setSpeakerphoneOn(true);
     }
@@ -150,22 +157,14 @@ const CallScreen = ({ navigation, route }) => {
     const data = new FormData();
     data.append("receiver_phone", callData);
     data.append("sender_phone", username);
-    data.append(
-      "meeting_url",
-      fromNotification
-        ? DEFAULT_MEETING_URL + username
-        : DEFAULT_MEETING_URL + callData
-    );
+    data.append("meeting_url", roomId);
     data.append("Type", voiceCall ? "A" : "V");
 
     console.log("data -->", data);
     hitJoinVideoCallApi(data).then((response) => {
       if (response.data.result == "success") {
         checkPeermission();
-        // setIsLoading(false);
-        // Show_Toast(response.data.msg);
       } else {
-        // setIsLoading(false);
         Show_Toast("Something went Wrong");
         navigation.goBack();
       }
@@ -193,19 +192,14 @@ const CallScreen = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    // if (voiceCall) {
-    //   dispatch(updateSettings({ startWithVideoMuted: true }));
-    // } else {
-    //   dispatch(updateSettings({ startWithVideoMuted: false }));
-    // }
+    roomId = generateRandomString();
+
     if (fromNotification) {
       checkPeermission();
     } else {
       hitJoinVideoApi();
     }
-    // checkPeermission();
 
-    // console.log("---Remoteeeeeparticipants---", getRemoteParticipants());
     console.log("myyyy_tracksss", tracks);
 
     const handleAppStateChange = (nextAppState) => {
@@ -216,10 +210,23 @@ const CallScreen = ({ navigation, route }) => {
 
     AppState.addEventListener("change", handleAppStateChange);
 
+    const backAction = () => {
+      console.log("Back button is pressed");
+      hitHanupCall();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
     return () => {
       AppState.removeEventListener("change", handleAppStateChange);
+      backHandler.remove();
     };
   }, []);
+
   const permissions =
     Platform.OS === "ios" ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA;
 
@@ -255,13 +262,7 @@ const CallScreen = ({ navigation, route }) => {
             break;
           case RESULTS.GRANTED:
             console.log("granted------");
-            dispatch(
-              startMeeting(
-                fromNotification
-                  ? DEFAULT_MEETING_URL + username
-                  : DEFAULT_MEETING_URL + callData
-              )
-            );
+            dispatch(startMeeting(fromNotification ? meetimgUrl : roomId));
 
             break;
           case RESULTS.BLOCKED:
@@ -280,7 +281,7 @@ const CallScreen = ({ navigation, route }) => {
         {voiceCall ? (
           <View>
             <TouchableOpacity
-              onPress={() => disconnectMeeting()}
+              onPress={() => hitHanupCall()}
               style={styles.backArrowBox}
             >
               <Image source={ic_brownArrow} />
@@ -335,17 +336,6 @@ const CallScreen = ({ navigation, route }) => {
             ) : null}
           </View>
         )}
-
-        {/* <Image
-          style={voiceCall ? styles.avatarStyle : styles.videoStyle}
-          source={
-            voiceCall
-              ? ic_callAvatar
-              : {
-                  uri: "https://png.pngtree.com/background/20220726/original/pngtree-smiling-woman-having-conference-video-call-picture-image_1810453.jpg",
-                }
-          }
-        /> */}
       </View>
 
       <View style={styles.bottomStyle}>
