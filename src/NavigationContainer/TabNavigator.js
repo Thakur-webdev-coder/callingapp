@@ -22,25 +22,19 @@ const TabNavigator = () => {
   const { loginDetails = {} } = useSelector((store) => store.sliceReducer);
 
   useEffect(() => {
-    const { password, did,username } = loginDetails;
-    const param ={"username":username}
+    const { password, did, username } = loginDetails;
+    const param = { id: username };
 
     Sip.register({
       websocket: "wss://billing.kokoafone.com:8089/ws",
-      username: `${did}_web`,
+      username: did + "_web",
       domain: "billing.kokoafone.com",
       password,
       name: did,
     });
-    // const socket = _socketConnect(param);
-    // const chatHistory = _getloadMoreChatData()
-
-    // socket.on("chat-history", (data) => {
-    //   console.log('chatdatatatatt========>>>')
-    //   // dispatch(setChatList(data));
-    // });
+    _socketConnect(param);
   }, []);
-  console.log('loginDetails=====root=====>>',`${loginDetails.did}_web`)
+  console.log("loginDetails==========>>", loginDetails);
   return (
     <Tab.Navigator
       initialRouteName={"Home"}

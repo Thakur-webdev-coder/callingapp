@@ -10,7 +10,7 @@ import InviteScreen from "../views/InviteScreen/InviteScreen";
 import Directory from "../views/SpecialServices/Directory";
 import CallDetailsScreen from "../views/CallDetailsScreen/CallDetailsScreen";
 import UserChatsScreen from "../views/UserChatsScreen/UserChatsScreen";
-import StartChatScreen from "../views/startChatScreen/startChatScreen";
+import StartChatScreen from "../views/StartChatScreen/StartChatScreen";
 import SelectScreen from "../views/SelectScreen/SelectScreen";
 import CallScreen from "../views/VoiceCall/VoiceCallScreen";
 import WebViewScreen from "../views/webView";
