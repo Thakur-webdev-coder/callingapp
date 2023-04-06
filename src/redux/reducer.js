@@ -2,6 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isLoadingEnable: false,
+  chatMessage: [],
+  chatRoom: '',
+
+
 };
 
 const sliceReducer = createSlice({
@@ -24,6 +28,17 @@ const sliceReducer = createSlice({
     saveBalanceData: (state, action) => {
       state.balanceDetail = action.payload;
     },
+
+    // chat
+
+    setChatMessage: (state, action) => {
+      console.log('action.payload=====>>', action.payload);
+      state.chatMessage = action.payload;
+    },
+
+    setChatRoom: (state, action) => {
+      state.chatRoom = action?.payload ?? '';
+    },
   },
 });
 
@@ -32,5 +47,8 @@ export const {
   saveLoginDetails,
   saveEncrLoginDetails,
   saveBalanceData,
+  //chat
+  setChatMessage,
+  setChatRoom
 } = sliceReducer.actions;
 export default sliceReducer.reducer;

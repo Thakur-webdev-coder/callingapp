@@ -78,6 +78,7 @@ const VerificationScreen = ({ navigation }) => {
             phoneEncryptedCode: phoneEncryptedCode,
             countryCode: countryEncryptedCode,
             phoneInput: phoneInput,
+            otp: response.data.OTP,
           });
           setIsLoading(false);
         } else {

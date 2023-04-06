@@ -7,7 +7,9 @@ import { createLocalTracksA, participantJoined, trackAdded } from './actions';
 import { AVATAR_COLORS, AVATAR_URL_COMMAND, CAMERA_FACING_MODE, EMAIL_COMMAND, JitsiConferenceEvents, JitsiParticipantConnectionStatus, JitsiRecordingConstants, JitsiTrackErrors, MEDIA_TYPE, PARTICIPANT_ROLE } from './constants';
 import JitsiMeetJS from 'lib-jitsi-meet'
 import { dominantSpeakerChanged, participantLeft, participantUpdated, raiseHandUpdated } from '../redux/participants';
+import { config } from './config';
 // import { navigate } from '../features/components/JitsiMeet/ConferenceNavigationRef';
+
 
 /**
  * Constructs options to be passed to the constructor of {@code JitsiConnection}
@@ -25,11 +27,11 @@ export function constructConfig(state: any): any {
     let { bosh, websocket } = options;
     const locationURL = new URL(url)
     // TESTING: Only enable WebSocket for some percentage of users.
-    if (websocket) {
-        if ((Math.random() * 100) >= (options?.testing?.mobileXmppWsThreshold ?? 0)) {
-            websocket = undefined;
-        }
-    }
+    // if (websocket) {
+    //     if ((Math.random() * 100) >= (options?.testing?.mobileXmppWsThreshold ?? 0)) {
+    //         websocket = undefined;
+    //     }
+    // }
 
     // Normalize the BOSH URL.
     if (bosh && !websocket) {
@@ -192,17 +194,18 @@ export async function loadConfig(url: string): Promise<Object> {
                 const configJson = eval(`()=>{${configTxt}\nreturn JSON.stringify(config)}`)()
                 const config = JSON.parse(configJson);
                 if (typeof config !== 'object') {
-                    throw new Error('config is not an object');
+                    console.error('config is not an object');
                 }
                 console.info(`Config loaded from ${url}`);
                 return config;
             }
             default:
-                throw new Error(`loadScript error: ${response.statusText}`);
+                console.error(`loadScript error: ${response.statusText}`);
+                return config
         }
 
     } catch (err) {
-        throw new Error(`loadScript error: ${err.message}`);
+        console.error(`loadScript error: ${err.message}`);
     }
 }
 

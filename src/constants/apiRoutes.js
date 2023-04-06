@@ -13,6 +13,7 @@ let ApiRoutes = {
     "billing_balance_transfer_balance/balance_transfer_org.php",
 
   API_JOIN_VIDEO: "join_video/join_video_call.php",
+  API_HANG_UP_CALL: "join_video/hangup_call.php",
 
   API_REGISTERED_NUMBER: "join_video/call_phone_number.php",
 };

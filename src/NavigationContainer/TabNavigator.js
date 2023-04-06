@@ -15,13 +15,15 @@ import Keypad from "../views/KeypadScreen/Keypad";
 import IconTab from "../components/IconTab";
 import { useDispatch, useSelector } from "react-redux";
 import Sip from "@khateeb00/react-jssip";
+import { _getloadMoreChatData, _socketConnect } from "../utils/socketManager";
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   const { loginDetails = {} } = useSelector((store) => store.sliceReducer);
 
   useEffect(() => {
-    const { password, did } = loginDetails;
+    const { password, did,username } = loginDetails;
+    const param ={"username":username}
 
     Sip.register({
       websocket: "wss://billing.kokoafone.com:8089/ws",
@@ -30,8 +32,16 @@ const TabNavigator = () => {
       password,
       name: did,
     });
-  }, []);
+    const socket = _socketConnect(param);
+    const chatHistory = _getloadMoreChatData()
+    console.log('chatHistory==========>>',chatHistory)
 
+    // socket.on("chat-history", (data) => {
+    //   console.log('chatdatatatatt========>>>')
+    //   // dispatch(setChatList(data));
+    // });
+  }, []);
+  console.log('loginDetails==========>>',loginDetails)
   return (
     <Tab.Navigator
       initialRouteName={"Home"}

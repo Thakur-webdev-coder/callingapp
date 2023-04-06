@@ -89,6 +89,15 @@ export const hitJoinVideoCallApi = (payload) => {
   });
 };
 
+export const hithangUpCallApi = (payload) => {
+  return apiClient({
+    baseURL: ApiRoutes.BASE_URL,
+    method: "post",
+    url: ApiRoutes.API_HANG_UP_CALL,
+    data: payload,
+  });
+};
+
 export const hitGetRegisteredNumberApi = () => {
   return apiClient({
     baseURL: ApiRoutes.BASE_URL,

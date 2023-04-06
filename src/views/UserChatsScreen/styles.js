@@ -45,7 +45,7 @@ export default StyleSheet.create({
   },
 
   sendMessageImg: {
-    marginTop: hp(78),
+    // marginTop: hp(30),
     marginBottom: hp(1),
     flexDirection: "row",
     marginHorizontal: wp(3),

@@ -14,7 +14,7 @@ import { Show_Toast } from "../../utils/toast";
 import { OTP_SCREEN } from "../../routes/routeNames";
 import Loading from "react-native-whc-loading";
 const DIDScreen = ({ navigation, route }) => {
-  const { phoneEncryptedCode, countryCode, phoneInput } = route.params;
+  const { phoneEncryptedCode, countryCode, phoneInput, otp } = route.params;
   const [isLoading, setIsLoading] = useState(false);
 
   const hitAssignDidApi = async () => {
@@ -22,10 +22,13 @@ const DIDScreen = ({ navigation, route }) => {
 
     hitApiAssignDid(phoneInput)
       .then((response) => {
+        setIsLoading(false);
+
         navigation.navigate(OTP_SCREEN, {
           phoneEncryptedCode: phoneEncryptedCode,
           countryCode: countryCode,
           phoneInput: phoneInput,
+          otp: otp,
         });
       })
       .catch((err) => {
