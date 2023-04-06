@@ -16,17 +16,16 @@ const sliceReducer = createSlice({
       state.isLoadingEnable = action.payload;
     },
     saveLoginDetails: (state, action) => {
-      console.log("dataaa", action.payload);
-      console.log("action.payload======>>>", action.payload);
-
-      state.loginDetails = action.payload;
+        state.loginDetails = action.payload;
     },
     saveEncrLoginDetails: (state, action) => {
-      // console.log("action.payload======>>>", action.payload);
       state.encrypt_detail = action.payload;
     },
     saveBalanceData: (state, action) => {
       state.balanceDetail = action.payload;
+    },
+    saveContacts: (state, action) => {
+      state.allContacts = action.payload
     },
 
     // chat
@@ -49,6 +48,7 @@ export const {
   saveBalanceData,
   //chat
   setChatMessage,
-  setChatRoom
+  setChatRoom,
+  saveContacts
 } = sliceReducer.actions;
 export default sliceReducer.reducer;

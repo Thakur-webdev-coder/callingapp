@@ -33,6 +33,7 @@ export const showNotification = () => {
 
       InCallManager.setSpeakerphoneOn(false);
       InCallManager.stopRingtone();
+      InCallManager.stopRingback();
 
       Store.dispatch(hangupMeeting());
 

@@ -27,7 +27,7 @@ const TabNavigator = () => {
 
     Sip.register({
       websocket: "wss://billing.kokoafone.com:8089/ws",
-      username: did,
+      username: did + "_web",
       domain: "billing.kokoafone.com",
       password,
       name: did,
