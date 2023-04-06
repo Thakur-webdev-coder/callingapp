@@ -29,49 +29,104 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
-import { _getMessageList, _getUpdatedChatMessage, _sendChatMessage, _sendChatRoomDetail, _sendloadMoreChatData, privateChatID } from "../../utils/socketManager";
+import {
+  _getMessageList,
+  _getUpdatedChatMessage,
+  _sendChatMessage,
+  _sendChatRoomDetail,
+  _sendloadMoreChatData,
+  getSocket,
+  privateChatID,
+} from "../../utils/socketManager";
 import { useSelector } from "react-redux";
 const UserChatsScreen = ({ navigation, route }) => {
   const [messageInput, onChangeMessageInput] = useState("");
 
   const [state, setState] = useState({
     callModal: false,
-    arr: []
+    arr: [],
   });
 
+  const tempArr = [];
+
+  const [array, setArray] = useState([]);
+
   let receiverID = route.params.callData;
-  const {callData} =route.params
-  const { loginDetails = {},chatMessage={} ,chatRoom} = useSelector((store) => store.sliceReducer);
+  let socket = null;
+  const { callData } = route.params;
+  const {
+    loginDetails = {},
+    chatMessage = {},
+    chatRoom,
+  } = useSelector((store) => store.sliceReducer);
   let senderID = loginDetails.username;
-  let type='private';
-   console.log('chatMessage==onscreen===>>>',receiverID,chatMessage)
+  let type = "private";
 
-  // useEffect(()=>{
-  //   privateChatID([senderID, receiverID])
+  console.log("callData", callData);
+  // console.log("chatMessage==onscreen===>>>", receiverID, chatMessage);
 
-  // },[])
+  useEffect(() => {
+    socket = getSocket();
+    _getUpdatedChatMessage();
 
+    // socket.on("chat", (data) => {
+    //   console.log("_getUpdatedChatMessage=======>", data);
+    //   //tempArr.push("manjot");
+    //   setArray([...array, data]);
+    // });
+  }, []);
 
-useEffect(() => {
-  privateChatID([senderID, receiverID])
-  console.log('chatRoom------>',chatRoom)
-  if (chatRoom != '') {
-    const chatRoomPayload = {
-      company_id: 'kokoafone',
-      documentID: chatRoom,
-      user_id: senderID,
-    };
-    _sendChatRoomDetail(chatRoomPayload);
-    _getMessageList(() => { }, senderID, chatRoom, false);
-  }
-}, [chatRoom]);
- 
+  // console.log("tempppppppppppppppp->>", tempArr);
 
- 
-  
-  
-  
- 
+  //  console.log("arrayyayaytwtewtewtewtewtewtwet=>>>>", array, array.length);
+
+  // const _getUpdatedChatMessage = () => {
+  //   console.log("chat_on_event");
+
+  //   socket.on("chat", (data) => {
+  //     console.log("_getUpdatedChatMessage=======>", data);
+
+  //     tempArr.push(data);
+
+  //     // setArray([...array, data]);
+
+  //     // setState((prev) => {
+  //     //   return {
+  //     //     ...prev,
+  //     //     arr: [...state.arr, data],
+  //     //   };
+  //     // });
+
+  //     // state.arr.push(data);
+
+  //     // const state = Store.getState();
+  //     // console.log("state====>", state);
+  //     // const { chatMessage = [], chatRoom } = state.sliceReducer;
+  //     // console.log("chatRoom====>", chatRoom);
+  //     // // const room = chatRoom;
+  //     // const newChat = [...chatMessage];
+  //     // newChat.unshift(data);
+  //     // console.log("newChat====>", newChat);
+
+  //     //  const findIndex = newChat.findIndex((findItem) => findItem.id === data.id);
+  //     //  console.log("_getUpdatedChatMessage findIndex",findIndex)
+  //     // if (room === data.documentID) {
+  //     //   // validate received data should be corresponding to selected room
+  //     // if (findIndex === -1) {
+  //     //   newChat.unshift(data);
+  //     // }
+  //     // else {
+  //     //     if (!data?.deleted) {
+  //     //       newChat[findIndex] = data;
+  //     //     } else {
+  //     //       Store.dispatch(setDeleteChatData(data));
+  //     //     }
+  //     //   }
+  //     // }
+
+  //     // Store.dispatch(setChatMessage(newChat));
+  //   });
+  // };
 
   const sendChatMethod = () => {
     if (messageInput === "" || messageInput == null) {
@@ -81,60 +136,44 @@ useEffect(() => {
       return;
     }
 
-    const data = {
-      // senderId: username,
-      // message: messageInput,
-      // recieverId:callData
+    // console.log("receiverarray-->>>", state.arr.concat(receiverID));
 
-      senderID: senderID,
-      message: messageInput,
-      timestamp: Date.now(),
-      receiverID:receiverID,
-      // receiverID: Object.keys(replyMessage).length === 0 ? (type === 'private' ? receiverID : groupID) : replyMessage.senderID === senderID ?  replyMessage.receiverID : replyMessage.senderID,
-       company_id: 'kokoafone',
-      documentID: type === 'private' ? privateChatID([senderID, receiverID]) : groupID,
-      type
+    const data = {
+      msg: messageInput,
+      rid: receiverID,
+      sid: senderID,
     };
 
     _sendChatMessage(data);
-    _getUpdatedChatMessage();
+
     onChangeMessageInput("");
   };
 
-  const filteredChatList = () => {
-    setState({arr:chatMessage})
-
-    // const filteredList = chatList.filter((u) => u?.callData === callData);
-    // return filteredList.reverse();
-  };
-
   const renderItem = ({ item }) => {
-    const {message} =item.doc
-    console.log('item------',item);
+    const { msg } = item;
+    // console.log("item------>>>>>>>>>>>>>>>>>>>>>>>>&&&&&&&&&&&&&&&", item);
     var msgStyle;
     var textStyle;
     // let uniq = userDetails.email;
     // const local = item.email === uniq;
 
     // if (local) {
-      msgStyle = {
-        marginLeft: 50,
-        marginRight: 8,
-        marginTop: 5,
-        borderRadius: 8,
-        alignSelf: "flex-end",
-       
-      
-      };
-      textStyle = {
-        color: "white",
-        paddingVertical: 5,
-        paddingHorizontal: 10,
-        fontSize: 16,
-        borderRadius: 8,
-        textAlign: "left",
-      };
-    // } 
+    msgStyle = {
+      marginLeft: 50,
+      marginRight: 8,
+      marginTop: 5,
+      borderRadius: 8,
+      alignSelf: "flex-end",
+    };
+    textStyle = {
+      color: "white",
+      paddingVertical: 5,
+      paddingHorizontal: 10,
+      fontSize: 16,
+      borderRadius: 8,
+      textAlign: "left",
+    };
+    // }
     // else {
     //   msgStyle = {
     //     marginRight: 50,
@@ -154,23 +193,24 @@ useEffect(() => {
 
     return (
       <View style={[msgStyle, { marginTop: 20 }]}>
-     
-        <View
-          style={{
-            // alignSelf: local ? "flex-end" : "flex-start",
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
+        {item.sid !== senderID ? (
           <View
             style={{
-              borderRadius: 8,
-             // backgroundColor: local ? "#E21019" : "#5C5D5F",
-              backgroundColor:  "#5C5D5F",
-              alignSelf: "flex-start",
+              // alignSelf: local ? "flex-end" : "flex-start",
+              flexDirection: "row",
+              alignItems: "center",
+              marginTop: 10,
             }}
           >
-            {/* <Hyperlink
+            <View
+              style={{
+                borderRadius: 8,
+                // backgroundColor: local ? "#E21019" : "#5C5D5F",
+                backgroundColor: "#5C5D5F",
+                alignSelf: "flex-start",
+              }}
+            >
+              {/* <Hyperlink
               onPress={(url, text) => Linking.openURL(url)}
               linkStyle={{
                 color: local ? "white" : "#2980b9",
@@ -178,27 +218,47 @@ useEffect(() => {
                 // textDecorationLine: "underline",
               }}
             > */}
-              <Text style={textStyle}>{message}
+              <Text style={textStyle}>
+                {msg}
                 {/* {typeof item.message==='string'?item.message:''} */}
-                </Text>
-              <Text
-                style={{
-                  fontSize: 10,
-                  color: "white",
-                 paddingBottom:5,
-                 paddingHorizontal: 10,
-                 
-                 
-                 
-                  textAlign:"right"
-                }}
-              >
-                text2
-                {/* {moment(item.timestamp).format("DD MMM,  LT")} */}
               </Text>
-            {/* </Hyperlink> */}
+
+              {/* </Hyperlink> */}
+            </View>
           </View>
-        </View>
+        ) : (
+          <View
+            style={{
+              // alignSelf: local ? "flex-end" : "flex-start",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <View
+              style={{
+                borderRadius: 8,
+                // backgroundColor: local ? "#E21019" : "#5C5D5F",
+                backgroundColor: "#5C5D5F",
+                alignSelf: "flex-start",
+              }}
+            >
+              {/* <Hyperlink
+              onPress={(url, text) => Linking.openURL(url)}
+              linkStyle={{
+                color: local ? "white" : "#2980b9",
+                fontSize: 15,
+                // textDecorationLine: "underline",
+              }}
+            > */}
+              <Text style={textStyle}>
+                {msg}
+                {/* {typeof item.message==='string'?item.message:''} */}
+              </Text>
+
+              {/* </Hyperlink> */}
+            </View>
+          </View>
+        )}
       </View>
     );
   };
@@ -213,7 +273,7 @@ useEffect(() => {
 
         <View style={styles.nameContainer}>
           <Text style={[styles.textStyleToolbar, { fontWeight: "700" }]}>
-            Banoj Tri....
+            {callData}
           </Text>
           <Text style={styles.textStyleToolbar}>Last Seen</Text>
         </View>
@@ -240,11 +300,12 @@ useEffect(() => {
           </Text>
         </View>
         <FlatList
-            inverted
-            data={chatMessage}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-          />
+          inverted
+          data={chatMessage}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          style={{ height: hp(70) }}
+        />
         <View style={styles.sendMessageImg}>
           <View style={styles.searchTnputStyle}>
             <TextInput
@@ -266,10 +327,11 @@ useEffect(() => {
             </TouchableOpacity>
           </View>
           <TouchableOpacity
-          style={styles.arrowStyle}
-          onPress={() => {
-            sendChatMethod();
-          }}>
+            style={styles.arrowStyle}
+            onPress={() => {
+              sendChatMethod();
+            }}
+          >
             <Image
               style={{ transform: [{ rotate: "180deg" }], alignSelf: "center" }}
               source={ic_back}
@@ -290,7 +352,7 @@ useEffect(() => {
             onPress={() => {
               navigation.navigate("CallScreen", {
                 voiceCall: true,
-                callData: callData?.callData,
+                callData: callData,
               });
               setState({ callModal: false });
             }}
@@ -310,7 +372,7 @@ useEffect(() => {
             onPress={() => {
               navigation.navigate("CallScreen", {
                 voiceCall: false,
-                callData: callData?.callData,
+                callData: callData,
               });
               setState({ callModal: false });
             }}
