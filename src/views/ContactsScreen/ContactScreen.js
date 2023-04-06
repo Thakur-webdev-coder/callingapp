@@ -27,6 +27,7 @@ const Contacts = ({ navigation }) => {
   const { balanceDetail = {} } = useSelector((store) => store.sliceReducer);
   useEffect(() => {
     checkPeermission();
+
     console.log("contacttcttct", state.contacts);
 
     const unsubscribe = navigation.addListener("blur", () => {
