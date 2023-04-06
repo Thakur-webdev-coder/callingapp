@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   AppState,
+  BackHandler,
   Image,
   SafeAreaView,
   TouchableOpacity,
@@ -25,6 +26,8 @@ import {
   ic_mic_on,
   ic_msg,
   ic_mute_call,
+  ic_speaker,
+  ic_speaker_fill,
   ic_speaker_small,
   ic_video_off,
   ic_video_on,
@@ -47,12 +50,13 @@ import { getTrackByMediaTypeAndParticipant } from "../../lib-jitsi-meet/function
 import { hitJoinVideoCallApi, hithangUpCallApi } from "../../constants/APi";
 import { Show_Toast } from "../../utils/toast";
 import InCallManager from "react-native-incall-manager";
-import { updateSettings } from "../../redux/meetConfig";
 import colors from "../../../assets/colors";
-import { secondsToHMS } from "../../utils/commonUtils";
+import { generateRandomString, secondsToHMS } from "../../utils/commonUtils";
+
+let roomId = null;
 
 const CallScreen = ({ navigation, route }) => {
-  const { voiceCall, callData, fromNotification } = route.params;
+  const { voiceCall, callData, fromNotification, meetimgUrl } = route.params;
   console.log("rouuu---", voiceCall, callData);
   const { tracks, participants } = useSelector((state) => state);
   const [enableVideo, setEnableVideo] = useState(false);
@@ -65,6 +69,7 @@ const CallScreen = ({ navigation, route }) => {
 
   const [smallVideoID, setSmallVideoId] = useState(participants.local.id);
   const [timerCount, setTimerCount] = useState(0);
+  const [speaker, setSpeaker] = useState(false);
 
   const { loginDetails = {} } = useSelector((store) => store.sliceReducer);
   const { username } = loginDetails;
@@ -84,14 +89,27 @@ const CallScreen = ({ navigation, route }) => {
   useEffect(() => {
     let interval;
 
-    if (participants.sortedRemoteParticipants[0]) {
+    if (fromNotification) {
+      InCallManager.stopRingback();
+    } else {
+      if (participants.sortedRemoteParticipants[0]) {
+        InCallManager.stopRingback();
+      } else {
+        InCallManager.startRingback();
+      }
+    }
+
+    if (voiceCall && participants.sortedRemoteParticipants[0]) {
+      dispatch(setVideoMuted(true));
+
       interval = setInterval(() => {
         setTimerCount((lastTimerCount) => {
           return lastTimerCount + 1;
         });
       }, 1000);
+    } else {
+      InCallManager.setSpeakerphoneOn(true);
     }
-    InCallManager.setSpeakerphoneOn(true);
 
     setLargeVideoId(
       participants.sortedRemoteParticipants[0] || participants.local.id
@@ -107,25 +125,27 @@ const CallScreen = ({ navigation, route }) => {
   }, [participants.local.id, participants.sortedRemoteParticipants[0]]);
 
   const videoEnable = () => {
-    if (enableVideo) {
-      setEnableVideo(false);
-    } else {
+    if (!enableVideo) {
+      dispatch(setVideoMuted(true));
       setEnableVideo(true);
+    } else {
+      dispatch(setVideoMuted(false));
+      setEnableVideo(false);
     }
-    console.log("herreee---", "hereeee");
 
-    dispatch(setVideoMuted(enableVideo));
+    console.log("herreee---", "hereeee");
   };
 
   const audioEnable = () => {
-    if (enableAudio) {
-      setEnableAudio(false);
-    } else {
+    if (!enableAudio) {
+      dispatch(setAudioMuted(true));
       setEnableAudio(true);
+    } else {
+      dispatch(setAudioMuted(false));
+      setEnableAudio(false);
     }
-    console.log("herreee---", "hereeee");
 
-    dispatch(setAudioMuted(enableAudio));
+    console.log("herreee---", "hereeee");
   };
 
   const switchStreamUrl = () => {
@@ -137,17 +157,14 @@ const CallScreen = ({ navigation, route }) => {
     const data = new FormData();
     data.append("receiver_phone", callData);
     data.append("sender_phone", username);
-    data.append("meeting_url", DEFAULT_MEETING_URL + "newRoom");
+    data.append("meeting_url", roomId);
     data.append("Type", voiceCall ? "A" : "V");
 
     console.log("data -->", data);
     hitJoinVideoCallApi(data).then((response) => {
       if (response.data.result == "success") {
         checkPeermission();
-        // setIsLoading(false);
-        // Show_Toast(response.data.msg);
       } else {
-        // setIsLoading(false);
         Show_Toast("Something went Wrong");
         navigation.goBack();
       }
@@ -164,20 +181,25 @@ const CallScreen = ({ navigation, route }) => {
     });
   };
 
+  const enableSpeaker = () => {
+    if (!speaker) {
+      InCallManager.setSpeakerphoneOn(true);
+      setSpeaker(true);
+    } else {
+      InCallManager.setSpeakerphoneOn(false);
+      setSpeaker(false);
+    }
+  };
+
   useEffect(() => {
-    // if (voiceCall) {
-    //   dispatch(updateSettings({ startWithVideoMuted: true }));
-    // } else {
-    //   dispatch(updateSettings({ startWithVideoMuted: false }));
-    // }
+    roomId = generateRandomString();
+
     if (fromNotification) {
       checkPeermission();
     } else {
       hitJoinVideoApi();
     }
-    // checkPeermission();
 
-    // console.log("---Remoteeeeeparticipants---", getRemoteParticipants());
     console.log("myyyy_tracksss", tracks);
 
     const handleAppStateChange = (nextAppState) => {
@@ -188,14 +210,29 @@ const CallScreen = ({ navigation, route }) => {
 
     AppState.addEventListener("change", handleAppStateChange);
 
+    const backAction = () => {
+      console.log("Back button is pressed");
+      hitHanupCall();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
     return () => {
       AppState.removeEventListener("change", handleAppStateChange);
+      backHandler.remove();
     };
   }, []);
+
   const permissions =
     Platform.OS === "ios" ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA;
 
   const disconnectMeeting = () => {
+    InCallManager.stopRingback();
+
     InCallManager.setSpeakerphoneOn(false);
     dispatch(hangupMeeting());
     if (fromNotification) {
@@ -225,7 +262,7 @@ const CallScreen = ({ navigation, route }) => {
             break;
           case RESULTS.GRANTED:
             console.log("granted------");
-            dispatch(startMeeting("newRoom"));
+            dispatch(startMeeting(fromNotification ? meetimgUrl : roomId));
 
             break;
           case RESULTS.BLOCKED:
@@ -244,7 +281,7 @@ const CallScreen = ({ navigation, route }) => {
         {voiceCall ? (
           <View>
             <TouchableOpacity
-              onPress={() => disconnectMeeting()}
+              onPress={() => hitHanupCall()}
               style={styles.backArrowBox}
             >
               <Image source={ic_brownArrow} />
@@ -260,7 +297,7 @@ const CallScreen = ({ navigation, route }) => {
             />
             <CustomText
               textColor={colors.black}
-              text={timerCount > 0 ? secondsToHMS(timerCount) : "Calling"}
+              text={timerCount > 0 ? secondsToHMS(timerCount) : "Connecting"}
               alignText={"center"}
               textSize={12}
               marginTop={hp(1)}
@@ -299,17 +336,6 @@ const CallScreen = ({ navigation, route }) => {
             ) : null}
           </View>
         )}
-
-        {/* <Image
-          style={voiceCall ? styles.avatarStyle : styles.videoStyle}
-          source={
-            voiceCall
-              ? ic_callAvatar
-              : {
-                  uri: "https://png.pngtree.com/background/20220726/original/pngtree-smiling-woman-having-conference-video-call-picture-image_1810453.jpg",
-                }
-          }
-        /> */}
       </View>
 
       <View style={styles.bottomStyle}>
@@ -321,6 +347,15 @@ const CallScreen = ({ navigation, route }) => {
             onPress={() => dispatch(toggleCamera())}
           >
             <Image source={ic_camera_switch} />
+          </TouchableOpacity>
+        ) : null}
+
+        {voiceCall ? (
+          <TouchableOpacity
+            style={styles.avatarStyle}
+            onPress={() => enableSpeaker()}
+          >
+            <Image source={!speaker ? ic_speaker : ic_speaker_fill} />
           </TouchableOpacity>
         ) : null}
         <TouchableOpacity
@@ -337,14 +372,13 @@ const CallScreen = ({ navigation, route }) => {
             <Image source={enableVideo ? ic_video_off : ic_video_on} />
           </TouchableOpacity>
         ) : null}
-        {!voiceCall ? (
-          <TouchableOpacity
-            style={styles.avatarStyle}
-            onPress={() => audioEnable()}
-          >
-            <Image source={enableAudio ? ic_mic_off : ic_mic_on} />
-          </TouchableOpacity>
-        ) : null}
+
+        <TouchableOpacity
+          style={styles.avatarStyle}
+          onPress={() => audioEnable()}
+        >
+          <Image source={enableAudio ? ic_mic_off : ic_mic_on} />
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );

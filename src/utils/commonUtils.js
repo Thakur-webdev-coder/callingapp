@@ -7,6 +7,16 @@ export function dateFormater(date) {
   return moment.utc(date).local().format("DD MMM YYYY");
 }
 
+export function generateRandomString() {
+  let result = "";
+  const characters = "0123456789";
+  const charactersLength = characters.length;
+  for (let i = 0; i < 5; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
 export function secondsToHMS(seconds) {
   seconds = Number(seconds);
   var h = Math.floor((seconds % (3600 * 24)) / 3600);

@@ -27,6 +27,8 @@ const Contacts = ({ navigation }) => {
   const { balanceDetail = {} } = useSelector((store) => store.sliceReducer);
   useEffect(() => {
     checkPeermission();
+    console.log("contacttcttct", state.contacts);
+
     const unsubscribe = navigation.addListener("blur", () => {
       setSearchTxt("");
       filterContacts("");
@@ -68,6 +70,9 @@ const Contacts = ({ navigation }) => {
             ContactList?.getAll()?.then((contact) => {
               setState({ contacts: contact });
             });
+
+            console.log("contacttcttct", state.contacts);
+
             break;
           case RESULTS.BLOCKED:
             console.log("The permission is denied and not requestable anymore");

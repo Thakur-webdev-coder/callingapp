@@ -40,6 +40,7 @@ const UserChatsScreen = ({ navigation, route }) => {
   });
 
   let receiverID = route.params.callData;
+  const {callData} =route.params
   const { loginDetails = {},chatMessage={} ,chatRoom} = useSelector((store) => store.sliceReducer);
   let senderID = loginDetails.username;
   let type='private';
