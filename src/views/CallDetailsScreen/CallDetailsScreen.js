@@ -11,7 +11,8 @@ import {
 } from "../../routes/imageRoutes";
 import CommonHeader from "../../components/Header/commonHeader";
 
-const CallDetailsScreen = ({navigation}) => {
+const CallDetailsScreen = ({navigation,route}) => {
+  const {Name,phoneNumber} =route.params
   return (
     <SafeAreaView style={AppStyle.wrapper}>
       <CommonHeader headerText={"Contacts Details"} />
@@ -19,7 +20,7 @@ const CallDetailsScreen = ({navigation}) => {
       <View style={styles.mainView}>
         <View style={styles.container_view}>
           <Image source={ic_contact_avatar} />
-          <Text style={styles.textStyle}>conatct name</Text>
+          <Text style={styles.textStyle}>{Name}</Text>
         </View>
 
         <View style={styles.container_view2}>
@@ -47,7 +48,7 @@ const CallDetailsScreen = ({navigation}) => {
      
 
       <View style={styles.numBox}>
-        <Text style={styles.mobileNumberText}>+919818220122</Text>
+        <Text style={styles.mobileNumberText}>{phoneNumber}</Text>
         <Text style={styles.mobileNumberText}>Mobile</Text>
       </View>
 

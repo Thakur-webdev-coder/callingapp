@@ -54,4 +54,27 @@ export default StyleSheet.create({
     borderWidth: 0.3,
     borderColor: colors.black,
   },
+  nameContainer: {
+    width: wp(65),
+    paddingLeft: wp(8),
+  },
+  toolBar: {
+    flexDirection: "row",
+
+    backgroundColor: colors.secondary,
+    alignItems: "center",
+    //justifyContent: "space-between",
+    paddingVertical: hp(1.4),
+    paddingHorizontal: wp(5),
+  },
+  textStyleToolbar: {
+    color: colors.white,
+    fontSize: 20,
+    fontWeight:'bold'
+  },
+  headerComponent: {
+    flexDirection: "row",
+    // justifyContent: "space-around",
+    alignItems: "center",
+  },
 });

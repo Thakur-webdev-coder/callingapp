@@ -16,6 +16,7 @@ let ApiRoutes = {
   API_HANG_UP_CALL: "join_video/hangup_call.php",
 
   API_REGISTERED_NUMBER: "join_video/call_phone_number.php",
+  SYNC_CONTACTS:"billing_auto_register/sync_contacts.php"
 };
 
 export default ApiRoutes;

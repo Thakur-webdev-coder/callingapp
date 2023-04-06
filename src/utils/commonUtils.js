@@ -39,3 +39,8 @@ export function secondsToHMS(seconds) {
     String(sDisplay).padStart(2, "0")
   );
 }
+
+export function omitSpecialCharacters(text) {
+  const regExp = new RegExp(/^0+|\W*/g);
+  return (text || "").replace(regExp, "");
+}
