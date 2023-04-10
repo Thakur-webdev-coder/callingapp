@@ -56,6 +56,14 @@ export const hitGetCallDetailsApi = (payload) => {
     data: payload,
   });
 };
+export const hitTransferHistoryApi = (payload) => {
+  return apiClient({
+    baseURL: ApiRoutes.BASE_URL,
+    method: "post",
+    url: ApiRoutes.API_TRANSFER_HISTORY,
+    data: payload,
+  });
+};
 export const hitCallRatesApi = () => {
   return apiClient({
     baseURL: ApiRoutes.BASE_URL,

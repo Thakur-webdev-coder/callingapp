@@ -2,27 +2,19 @@ import {
   View,
   Text,
   SafeAreaView,
-  TouchableOpacity,
-  Image,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import AppStyle from "../../components/AppStyle";
 import CustomImage from "../../components/CustomImage";
 import {
-  ic_bluetooth,
-  ic_callingPerson,
-  ic_callKeyPad,
   ic_endcall,
-  ic_mute,
   ic_speaker,
-  ic_CallingBg,
   ic_speaker_fill,
   ic_pause_fill,
   ic_pause,
   ic_mic,
   ic_mic_fill,
   ic_avatar,
-  ic_black_arrow,
 } from "../../routes/imageRoutes";
 import CustomText from "../../components/CustomText";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
