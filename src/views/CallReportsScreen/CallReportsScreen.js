@@ -1,4 +1,4 @@
-import { View, FlatList, SafeAreaView } from "react-native";
+import { View, FlatList, SafeAreaView, Text } from "react-native";
 import React, { useEffect, useState } from "react";
 import colors from "../../../assets/colors";
 import CustomText from "../../components/CustomText";
@@ -40,6 +40,13 @@ const CallReportsScreen = () => {
         console.log("reeeeeeeeerrrrrrrr====>>>>>>", err);
         setState({ isLoading: false });
       });
+  };
+
+  const EmptyListMessage = ({ item }) => {
+    return (
+      // Flat List Item
+      <Text style={styles.emptyListStyle}>No Data Found</Text>
+    );
   };
 
   const renderItem = ({ item }) => (
@@ -98,7 +105,11 @@ const CallReportsScreen = () => {
         </View>
         <View style={styles.horizontalLine}></View>
 
-        <FlatList data={state?.callDetailRes} renderItem={renderItem} />
+        <FlatList
+          data={state?.callDetailRes}
+          renderItem={renderItem}
+          ListEmptyComponent={EmptyListMessage}
+        />
       </View>
       <Loading loading={state.isLoading} />
     </SafeAreaView>

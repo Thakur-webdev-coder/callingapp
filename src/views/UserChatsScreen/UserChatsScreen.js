@@ -67,13 +67,12 @@ const UserChatsScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     socket = getSocket();
-    _getUpdatedChatMessage();
+    // _getUpdatedChatMessage();
 
-    // socket.on("chat", (data) => {
-    //   console.log("_getUpdatedChatMessage=======>", data);
-    //   //tempArr.push("manjot");
-    //   setArray([...array, data]);
-    // });
+    socket.on("chat", (data) => {
+      console.log("_getUpdatedChatMessage=======>", data);
+      tempArr.push("data");
+    });
   }, []);
 
   // console.log("tempppppppppppppppp->>", tempArr);

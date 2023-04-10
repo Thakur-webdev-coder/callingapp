@@ -44,9 +44,9 @@ const CallingScreen = ({ navigation, route }) => {
   const [mute, setMute] = useState(false);
   const [hold, setHold] = useState(false);
   const [speaker, setSpeaker] = useState(false);
-  const callData = route.params;
+  const { callData } = route.params;
 
-  console.log("callData---->", callData);
+  console.log("route.params---->", route.params);
 
   useEffect(() => {
     console.log("ashfioasf", Sip);
@@ -107,12 +107,28 @@ const CallingScreen = ({ navigation, route }) => {
         {/* <TouchableOpacity onpress={() => callDisconnect()}>
           <Image source={ic_black_arrow} style={{ margin: 20 }} />
         </TouchableOpacity> */}
+
+        <CustomText
+          textColor={colors.black}
+          text={
+            callData.name
+              ? callData.name
+              : callData.givenName
+              ? callData.givenName + " " + callData.familyName
+              : null
+          }
+          alignText={"center"}
+          textSize={20}
+          marginTop={hp(10)}
+          fontWeight={"700"}
+        />
+
         <CustomText
           textColor={colors.black}
           text={Sip.getRemoteNumber(Sip.ActiveCallId)}
           alignText={"center"}
           textSize={26}
-          marginTop={hp(10)}
+          // marginTop={hp(10)}
         />
         <Text style={styles.timerText}>
           {timerCount > 0 ? secondsToHMS(timerCount) : "Calling"}

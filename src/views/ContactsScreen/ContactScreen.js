@@ -38,12 +38,13 @@ import colors from "../../../assets/colors";
 import { saveContacts } from "../../redux/reducer";
 import Sip from "@khateeb00/react-jssip";
 import { Show_Toast } from "../../utils/toast";
+import Loading from "react-native-whc-loading";
 
 const { Popover } = renderers;
 
 const Contacts = ({ navigation }) => {
   const dispatch = useDispatch();
-
+  const [isLoading, setIsLoading] = useState(false);
   const [commonKokacontact, setCommonKokacontact] = useState([]);
   const [state, setState] = useState({
     contacts: [],
@@ -68,11 +69,10 @@ const Contacts = ({ navigation }) => {
   useEffect(() => {
     console.log("---useEffect---");
     checkPeermission();
-    syncContacts();
-
+    // syncContacts();
     const unsubscribe = navigation.addListener("blur", () => {
       setSearchTxt("");
-      syncContacts();
+      // syncContacts();
       // filterContacts("");
     });
     return unsubscribe;
@@ -88,16 +88,21 @@ const Contacts = ({ navigation }) => {
   //     setState({ contacts: contact });
   //   });
   // };
-  const syncContacts = () => {
-    const mapContact = allContacts?.map((l) => l.phoneNumbers[0]?.number);
-    console.log("mapContact------", mapContact);
+  const syncContacts = (contactNumber) => {
+    console.log("inApi======");
+    setIsLoading(true);
+    const mapContact = (contactNumber || allContacts)?.map((l) =>
+      // l.phoneNumbers[0]?.number
+      omitSpecialCharacters(l.phoneNumbers[0]?.number)
+    );
+    console.log("mapContact------", mapContact.toString());
     setState({
       numberList: mapContact.toString(),
     });
     const data = new FormData();
     data.append("username", encryptUser);
     data.append("password", encryptPassword);
-    data.append("phonenos", mapContact);
+    data.append("phonenos", mapContact.toString());
 
     console.log("datattattatatta>>>", data);
 
@@ -105,29 +110,35 @@ const Contacts = ({ navigation }) => {
       .then((response) => {
         console.log("res====>>>>>>>>", response.data.phonenos);
         if (response.data.result == "success") {
+          setIsLoading(false);
+
           if (response?.data?.phonenos) {
             setState({ kokaContact: response.data.phonenos });
 
-            var contacts_list = response?.data?.phonenos.map((_item, index) => {
-              console.log("_item========>>>", _item);
-              const contact = allContacts.find((item) => {
-                return item.phoneNumbers.find((number) => {
-                  return (
-                    omitSpecialCharacters(_item) ==
-                    omitSpecialCharacters(number.number)
-                  );
+            var contacts_list = response?.data?.phonenos
+              .map((_item, index) => {
+                const contact = (contactNumber || allContacts).find((item) => {
+                  return item.phoneNumbers.find((number) => {
+                    return (
+                      // console.log(
+                      //   "comparre======>",
+                      //   _item == omitSpecialCharacters(number.number)
+                      // ),
+                      _item == omitSpecialCharacters(number.number)
+                    );
+                  });
                 });
-              });
-              if (contact)
-                return {
-                  ..._item,
-                  ...contact,
-                  name: `${contact.givenName} ${contact.familyName}`.trim(),
-                };
-              return { ..._item };
-            });
+                if (contact)
+                  return {
+                    ...contact,
+                    name: `${contact.givenName} ${contact.familyName}`.trim(),
+                  };
+                return undefined;
+              })
+              .filter((item) => item);
 
             setCommonKokacontact(contacts_list);
+            console.log("contacts_list======>", contacts_list);
           }
 
           // setState({
@@ -140,7 +151,8 @@ const Contacts = ({ navigation }) => {
       .catch((err) => {
         console.log("errrror------", err);
         Alert.alert("Something went wrong herreee");
-        // setIsLoading(false);
+        setState({ isLoading: false });
+        setIsLoading(false);
       });
   };
 
@@ -166,6 +178,8 @@ const Contacts = ({ navigation }) => {
             console.log("granted------");
             ContactList?.getAll()?.then((contact) => {
               dispatch(saveContacts(contact));
+              syncContacts(contact);
+
               setState({
                 contacts: contact,
               });
@@ -198,25 +212,27 @@ const Contacts = ({ navigation }) => {
   const keyExtractor = (item, idx) => {
     return item?.recordID?.toString() || idx.toString();
   };
-  const { kokaContact, contacts } = state;
+
+  const { kokaContact = [], contacts } = state;
   let commonGivenNames = commonKokacontact.map((l) => l.givenName);
-  console.log(commonGivenNames, "commonKokacontact------", commonKokacontact);
+  console.log("commonKokacontact------", commonKokacontact);
 
   const renderItem = ({ item }) => {
-    console.log("item============", item?.phoneNumbers[0]?.number);
+    // console.log("item============", item?.phoneNumbers[0]?.number);
     // console.log('find============', commonGivenNames.find(el => el== item?.givenName))
-    onPressCall = () => {
+    const onPressCall = () => {
       if (balanceDetail.credit > 0) {
         Sip.makeCall(item?.phoneNumbers[0]?.number);
 
         navigation.navigate("CallingScreen", {
-          callData: item?.phoneNumbers[0]?.number,
+          callData: item,
         });
       } else {
         Show_Toast("Insufficient balance. Please recharge your account.");
       }
     };
-    onPressNextPage = () => {
+    const onPressNextPage = () => {
+      console.log("callDetail--------", item?.phoneNumbers[0]?.number);
       navigation.navigate("CallDetailsScreen", {
         Name: item.givenName,
         phoneNumber: item?.phoneNumbers[0]?.number,
@@ -333,6 +349,7 @@ const Contacts = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         keyExtractor={keyExtractor}
       />
+      <Loading loading={isLoading} />
     </SafeAreaView>
   );
 };

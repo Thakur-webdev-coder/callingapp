@@ -153,6 +153,7 @@ const Keypad = ({ navigation }) => {
 
         <TouchableOpacity
           onPress={() => {
+            console.log("dialedNumber=====", dialedNumber);
             if (balanceDetail.credit > 0) {
               Sip.makeCall(dialedNumber);
               navigation.navigate("CallingScreen", {

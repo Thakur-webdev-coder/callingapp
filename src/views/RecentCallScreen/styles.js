@@ -42,4 +42,10 @@ export default StyleSheet.create({
     color: colors.black,
     fontSize: 12,
   },
+  emptyListStyle: {
+    alignSelf: "center",
+    color: colors.secondary,
+    fontSize: 20,
+    paddingTop: 20,
+  },
 });

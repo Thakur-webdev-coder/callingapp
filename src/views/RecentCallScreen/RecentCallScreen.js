@@ -56,6 +56,12 @@ const RecentCall = ({ navigation }) => {
     }
   };
 
+  const EmptyListMessage = ({ item }) => {
+    return (
+      // Flat List Item
+      <Text style={styles.emptyListStyle}>No Data Found</Text>
+    );
+  };
   const renderItem = ({ item }) => (
     <View style={styles.flatListStyle}>
       <View style={styles.linearGradient}>
@@ -95,6 +101,7 @@ const RecentCall = ({ navigation }) => {
           renderItem={renderItem}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item.id}
+          ListEmptyComponent={EmptyListMessage}
         />
       </View>
     </SafeAreaView>

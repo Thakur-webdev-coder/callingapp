@@ -18,11 +18,12 @@ import {
 import CommonHeader from "../../components/Header/commonHeader";
 import { useSelector } from "react-redux";
 import Sip from "@khateeb00/react-jssip";
+import { Show_Toast } from "../../utils/toast";
 
 const CallDetailsScreen = ({ navigation, route }) => {
   const { Name, phoneNumber } = route.params;
   const { balanceDetail = {} } = useSelector((store) => store.sliceReducer);
-
+  console.log("route.params--->0", route.params);
   return (
     <SafeAreaView style={AppStyle.wrapper}>
       <CommonHeader headerText={"Contacts Details"} />
@@ -79,9 +80,9 @@ const CallDetailsScreen = ({ navigation, route }) => {
             <TouchableOpacity
               onPress={() => {
                 if (balanceDetail.credit > 0) {
-                  Sip.makeCall(dialedNumber);
+                  Sip.makeCall(phoneNumber);
                   navigation.navigate("CallingScreen", {
-                    callData: dialedNumber,
+                    callData: { name: Name },
                   });
                 } else {
                   Show_Toast(

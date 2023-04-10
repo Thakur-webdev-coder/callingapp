@@ -57,7 +57,7 @@ let roomId = null;
 
 const CallScreen = ({ navigation, route }) => {
   const { voiceCall, callData, fromNotification, meetimgUrl } = route.params;
-  console.log("rouuu---", voiceCall, callData);
+  console.log("rouuu---", route.params);
   const { tracks, participants } = useSelector((state) => state);
   const [enableVideo, setEnableVideo] = useState(false);
   const [enableAudio, setEnableAudio] = useState(false);
@@ -165,6 +165,7 @@ const CallScreen = ({ navigation, route }) => {
       if (response.data.result == "success") {
         checkPeermission();
       } else {
+        InCallManager.stopRingback();
         Show_Toast("Something went Wrong");
         navigation.goBack();
       }
