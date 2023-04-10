@@ -181,7 +181,7 @@ const Home = ({ navigation }) => {
     switch (name) {
       case "Invite Friends":
         // navigation.navigate("InviteScreen");
-        navigation.navigate("IncomingScreen");
+        navigation.navigate("InviteScreen");
         break;
 
       case "My Balance":
@@ -189,7 +189,10 @@ const Home = ({ navigation }) => {
         break;
 
       case "Buy Credits":
-        navigation.navigate("BuyCredit");
+        navigation.navigate("WebViewScreen", {
+          url: `https://billing.kokoafone.com/billing/customer/mobile_payment.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
+          title: "Buy Credit",
+        });
         break;
 
       case "Transfer Credit":
@@ -218,8 +221,21 @@ const Home = ({ navigation }) => {
         });
         break;
 
-      case "Directory":
-        //navigation.navigate("Directory");
+      case "Data Bundle":
+        navigation.navigate("WebViewScreen", {
+          url: `https://voice.nonicoms.ng/billing/customer/billing_utility.php?pr_login=[username]&pr_password=[password]&mobiledone=submit_log`,
+          title: "Data Bundle",
+        });
+      case "Electricity Bill Pay":
+        navigation.navigate("WebViewScreen", {
+          url: `https://voice.nonicoms.ng/billing/customer/billing_utility.php?pr_login=[username]&pr_password=[password]&mobiledone=submit_log`,
+          title: "Electricity Bill Pay",
+        });
+      case "TV Recharge":
+        navigation.navigate("WebViewScreen", {
+          url: `https://voice.nonicoms.ng/billing/customer/billing_utility.php?pr_login=[username]&pr_password=[password]&mobiledone=submit_log`,
+          title: "TV Recharge",
+        });
         break;
       case "Voucher Recharge":
         setVoucherModal(true);
