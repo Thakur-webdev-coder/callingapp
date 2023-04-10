@@ -9,6 +9,8 @@ import {
   Modal,
   FlatList,
   Alert,
+  KeyboardAvoidingView,
+  ScrollView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import styles from "./styles";
@@ -31,7 +33,6 @@ import {
 } from "react-native-responsive-screen";
 import {
   _getMessageList,
-  _getUpdatedChatMessage,
   _sendChatMessage,
   _sendChatRoomDetail,
   _sendloadMoreChatData,
@@ -39,6 +40,7 @@ import {
   privateChatID,
 } from "../../utils/socketManager";
 import { useSelector } from "react-redux";
+import { timestampToDate } from "../../utils/commonUtils";
 const UserChatsScreen = ({ navigation, route }) => {
   const [messageInput, onChangeMessageInput] = useState("");
 
@@ -47,12 +49,12 @@ const UserChatsScreen = ({ navigation, route }) => {
     arr: [],
   });
 
-  const tempArr = [];
-
   const [array, setArray] = useState([]);
 
   let receiverID = route.params.callData;
   let socket = null;
+  let tempArray = [];
+
   const { callData } = route.params;
   const {
     loginDetails = {},
@@ -63,69 +65,44 @@ const UserChatsScreen = ({ navigation, route }) => {
   let type = "private";
 
   console.log("callData", callData);
+
   // console.log("chatMessage==onscreen===>>>", receiverID, chatMessage);
 
   useEffect(() => {
     socket = getSocket();
-    // _getUpdatedChatMessage();
-
-    socket.on("chat", (data) => {
-      console.log("_getUpdatedChatMessage=======>", data);
-      tempArr.push("data");
-    });
+    gettingChatHistory();
+    onHistoryReceived();
+    __getUpdatedChatMessage();
   }, []);
 
-  // console.log("tempppppppppppppppp->>", tempArr);
+  const __getUpdatedChatMessage = () => {
+    socket.on("chat", (data) => {
+      console.log("_getUpdatedChatMessage=======>", data);
 
-  //  console.log("arrayyayaytwtewtewtewtewtewtwet=>>>>", array, array.length);
+      setArray((array) => {
+        const a = array.slice(0).reverse();
+        a.push(data);
+        console.log("arrrayy", array);
+        return a.reverse();
+      });
+    });
+  };
 
-  // const _getUpdatedChatMessage = () => {
-  //   console.log("chat_on_event");
+  const gettingChatHistory = () => {
+    const data = {
+      rid: receiverID,
+      sid: senderID,
+    };
+    socket.emit("chat-history", data);
+  };
 
-  //   socket.on("chat", (data) => {
-  //     console.log("_getUpdatedChatMessage=======>", data);
+  const onHistoryReceived = () => {
+    socket.on("chat-history", (data) => {
+      console.log("_getChatHistoryy=======>", data);
 
-  //     tempArr.push(data);
-
-  //     // setArray([...array, data]);
-
-  //     // setState((prev) => {
-  //     //   return {
-  //     //     ...prev,
-  //     //     arr: [...state.arr, data],
-  //     //   };
-  //     // });
-
-  //     // state.arr.push(data);
-
-  //     // const state = Store.getState();
-  //     // console.log("state====>", state);
-  //     // const { chatMessage = [], chatRoom } = state.sliceReducer;
-  //     // console.log("chatRoom====>", chatRoom);
-  //     // // const room = chatRoom;
-  //     // const newChat = [...chatMessage];
-  //     // newChat.unshift(data);
-  //     // console.log("newChat====>", newChat);
-
-  //     //  const findIndex = newChat.findIndex((findItem) => findItem.id === data.id);
-  //     //  console.log("_getUpdatedChatMessage findIndex",findIndex)
-  //     // if (room === data.documentID) {
-  //     //   // validate received data should be corresponding to selected room
-  //     // if (findIndex === -1) {
-  //     //   newChat.unshift(data);
-  //     // }
-  //     // else {
-  //     //     if (!data?.deleted) {
-  //     //       newChat[findIndex] = data;
-  //     //     } else {
-  //     //       Store.dispatch(setDeleteChatData(data));
-  //     //     }
-  //     //   }
-  //     // }
-
-  //     // Store.dispatch(setChatMessage(newChat));
-  //   });
-  // };
+      setArray(data.reverse());
+    });
+  };
 
   const sendChatMethod = () => {
     if (messageInput === "" || messageInput == null) {
@@ -149,20 +126,29 @@ const UserChatsScreen = ({ navigation, route }) => {
   };
 
   const renderItem = ({ item }) => {
-    const { msg } = item;
+    const { msg, timestamp } = item;
     // console.log("item------>>>>>>>>>>>>>>>>>>>>>>>>&&&&&&&&&&&&&&&", item);
     var msgStyle;
     var textStyle;
+    var receiverMsgStyle;
+
     // let uniq = userDetails.email;
     // const local = item.email === uniq;
 
     // if (local) {
     msgStyle = {
       marginLeft: 50,
-      marginRight: 8,
+      marginRight: 15,
       marginTop: 5,
       borderRadius: 8,
       alignSelf: "flex-end",
+    };
+
+    receiverMsgStyle = {
+      marginLeft: 15,
+      marginRight: 50,
+      marginTop: 5,
+      borderRadius: 8,
     };
     textStyle = {
       color: "white",
@@ -172,40 +158,27 @@ const UserChatsScreen = ({ navigation, route }) => {
       borderRadius: 8,
       textAlign: "left",
     };
-    // }
-    // else {
-    //   msgStyle = {
-    //     marginRight: 50,
-    //     marginLeft: 8,
-    //     borderRadius: 8,
-    //     alignSelf: "flex-start",
-    //   };
-    //   textStyle = {
-    //     color: "white",
-    //     paddingVertical: 5,
-    //     paddingHorizontal: 10,
-    //     textAlign: "left",
-    //     fontSize: 16,
-    //     borderRadius: 8,
-    //   };
-    // }
 
     return (
-      <View style={[msgStyle, { marginTop: 20 }]}>
-        {item.sid !== senderID ? (
-          <View
+      <View>
+        <View style={styles.dateBg}>
+          <Text
             style={{
-              // alignSelf: local ? "flex-end" : "flex-start",
-              flexDirection: "row",
-              alignItems: "center",
-              marginTop: 10,
+              color: colors.black,
+              fontWeight: "bold",
+              alignSelf: "center",
             }}
           >
+            {timestampToDate(timestamp)}
+          </Text>
+        </View>
+        {item.sid !== senderID ? (
+          <View style={receiverMsgStyle}>
             <View
               style={{
                 borderRadius: 8,
                 // backgroundColor: local ? "#E21019" : "#5C5D5F",
-                backgroundColor: "#5C5D5F",
+                backgroundColor: colors.greenTop,
                 alignSelf: "flex-start",
               }}
             >
@@ -221,18 +194,14 @@ const UserChatsScreen = ({ navigation, route }) => {
                 {msg}
                 {/* {typeof item.message==='string'?item.message:''} */}
               </Text>
+
+              {/* <Text>{timestampToDate(timeStamp)}</Text> */}
 
               {/* </Hyperlink> */}
             </View>
           </View>
         ) : (
-          <View
-            style={{
-              // alignSelf: local ? "flex-end" : "flex-start",
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-          >
+          <View style={msgStyle}>
             <View
               style={{
                 borderRadius: 8,
@@ -253,6 +222,8 @@ const UserChatsScreen = ({ navigation, route }) => {
                 {msg}
                 {/* {typeof item.message==='string'?item.message:''} */}
               </Text>
+
+              {/* <Text style={textStyle}>{timestampToDate(timestamp)}</Text> */}
 
               {/* </Hyperlink> */}
             </View>
@@ -293,27 +264,33 @@ const UserChatsScreen = ({ navigation, route }) => {
       </View>
 
       <ImageBackground source={ic_chat_bg}>
-        <View style={styles.dateBg}>
+        {/* <View style={styles.dateBg}>
           <Text style={{ color: colors.black, fontWeight: "bold" }}>
             Thu , 12 Jan 2023
           </Text>
-        </View>
+        </View> */}
         <FlatList
           inverted
-          data={chatMessage}
+          data={array}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          style={{ height: hp(70) }}
+          keyExtractor={(item, index) => index.toString()}
+          style={{ height: hp(80) }}
         />
         <View style={styles.sendMessageImg}>
           <View style={styles.searchTnputStyle}>
-            <TextInput
-              style={styles.searchTnputStyleee}
-              placeholder="Type  message here"
-              placeholderTextColor={colors.searchBarTxt}
-              onChangeText={(text) => onChangeMessageInput(text)}
-              value={messageInput}
-            />
+            <KeyboardAvoidingView
+              behavior="padding"
+              style={{ flex: 1 }}
+              keyboardVerticalOffset={64}
+            >
+              <TextInput
+                style={styles.searchTnputStyleee}
+                placeholder="Type  message here"
+                placeholderTextColor={colors.searchBarTxt}
+                onChangeText={(text) => onChangeMessageInput(text)}
+                value={messageInput}
+              />
+            </KeyboardAvoidingView>
 
             <TouchableOpacity style={{ justifyContent: "center" }}>
               <Image source={ic_chat_attach} />

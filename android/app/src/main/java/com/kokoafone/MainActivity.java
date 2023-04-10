@@ -6,6 +6,8 @@ import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
+import com.google.firebase.FirebaseApp;
+
 import org.devio.rn.splashscreen.SplashScreen; // here
 
 
@@ -23,6 +25,8 @@ public class MainActivity extends ReactActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     SplashScreen.show(this);  // here
+    FirebaseApp.initializeApp(this);
+
 
     super.onCreate(savedInstanceState);
   }

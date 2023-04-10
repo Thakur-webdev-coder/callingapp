@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   Image,
@@ -17,7 +17,42 @@ import { Text } from "react-native";
 import colors from "../../../assets/colors";
 import LinearGradient from "react-native-linear-gradient";
 import { ic_add, ic_back, ic_contact_avatar } from "../../routes/imageRoutes";
+import { useSelector } from "react-redux";
+import { getSocket } from "../../utils/socketManager";
 const LiveChat = ({ navigation }) => {
+  const { loginDetails = {} } = useSelector((store) => store.sliceReducer);
+  let senderID = loginDetails.username;
+  let socket = null;
+
+  useEffect(() => {
+    socket = getSocket();
+
+    console.log("connectted");
+    getUsersList();
+    onUserListReceived();
+  }, []);
+
+  const getUsersList = () => {
+    console.log("herere", "herer");
+    const data = {
+      sid: senderID,
+    };
+
+    console.log("dattaa", data);
+    socket.emit("chat-list", data);
+    console.log("suessfull_emit", data);
+  };
+
+  const onUserListReceived = () => {
+    socket.on("chat-list", (data) => {
+      console.log("_getChatListt=======>", data);
+      // setArray(data);
+
+      // tempArr.push(data);
+      // setArray(tempArr);
+    });
+  };
+
   const chatData = [
     {
       name: "Banoj Tripathy",
