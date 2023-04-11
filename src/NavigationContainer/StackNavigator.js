@@ -10,7 +10,7 @@ import InviteScreen from "../views/InviteScreen/InviteScreen";
 import Directory from "../views/SpecialServices/Directory";
 import CallDetailsScreen from "../views/CallDetailsScreen/CallDetailsScreen";
 import UserChatsScreen from "../views/UserChatsScreen/UserChatsScreen";
-import StartChatScreen from "../views/StartChatScreen/StartChatScreen";
+import StartChatScreen from "../views/startChatScreen/startChatScreen";
 import SelectScreen from "../views/SelectScreen/SelectScreen";
 import CallScreen from "../views/VoiceCall/VoiceCallScreen";
 import WebViewScreen from "../views/webView";
@@ -18,6 +18,7 @@ import { participantJoined } from "../lib-jitsi-meet/actions";
 import { useDispatch, useSelector } from "react-redux";
 import CustomAlert from "../utils/CustomAlertMessage";
 import IncomingScreen from "../views/IncomingCallScreen/IncomingScreen";
+import TransferHistory from "../views/TransferHistoryScreen/transferHistory";
 
 const Stack = createNativeStackNavigator();
 
@@ -56,6 +57,8 @@ const StackNavigator = () => {
       <Stack.Screen name="CallScreen" component={CallScreen} />
       <Stack.Screen name={"WebViewScreen"} component={WebViewScreen} />
       <Stack.Screen name={"IncomingScreen"} component={IncomingScreen} />
+      <Stack.Screen name={"TransferHistory"} component={TransferHistory} />
+
     </Stack.Navigator>
   );
 };

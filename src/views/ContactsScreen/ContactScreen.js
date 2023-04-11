@@ -6,6 +6,7 @@ import {
   Platform,
   SafeAreaView,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -39,6 +40,7 @@ import { saveContacts } from "../../redux/reducer";
 import Sip from "@khateeb00/react-jssip";
 import { Show_Toast } from "../../utils/toast";
 import Loading from "react-native-whc-loading";
+import { AlphabetList } from 'react-native-section-alphabet-list';
 
 const { Popover } = renderers;
 
@@ -46,13 +48,16 @@ const Contacts = ({ navigation }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [commonKokacontact, setCommonKokacontact] = useState([]);
+  const [searchTxt,setSearchTxt]=useState('')
   const [state, setState] = useState({
     contacts: [],
     numberList: " ",
     kokaContact: [],
+    showkokaContact: false,
+    // searchTxt: '',
+    search: false
     // commonKokacontact:[]
   });
-  const [searchTxt, setSearchTxt] = useState("");
 
   const {
     balanceDetail = {},
@@ -62,18 +67,16 @@ const Contacts = ({ navigation }) => {
   } = useSelector((store) => store.sliceReducer);
   const { encryptPassword, encryptUser } = encrypt_detail;
 
-  console.log("detailsssss====", allContacts);
-  // useEffect(()=>{ ̰
-  //   checkPeermission();
-  // },[])
+ 
   useEffect(() => {
     console.log("---useEffect---");
     checkPeermission();
     // syncContacts();
     const unsubscribe = navigation.addListener("blur", () => {
-      setSearchTxt("");
+   
+       setSearchTxt("");
       // syncContacts();
-      // filterContacts("");
+       filterContacts("");
     });
     return unsubscribe;
   }, []);
@@ -82,12 +85,25 @@ const Contacts = ({ navigation }) => {
       ? PERMISSIONS.IOS.READ_CONTACTS
       : PERMISSIONS.ANDROID.READ_CONTACTS;
 
-  // const filterContacts = (txt) => {
-  //   setSearchTxt(txt);
-  //   ContactList?.getContactsMatchingString(txt)?.then((contact) => {
-  //     setState({ contacts: contact });
-  //   });
-  // };
+
+  let sortedData = allContacts.slice().sort((a, b) => {
+    if (a.givenName < b.givenName) {
+      return -1;
+    }
+    if (a.givenName > b.givenName) {
+      return 1;
+    }
+    return 0;
+  });
+
+
+
+  const filterContacts = (txt) => {
+    setSearchTxt(txt);
+    ContactList?.getContactsMatchingString(txt)?.then((contactData) => {
+      setState({ contacts: contactData });
+    });
+  };
   const syncContacts = (contactNumber) => {
     console.log("inApi======");
     setIsLoading(true);
@@ -205,7 +221,7 @@ const Contacts = ({ navigation }) => {
     if (value == 1) {
       syncContacts();
     } else {
-      console.log("inmenu----e---", value);
+      setState({ showkokaContact: !state.showkokaContact });
     }
   };
 
@@ -216,6 +232,15 @@ const Contacts = ({ navigation }) => {
   const { kokaContact = [], contacts } = state;
   let commonGivenNames = commonKokacontact.map((l) => l.givenName);
   console.log("commonKokacontact------", commonKokacontact);
+
+
+
+  const EmptyListMessage = ({ item }) => {
+    return (
+      // Flat List Item
+      <Text style={styles.emptyListStyle}>No Data Found</Text>
+    );
+  };
 
   const renderItem = ({ item }) => {
     // console.log("item============", item?.phoneNumbers[0]?.number);
@@ -239,6 +264,8 @@ const Contacts = ({ navigation }) => {
       });
     };
 
+
+
     return (
       <TouchableOpacity
         style={styles.flatListStyle}
@@ -248,50 +275,77 @@ const Contacts = ({ navigation }) => {
             : onPressCall();
         }}
       >
-        <View style={styles.imgBox}>
-          <Image
-            style={styles.imgstyle}
-            source={
-              item?.hasThumbnail
-                ? { uri: item?.thumbnailPath }
-                : ic_contact_avatar
-            }
-          />
-        </View>
-        <Text style={styles.nameTxtStyle}>{item?.givenName}</Text>
-        {commonGivenNames.includes(item?.givenName) ? (
-          <Image source={logo_contact_kokoa} />
-        ) : null}
-        {/* <Text style={styles.nameTxtStyle}>
-            {item?.phoneNumbers[0]?.number}
-          </Text> */}
+        {!state.showkokaContact ?
+          <>
+            <View style={styles.imgBox}>
+              <Image
+                style={styles.imgstyle}
+                source={
+                  item?.hasThumbnail
+                    ? { uri: item?.thumbnailPath }
+                    : ic_contact_avatar
+                }
+              />
+            </View>
+            <Text style={styles.nameTxtStyle}>{item?.givenName}</Text>
+            {commonGivenNames.includes(item?.givenName) ? (
+              <Image source={logo_contact_kokoa} />
+            ) : null}
+
+          </>
+          : <>
+            <View style={styles.kokaImgBox}>
+              <Image
+                style={styles.imgstyle}
+                source={
+                  item?.hasThumbnail
+                    ? { uri: item?.thumbnailPath }
+                    : ic_contact_avatar
+                }
+              />
+            </View>
+            <View >
+              <Text style={styles.nameTxtStyle}>{item?.givenName}</Text>
+              <Text style={[styles.nameTxtStyle, { fontSize: 14, fontWeight: "400", }]}>
+                {item?.phoneNumbers[0]?.number}
+              </Text>
+            </View>
+
+
+          </>
+
+        }
       </TouchableOpacity>
     );
   };
 
   return (
     <SafeAreaView>
-      {/* <View style={{justifyContent:'center',flex:1}}>
-      <Text style={{color:colors.black,textAlign:'center',fontSize:20}}>Not implemented yet</Text>
-      </View> */}
-
-      <View style={styles.toolBar}>
+         <View style={styles.toolBar}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image source={ic_back} />
         </TouchableOpacity>
 
-        <View style={styles.nameContainer}>
+        {/* {!state?.search ? <View style={styles.nameContainer}>
           <Text style={styles.textStyleToolbar}>Contacts</Text>
-        </View>
+        </View> : */}
+          <TextInput
+            style={styles.inputTxtBoxStyle}
+            placeholder="Search Contact"
+            onChangeText={(searchedText) => filterContacts(searchedText)}
+            placeholderTextColor={colors.secondary}
+            value={searchTxt}
+          />
+          {/* } */}
         <View style={styles.headerComponent}>
-          <TouchableOpacity>
+
+          {/* <TouchableOpacity style={{ marginLeft: 8 }} onPress={() => setState({ search: true })}>
             <Image source={ic_chat_search} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+
           <View
-            style={{ marginHorizontal: 25 }}
-            // onPress={() => navigation.navigate("SelectScreen")}
+            style={{ marginHorizontal: 20 }}
           >
-            {/* <Image source={ic_menu} /> */}
 
             <Menu
               renderer={Popover}
@@ -304,12 +358,8 @@ const Contacts = ({ navigation }) => {
                   TriggerTouchableComponent: ({ onPress }) => (
                     <TouchableOpacity onPress={onPress}>
                       <Image
-                        // resizeMode="center"
-
                         source={ic_menu}
                       />
-                      {/* <Text style={{ fontSize: wp('2.8%'), color: "#00B9AB", textAlign: 'center', marginLeft: 2, fontWeight: 'bold' }}
-                                    numberOfLines={0} textBreakStrategy={'simple'}>{translate_Language("Start") + "  "}</Text> */}
                     </TouchableOpacity>
                   ),
                 }}
@@ -331,9 +381,9 @@ const Contacts = ({ navigation }) => {
                   </Text>
                   {/* <Text style={{ fontSize: 14, color: colors.black,fontWeight:'bold'  }}>{'Kokoafone Contacts'}</Text> */}
                 </MenuOption>
-                {/* <MenuOption style={{ paddingVertical: hp(1), paddingHorizontal: wp(10), }} value={2}>
-                  <Text style={{ fontSize: 14, color: colors.black, fontWeight: 'bold' }}>{'Kokoafone Contacts'}</Text>
-                </MenuOption> */}
+                <MenuOption style={{ paddingVertical: hp(1), paddingHorizontal: wp(10), }} value={2}>
+                  <Text style={{ fontSize: 14, color: colors.black, fontWeight: 'bold' }}>{!state.showkokaContact ? 'Kokoafone Contacts' : 'All Contacts'}</Text>
+                </MenuOption>
               </MenuOptions>
             </Menu>
           </View>
@@ -344,11 +394,13 @@ const Contacts = ({ navigation }) => {
       </View>
       <FlatList
         style={styles.containerStyle}
-        data={allContacts}
+        data={searchTxt ? state.contacts : sortedData}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
         keyExtractor={keyExtractor}
+        ListEmptyComponent={EmptyListMessage}
       />
+
       <Loading loading={isLoading} />
     </SafeAreaView>
   );

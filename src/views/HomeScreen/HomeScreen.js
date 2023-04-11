@@ -199,8 +199,8 @@ const Home = ({ navigation }) => {
         setTransferModal(true);
         break;
 
-      case "Call Rates":
-        // navigation.navigate("CallRatesScreen");
+      case "Transfer History":
+          navigation.navigate("TransferHistory");
         break;
 
       case "Call Details Report":
@@ -240,6 +240,7 @@ const Home = ({ navigation }) => {
       case "Voucher Recharge":
         setVoucherModal(true);
         break;
+        
       case "Logout":
         LogoutMethod();
         break;

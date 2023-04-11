@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  Alert,
   FlatList,
   Image,
   SafeAreaView,
@@ -26,6 +27,7 @@ import {
 import Sip from "@khateeb00/react-jssip";
 import { useSelector } from "react-redux";
 import { Show_Toast } from "../../utils/toast";
+import Contacts from "react-native-contacts";
 
 const Keypad = ({ navigation }) => {
   // const [inputNumber, setInputNumber] = useState('')
@@ -73,7 +75,26 @@ const Keypad = ({ navigation }) => {
     newStr = newStr.join("");
     _setState({ dialedNumber: newStr });
   };
-  // console.log('inputNumber--', inputNumber)
+
+
+
+  const GetContacts = (phone ) => {
+console.log('phone-----',phone);
+    var newPerson = {
+      
+      phoneNumbers: [
+        {
+          label: "mobile",
+          number: phone,
+        },
+      ],
+      
+    };
+    Contacts.openContactForm(newPerson).then((contact) => {
+    });
+  };
+  
+
   const RenderList = ({ item }) => {
     const { dialedNumber } = state;
     return (
@@ -147,13 +168,14 @@ const Keypad = ({ navigation }) => {
         />
       </View>
       <View style={[styles.bottomRowStyle]}>
-        <TouchableOpacity onPress={() => navigation.navigate("Contacts")}>
+        <TouchableOpacity onPress={() => GetContacts(state?.dialedNumber)}>
           <Image style={styles.bottomImgStyle} source={ic_people} />
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => {
-            console.log("dialedNumber=====", dialedNumber);
+            // console.log("dialedNumber=====", dialedNumber);
+            if (dialedNumber.length > 8) {
             if (balanceDetail.credit > 0) {
               Sip.makeCall(dialedNumber);
               navigation.navigate("CallingScreen", {
@@ -162,6 +184,10 @@ const Keypad = ({ navigation }) => {
             } else {
               Show_Toast("Insufficient balance. Please recharge your account.");
             }
+          }else {
+            Alert.alert("", "Please enter a valid number for call");
+          }
+            
           }}
         >
           <LinearGradient
