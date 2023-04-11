@@ -17,6 +17,20 @@ export function generateRandomString() {
   return result;
 }
 
+export function timestampToDate(timeStamp) {
+  const formattedDate = new Date(timeStamp).toDateString();
+  return formattedDate;
+}
+
+export function timestampToDateInAnotherFormat(timeStamp) {
+  const date = new Date(timeStamp);
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+  const formattedDate = `${day}/${month}/${year}`;
+  return formattedDate;
+}
+
 export function secondsToHMS(seconds) {
   seconds = Number(seconds);
   var h = Math.floor((seconds % (3600 * 24)) / 3600);

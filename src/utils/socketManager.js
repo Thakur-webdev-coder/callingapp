@@ -228,6 +228,12 @@ export const _sendChatMessage = (chatData) => {
   console.log("sucessful======");
 };
 
+// const gettingChatHistory = (chatHistory) => {
+//   console.log("_getHistoryChat", chatHistory);
+//   socket.emit("chat-history", data);
+//   console.log("history_sucessful======");
+// };
+
 export const getSocket = () => {
   return socket;
 };

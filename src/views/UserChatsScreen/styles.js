@@ -46,7 +46,7 @@ export default StyleSheet.create({
 
   sendMessageImg: {
     // marginTop: hp(30),
-    marginBottom: hp(1),
+    marginTop: hp(2),
     flexDirection: "row",
     marginHorizontal: wp(3),
     justifyContent: "space-between",
@@ -90,5 +90,4 @@ export default StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
-    
 });
