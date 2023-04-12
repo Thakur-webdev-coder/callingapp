@@ -74,4 +74,57 @@ export default StyleSheet.create({
     right: 10,
     margin: 20,
   },
+  nameTxtStyle: {
+    paddingLeft: wp(4),
+    color: colors.black,
+    fontSize: 16,
+    fontWeight: "600",
+    width: wp(67),
+  },
+
+  imgstyle: {
+    alignSelf: "center",
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+  },
+
+  kokaImgBox: {
+    backgroundColor: "red",
+    height: 48,
+    width: 48,
+    borderRadius: 25,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  toolBar: {
+    flexDirection: "row",
+
+    backgroundColor: colors.secondary,
+    alignItems: "center",
+    //justifyContent: "space-between",
+    paddingVertical: hp(1.4),
+    paddingHorizontal: wp(5),
+    justifyContent: "space-between",
+  },
+
+  voucherModalStyle: {
+    backgroundColor: colors.white,
+    borderRadius: 10,
+    padding: hp(2),
+    // paddingHorizontal:wp(3)
+  },
+  textInputStyle: {
+    marginTop: hp(2),
+    borderBottomWidth: wp(0.6),
+    borderBottomColor: colors.borderBottomColor,
+    //fontSize:18
+  },
+
+  btnStyle: {
+    flexDirection: "row",
+    marginTop: hp(3),
+    marginBottom: hp(1),
+    justifyContent: "flex-end",
+  },
 });

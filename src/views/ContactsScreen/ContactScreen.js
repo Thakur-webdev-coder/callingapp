@@ -3,6 +3,7 @@ import {
   Alert,
   FlatList,
   Image,
+  Modal,
   Platform,
   SafeAreaView,
   Text,
@@ -36,11 +37,11 @@ import {
   renderers,
 } from "react-native-popup-menu";
 import colors from "../../../assets/colors";
-import { saveContacts } from "../../redux/reducer";
+import { saveContacts, saveKokoaContacts } from "../../redux/reducer";
 import Sip from "@khateeb00/react-jssip";
 import { Show_Toast } from "../../utils/toast";
 import Loading from "react-native-whc-loading";
-import { AlphabetList } from 'react-native-section-alphabet-list';
+import { AlphabetList } from "react-native-section-alphabet-list";
 
 const { Popover } = renderers;
 
@@ -48,14 +49,15 @@ const Contacts = ({ navigation }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [commonKokacontact, setCommonKokacontact] = useState([]);
-  const [searchTxt,setSearchTxt]=useState('')
+  const [searchTxt, setSearchTxt] = useState("");
+
   const [state, setState] = useState({
     contacts: [],
     numberList: " ",
     kokaContact: [],
     showkokaContact: false,
     // searchTxt: '',
-    search: false
+    search: false,
     // commonKokacontact:[]
   });
 
@@ -67,16 +69,14 @@ const Contacts = ({ navigation }) => {
   } = useSelector((store) => store.sliceReducer);
   const { encryptPassword, encryptUser } = encrypt_detail;
 
- 
   useEffect(() => {
     console.log("---useEffect---");
     checkPeermission();
     // syncContacts();
     const unsubscribe = navigation.addListener("blur", () => {
-   
-       setSearchTxt("");
+      setSearchTxt("");
       // syncContacts();
-       filterContacts("");
+      filterContacts("");
     });
     return unsubscribe;
   }, []);
@@ -84,7 +84,6 @@ const Contacts = ({ navigation }) => {
     Platform.OS === "ios"
       ? PERMISSIONS.IOS.READ_CONTACTS
       : PERMISSIONS.ANDROID.READ_CONTACTS;
-
 
   let sortedData = allContacts.slice().sort((a, b) => {
     if (a.givenName < b.givenName) {
@@ -95,8 +94,6 @@ const Contacts = ({ navigation }) => {
     }
     return 0;
   });
-
-
 
   const filterContacts = (txt) => {
     setSearchTxt(txt);
@@ -154,6 +151,8 @@ const Contacts = ({ navigation }) => {
               .filter((item) => item);
 
             setCommonKokacontact(contacts_list);
+
+            dispatch(saveKokoaContacts(contacts_list));
             console.log("contacts_list======>", contacts_list);
           }
 
@@ -191,7 +190,6 @@ const Contacts = ({ navigation }) => {
             console.log("The permission is limited: some actions are possible");
             break;
           case RESULTS.GRANTED:
-            console.log("granted------");
             ContactList?.getAll()?.then((contact) => {
               dispatch(saveContacts(contact));
               syncContacts(contact);
@@ -230,10 +228,10 @@ const Contacts = ({ navigation }) => {
   };
 
   const { kokaContact = [], contacts } = state;
-  let commonGivenNames = commonKokacontact.map((l) => l.givenName);
-  console.log("commonKokacontact------", commonKokacontact);
-
-
+  let commonGivenNames = commonKokacontact.map(
+    (l) => l.phoneNumbers[0]?.number
+  );
+  // console.log("commonKokacontact------", commonKokacontact);
 
   const EmptyListMessage = ({ item }) => {
     return (
@@ -259,23 +257,21 @@ const Contacts = ({ navigation }) => {
     const onPressNextPage = () => {
       console.log("callDetail--------", item?.phoneNumbers[0]?.number);
       navigation.navigate("CallDetailsScreen", {
-        Name: item.givenName,
+        Name: item?.givenName + " " + item?.familyName,
         phoneNumber: item?.phoneNumbers[0]?.number,
       });
     };
-
-
 
     return (
       <TouchableOpacity
         style={styles.flatListStyle}
         onPress={() => {
-          commonGivenNames.includes(item?.givenName)
+          commonGivenNames.includes(item?.phoneNumbers[0]?.number)
             ? onPressNextPage()
             : onPressCall();
         }}
       >
-        {!state.showkokaContact ?
+        {!state.showkokaContact ? (
           <>
             <View style={styles.imgBox}>
               <Image
@@ -287,13 +283,16 @@ const Contacts = ({ navigation }) => {
                 }
               />
             </View>
-            <Text style={styles.nameTxtStyle}>{item?.givenName}</Text>
-            {commonGivenNames.includes(item?.givenName) ? (
+            <Text style={styles.nameTxtStyle}>
+              {item?.givenName + " " + item?.familyName}
+            </Text>
+
+            {commonGivenNames.includes(item?.phoneNumbers[0]?.number) ? (
               <Image source={logo_contact_kokoa} />
             ) : null}
-
           </>
-          : <>
+        ) : (
+          <View style={{ flexDirection: "row" }}>
             <View style={styles.kokaImgBox}>
               <Image
                 style={styles.imgstyle}
@@ -304,24 +303,32 @@ const Contacts = ({ navigation }) => {
                 }
               />
             </View>
-            <View >
-              <Text style={styles.nameTxtStyle}>{item?.givenName}</Text>
-              <Text style={[styles.nameTxtStyle, { fontSize: 14, fontWeight: "400", }]}>
+            <View>
+              <Text style={styles.nameTxtStyle}>
+                {item?.givenName + " " + item?.familyName}
+              </Text>
+              <Text
+                style={[
+                  styles.nameTxtStyle,
+                  { fontSize: 14, fontWeight: "400" },
+                ]}
+              >
                 {item?.phoneNumbers[0]?.number}
               </Text>
             </View>
-
-
-          </>
-
-        }
+            <Image
+              source={logo_contact_kokoa}
+              style={{ alignSelf: "center" }}
+            />
+          </View>
+        )}
       </TouchableOpacity>
     );
   };
 
   return (
     <SafeAreaView>
-         <View style={styles.toolBar}>
+      <View style={styles.toolBar}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image source={ic_back} />
         </TouchableOpacity>
@@ -329,24 +336,25 @@ const Contacts = ({ navigation }) => {
         {/* {!state?.search ? <View style={styles.nameContainer}>
           <Text style={styles.textStyleToolbar}>Contacts</Text>
         </View> : */}
-          <TextInput
-            style={styles.inputTxtBoxStyle}
-            placeholder="Search Contact"
-            onChangeText={(searchedText) => filterContacts(searchedText)}
-            placeholderTextColor={colors.secondary}
-            value={searchTxt}
-          />
-          {/* } */}
+        <TextInput
+          style={styles.inputTxtBoxStyle}
+          placeholder="Search Contact"
+          onChangeText={(searchedText) => filterContacts(searchedText)}
+          placeholderTextColor={colors.secondary}
+          value={searchTxt}
+        />
+        {/* } */}
         <View style={styles.headerComponent}>
-
           {/* <TouchableOpacity style={{ marginLeft: 8 }} onPress={() => setState({ search: true })}>
             <Image source={ic_chat_search} />
           </TouchableOpacity> */}
 
           <View
-            style={{ marginHorizontal: 20 }}
+            style={{
+              marginHorizontal: 10,
+              padding: 10,
+            }}
           >
-
             <Menu
               renderer={Popover}
               rendererProps={{ placement: "bottom" }}
@@ -354,35 +362,47 @@ const Contacts = ({ navigation }) => {
               onSelect={(value) => onInviteOptionSelect(value)}
             >
               <MenuTrigger
-                customStyles={{
-                  TriggerTouchableComponent: ({ onPress }) => (
-                    <TouchableOpacity onPress={onPress}>
-                      <Image
-                        source={ic_menu}
-                      />
-                    </TouchableOpacity>
-                  ),
-                }}
+                children={<Image source={ic_menu} />}
+
+                // customStyles={{
+                //   TriggerTouchableComponent: ({ onPress }) => (
+                //     <TouchableOpacity
+                //       style={{ backgroundColor: "pink", height: 40, width: 40 }}
+                //       onPress={onPress}
+                //     >
+                //       {/* <Image source={ic_menu} style={{ padding: 20 }} /> */}
+                //     </TouchableOpacity>
+                //   ),
+                // }}
               />
 
               <MenuOptions>
-                <MenuOption
-                  style={{ paddingVertical: hp(1), paddingHorizontal: wp(10) }}
-                  value={1}
-                >
+                <MenuOption value={1}>
                   <Text
                     style={{
                       fontSize: 14,
                       color: colors.black,
                       fontWeight: "bold",
+                      padding: 5,
                     }}
                   >
                     {"Sync Contacts"}
                   </Text>
                   {/* <Text style={{ fontSize: 14, color: colors.black,fontWeight:'bold'  }}>{'Kokoafone Contacts'}</Text> */}
                 </MenuOption>
-                <MenuOption style={{ paddingVertical: hp(1), paddingHorizontal: wp(10), }} value={2}>
-                  <Text style={{ fontSize: 14, color: colors.black, fontWeight: 'bold' }}>{!state.showkokaContact ? 'Kokoafone Contacts' : 'All Contacts'}</Text>
+                <MenuOption value={2}>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: colors.black,
+                      fontWeight: "bold",
+                      padding: 5,
+                    }}
+                  >
+                    {!state.showkokaContact
+                      ? "Kokoafone Contacts"
+                      : "All Contacts"}
+                  </Text>
                 </MenuOption>
               </MenuOptions>
             </Menu>
@@ -394,7 +414,13 @@ const Contacts = ({ navigation }) => {
       </View>
       <FlatList
         style={styles.containerStyle}
-        data={searchTxt ? state.contacts : sortedData}
+        data={
+          !state.showkokaContact
+            ? searchTxt
+              ? state.contacts
+              : sortedData
+            : commonKokacontact
+        }
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
         keyExtractor={keyExtractor}

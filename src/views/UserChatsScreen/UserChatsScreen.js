@@ -40,7 +40,11 @@ import {
   privateChatID,
 } from "../../utils/socketManager";
 import { useSelector } from "react-redux";
-import { timestampToDate, timestampToLocalTime } from "../../utils/commonUtils";
+import {
+  omitSpecialCharacters,
+  timestampToDate,
+  timestampToLocalTime,
+} from "../../utils/commonUtils";
 const UserChatsScreen = ({ navigation, route }) => {
   const [messageInput, onChangeMessageInput] = useState("");
   const [groupedChats, setGroupedChats] = useState([]);
@@ -53,10 +57,11 @@ const UserChatsScreen = ({ navigation, route }) => {
   const [array, setArray] = useState([]);
 
   let receiverID = route.params.callData;
+
   let socket = null;
   let tempArray = [];
 
-  const { callData } = route.params;
+  const { callData, Name } = route.params;
   const {
     loginDetails = {},
     chatMessage = {},
@@ -106,6 +111,7 @@ const UserChatsScreen = ({ navigation, route }) => {
   };
 
   const gettingChatHistory = () => {
+    receiverID = omitSpecialCharacters(receiverID);
     const data = {
       rid: receiverID,
       sid: senderID,
@@ -133,6 +139,7 @@ const UserChatsScreen = ({ navigation, route }) => {
     }
 
     // console.log("receiverarray-->>>", state.arr.concat(receiverID));
+    receiverID = omitSpecialCharacters(receiverID);
 
     const data = {
       msg: messageInput,
@@ -297,7 +304,7 @@ const UserChatsScreen = ({ navigation, route }) => {
 
         <View style={styles.nameContainer}>
           <Text style={[styles.textStyleToolbar, { fontWeight: "700" }]}>
-            {callData}
+            {Name ? Name : callData}
           </Text>
           <Text style={styles.textStyleToolbar}>Last Seen</Text>
         </View>

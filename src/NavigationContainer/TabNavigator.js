@@ -16,10 +16,22 @@ import IconTab from "../components/IconTab";
 import { useDispatch, useSelector } from "react-redux";
 import Sip from "@khateeb00/react-jssip";
 import { _getloadMoreChatData, _socketConnect } from "../utils/socketManager";
+import { PERMISSIONS, RESULTS, request } from "react-native-permissions";
+import { saveContacts } from "../redux/reducer";
+import ContactList from "react-native-contacts";
+
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
-  const { loginDetails = {} } = useSelector((store) => store.sliceReducer);
+  const { loginDetails = {}, allContacts = [] } = useSelector(
+    (store) => store.sliceReducer
+  );
+  const dispatch = useDispatch();
+
+  const permissions =
+    Platform.OS === "ios"
+      ? PERMISSIONS.IOS.READ_CONTACTS
+      : PERMISSIONS.ANDROID.READ_CONTACTS;
 
   useEffect(() => {
     const { password, did, username } = loginDetails;
@@ -34,7 +46,46 @@ const TabNavigator = () => {
     });
     _socketConnect(param);
   }, []);
-  console.log("loginDetails==========>>", loginDetails);
+
+  useEffect(() => {
+    checkPeermission();
+  });
+
+  const checkPeermission = () => {
+    request(permissions)
+      .then((result) => {
+        switch (result) {
+          case RESULTS.UNAVAILABLE:
+            console.log(
+              "This feature is not available (on this device / in this context)"
+            );
+            break;
+          case RESULTS.DENIED:
+            console.log(
+              "The permission has not been requested / is denied but requestable",
+              RESULTS.DENIED
+            );
+            break;
+          case RESULTS.LIMITED:
+            console.log("The permission is limited: some actions are possible");
+            break;
+          case RESULTS.GRANTED:
+            // console.log("granted------");
+            ContactList?.getAll()?.then((contact) => {
+              dispatch(saveContacts(contact));
+            });
+
+            break;
+          case RESULTS.BLOCKED:
+            console.log("The permission is denied and not requestable anymore");
+            break;
+        }
+      })
+      .catch((error) => {
+        console.log("errr----", error);
+      });
+  };
+  // console.log("loginDetails==========>>", loginDetails);
   return (
     <Tab.Navigator
       initialRouteName={"Home"}
