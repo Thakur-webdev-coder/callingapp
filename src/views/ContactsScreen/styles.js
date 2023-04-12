@@ -12,8 +12,8 @@ export default StyleSheet.create({
     paddingHorizontal: wp(5),
     alignItems:'center',
     // backgroundColor:'skyblue',
-    borderBottomWidth:1,
-    borderBottomColor:colors.darkGray,
+    // borderBottomWidth:1,
+    // borderBottomColor:colors.darkGray,
     paddingVertical:hp(1)
   },
 
@@ -30,7 +30,14 @@ export default StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-
+  kokaImgBox: {
+    backgroundColor:'red',
+    height: 48,
+    width: 48,
+    borderRadius: 25,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   imgstyle: {
     alignSelf: "center",
     width: 50,
@@ -76,5 +83,41 @@ export default StyleSheet.create({
     flexDirection: "row",
     // justifyContent: "space-around",
     alignItems: "center",
+  },
+  indexLetterstyle: {
+    color: colors.blueBottom,
+    fontSize: hp('1.3%'),
+  },
+  indexLetterContainerstyle: {
+    height: hp('3%'),
+    width: 20,
+  },
+  indexconatinerstle: {
+    right: hp('0.5%'),
+    width: 15,
+  },
+  sectionHeaderContainer: {
+    // backgroundColor: '#F5FCFF',
+    padding: 10,
+  },
+  sectionHeaderLabel: {
+    fontWeight: 'bold',
+    color: 'black',
+    fontSize: hp('2.6%'),
+  },
+  emptyListStyle: {
+    alignSelf: "center",
+    color: colors.secondary,
+    fontSize: 20,
+    paddingTop: 20,
+  },
+  inputTxtBoxStyle: {
+    borderRadius: 10,
+    marginLeft: wp(5),
+    width: wp(70),
+    height: hp(5.3),
+    backgroundColor: colors.searchBar,
+    color: colors.black,
+    paddingHorizontal: wp(5),
   },
 });
