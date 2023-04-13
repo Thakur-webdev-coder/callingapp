@@ -10,11 +10,11 @@ export default StyleSheet.create({
     flexDirection: "row",
     //marginTop: hp(2),
     paddingHorizontal: wp(5),
-    alignItems:'center',
+    alignItems: "center",
     // backgroundColor:'skyblue',
     // borderBottomWidth:1,
     // borderBottomColor:colors.darkGray,
-    paddingVertical:hp(1)
+    paddingVertical: hp(1),
   },
 
   nameTextColoumn: {
@@ -31,7 +31,7 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   kokaImgBox: {
-    backgroundColor:'red',
+    backgroundColor: "red",
     height: 48,
     width: 48,
     borderRadius: 25,
@@ -48,8 +48,8 @@ export default StyleSheet.create({
     paddingLeft: wp(4),
     color: colors.black,
     fontSize: 16,
-    fontWeight:"600",
-    width:wp(67)
+    fontWeight: "600",
+    width: wp(67),
   },
   headerSearchBar: {
     flexDirection: "row",
@@ -77,7 +77,7 @@ export default StyleSheet.create({
   textStyleToolbar: {
     color: colors.white,
     fontSize: 20,
-    fontWeight:'bold'
+    fontWeight: "bold",
   },
   headerComponent: {
     flexDirection: "row",
@@ -86,14 +86,14 @@ export default StyleSheet.create({
   },
   indexLetterstyle: {
     color: colors.blueBottom,
-    fontSize: hp('1.3%'),
+    fontSize: hp("1.3%"),
   },
   indexLetterContainerstyle: {
-    height: hp('3%'),
+    height: hp("3%"),
     width: 20,
   },
   indexconatinerstle: {
-    right: hp('0.5%'),
+    right: hp("0.5%"),
     width: 15,
   },
   sectionHeaderContainer: {
@@ -101,9 +101,9 @@ export default StyleSheet.create({
     padding: 10,
   },
   sectionHeaderLabel: {
-    fontWeight: 'bold',
-    color: 'black',
-    fontSize: hp('2.6%'),
+    fontWeight: "bold",
+    color: "black",
+    fontSize: hp("2.6%"),
   },
   emptyListStyle: {
     alignSelf: "center",

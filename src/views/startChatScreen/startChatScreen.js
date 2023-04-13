@@ -12,77 +12,131 @@ import styles from "./styles";
 import { Text } from "react-native";
 import colors from "../../../assets/colors";
 import LinearGradient from "react-native-linear-gradient";
-import { ic_back, ic_contact_avatar } from "../../routes/imageRoutes";
+import {
+  ic_back,
+  ic_contact_avatar,
+  logo_contact_kokoa,
+} from "../../routes/imageRoutes";
 import { hitGetRegisteredNumberApi } from "../../constants/APi";
+import { useSelector } from "react-redux";
 const StartChatScreen = ({ navigation }) => {
-  const [state, setState] = useState({
-    chatData: [],
-  });
-  const chatData = [
-    {
-      name: "Banoj Tripathy",
-      number: "918800810156",
-    },
-    {
-      name: "Banoj Tripathy",
-      number: "918800810156",
-    },
-    {
-      name: "Banoj Tripathy",
-      number: "918800810156",
-    },
-    {
-      name: "Banoj Tripathy",
-      number: "918800810156",
-    },
-  ];
+  const { kokoaContacts = [] } = useSelector((store) => store.sliceReducer);
 
-  useEffect(() => {
-    getRegisteredNumberList();
-  }, []);
+  const [selectedItems, setSelectedItems] = useState([]);
 
-  const getRegisteredNumberList = async () => {
-    const myResponse = await hitGetRegisteredNumberApi();
-    // console.log('---res-->>>>>',myResponse)
-    if (myResponse.data.result == "success") {
-      console.log("---sucess->>>>>", myResponse.data.response);
-      setState({ chatData: myResponse.data.response });
-    } else {
-      Show_Toast(myResponse.data.msg);
-    }
+  const handleLongPress = (item) => {
+    console.log("itemmmm", item);
+    setSelectedItems([...selectedItems, item]);
   };
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity
-      onPress={() => {
-        navigation.navigate("UserChatsScreen", {
-          callData: item?.receiver_phone,
-        });
-      }}
-    >
-      <View style={styles.flatListStyle}>
-        <Image style={styles.imgstyle} source={ic_contact_avatar} />
+  const renderItem = ({ item }) => {
+    const isSelected = selectedItems.includes(item);
 
-        <View style={styles.nameTextColoumn}>
-          {/* <Text style={styles.nameTxtStyle}>{item?.name}</Text> */}
-          <Text numberOfLines={1} style={styles.msgTxtStyle}>
-            {item?.receiver_phone}
-          </Text>
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          selectedItems.length > 0
+            ? isSelected
+              ? setSelectedItems(
+                  selectedItems.filter((selectedItem) => selectedItem !== item)
+                )
+              : handleLongPress(item)
+            : navigation.navigate("UserChatsScreen", {
+                Name: item?.givenName + " " + item?.familyName,
+                callData: item?.phoneNumbers[0]?.number,
+              });
+        }}
+        onLongPress={() => handleLongPress(item)}
+      >
+        <View style={styles.flatListStyle}>
+          <View style={styles.kokaImgBox}>
+            <Image
+              style={styles.imgstyle}
+              source={
+                item?.hasThumbnail
+                  ? { uri: item?.thumbnailPath }
+                  : ic_contact_avatar
+              }
+            />
+          </View>
+          <View>
+            <Text style={styles.nameTxtStyle}>
+              {item?.givenName + " " + item?.familyName}
+            </Text>
+            <Text
+              style={[styles.nameTxtStyle, { fontSize: 14, fontWeight: "400" }]}
+            >
+              {item?.phoneNumbers[0]?.number}
+            </Text>
+          </View>
+          {isSelected ? (
+            <Image
+              source={logo_contact_kokoa}
+              style={{ alignSelf: "center" }}
+            />
+          ) : null}
         </View>
-      </View>
-      <View style={styles.horizontalLine}></View>
-    </TouchableOpacity>
-  );
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <CommonHeader headerText={"Start Chat"} />
-      <FlatList
-        //style={{ marginTop: hp(2) }}
-        data={state?.chatData}
-        renderItem={renderItem}
-        showsVerticalScrollIndicator={false}
-      />
+      {/* <CommonHeader headerText={"Start Chat"} /> */}
+      <View style={styles.toolBar}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Image source={ic_back} />
+        </TouchableOpacity>
+
+        {/* {!state?.search ? <View style={styles.nameContainer}>
+          <Text style={styles.textStyleToolbar}>Contacts</Text>
+        </View> : */}
+        <Text style={{ color: colors.white, fontWeight: "bold", fontSize: 20 }}>
+          Start Chat
+        </Text>
+        {/* } */}
+
+        {selectedItems.length > 0 ? (
+          <TouchableOpacity
+          // onPress={() =>
+          //   navigation.navigate("UserChatsScreen", {
+          //     Name:  selectedItems.map((item) => item?.givenName + " " + item?.familyName),
+          //     callData:selectedItems.map((item) => item?.phoneNumbers[0]?.number)
+          //   })
+          // }
+          >
+            <Text style={{ color: colors.white }}>Next</Text>
+          </TouchableOpacity>
+        ) : (
+          <View></View>
+        )}
+      </View>
+      {kokoaContacts.length > 0 ? (
+        <FlatList
+          //style={{ marginTop: hp(2) }}
+          data={kokoaContacts}
+          renderItem={renderItem}
+          showsVerticalScrollIndicator={false}
+        />
+      ) : (
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            flex: 1,
+          }}
+        >
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontSize: 20,
+              color: colors.black,
+            }}
+          >
+            No KokoaFone Users Found!
+          </Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 };

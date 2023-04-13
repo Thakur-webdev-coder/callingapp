@@ -22,6 +22,13 @@ export function timestampToDate(timeStamp) {
   return formattedDate;
 }
 
+export function timestampToLocalTime(timeStamp) {
+  const date = new Date(timeStamp);
+  const options = { hour: "numeric", minute: "numeric", hour12: true };
+  const localTime = date.toLocaleString("en-US", options);
+  return localTime;
+}
+
 export function timestampToDateInAnotherFormat(timeStamp) {
   const date = new Date(timeStamp);
   const day = date.getDate();

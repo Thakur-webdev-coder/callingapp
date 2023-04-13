@@ -3,9 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   isLoadingEnable: false,
   chatMessage: [],
-  chatRoom: '',
-
-
+  chatRoom: "",
 };
 
 const sliceReducer = createSlice({
@@ -16,7 +14,7 @@ const sliceReducer = createSlice({
       state.isLoadingEnable = action.payload;
     },
     saveLoginDetails: (state, action) => {
-        state.loginDetails = action.payload;
+      state.loginDetails = action.payload;
     },
     saveEncrLoginDetails: (state, action) => {
       state.encrypt_detail = action.payload;
@@ -25,18 +23,21 @@ const sliceReducer = createSlice({
       state.balanceDetail = action.payload;
     },
     saveContacts: (state, action) => {
-      state.allContacts = action.payload
+      state.allContacts = action.payload;
+    },
+    saveKokoaContacts: (state, action) => {
+      state.kokoaContacts = action.payload;
     },
 
     // chat
 
     setChatMessage: (state, action) => {
-      console.log('action.payload=====>>', action.payload);
+      console.log("action.payload=====>>", action.payload);
       state.chatMessage = action.payload;
     },
 
     setChatRoom: (state, action) => {
-      state.chatRoom = action?.payload ?? '';
+      state.chatRoom = action?.payload ?? "";
     },
   },
 });
@@ -49,6 +50,7 @@ export const {
   //chat
   setChatMessage,
   setChatRoom,
-  saveContacts
+  saveContacts,
+  saveKokoaContacts,
 } = sliceReducer.actions;
 export default sliceReducer.reducer;

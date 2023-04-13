@@ -40,9 +40,14 @@ import {
   privateChatID,
 } from "../../utils/socketManager";
 import { useSelector } from "react-redux";
-import { timestampToDate } from "../../utils/commonUtils";
+import {
+  omitSpecialCharacters,
+  timestampToDate,
+  timestampToLocalTime,
+} from "../../utils/commonUtils";
 const UserChatsScreen = ({ navigation, route }) => {
   const [messageInput, onChangeMessageInput] = useState("");
+  const [groupedChats, setGroupedChats] = useState([]);
 
   const [state, setState] = useState({
     callModal: false,
@@ -52,10 +57,11 @@ const UserChatsScreen = ({ navigation, route }) => {
   const [array, setArray] = useState([]);
 
   let receiverID = route.params.callData;
+
   let socket = null;
   let tempArray = [];
 
-  const { callData } = route.params;
+  const { callData, Name } = route.params;
   const {
     loginDetails = {},
     chatMessage = {},
@@ -66,14 +72,29 @@ const UserChatsScreen = ({ navigation, route }) => {
 
   console.log("callData", callData);
 
-  // console.log("chatMessage==onscreen===>>>", receiverID, chatMessage);
-
   useEffect(() => {
     socket = getSocket();
     gettingChatHistory();
     onHistoryReceived();
     __getUpdatedChatMessage();
   }, []);
+
+  const reduceChat = (chatData) => {
+    const groupedChats = chatData?.reduce((acc, chat) => {
+      const date = new Date(chat.timestamp);
+      const timestamp = date.toDateString();
+      const group = acc.find((g) => g.timestamp === timestamp);
+      if (group) {
+        group.chats.push(chat);
+      } else {
+        acc.push({ timestamp, chats: [chat] });
+      }
+      return acc;
+    }, []);
+
+    console.log("previousstate", groupedChats);
+    setGroupedChats(groupedChats);
+  };
 
   const __getUpdatedChatMessage = () => {
     socket.on("chat", (data) => {
@@ -82,13 +103,15 @@ const UserChatsScreen = ({ navigation, route }) => {
       setArray((array) => {
         const a = array.slice(0).reverse();
         a.push(data);
-        console.log("arrrayy", array);
-        return a.reverse();
+        const arrayReverse = a.reverse();
+        reduceChat(arrayReverse);
+        return arrayReverse;
       });
     });
   };
 
   const gettingChatHistory = () => {
+    receiverID = omitSpecialCharacters(receiverID);
     const data = {
       rid: receiverID,
       sid: senderID,
@@ -99,8 +122,11 @@ const UserChatsScreen = ({ navigation, route }) => {
   const onHistoryReceived = () => {
     socket.on("chat-history", (data) => {
       console.log("_getChatHistoryy=======>", data);
+      const arrayReverse = data.reverse();
 
-      setArray(data.reverse());
+      reduceChat(arrayReverse);
+
+      setArray(arrayReverse);
     });
   };
 
@@ -113,6 +139,7 @@ const UserChatsScreen = ({ navigation, route }) => {
     }
 
     // console.log("receiverarray-->>>", state.arr.concat(receiverID));
+    receiverID = omitSpecialCharacters(receiverID);
 
     const data = {
       msg: messageInput,
@@ -126,6 +153,30 @@ const UserChatsScreen = ({ navigation, route }) => {
   };
 
   const renderItem = ({ item }) => {
+    return (
+      <View>
+        <View style={styles.dateBg}>
+          <Text
+            style={{
+              color: colors.black,
+              fontWeight: "bold",
+              alignSelf: "center",
+            }}
+          >
+            {item.timestamp}
+          </Text>
+        </View>
+        <FlatList
+          inverted
+          data={item.chats}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={renderNewItem}
+        />
+      </View>
+    );
+  };
+
+  const renderNewItem = ({ item }) => {
     const { msg, timestamp } = item;
     // console.log("item------>>>>>>>>>>>>>>>>>>>>>>>>&&&&&&&&&&&&&&&", item);
     var msgStyle;
@@ -139,7 +190,7 @@ const UserChatsScreen = ({ navigation, route }) => {
     msgStyle = {
       marginLeft: 50,
       marginRight: 15,
-      marginTop: 5,
+      marginTop: 8,
       borderRadius: 8,
       alignSelf: "flex-end",
     };
@@ -147,13 +198,13 @@ const UserChatsScreen = ({ navigation, route }) => {
     receiverMsgStyle = {
       marginLeft: 15,
       marginRight: 50,
-      marginTop: 5,
+      marginTop: 8,
       borderRadius: 8,
     };
     textStyle = {
       color: "white",
-      paddingVertical: 5,
-      paddingHorizontal: 10,
+      paddingVertical: 10,
+      paddingHorizontal: 15,
       fontSize: 16,
       borderRadius: 8,
       textAlign: "left",
@@ -161,17 +212,6 @@ const UserChatsScreen = ({ navigation, route }) => {
 
     return (
       <View>
-        <View style={styles.dateBg}>
-          <Text
-            style={{
-              color: colors.black,
-              fontWeight: "bold",
-              alignSelf: "center",
-            }}
-          >
-            {timestampToDate(timestamp)}
-          </Text>
-        </View>
         {item.sid !== senderID ? (
           <View style={receiverMsgStyle}>
             <View
@@ -199,6 +239,17 @@ const UserChatsScreen = ({ navigation, route }) => {
 
               {/* </Hyperlink> */}
             </View>
+            <Text
+              style={{
+                fontSize: 8,
+                alignSelf: "flex-start",
+                color: colors.blueBottom,
+                fontWeight: "bold",
+                marginBottom: 5,
+              }}
+            >
+              {timestampToLocalTime(timestamp)}
+            </Text>
           </View>
         ) : (
           <View style={msgStyle}>
@@ -227,13 +278,23 @@ const UserChatsScreen = ({ navigation, route }) => {
 
               {/* </Hyperlink> */}
             </View>
+            <Text
+              style={{
+                fontSize: 8,
+                alignSelf: "flex-end",
+                color: colors.blueBottom,
+                fontWeight: "bold",
+                marginBottom: 5,
+              }}
+            >
+              {timestampToLocalTime(timestamp)}
+            </Text>
           </View>
         )}
       </View>
     );
   };
 
-  //const [callModal,setCallModal]=useState(false)
   return (
     <SafeAreaView>
       <View style={styles.toolBar}>
@@ -243,7 +304,7 @@ const UserChatsScreen = ({ navigation, route }) => {
 
         <View style={styles.nameContainer}>
           <Text style={[styles.textStyleToolbar, { fontWeight: "700" }]}>
-            {callData}
+            {Name ? Name : callData}
           </Text>
           <Text style={styles.textStyleToolbar}>Last Seen</Text>
         </View>
@@ -271,9 +332,9 @@ const UserChatsScreen = ({ navigation, route }) => {
         </View> */}
         <FlatList
           inverted
-          data={array}
+          data={groupedChats}
           renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(group) => group.timestamp}
           style={{ height: hp(80) }}
         />
         <View style={styles.sendMessageImg}>

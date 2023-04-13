@@ -2,7 +2,7 @@ import { apiClient } from "../helpers/ApiInterceptor";
 import ApiRoutes from "./apiRoutes";
 
 export const hitEncryptionApi = (payload) => {
-  console.log('paylosaddd--enc---',payload);
+  console.log("paylosaddd--enc---", payload);
   return apiClient({
     baseURL: ApiRoutes.BASE_URL,
     method: "post",
@@ -116,7 +116,6 @@ export const hitGetRegisteredNumberApi = () => {
 };
 
 export const hitSyncContactApi = (payload) => {
-  console.log('paylosaddd-----',payload);
   return apiClient({
     baseURL: ApiRoutes.BASE_URL,
     method: "post",
