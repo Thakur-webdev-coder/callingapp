@@ -228,6 +228,24 @@ export const _sendChatMessage = (chatData) => {
   console.log("sucessful======");
 };
 
+export const _deleteChat = (data) => {
+  console.log("_deleteChat", data);
+  socket.emit("chat-list-delete", data);
+  console.log("sucessful======_deleteChat");
+};
+
+export const _addGroup = (data) => {
+  console.log("group-add__", data);
+  socket.emit("group", data);
+  console.log("sucessful======_group-add__");
+};
+
+export const _leaveGroup = (data) => {
+  console.log("group-leave__", data);
+  socket.emit("group-leave", data);
+  console.log("sucessful======_group-leave__");
+};
+
 // const gettingChatHistory = (chatHistory) => {
 //   console.log("_getHistoryChat", chatHistory);
 //   socket.emit("chat-history", data);

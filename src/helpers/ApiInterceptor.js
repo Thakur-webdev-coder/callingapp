@@ -15,7 +15,7 @@ apiClient.interceptors.request.use(
     if (accessToken) {
       config.headers["x-auth-token"] = accessToken;
     }
-    console.log("request api", config);
+    // console.log("request api", config);
 
     return config;
   },
@@ -30,7 +30,7 @@ apiClient.interceptors.response.use(
       response.data.result == "success" ||
       !response.data.hasOwnProperty("result")
     ) {
-      console.log("response success------->", response.data);
+      // console.log("response success------->", response.data);
       return response;
     } else {
       console.log("response failure------->", response.data);

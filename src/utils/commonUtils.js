@@ -38,6 +38,23 @@ export function timestampToDateInAnotherFormat(timeStamp) {
   return formattedDate;
 }
 
+export function formatAccordingTimestamp(timestamp) {
+  const now = new Date();
+  const date = new Date(timestamp);
+
+  if (date.toDateString() === now.toDateString()) {
+    // timestamp is from today, so show time
+    const options = { hour: "numeric", minute: "numeric", hour12: true };
+    return date.toLocaleString("en-US", options);
+  } else if (date.toDateString() === new Date(now - 86400000).toDateString()) {
+    // timestamp is from yesterday, so show "yesterday"
+    return "Yesterday";
+  } else {
+    // timestamp is from another day, so show date only
+    return date.toLocaleDateString();
+  }
+}
+
 export function secondsToHMS(seconds) {
   seconds = Number(seconds);
   var h = Math.floor((seconds % (3600 * 24)) / 3600);
@@ -64,4 +81,15 @@ export function secondsToHMS(seconds) {
 export function omitSpecialCharacters(text) {
   const regExp = new RegExp(/^0+|\W*/g);
   return (text || "").replace(regExp, "");
+}
+
+export function generateRandomId() {
+  let result = "";
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const charactersLength = characters.length;
+  for (let i = 0; i < 10; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
 }

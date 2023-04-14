@@ -32,7 +32,9 @@ import {
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 import {
+  _deleteChat,
   _getMessageList,
+  _leaveGroup,
   _sendChatMessage,
   _sendChatRoomDetail,
   _sendloadMoreChatData,
@@ -48,6 +50,10 @@ import {
 const UserChatsScreen = ({ navigation, route }) => {
   const [messageInput, onChangeMessageInput] = useState("");
   const [groupedChats, setGroupedChats] = useState([]);
+  const [myVar, setMyVar] = useState(null);
+  const [isDeleted, setDeleted] = useState(false);
+
+  const socket = getSocket();
 
   const [state, setState] = useState({
     callModal: false,
@@ -56,28 +62,40 @@ const UserChatsScreen = ({ navigation, route }) => {
 
   const [array, setArray] = useState([]);
 
-  let receiverID = route.params.callData;
+  let receiverID = route.params;
 
-  let socket = null;
   let tempArray = [];
 
-  const { callData, Name } = route.params;
+  const { callData, Name, groupName, groupMembers, uniqueId } = route.params;
   const {
     loginDetails = {},
     chatMessage = {},
     chatRoom,
   } = useSelector((store) => store.sliceReducer);
   let senderID = loginDetails.username;
-  let type = "private";
 
-  console.log("callData", callData);
+  console.log(
+    "callData",
+    callData ? receiverID.callData : groupMembers,
+    uniqueId
+  );
 
   useEffect(() => {
-    socket = getSocket();
     gettingChatHistory();
     onHistoryReceived();
     __getUpdatedChatMessage();
   }, []);
+
+  const leaveChat = () => {
+    const data = {
+      id: senderID,
+      group_id: uniqueId,
+    };
+
+    console.log("datattatatat", data);
+
+    _leaveGroup(data);
+  };
 
   const reduceChat = (chatData) => {
     const groupedChats = chatData?.reduce((acc, chat) => {
@@ -111,15 +129,48 @@ const UserChatsScreen = ({ navigation, route }) => {
   };
 
   const gettingChatHistory = () => {
-    receiverID = omitSpecialCharacters(receiverID);
+    let data = null;
+
+    if (receiverID.callData) {
+      receiverID = omitSpecialCharacters(receiverID.callData);
+
+      data = {
+        rid: receiverID,
+        sid: senderID,
+      };
+    } else {
+      data = {
+        type: "group",
+        rid: uniqueId,
+        sid: senderID,
+        group_name: groupName,
+      };
+    }
+
+    console.log("chat_history", data);
+
+    socket.emit("chat-history", data);
+  };
+
+  const deleteChatHistory = () => {
+    receiverID = omitSpecialCharacters(receiverID.callData);
+
     const data = {
       rid: receiverID,
       sid: senderID,
     };
-    socket.emit("chat-history", data);
+
+    console.log("myyydeleteChatttt", data);
+
+    console.log("deleteChatttt", data);
+
+    _deleteChat(data);
+    // setDeleted(true);
   };
 
   const onHistoryReceived = () => {
+    console.log("_getChatHistoryy=======>");
+
     socket.on("chat-history", (data) => {
       console.log("_getChatHistoryy=======>", data);
       const arrayReverse = data.reverse();
@@ -138,14 +189,29 @@ const UserChatsScreen = ({ navigation, route }) => {
       return;
     }
 
-    // console.log("receiverarray-->>>", state.arr.concat(receiverID));
-    receiverID = omitSpecialCharacters(receiverID);
+    let data = null;
 
-    const data = {
-      msg: messageInput,
-      rid: receiverID,
-      sid: senderID,
-    };
+    // console.log("receiverarray-->>>", state.arr.concat(receiverID));
+    if (receiverID.callData) {
+      receiverID = omitSpecialCharacters(receiverID.callData);
+
+      data = {
+        msg: messageInput,
+        rid: receiverID,
+        sid: senderID,
+        type: "private",
+      };
+    } else {
+      data = {
+        msg: messageInput,
+        rid: uniqueId,
+        sid: senderID,
+        type: "group",
+        group_name: groupName,
+      };
+    }
+
+    console.log("groupchatDatta", data);
 
     _sendChatMessage(data);
 
@@ -304,7 +370,7 @@ const UserChatsScreen = ({ navigation, route }) => {
 
         <View style={styles.nameContainer}>
           <Text style={[styles.textStyleToolbar, { fontWeight: "700" }]}>
-            {Name ? Name : callData}
+            {Name && callData ? (Name ? Name : callData) : groupName}
           </Text>
           <Text style={styles.textStyleToolbar}>Last Seen</Text>
         </View>
@@ -318,7 +384,12 @@ const UserChatsScreen = ({ navigation, route }) => {
           >
             <Image source={ic_small_plus} />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              deleteChatHistory();
+              // leaveChat();
+            }}
+          >
             <Image source={ic_menu} />
           </TouchableOpacity>
         </View>
@@ -330,13 +401,34 @@ const UserChatsScreen = ({ navigation, route }) => {
             Thu , 12 Jan 2023
           </Text>
         </View> */}
-        <FlatList
-          inverted
-          data={groupedChats}
-          renderItem={renderItem}
-          keyExtractor={(group) => group.timestamp}
-          style={{ height: hp(80) }}
-        />
+        {groupedChats.length > 0 ? (
+          <FlatList
+            inverted
+            data={groupedChats}
+            renderItem={renderItem}
+            keyExtractor={(group) => group.timestamp}
+            style={{ height: hp(80) }}
+          />
+        ) : (
+          <View
+            style={{
+              height: hp(80),
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                alignSelf: "center",
+                fontSize: 20,
+                color: colors.black,
+                fontWeight: "bold",
+              }}
+            >
+              Start New Conversation!
+            </Text>
+          </View>
+        )}
         <View style={styles.sendMessageImg}>
           <View style={styles.searchTnputStyle}>
             <KeyboardAvoidingView
@@ -387,11 +479,13 @@ const UserChatsScreen = ({ navigation, route }) => {
           <TouchableOpacity
             style={styles.callBoxStyle}
             onPress={() => {
-              navigation.navigate("CallScreen", {
-                voiceCall: true,
-                callData: callData,
-              });
-              setState({ callModal: false });
+              if (callData) {
+                navigation.navigate("CallScreen", {
+                  voiceCall: true,
+                  callData: callData,
+                });
+                setState({ callModal: false });
+              }
             }}
           >
             <Image source={ic_audiocall} />
@@ -407,11 +501,13 @@ const UserChatsScreen = ({ navigation, route }) => {
           <TouchableOpacity
             style={{ flexDirection: "row", alignItems: "center" }}
             onPress={() => {
-              navigation.navigate("CallScreen", {
-                voiceCall: false,
-                callData: callData,
-              });
-              setState({ callModal: false });
+              if (callData) {
+                navigation.navigate("CallScreen", {
+                  voiceCall: false,
+                  callData: callData,
+                });
+                setState({ callModal: false });
+              }
             }}
           >
             <Image source={ic_videocall} />

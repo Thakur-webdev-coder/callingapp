@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Alert,
   FlatList,
@@ -9,6 +9,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import {
@@ -68,6 +69,8 @@ const Contacts = ({ navigation }) => {
     allContacts = [],
   } = useSelector((store) => store.sliceReducer);
   const { encryptPassword, encryptUser } = encrypt_detail;
+
+  let inputRef = useRef();
 
   useEffect(() => {
     console.log("---useEffect---");
@@ -336,13 +339,16 @@ const Contacts = ({ navigation }) => {
         {/* {!state?.search ? <View style={styles.nameContainer}>
           <Text style={styles.textStyleToolbar}>Contacts</Text>
         </View> : */}
+
         <TextInput
+          ref={inputRef}
           style={styles.inputTxtBoxStyle}
           placeholder="Search Contact"
           onChangeText={(searchedText) => filterContacts(searchedText)}
           placeholderTextColor={colors.secondary}
           value={searchTxt}
         />
+
         {/* } */}
         <View style={styles.headerComponent}>
           {/* <TouchableOpacity style={{ marginLeft: 8 }} onPress={() => setState({ search: true })}>
@@ -425,6 +431,7 @@ const Contacts = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         keyExtractor={keyExtractor}
         ListEmptyComponent={EmptyListMessage}
+        keyboardShouldPersistTaps="always"
       />
 
       <Loading loading={isLoading} />
