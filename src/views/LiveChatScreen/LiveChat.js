@@ -19,18 +19,25 @@ import LinearGradient from "react-native-linear-gradient";
 import { ic_add, ic_back, ic_contact_avatar } from "../../routes/imageRoutes";
 import { useSelector } from "react-redux";
 import { getSocket } from "../../utils/socketManager";
+import {
+  formatAccordingTimestamp,
+  timestampToDate,
+} from "../../utils/commonUtils";
+import { useFocusEffect } from "@react-navigation/native";
 const LiveChat = ({ navigation }) => {
-  const { loginDetails = {} } = useSelector((store) => store.sliceReducer);
+  const { kokoaContacts = [], loginDetails = {} } = useSelector(
+    (store) => store.sliceReducer
+  );
   let senderID = loginDetails.username;
-  let socket = null;
+  const socket = getSocket();
+  const [chatList, setChatList] = useState([]);
 
-  useEffect(() => {
-    socket = getSocket();
-
-    console.log("connectted");
-    getUsersList();
-    onUserListReceived();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      getUsersList();
+      onUserListReceived();
+    }, [])
+  );
 
   const getUsersList = () => {
     console.log("herere", "herer");
@@ -46,39 +53,22 @@ const LiveChat = ({ navigation }) => {
   const onUserListReceived = () => {
     socket.on("chat-list", (data) => {
       console.log("_getChatListt=======>", data);
-      // setArray(data);
-
-      // tempArr.push(data);
-      // setArray(tempArr);
+      setChatList(data.reverse());
     });
   };
-
-  const chatData = [
-    {
-      name: "Banoj Tripathy",
-      msg: "918800810156  : Ho How are you ?",
-      date: "12/01/2023",
-    },
-    {
-      name: "Banoj Tripathy",
-      msg: "918800810156  : Ho How are you ?",
-      date: "12/01/2023",
-    },
-    {
-      name: "Banoj Tripathy",
-      msg: "918800810156  : Ho How are you ?",
-      date: "12/01/2023",
-    },
-    {
-      name: "Banoj Tripathy",
-      msg: "918800810156  : Ho How are you ?",
-      date: "12/01/2023",
-    },
-  ];
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
       onPress={() => {
+        item?.type
+          ? navigation.navigate("UserChatsScreen", {
+              groupName: item?.name,
+              uniqueId: item?.id,
+            })
+          : navigation.navigate("UserChatsScreen", {
+              // Name: item?.givenName + " " + item?.familyName,
+              callData: item?.id,
+            });
         // navigation.navigate("UserChatsScreen");
       }}
     >
@@ -86,13 +76,17 @@ const LiveChat = ({ navigation }) => {
         <Image style={styles.imgstyle} source={ic_contact_avatar} />
 
         <View style={styles.nameTextColoumn}>
-          <Text style={styles.nameTxtStyle}>{item?.name}</Text>
+          <Text style={styles.nameTxtStyle}>
+            {item?.name ? item?.name : item?.id}
+          </Text>
           <Text numberOfLines={1} style={styles.msgTxtStyle}>
             {item?.msg}
           </Text>
         </View>
 
-        <Text style={styles.dateTxtStyle}>{item?.date}</Text>
+        <Text style={styles.dateTxtStyle}>
+          {formatAccordingTimestamp(item?.timestamp)}
+        </Text>
       </View>
       <View style={styles.horizontalLine}></View>
     </TouchableOpacity>
@@ -101,12 +95,29 @@ const LiveChat = ({ navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <CommonHeader headerText={"Chat"} />
-      <FlatList
-        //style={{ marginTop: hp(2) }}
-        data={chatData}
-        renderItem={renderItem}
-        showsVerticalScrollIndicator={false}
-      />
+      {chatList.length > 0 ? (
+        <FlatList
+          //style={{ marginTop: hp(2) }}
+          data={chatList}
+          renderItem={renderItem}
+          showsVerticalScrollIndicator={false}
+        />
+      ) : (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: "bold",
+              color: colors.black,
+              textAlign: "center",
+            }}
+          >
+            (Please click on + button to start chatting)
+          </Text>
+        </View>
+      )}
 
       <TouchableOpacity
         style={styles.btnStyle}

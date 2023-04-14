@@ -80,3 +80,4 @@ export const ic_mic_on = require("../../assets/images/unmute_Call.png");
 export const ic_video_on = require("../../assets/images/video_on.png");
 export const ic_video_off = require("../../assets/images/video_off.png");
 export const ic_mic_off = require("../../assets/images/mic_off.png");
+export const ic_tick = require("../../assets/images/ic_tick.png");

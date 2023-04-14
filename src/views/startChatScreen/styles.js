@@ -112,6 +112,8 @@ export default StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: 10,
     padding: hp(2),
+    marginTop: hp(40),
+    marginHorizontal: wp(5),
     // paddingHorizontal:wp(3)
   },
   textInputStyle: {

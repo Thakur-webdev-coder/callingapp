@@ -54,27 +54,27 @@ const TabNavigator = () => {
   }, []);
 
   useEffect(() => {
-    checkPeermission();
+    // checkPeermission();
   });
 
   const syncContacts = (contactNumber) => {
-    console.log("inApi======");
+    // console.log("inApi======");
     const mapContact = (contactNumber || allContacts)?.map((l) =>
       // l.phoneNumbers[0]?.number
       omitSpecialCharacters(l.phoneNumbers[0]?.number)
     );
-    console.log("mapContact------", mapContact.toString());
+    // console.log("mapContact------", mapContact.toString());
 
     const data = new FormData();
     data.append("username", encryptUser);
     data.append("password", encryptPassword);
     data.append("phonenos", mapContact.toString());
 
-    console.log("datattattatatta>>>", data);
+    // console.log("datattattatatta>>>", data);
 
     hitSyncContactApi(data)
       .then((response) => {
-        console.log("res====>>>>>>>>", response.data.phonenos);
+        // console.log("res====>>>>>>>>", response.data.phonenos);
         if (response.data.result == "success") {
           if (response?.data?.phonenos) {
             var contacts_list = response?.data?.phonenos
@@ -100,12 +100,12 @@ const TabNavigator = () => {
               .filter((item) => item);
 
             dispatch(saveKokoaContacts(contacts_list));
-            console.log("contacts_list======>", contacts_list);
+            // console.log("contacts_list======>", contacts_list);
           }
         }
       })
       .catch((err) => {
-        console.log("errrror------", err);
+        // console.log("errrror------", err);
         Alert.alert("Something went wrong herreee");
       });
   };
