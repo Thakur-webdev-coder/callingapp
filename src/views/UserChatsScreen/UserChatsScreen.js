@@ -363,37 +363,43 @@ const UserChatsScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView>
-      <View style={styles.toolBar}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={ic_back} />
-        </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          groupName ? navigation.navigate("ParticipantsScreen") : null
+        }
+      >
+        <View style={styles.toolBar}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Image source={ic_back} />
+          </TouchableOpacity>
 
-        <View style={styles.nameContainer}>
-          <Text style={[styles.textStyleToolbar, { fontWeight: "700" }]}>
-            {Name && callData ? (Name ? Name : callData) : groupName}
-          </Text>
-          <Text style={styles.textStyleToolbar}>Last Seen</Text>
+          <View style={styles.nameContainer}>
+            <Text style={[styles.textStyleToolbar, { fontWeight: "700" }]}>
+              {Name && callData ? (Name ? Name : callData) : groupName}
+            </Text>
+            <Text style={styles.textStyleToolbar}>Last Seen</Text>
+          </View>
+          <View style={styles.headerComponent}>
+            <TouchableOpacity>
+              <Image source={ic_chat_search} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{ marginHorizontal: 25 }}
+              onPress={() => navigation.navigate("SelectScreen")}
+            >
+              <Image source={ic_small_plus} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                deleteChatHistory();
+                // leaveChat();
+              }}
+            >
+              <Image source={ic_menu} />
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.headerComponent}>
-          <TouchableOpacity>
-            <Image source={ic_chat_search} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{ marginHorizontal: 25 }}
-            onPress={() => navigation.navigate("SelectScreen")}
-          >
-            <Image source={ic_small_plus} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              deleteChatHistory();
-              // leaveChat();
-            }}
-          >
-            <Image source={ic_menu} />
-          </TouchableOpacity>
-        </View>
-      </View>
+      </TouchableOpacity>
 
       <ImageBackground source={ic_chat_bg}>
         {/* <View style={styles.dateBg}>
