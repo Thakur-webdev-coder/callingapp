@@ -93,3 +93,14 @@ export function generateRandomId() {
   }
   return result;
 }
+
+export async function uriToFile(uri) {
+  const fileUri = FileSystem.documentDirectory + "filename.ext";
+  try {
+    await FileSystem.downloadAsync(uri, fileUri);
+    console.log("myUriiii", uri);
+    return fileUri;
+  } catch (error) {
+    console.error(error);
+  }
+}

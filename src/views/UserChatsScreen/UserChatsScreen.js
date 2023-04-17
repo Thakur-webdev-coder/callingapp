@@ -14,6 +14,8 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import styles from "./styles";
+import DocumentPicker from "react-native-document-picker";
+
 import {
   ic_audiocall,
   ic_back,
@@ -46,7 +48,19 @@ import {
   omitSpecialCharacters,
   timestampToDate,
   timestampToLocalTime,
+  uriToFile,
 } from "../../utils/commonUtils";
+import {
+  Menu,
+  MenuOption,
+  MenuOptions,
+  MenuTrigger,
+  renderers,
+} from "react-native-popup-menu";
+import { useFocusEffect } from "@react-navigation/native";
+
+const { Popover } = renderers;
+
 const UserChatsScreen = ({ navigation, route }) => {
   const [messageInput, onChangeMessageInput] = useState("");
   const [groupedChats, setGroupedChats] = useState([]);
@@ -66,7 +80,15 @@ const UserChatsScreen = ({ navigation, route }) => {
 
   let tempArray = [];
 
-  const { callData, Name, groupName, groupMembers, uniqueId } = route.params;
+  const {
+    callData,
+    Name,
+    groupName,
+    groupMembers,
+    uniqueId,
+    participants,
+    added,
+  } = route.params;
   const {
     loginDetails = {},
     chatMessage = {},
@@ -74,16 +96,37 @@ const UserChatsScreen = ({ navigation, route }) => {
   } = useSelector((store) => store.sliceReducer);
   let senderID = loginDetails.username;
 
+  console.log("myNUmberrrrrr", callData);
+
   console.log(
     "callData",
     callData ? receiverID.callData : groupMembers,
     uniqueId
   );
 
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log("herererrerererrere", added);
+      if (added) {
+        console.log("herererrerererrere");
+        sendChatMethod("Added New Member");
+      }
+    }, [navigation])
+  );
+
   useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      if (added) {
+        console.log("herererrerererrere");
+        sendChatMethod("Added New Member");
+      }
+    });
+
     gettingChatHistory();
     onHistoryReceived();
     __getUpdatedChatMessage();
+
+    return unsubscribe;
   }, []);
 
   const leaveChat = () => {
@@ -181,7 +224,7 @@ const UserChatsScreen = ({ navigation, route }) => {
     });
   };
 
-  const sendChatMethod = () => {
+  const sendChatMethod = (message) => {
     if (messageInput === "" || messageInput == null) {
       Alert.alert("Alert!", "Enter your message please...", [{ text: "Ok" }], {
         cancelable: false,
@@ -196,14 +239,14 @@ const UserChatsScreen = ({ navigation, route }) => {
       receiverID = omitSpecialCharacters(receiverID.callData);
 
       data = {
-        msg: messageInput,
+        msg: message,
         rid: receiverID,
         sid: senderID,
         type: "private",
       };
     } else {
       data = {
-        msg: messageInput,
+        msg: message,
         rid: uniqueId,
         sid: senderID,
         type: "group",
@@ -216,6 +259,32 @@ const UserChatsScreen = ({ navigation, route }) => {
     _sendChatMessage(data);
 
     onChangeMessageInput("");
+  };
+
+  const onInviteOptionSelect = (value) => {
+    // console.log('item_________:)', item)
+
+    if (value == 1) {
+      deleteChatHistory();
+      setGroupedChats([]);
+    }
+  };
+
+  const uploadFile = async () => {
+    try {
+      const result = await DocumentPicker.pick({
+        type: [DocumentPicker.types.images, DocumentPicker.types.video],
+      });
+      const { uri, type, name, size } = result;
+
+      console.log("uploaded fileeee", result);
+      uriToFile(uri);
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+      } else {
+        console.error("Failed to pick a file", err);
+      }
+    }
   };
 
   const renderItem = ({ item }) => {
@@ -296,6 +365,19 @@ const UserChatsScreen = ({ navigation, route }) => {
                 // textDecorationLine: "underline",
               }}
             > */}
+
+              {participants ? (
+                <Text
+                  style={{
+                    paddingHorizontal: 10,
+                    color: colors.white,
+                    marginTop: 5,
+                  }}
+                >
+                  {item.sid}
+                </Text>
+              ) : null}
+
               <Text style={textStyle}>
                 {msg}
                 {/* {typeof item.message==='string'?item.message:''} */}
@@ -365,7 +447,11 @@ const UserChatsScreen = ({ navigation, route }) => {
     <SafeAreaView>
       <TouchableOpacity
         onPress={() =>
-          groupName ? navigation.navigate("ParticipantsScreen") : null
+          groupName
+            ? navigation.navigate("ParticipantsScreen", {
+                participants: participants,
+              })
+            : null
         }
       >
         <View style={styles.toolBar}>
@@ -375,7 +461,7 @@ const UserChatsScreen = ({ navigation, route }) => {
 
           <View style={styles.nameContainer}>
             <Text style={[styles.textStyleToolbar, { fontWeight: "700" }]}>
-              {Name && callData ? (Name ? Name : callData) : groupName}
+              {Name || callData ? (Name ? Name : callData) : groupName}
             </Text>
             <Text style={styles.textStyleToolbar}>Last Seen</Text>
           </View>
@@ -383,23 +469,58 @@ const UserChatsScreen = ({ navigation, route }) => {
             <TouchableOpacity>
               <Image source={ic_chat_search} />
             </TouchableOpacity>
-            <TouchableOpacity
-              style={{ marginHorizontal: 25 }}
-              onPress={() => navigation.navigate("SelectScreen")}
-            >
-              <Image source={ic_small_plus} />
-            </TouchableOpacity>
-            <TouchableOpacity
+            {groupName ? (
+              <TouchableOpacity
+                style={{ marginHorizontal: 25, padding: 10 }}
+                onPress={() =>
+                  navigation.navigate("SelectScreen", {
+                    groupName: groupName,
+                    uniqueId: uniqueId,
+                    participants: participants,
+                  })
+                }
+              >
+                <Image source={ic_small_plus} />
+              </TouchableOpacity>
+            ) : (
+              <View style={{ marginHorizontal: 25, padding: 10 }}></View>
+            )}
+
+            {/* <TouchableOpacity
               onPress={() => {
                 deleteChatHistory();
                 // leaveChat();
               }}
             >
               <Image source={ic_menu} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+            <Menu
+              renderer={Popover}
+              rendererProps={{ placement: "bottom" }}
+              onSelect={(value) => onInviteOptionSelect(value)}
+            >
+              <MenuTrigger children={<Image source={ic_menu} />} />
+
+              <MenuOptions>
+                <MenuOption value={1}>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: colors.black,
+                      fontWeight: "bold",
+                      padding: 5,
+                    }}
+                  >
+                    {"Delete chat"}
+                  </Text>
+                </MenuOption>
+              </MenuOptions>
+            </Menu>
           </View>
         </View>
       </TouchableOpacity>
+
+      <TouchableOpacity>{/* <Image source={ic_menu} /> */}</TouchableOpacity>
 
       <ImageBackground source={ic_chat_bg}>
         {/* <View style={styles.dateBg}>
@@ -451,7 +572,10 @@ const UserChatsScreen = ({ navigation, route }) => {
               />
             </KeyboardAvoidingView>
 
-            <TouchableOpacity style={{ justifyContent: "center" }}>
+            <TouchableOpacity
+              style={{ justifyContent: "center" }}
+              onPress={uploadFile}
+            >
               <Image source={ic_chat_attach} />
             </TouchableOpacity>
             <TouchableOpacity
@@ -464,7 +588,7 @@ const UserChatsScreen = ({ navigation, route }) => {
           <TouchableOpacity
             style={styles.arrowStyle}
             onPress={() => {
-              sendChatMethod();
+              sendChatMethod(messageInput);
             }}
           >
             <Image

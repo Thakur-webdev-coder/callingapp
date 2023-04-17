@@ -90,4 +90,10 @@ export default StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+
+  headerComponent: {
+    flexDirection: "row",
+    // justifyContent: "space-around",
+    alignItems: "center",
+  },
 });
