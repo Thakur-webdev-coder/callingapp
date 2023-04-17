@@ -67,6 +67,7 @@ const UserChatsScreen = ({ navigation, route }) => {
   let tempArray = [];
 
   const { callData, Name, groupName, groupMembers, uniqueId } = route.params;
+  console.log('---route.params----',route.params);
   const {
     loginDetails = {},
     chatMessage = {},
@@ -362,7 +363,7 @@ const UserChatsScreen = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{flex:1}}>
       <TouchableOpacity
         onPress={() =>
           groupName ? navigation.navigate("ParticipantsScreen") : null
@@ -375,7 +376,7 @@ const UserChatsScreen = ({ navigation, route }) => {
 
           <View style={styles.nameContainer}>
             <Text style={[styles.textStyleToolbar, { fontWeight: "700" }]}>
-              {Name && callData ? (Name ? Name : callData) : groupName}
+              {Name || callData ? (Name ? Name : callData) : groupName}
             </Text>
             <Text style={styles.textStyleToolbar}>Last Seen</Text>
           </View>
@@ -401,7 +402,9 @@ const UserChatsScreen = ({ navigation, route }) => {
         </View>
       </TouchableOpacity>
 
-      <ImageBackground source={ic_chat_bg}>
+      <ImageBackground
+      style={{flex:1}}
+       source={ic_chat_bg}>
         {/* <View style={styles.dateBg}>
           <Text style={{ color: colors.black, fontWeight: "bold" }}>
             Thu , 12 Jan 2023
@@ -413,12 +416,12 @@ const UserChatsScreen = ({ navigation, route }) => {
             data={groupedChats}
             renderItem={renderItem}
             keyExtractor={(group) => group.timestamp}
-            style={{ height: hp(80) }}
+             style={{ flex:1}}
           />
         ) : (
           <View
             style={{
-              height: hp(80),
+              flex:1,
               justifyContent: "center",
               alignItems: "center",
             }}

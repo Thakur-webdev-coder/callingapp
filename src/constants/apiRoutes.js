@@ -18,7 +18,7 @@ let ApiRoutes = {
   API_REGISTERED_NUMBER: "join_video/call_phone_number.php",
   SYNC_CONTACTS:"billing_auto_register/sync_contacts.php",
   API_TRANSFER_HISTORY: "billing_balance_transfer_balance/balance_transfer_report.php",
-
+  API_RATES_NEW: "billing_rates/get_rates_new.php"
 };
 
 export default ApiRoutes;
