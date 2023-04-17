@@ -275,10 +275,10 @@ const UserChatsScreen = ({ navigation, route }) => {
       const result = await DocumentPicker.pick({
         type: [DocumentPicker.types.images, DocumentPicker.types.video],
       });
-      const { uri, type, name, size } = result;
+      // const { uri, type, name, size } = result;
 
-      console.log("uploaded fileeee", result);
-      uriToFile(uri);
+      // console.log("uploaded fileeee", result);
+      // uriToFile(uri);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
       } else {
