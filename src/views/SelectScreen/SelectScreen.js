@@ -17,55 +17,120 @@ import { Text } from "react-native";
 import colors from "../../../assets/colors";
 import LinearGradient from "react-native-linear-gradient";
 import { ic_back, ic_contact_avatar } from "../../routes/imageRoutes";
-const SelectScreen = ({ navigation }) => {
-  const chatData = [
-    {
-      name: "Banoj Tripathy",
-      number: "918800810156",
-    },
-    {
-      name: "Banoj Tripathy",
-      number: "918800810156",
-    },
-    {
-      name: "Banoj Tripathy",
-      number: "918800810156",
-    },
-    {
-      name: "Banoj Tripathy",
-      number: "918800810156",
-    },
-  ];
-
-  const renderItem = ({ item }) => (
-    <TouchableOpacity
-      onPress={() => {
-        navigation.navigate("UserChatsScreen");
-      }}
-    >
-      <View style={styles.flatListStyle}>
-        <Image style={styles.imgstyle} source={ic_contact_avatar} />
-
-        <View style={styles.nameTextColoumn}>
-          <Text style={styles.nameTxtStyle}>{item?.name}</Text>
-          <Text numberOfLines={1} style={styles.msgTxtStyle}>
-            {item?.number}
-          </Text>
-        </View>
-      </View>
-      <View style={styles.horizontalLine}></View>
-    </TouchableOpacity>
+import { useSelector } from "react-redux";
+import participants from "../../redux/participants";
+import { _addGroup } from "../../utils/socketManager";
+import { Show_Toast } from "../../utils/toast";
+import { omitSpecialCharacters } from "../../utils/commonUtils";
+const SelectScreen = ({ navigation, route }) => {
+  const { kokoaContacts = [], loginDetails = {} } = useSelector(
+    (store) => store.sliceReducer
   );
+
+  let senderID = loginDetails.username;
+
+  const { groupName, uniqueId, participants } = route.params;
+
+  const handleAddNumber = (selectedNumber) => {
+    if (!myArray.includes(selectedNumber)) {
+      setMyArray([...myArray, selectedNumber]);
+    }
+  };
+
+  const navigateToGroupChat = (item) => {
+    const newParticipants = participants.concat(item);
+    const data = {
+      id: senderID,
+      group_id: uniqueId,
+      group_name: groupName,
+      participants: newParticipants,
+    };
+
+    console.log("datattatatat", data);
+
+    _addGroup(data);
+
+    navigation.navigate("UserChatsScreen", {
+      added: true,
+      groupName: groupName,
+      participants: newParticipants,
+      uniqueId: uniqueId,
+    });
+  };
+
+  const renderItem = ({ item }) => {
+    return item?.phoneNumbers[0]?.number !== senderID ? (
+      <TouchableOpacity
+        onPress={() => {
+          participants.includes(
+            omitSpecialCharacters(item?.phoneNumbers[0]?.number)
+          )
+            ? Show_Toast("Already a Member of this group")
+            : navigateToGroupChat(
+                omitSpecialCharacters(item?.phoneNumbers[0]?.number)
+              );
+        }}
+      >
+        <View style={styles.flatListStyle}>
+          <Image
+            style={styles.imgstyle}
+            source={
+              item?.hasThumbnail
+                ? { uri: item?.thumbnailPath }
+                : ic_contact_avatar
+            }
+          />
+
+          <View style={styles.nameTextColoumn}>
+            <Text style={styles.nameTxtStyle}>
+              {" "}
+              {item?.givenName + " " + item?.familyName}
+            </Text>
+            <Text numberOfLines={1} style={styles.msgTxtStyle}>
+              {item?.phoneNumbers[0]?.number}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.horizontalLine}></View>
+      </TouchableOpacity>
+    ) : null;
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <CommonHeader headerText={"Start Chat"} />
-      <FlatList
+      <CommonHeader headerText={"Add Members"} />
+      {kokoaContacts.length > 0 ? (
+        <FlatList
+          //style={{ marginTop: hp(2) }}
+          data={kokoaContacts}
+          renderItem={renderItem}
+          showsVerticalScrollIndicator={false}
+        />
+      ) : (
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            flex: 1,
+          }}
+        >
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontSize: 20,
+              color: colors.black,
+            }}
+          >
+            No KokoaFone Users Found!
+          </Text>
+        </View>
+      )}
+      {/* <FlatList
         //style={{ marginTop: hp(2) }}
-        data={chatData}
+        data={kokoaContacts}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
-      />
+      /> */}
     </SafeAreaView>
   );
 };

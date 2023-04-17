@@ -63,7 +63,7 @@ const StartChatScreen = ({ navigation }) => {
 
     navigation.navigate("UserChatsScreen", {
       groupName: state.voucherNum,
-      groupMembers: allParticipant,
+      participants: allParticipant,
       uniqueId: uniqueId,
     });
   };
