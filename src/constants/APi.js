@@ -71,6 +71,22 @@ export const hitCallRatesApi = () => {
     url: ApiRoutes.API_RATES,
   });
 };
+// export const hitCallRatesNewApi = () => {
+//   return apiClient({
+//     baseURL: ApiRoutes.BASE_URL,
+//     method: "GET",
+//     url: ApiRoutes.API_RATES_NEW,
+//   });
+// };
+export const hitCallRatesNewApi = (payload) => {
+  console.log('-----paylod',payload);
+  return apiClient({
+    baseURL: ApiRoutes.BASE_URL,
+    method: "POST",
+    url: ApiRoutes.API_RATES_NEW,
+    data: payload,
+  });
+};
 
 export const hitApiAssignDid = (username) => {
   return apiClient({
@@ -79,6 +95,7 @@ export const hitApiAssignDid = (username) => {
     params: { pr_login: username },
   });
 };
+
 
 export const hitCreditTransferApi = (payload) => {
   return apiClient({
