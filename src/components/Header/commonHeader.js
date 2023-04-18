@@ -2,17 +2,19 @@ import React from "react";
 import { Image, TouchableOpacity, View } from "react-native";
 import colors from "../../../assets/colors";
 import { ic_back } from "../../routes/imageRoutes";
-import CustomImage from "../CustomImage";
 import CustomText from "../CustomText";
 import styles from "./styles";
 import { useNavigation } from "@react-navigation/native";
+import CustomImage from "../CustomImage";
 
-const CommonHeader = ({ headerText, paddingHorizontal }) => {
-  const navigation = useNavigation();
+const CommonHeader = ({ headerText, paddingHorizontal,onPress }) => {
   return (
     <View style={[styles.toolBar, { paddingHorizontal: paddingHorizontal }]}>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Image style={styles.imgStyle} source={ic_back} />
+      <TouchableOpacity onPress={onPress}>
+        <CustomImage
+        imgSrc={ic_back}
+        padding={10}
+         />
       </TouchableOpacity>
       <CustomText
         fontWeight={"bold"}

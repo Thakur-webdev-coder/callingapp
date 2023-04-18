@@ -9,7 +9,7 @@ import { hitGetCallDetailsApi } from "../../constants/APi";
 import { useSelector } from "react-redux";
 import Loading from "react-native-whc-loading";
 
-const CallReportsScreen = () => {
+const CallReportsScreen = ({navigation}) => {
   const [state, setState] = useState({
     callDetailRes: "",
     isLoading: false,
@@ -79,6 +79,7 @@ const CallReportsScreen = () => {
       <CommonHeader
         headerText={"Call Details Reports"}
         paddingHorizontal={20}
+        onPress={() => navigation.goBack()}
       />
 
       <View style={styles.listContainer}>

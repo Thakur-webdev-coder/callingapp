@@ -80,8 +80,7 @@ const Contacts = ({ navigation }) => {
     });
       // syncContacts();
       const blurListner = navigation.addListener("blur", () => {
-        console.log("---inblurlistner---");
-        if (state.contacts.length > 0) {
+        if (state?.contacts?.length >0) {
           setSearchTxt("");
           // syncContacts();
           filterContacts("");

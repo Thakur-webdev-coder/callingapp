@@ -102,6 +102,7 @@ export default StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: 10,
     padding: hp(2),
+    
   },
   logOutModalBox: {
     backgroundColor: colors.white,

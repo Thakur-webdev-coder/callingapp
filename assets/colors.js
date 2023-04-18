@@ -48,5 +48,6 @@ export default {
   otpBgColor: "#D9D9D9",
   lightBlack: "#010101",
   disableColor: "#FBFBFB",
-  darkGray:'#888888'
+  darkGray:'#888888',
+  modalcolor:'#f2f3f4'
 };
