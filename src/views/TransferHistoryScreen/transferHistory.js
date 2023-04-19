@@ -9,7 +9,7 @@ import { hitGetCallDetailsApi, hitTransferHistoryApi } from "../../constants/APi
 import { useSelector } from "react-redux";
 import Loading from "react-native-whc-loading";
 
-const TransferHistory = () => {
+const TransferHistory = ({navigation}) => {
   const [state, setState] = useState({
     callDetailRes: "",
     isLoading: false,
@@ -102,6 +102,7 @@ const TransferHistory = () => {
       <CommonHeader
         headerText={"Transfer History "}
         paddingHorizontal={20}
+        onPress={() => navigation.goBack()}
       />
 
       <View style={styles.listContainer}>

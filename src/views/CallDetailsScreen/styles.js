@@ -68,7 +68,18 @@ export default StyleSheet.create({
   arrowRatesBox: {
     flexDirection: 'row',
     alignItems: 'center',
-
+  },
+  ratesModalStyle: {
+     backgroundColor: colors.modalcolor,
+    borderRadius: 10,
+    padding: hp(2),
+    paddingTop:hp(3),
+     marginHorizontal:wp(3),
+     marginTop:hp(50)
+  },
+  ratesTxtStyle: {
+    flexDirection:'row',
+    // justifyContent:'space-between'
   }
 
 });

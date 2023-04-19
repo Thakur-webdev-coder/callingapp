@@ -14,7 +14,7 @@ import colors from "../../../assets/colors";
 import styles from "./styles";
 import { CommonHeader } from "../../components";
 
-const InviteScreen = () => {
+const InviteScreen = ({navigation}) => {
   const shareLink = async () => {
     try {
       const result = await Share.share({
@@ -32,7 +32,11 @@ const InviteScreen = () => {
   };
   return (
     <SafeAreaView style={styles.wrapper}>
-      <CommonHeader headerText={"Invite Friend"} paddingHorizontal={18} />
+      <CommonHeader 
+      headerText={"Invite Friend"}
+       paddingHorizontal={18}
+       onPress={() => navigation.goBack()}
+        />
       <CustomImage imgSrc={ic_invite} alignSelf={"center"} marginTop={hp(15)} />
       <CustomText
         text={"Invite your friend"}
