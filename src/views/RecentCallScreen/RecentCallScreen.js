@@ -8,15 +8,12 @@ import {
   View,
 } from "react-native";
 import {
-  ic_user,
   ic_recent,
   ic_contact_avatar,
   ic_recentcall_small,
 } from "../../routes/imageRoutes";
 import styles from "./styles";
 import AppStyle from "../../components/AppStyle";
-import LinearGradient from "react-native-linear-gradient";
-import colors from "../../../assets/colors";
 import { CommonHeader } from "../../components";
 import { useSelector } from "react-redux";
 import { hitGetCallDetailsApi } from "../../constants/APi";
@@ -94,7 +91,9 @@ const RecentCall = ({ navigation }) => {
   return (
     <SafeAreaView style={AppStyle.wrapper}>
       <View style={AppStyle.secondWrapper}>
-        <CommonHeader headerText={"Recent Call"} />
+        <CommonHeader 
+        headerText={"Recent Call"}
+        onPress={() => navigation.goBack()} />
         <FlatList
           style={styles.containerStyle}
           data={state?.callDetailRes}

@@ -28,7 +28,11 @@ const BuyCredit = ({ navigation }) => {
   };
   return (
     <SafeAreaView style={AppStyle.wrapper}>
-      <CommonHeader paddingHorizontal={wp(5)} headerText={"Buy Credit"} />
+      <CommonHeader 
+      paddingHorizontal={wp(5)}
+       headerText={"Buy Credit"}
+       onPress={() => navigation.goBack()}
+        />
 
       <WebView
         style={buyCreditStyles.mainViewStyle}

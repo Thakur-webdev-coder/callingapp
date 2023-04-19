@@ -119,7 +119,9 @@ const LiveChat = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <CommonHeader headerText={"Chat"} />
+      <CommonHeader 
+      headerText={"Chat"}
+      onPress={() => navigation.goBack()} />
       {chatList.length > 0 ? (
         <FlatList
           //style={{ marginTop: hp(2) }}

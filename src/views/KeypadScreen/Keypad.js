@@ -133,7 +133,9 @@ console.log('phone-----',phone);
       style={[AppStyle.wrapper, { backgroundColor: colors.offWhite }]}
     >
       <View style={styles.secondWrapper}>
-        <CommonHeader headerText={"Dialpad"} />
+        <CommonHeader 
+        headerText={"Dialpad"} 
+        onPress={() => navigation.goBack()}/>
 
         <View style={styles.registerBox}>
           <CustomText
