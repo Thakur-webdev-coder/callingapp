@@ -54,11 +54,17 @@ import {
   saveBalanceData,
   saveEncrLoginDetails,
   saveLoginDetails,
+  saveNotificationData,
 } from "../../redux/reducer";
 import { CommonActions, useIsFocused } from "@react-navigation/native";
 import CommonHeader from "../../components/Header/commonHeader";
 import { removeLocalParticipant } from "../../redux/participants";
 import { navigateScreen } from "../../utils/notificationHandler";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  getDataFromAsyncStorage,
+  saveDataToAsyncStorage,
+} from "../../utils/commonUtils";
 
 let myBalanceData = null;
 let usernameEncryptedCode = null;
@@ -79,6 +85,7 @@ const Home = ({ navigation }) => {
   const { loginDetails = {}, balanceDetail = {} } = useSelector(
     (store) => store.sliceReducer
   );
+
   const { conference } = useSelector((state) => state);
 
   const { username, password, did } = loginDetails;
@@ -86,6 +93,17 @@ const Home = ({ navigation }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    // const notificationData = AsyncStorage.getItem("notificationData").then(
+    //   (data) => console.log("datatatata", data)
+    // );
+    // console.log("notificationDataaaaa", notificationData);
+    // if (notificationData !== null) {
+    //   navigation.navigate("IncomingScreen", {
+    //     callData: notificationData,
+    //   });
+
+    //   // saveDataToAsyncStorage("notificationData", null);
+    // }
     navigateScreen(navigation);
     hitBalanceAPi();
   }, []);
@@ -200,7 +218,7 @@ const Home = ({ navigation }) => {
         break;
 
       case "Transfer History":
-          navigation.navigate("TransferHistory");
+        navigation.navigate("TransferHistory");
         break;
 
       case "Call Details Report":
@@ -240,7 +258,7 @@ const Home = ({ navigation }) => {
       case "Voucher Recharge":
         setVoucherModal(true);
         break;
-        
+
       case "Logout":
         LogoutMethod();
         break;
