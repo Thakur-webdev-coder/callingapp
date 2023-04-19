@@ -137,8 +137,8 @@ export default StyleSheet.create({
     backgroundColor: colors.secondary,
     justifyContent: "center",
     position: "absolute",
-    bottom: 20,
-    right: 20,
+    bottom: 10,
+    right: 10,
     margin: 20,
   },
 });

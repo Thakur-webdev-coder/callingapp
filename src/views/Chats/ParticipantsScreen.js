@@ -33,25 +33,42 @@ const ParticipantsScreen = ({ navigation, route }) => {
     console.log("nammemmememem", kokoaContacts.map(participants));
   };
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity
-      onPress={() => {
-        navigation.navigate("UserChatsScreen");
-      }}
-    >
-      <View style={styles.flatListStyle}>
-        <Image style={styles.imgstyle} source={ic_contact_avatar} />
+  const renderItem = ({ item }) => {
+    const contact = kokoaContacts.find(
+      (myItem) =>
+        myItem?.phoneNumbers[0]?.number.replace(/[^0-9]/g, "") === item
+    );
 
-        <View style={styles.nameTextColoumn}>
-          {/* <Text style={styles.nameTxtStyle}>{item?.name}</Text> */}
-          <Text numberOfLines={1} style={styles.msgTxtStyle}>
-            {item}
-          </Text>
+    return (
+      <View>
+        <View style={styles.flatListStyle}>
+          <Image
+            style={styles.imgstyle}
+            source={
+              contact
+                ? contact?.hasThumbnail
+                  ? { uri: contact?.thumbnailPath }
+                  : ic_contact_avatar
+                : ic_contact_avatar
+            }
+          />
+
+          <View style={styles.nameTextColoumn}>
+            {contact ? (
+              <Text style={styles.nameTxtStyle}>
+                {contact?.givenName + " " + contact?.familyName}
+              </Text>
+            ) : null}
+
+            <Text numberOfLines={1} style={styles.msgTxtStyle}>
+              {senderID === item ? "You" : item}
+            </Text>
+          </View>
         </View>
+        <View style={styles.horizontalLine}></View>
       </View>
-      <View style={styles.horizontalLine}></View>
-    </TouchableOpacity>
-  );
+    );
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

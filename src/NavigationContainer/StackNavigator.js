@@ -10,7 +10,7 @@ import InviteScreen from "../views/InviteScreen/InviteScreen";
 import Directory from "../views/SpecialServices/Directory";
 import CallDetailsScreen from "../views/CallDetailsScreen/CallDetailsScreen";
 import UserChatsScreen from "../views/UserChatsScreen/UserChatsScreen";
- import StartChatScreen from "../views/startChatScreen/startChatScreen";
+import StartChatScreen from "../views/startChatScreen/startChatScreen";
 //import StartChatScreen from "../views/StartChatScreen/StartChatScreen";
 
 import SelectScreen from "../views/SelectScreen/SelectScreen";
@@ -22,6 +22,7 @@ import CustomAlert from "../utils/CustomAlertMessage";
 import IncomingScreen from "../views/IncomingCallScreen/IncomingScreen";
 import TransferHistory from "../views/TransferHistoryScreen/transferHistory";
 import ParticipantsScreen from "../views/Chats/ParticipantsScreen";
+import CreateGroup from "../views/Chats/CreateGroupScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -65,6 +66,7 @@ const StackNavigator = () => {
         name={"ParticipantsScreen"}
         component={ParticipantsScreen}
       />
+      <Stack.Screen name={"CreateGroup"} component={CreateGroup} />
     </Stack.Navigator>
   );
 };

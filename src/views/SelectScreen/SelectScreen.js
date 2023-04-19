@@ -15,10 +15,8 @@ import {
 } from "react-native-responsive-screen";
 import { Text } from "react-native";
 import colors from "../../../assets/colors";
-import LinearGradient from "react-native-linear-gradient";
 import { ic_back, ic_contact_avatar } from "../../routes/imageRoutes";
 import { useSelector } from "react-redux";
-import participants from "../../redux/participants";
 import { _addGroup } from "../../utils/socketManager";
 import { Show_Toast } from "../../utils/toast";
 import { omitSpecialCharacters } from "../../utils/commonUtils";

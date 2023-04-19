@@ -10,7 +10,6 @@ import {
   FlatList,
   Alert,
   KeyboardAvoidingView,
-  ScrollView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import styles from "./styles";
@@ -34,6 +33,7 @@ import {
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 import {
+  _addGroup,
   _deleteChat,
   _getMessageList,
   _leaveGroup,
@@ -41,7 +41,6 @@ import {
   _sendChatRoomDetail,
   _sendloadMoreChatData,
   getSocket,
-  privateChatID,
 } from "../../utils/socketManager";
 import { useSelector } from "react-redux";
 import {
@@ -57,15 +56,12 @@ import {
   MenuTrigger,
   renderers,
 } from "react-native-popup-menu";
-import { useFocusEffect } from "@react-navigation/native";
 
 const { Popover } = renderers;
 
 const UserChatsScreen = ({ navigation, route }) => {
   const [messageInput, onChangeMessageInput] = useState("");
   const [groupedChats, setGroupedChats] = useState([]);
-  const [myVar, setMyVar] = useState(null);
-  const [isDeleted, setDeleted] = useState(false);
 
   const socket = getSocket();
 
@@ -78,8 +74,6 @@ const UserChatsScreen = ({ navigation, route }) => {
 
   let receiverID = route.params;
 
-  let tempArray = [];
-
   const {
     callData,
     Name,
@@ -88,15 +82,25 @@ const UserChatsScreen = ({ navigation, route }) => {
     uniqueId,
     participants,
     added,
+    created,
   } = route.params;
-  const {
-    loginDetails = {},
-    chatMessage = {},
-    chatRoom,
-  } = useSelector((store) => store.sliceReducer);
+  const { kokoaContacts = [], loginDetails = {} } = useSelector(
+    (store) => store.sliceReducer
+  );
   let senderID = loginDetails.username;
 
-  console.log("myNUmberrrrrr", callData);
+  console.log("myNUmberrrrrr", added);
+
+  useEffect(() => {
+    if (added) {
+      console.log("herererrerererrere");
+      sendChatMethod("Added New Member");
+    }
+
+    if (created) {
+      sendChatMethod("Craeted New Group");
+    }
+  }, [route]);
 
   console.log(
     "callData",
@@ -104,29 +108,10 @@ const UserChatsScreen = ({ navigation, route }) => {
     uniqueId
   );
 
-  useFocusEffect(
-    React.useCallback(() => {
-      console.log("herererrerererrere", added);
-      if (added) {
-        console.log("herererrerererrere");
-        sendChatMethod("Added New Member");
-      }
-    }, [navigation])
-  );
-
   useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      if (added) {
-        console.log("herererrerererrere");
-        sendChatMethod("Added New Member");
-      }
-    });
-
     gettingChatHistory();
     onHistoryReceived();
     __getUpdatedChatMessage();
-
-    return unsubscribe;
   }, []);
 
   const leaveChat = () => {
@@ -224,12 +209,37 @@ const UserChatsScreen = ({ navigation, route }) => {
     });
   };
 
+  const leaveGroup = () => {
+    const allParticipant = participants.filter((item) => item !== senderID);
+
+    console.log("allParticipant", uniqueId, allParticipant);
+    const data = {
+      id: senderID,
+      group_id: uniqueId,
+      group_name: groupName,
+      participants: allParticipant,
+    };
+
+    console.log("datattatatat", data);
+
+    _addGroup(data);
+
+    sendChatMethod(" Member leaved group");
+  };
+
   const sendChatMethod = (message) => {
-    if (messageInput === "" || messageInput == null) {
-      Alert.alert("Alert!", "Enter your message please...", [{ text: "Ok" }], {
-        cancelable: false,
-      });
-      return;
+    if (!added) {
+      if (message === "" || message == null) {
+        Alert.alert(
+          "Alert!",
+          "Enter your message please...",
+          [{ text: "Ok" }],
+          {
+            cancelable: false,
+          }
+        );
+        return;
+      }
     }
 
     let data = null;
@@ -265,8 +275,14 @@ const UserChatsScreen = ({ navigation, route }) => {
     // console.log('item_________:)', item)
 
     if (value == 1) {
-      deleteChatHistory();
-      setGroupedChats([]);
+      if (uniqueId) {
+        leaveGroup();
+      } else {
+        deleteChatHistory();
+        setGroupedChats([]);
+        gettingChatHistory();
+        onHistoryReceived();
+      }
     }
   };
 
@@ -313,6 +329,11 @@ const UserChatsScreen = ({ navigation, route }) => {
 
   const renderNewItem = ({ item }) => {
     const { msg, timestamp } = item;
+    const contact = kokoaContacts.find(
+      (myItem) =>
+        myItem?.phoneNumbers[0]?.number.replace(/[^0-9]/g, "") === item?.sid
+    );
+
     // console.log("item------>>>>>>>>>>>>>>>>>>>>>>>>&&&&&&&&&&&&&&&", item);
     var msgStyle;
     var textStyle;
@@ -367,15 +388,27 @@ const UserChatsScreen = ({ navigation, route }) => {
             > */}
 
               {participants ? (
-                <Text
-                  style={{
-                    paddingHorizontal: 10,
-                    color: colors.white,
-                    marginTop: 5,
-                  }}
-                >
-                  {item.sid}
-                </Text>
+                contact ? (
+                  <Text
+                    style={{
+                      paddingHorizontal: 10,
+                      color: colors.white,
+                      marginTop: 5,
+                    }}
+                  >
+                    {contact?.givenName + " " + contact?.familyName}
+                  </Text>
+                ) : (
+                  <Text
+                    style={{
+                      paddingHorizontal: 10,
+                      color: colors.white,
+                      marginTop: 5,
+                    }}
+                  >
+                    {item.sid}
+                  </Text>
+                )
               ) : null}
 
               <Text style={textStyle}>
@@ -444,7 +477,7 @@ const UserChatsScreen = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={{flex:1}}>
+    <SafeAreaView style={{ flex: 1 }}>
       <TouchableOpacity
         onPress={() =>
           groupName
@@ -463,7 +496,6 @@ const UserChatsScreen = ({ navigation, route }) => {
             <Text style={[styles.textStyleToolbar, { fontWeight: "700" }]}>
               {Name || callData ? (Name ? Name : callData) : groupName}
             </Text>
-            <Text style={styles.textStyleToolbar}>Last Seen</Text>
           </View>
           <View style={styles.headerComponent}>
             <TouchableOpacity>
@@ -511,7 +543,7 @@ const UserChatsScreen = ({ navigation, route }) => {
                       padding: 5,
                     }}
                   >
-                    {"Delete chat"}
+                    {uniqueId ? "Leave Group" : "Delete chat"}
                   </Text>
                 </MenuOption>
               </MenuOptions>
@@ -520,9 +552,7 @@ const UserChatsScreen = ({ navigation, route }) => {
         </View>
       </TouchableOpacity>
 
-      <ImageBackground
-      style={{flex:1}}
-       source={ic_chat_bg}>
+      <ImageBackground style={{ flex: 1 }} source={ic_chat_bg}>
         {/* <View style={styles.dateBg}>
           <Text style={{ color: colors.black, fontWeight: "bold" }}>
             Thu , 12 Jan 2023
@@ -534,12 +564,12 @@ const UserChatsScreen = ({ navigation, route }) => {
             data={groupedChats}
             renderItem={renderItem}
             keyExtractor={(group) => group.timestamp}
-             style={{ flex:1}}
+            style={{ flex: 1 }}
           />
         ) : (
           <View
             style={{
-              flex:1,
+              flex: 1,
               justifyContent: "center",
               alignItems: "center",
             }}
