@@ -14,7 +14,13 @@ import styles from "./styles";
 import { Text } from "react-native";
 import colors from "../../../assets/colors";
 import LinearGradient from "react-native-linear-gradient";
-import { ic_back, ic_contact_avatar, ic_tick } from "../../routes/imageRoutes";
+import {
+  ic_AddGroup,
+  ic_add,
+  ic_back,
+  ic_contact_avatar,
+  ic_tick,
+} from "../../routes/imageRoutes";
 import { hitGetRegisteredNumberApi } from "../../constants/APi";
 import { useSelector } from "react-redux";
 import CustomText from "../../components/CustomText";
@@ -36,64 +42,15 @@ const StartChatScreen = ({ navigation }) => {
 
   const socket = getSocket();
 
-  const [selectedItems, setSelectedItems] = useState([]);
-
-  const handleLongPress = (item) => {
-    console.log("itemmmm", item);
-    setSelectedItems([...selectedItems, item]);
-  };
-
-  const navigateToGroupChat = () => {
-    const uniqueId = generateRandomId();
-
-    const allParticipant = selectedItems
-      .map((item) => omitSpecialCharacters(item?.phoneNumbers[0]?.number))
-      .concat(senderID);
-    console.log("allParticipant", uniqueId, allParticipant);
-    const data = {
-      id: senderID,
-      group_id: uniqueId,
-      group_name: state.voucherNum,
-      participants: allParticipant,
-    };
-
-    console.log("datattatatat", data);
-
-    _addGroup(data);
-
-    navigation.navigate("UserChatsScreen", {
-      groupName: state.voucherNum,
-      participants: allParticipant,
-      uniqueId: uniqueId,
-    });
-  };
-
-  const [state, setState] = useState({
-    voucherNum: "",
-  });
-
-  const [voucherModal, setVoucherModal] = useState(false);
-
-  console.log("voucherMoadlalll", voucherModal);
-
   const renderItem = ({ item }) => {
-    const isSelected = selectedItems.includes(item);
-
     return item?.phoneNumbers[0]?.number !== senderID ? (
       <TouchableOpacity
         onPress={() => {
-          selectedItems.length > 0
-            ? isSelected
-              ? setSelectedItems(
-                  selectedItems.filter((selectedItem) => selectedItem !== item)
-                )
-              : handleLongPress(item)
-            : navigation.navigate("UserChatsScreen", {
-                Name: item?.givenName + " " + item?.familyName,
-                callData: item?.phoneNumbers[0]?.number,
-              });
+          navigation.navigate("UserChatsScreen", {
+            Name: item?.givenName + " " + item?.familyName,
+            callData: item?.phoneNumbers[0]?.number,
+          });
         }}
-        onLongPress={() => handleLongPress(item)}
       >
         <View style={styles.flatListStyle}>
           <View style={styles.kokaImgBox}>
@@ -116,9 +73,6 @@ const StartChatScreen = ({ navigation }) => {
               {item?.phoneNumbers[0]?.number}
             </Text>
           </View>
-          {isSelected ? (
-            <Image source={ic_tick} style={{ alignSelf: "center" }} />
-          ) : null}
         </View>
       </TouchableOpacity>
     ) : null;
@@ -126,41 +80,18 @@ const StartChatScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      {/* <CommonHeader headerText={"Start Chat"} /> */}
-
       <View style={styles.toolBar}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image source={ic_back} />
         </TouchableOpacity>
 
-        {/* {!state?.search ? <View style={styles.nameContainer}>
-          <Text style={styles.textStyleToolbar}>Contacts</Text>
-        </View> : */}
         <Text style={{ color: colors.white, fontWeight: "bold", fontSize: 20 }}>
           Start Chat
         </Text>
-        {/* } */}
-
-        {selectedItems.length > 0 ? (
-          <TouchableOpacity
-            // onPress={() =>
-            //   navigation.navigate("UserChatsScreen", {
-            //     Name:  selectedItems.map((item) => item?.givenName + " " + item?.familyName),
-            //     callData:selectedItems.map((item) => item?.phoneNumbers[0]?.number)
-            //   })
-            // }
-
-            onPress={() => setVoucherModal(true)}
-          >
-            <Text style={{ color: colors.white }}>Next</Text>
-          </TouchableOpacity>
-        ) : (
-          <View></View>
-        )}
+        <View></View>
       </View>
       {kokoaContacts.length > 0 ? (
         <FlatList
-          //style={{ marginTop: hp(2) }}
           data={kokoaContacts}
           renderItem={renderItem}
           showsVerticalScrollIndicator={false}
@@ -184,49 +115,20 @@ const StartChatScreen = ({ navigation }) => {
           </Text>
         </View>
       )}
-      <Modal
-        animationIn="slideInUp"
-        animationOut="slideOutDown"
-        backdropColor={colors.white}
-        transparent={true}
-        visible={voucherModal}
+
+      <TouchableOpacity
+        style={styles.newBtnStyle}
+        onPress={() => navigation.navigate("CreateGroup")}
       >
-        <View style={styles.voucherModalStyle}>
-          <CustomText
-            text={"Create New Group"}
-            textSize={20}
-            fontWeight={"bold"}
-            textColor={colors.appColor}
-          />
-          <CustomText text={"Enter Group Name"} textColor={colors.appColor} />
-          <TextInput
-            style={styles.textInputStyle}
-            //placeholder="Search Destination"
-            placeholderTextColor={colors.appColor}
-            onChangeText={(txt) => setState({ voucherNum: txt })}
-            maxLength={30}
-          />
-          <View style={styles.btnStyle}>
-            <TouchableOpacity onPress={() => setVoucherModal(false)}>
-              <CustomText
-                text={"Cancel"}
-                textSize={16}
-                fontWeight={"600"}
-                textColor={colors.dodgeBlue}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={navigateToGroupChat}>
-              <CustomText
-                text={"Create"}
-                textSize={16}
-                fontWeight={"600"}
-                textColor={colors.dodgeBlue}
-                marginLeft={wp(10)}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+        <Image
+          style={{
+            alignSelf: "center",
+            height: 30,
+            width: 30,
+          }}
+          source={ic_AddGroup}
+        />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
