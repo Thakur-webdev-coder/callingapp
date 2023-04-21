@@ -28,6 +28,9 @@ const sliceReducer = createSlice({
     saveKokoaContacts: (state, action) => {
       state.kokoaContacts = action.payload;
     },
+    saveNotificationData: (state, action) => {
+      state.notificationData = action.payload;
+    },
 
     // chat
 
@@ -52,5 +55,6 @@ export const {
   setChatRoom,
   saveContacts,
   saveKokoaContacts,
+  saveNotificationData,
 } = sliceReducer.actions;
 export default sliceReducer.reducer;

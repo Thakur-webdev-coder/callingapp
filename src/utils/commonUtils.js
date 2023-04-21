@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import moment from "moment";
 
 export function showErrorMessage(Message) {
@@ -104,3 +105,21 @@ export async function uriToFile(uri) {
     console.error(error);
   }
 }
+
+export const saveDataToAsyncStorage = async (key, value) => {
+  try {
+    AsyncStorage.setItem(key, value);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getDataFromAsyncStorage = async (key) => {
+  try {
+    AsyncStorage.getItem(key).then((data) => console.log(data, "notiiii"));
+    return;
+    return jsonValue != null ? JSON.parse(jsonValue) : null;
+  } catch (error) {
+    console.log("eroorororor", error);
+  }
+};

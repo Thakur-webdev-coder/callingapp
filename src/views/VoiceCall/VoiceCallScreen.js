@@ -4,6 +4,7 @@ import {
   BackHandler,
   Image,
   SafeAreaView,
+  Text,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -52,6 +53,7 @@ import { Show_Toast } from "../../utils/toast";
 import InCallManager from "react-native-incall-manager";
 import colors from "../../../assets/colors";
 import { generateRandomString, secondsToHMS } from "../../utils/commonUtils";
+import Loading from "react-native-whc-loading";
 
 let roomId = null;
 
@@ -64,6 +66,7 @@ const CallScreen = ({ navigation, route }) => {
   const [largeVideoId, setLargeVideoId] = useState(
     participants.sortedRemoteParticipants[0] || ""
   );
+  const [isLoading, setIsLoading] = useState(false);
 
   console.log("getRemoteParticipants", participants);
 
@@ -73,6 +76,8 @@ const CallScreen = ({ navigation, route }) => {
 
   const { loginDetails = {} } = useSelector((store) => store.sliceReducer);
   const { username } = loginDetails;
+
+  console.log("participantsss", participants);
 
   const dispatch = useDispatch();
   var largeVideoTrack = getTrackByMediaTypeAndParticipant(
@@ -117,6 +122,14 @@ const CallScreen = ({ navigation, route }) => {
     if (participants.sortedRemoteParticipants[0]) {
       setLargeVideoId(participants.sortedRemoteParticipants[0]);
       setSmallVideoId(participants.local.id);
+    }
+
+    if (participants.sortedRemoteParticipants[0] && !voiceCall) {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 6000);
+    } else {
+      setIsLoading(true);
     }
 
     return () => {
@@ -316,6 +329,24 @@ const CallScreen = ({ navigation, route }) => {
               mirror={largeVideoTrack?.mirror}
               streamURL={largeVideoTrack?.jitsiTrack?.stream.toURL()}
             />
+
+            {isLoading ? (
+              <Text
+                style={{
+                  color: colors.white,
+                  flex: 1,
+                  alignSelf: "center",
+                  justifyContent: "center",
+                  fontSize: 20,
+                  fontWeight: "bold",
+                  position: "absolute",
+                  top: hp(40),
+                  bottom: hp(40),
+                }}
+              >
+                Connecting
+              </Text>
+            ) : null}
 
             {participants.sortedRemoteParticipants.length > 0 ? (
               <TouchableOpacity

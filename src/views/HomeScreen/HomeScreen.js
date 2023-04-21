@@ -43,6 +43,7 @@ import CustomText from "../../components/CustomText";
 import Modal from "react-native-modal";
 import { Show_Toast } from "../../utils/toast";
 import { useDispatch, useSelector } from "react-redux";
+import InCallManager from "react-native-incall-manager";
 
 import {
   hitCreditTransferApi,
@@ -54,11 +55,17 @@ import {
   saveBalanceData,
   saveEncrLoginDetails,
   saveLoginDetails,
+  saveNotificationData,
 } from "../../redux/reducer";
 import { CommonActions, useIsFocused } from "@react-navigation/native";
 import CommonHeader from "../../components/Header/commonHeader";
 import { removeLocalParticipant } from "../../redux/participants";
 import { navigateScreen } from "../../utils/notificationHandler";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  getDataFromAsyncStorage,
+  saveDataToAsyncStorage,
+} from "../../utils/commonUtils";
 
 let myBalanceData = null;
 let usernameEncryptedCode = null;
@@ -79,6 +86,7 @@ const Home = ({ navigation }) => {
   const { loginDetails = {}, balanceDetail = {} } = useSelector(
     (store) => store.sliceReducer
   );
+
   const { conference } = useSelector((state) => state);
 
   const { username, password, did } = loginDetails;
@@ -86,6 +94,9 @@ const Home = ({ navigation }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    InCallManager.stopRingback();
+    InCallManager.stopRingtone();
+
     navigateScreen(navigation);
     hitBalanceAPi();
   }, []);

@@ -16,28 +16,16 @@ import IconTab from "../components/IconTab";
 import { useDispatch, useSelector } from "react-redux";
 import Sip from "@khateeb00/react-jssip";
 import { _getloadMoreChatData, _socketConnect } from "../utils/socketManager";
-import { PERMISSIONS, RESULTS, request } from "react-native-permissions";
-import { saveContacts, saveKokoaContacts } from "../redux/reducer";
-import ContactList from "react-native-contacts";
-import { omitSpecialCharacters } from "../utils/commonUtils";
-import { hitSyncContactApi } from "../constants/APi";
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
-  const {
-    loginDetails = {},
-    allContacts = [],
-    encrypt_detail = {},
-  } = useSelector((store) => store.sliceReducer);
+  const { loginDetails = {}, encrypt_detail = {} } = useSelector(
+    (store) => store.sliceReducer
+  );
   const dispatch = useDispatch();
 
   const { encryptPassword, encryptUser } = encrypt_detail;
-
-  const permissions =
-    Platform.OS === "ios"
-      ? PERMISSIONS.IOS.READ_CONTACTS
-      : PERMISSIONS.ANDROID.READ_CONTACTS;
 
   useEffect(() => {
     const { password, did, username } = loginDetails;
@@ -53,99 +41,6 @@ const TabNavigator = () => {
     _socketConnect(param);
   }, []);
 
-  useEffect(() => {
-    // checkPeermission();
-  });
-
-  const syncContacts = (contactNumber) => {
-    // console.log("inApi======");
-    const mapContact = (contactNumber || allContacts)?.map((l) =>
-      // l.phoneNumbers[0]?.number
-      omitSpecialCharacters(l.phoneNumbers[0]?.number)
-    );
-    // console.log("mapContact------", mapContact.toString());
-
-    const data = new FormData();
-    data.append("username", encryptUser);
-    data.append("password", encryptPassword);
-    data.append("phonenos", mapContact.toString());
-
-    // console.log("datattattatatta>>>", data);
-
-    hitSyncContactApi(data)
-      .then((response) => {
-        // console.log("res====>>>>>>>>", response.data.phonenos);
-        if (response.data.result == "success") {
-          if (response?.data?.phonenos) {
-            var contacts_list = response?.data?.phonenos
-              .map((_item, index) => {
-                const contact = (contactNumber || allContacts).find((item) => {
-                  return item.phoneNumbers.find((number) => {
-                    return (
-                      // console.log(
-                      //   "comparre======>",
-                      //   _item == omitSpecialCharacters(number.number)
-                      // ),
-                      _item == omitSpecialCharacters(number.number)
-                    );
-                  });
-                });
-                if (contact)
-                  return {
-                    ...contact,
-                    name: `${contact.givenName} ${contact.familyName}`.trim(),
-                  };
-                return undefined;
-              })
-              .filter((item) => item);
-
-            dispatch(saveKokoaContacts(contacts_list));
-            // console.log("contacts_list======>", contacts_list);
-          }
-        }
-      })
-      .catch((err) => {
-        // console.log("errrror------", err);
-        Alert.alert("Something went wrong herreee");
-      });
-  };
-  const checkPeermission = () => {
-    request(permissions)
-      .then((result) => {
-        switch (result) {
-          case RESULTS.UNAVAILABLE:
-            console.log(
-              "This feature is not available (on this device / in this context)"
-            );
-            break;
-          case RESULTS.DENIED:
-            console.log(
-              "The permission has not been requested / is denied but requestable",
-              RESULTS.DENIED
-            );
-            break;
-          case RESULTS.LIMITED:
-            console.log("The permission is limited: some actions are possible");
-            break;
-          case RESULTS.GRANTED:
-            // console.log("granted------");
-            ContactList?.getAll()?.then((contact) => {
-              dispatch(saveContacts(contact));
-
-              syncContacts();
-            });
-
-            break;
-          case RESULTS.BLOCKED:
-            console.log("The permission is denied and not requestable anymore");
-            break;
-        }
-      })
-      .catch((error) => {
-        console.log("errr----", error);
-      });
-  };
-  // console.log("loginDetails==========>>", loginDetails);
   return (
     <Tab.Navigator
       initialRouteName={"Home"}
