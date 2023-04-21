@@ -43,6 +43,7 @@ import CustomText from "../../components/CustomText";
 import Modal from "react-native-modal";
 import { Show_Toast } from "../../utils/toast";
 import { useDispatch, useSelector } from "react-redux";
+import InCallManager from "react-native-incall-manager";
 
 import {
   hitCreditTransferApi,
@@ -93,17 +94,9 @@ const Home = ({ navigation }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // const notificationData = AsyncStorage.getItem("notificationData").then(
-    //   (data) => console.log("datatatata", data)
-    // );
-    // console.log("notificationDataaaaa", notificationData);
-    // if (notificationData !== null) {
-    //   navigation.navigate("IncomingScreen", {
-    //     callData: notificationData,
-    //   });
+    InCallManager.stopRingback();
+    InCallManager.stopRingtone();
 
-    //   // saveDataToAsyncStorage("notificationData", null);
-    // }
     navigateScreen(navigation);
     hitBalanceAPi();
   }, []);

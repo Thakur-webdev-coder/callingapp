@@ -53,8 +53,6 @@ export const showNotification = () => {
     console.log("Message handled in the background!", remoteMessage);
 
     if (remoteMessage?.data?.notification_type == "call") {
-      // AsyncStorage.setItem("notificationData", remoteMessage?.data);
-
       InCallManager.startRingtone();
       navigations.navigate("IncomingScreen", {
         callData: remoteMessage?.data,
@@ -73,6 +71,18 @@ export const showNotification = () => {
     // // Display the notification
     // firebase.notifications().displayNotification(notification);
   });
+
+  messaging()
+    .getInitialNotification()
+    .then((remoteMessage) => {
+      console.log("initialNotification", remoteMessage);
+      if (remoteMessage?.data?.notification_type == "call") {
+        InCallManager.startRingtone();
+        navigations.navigate("IncomingScreen", {
+          callData: remoteMessage?.data,
+        });
+      }
+    });
 
   messaging().onNotificationOpenedApp((remoteMessage) => {
     console.log("hererrerererNotiitiitit");
