@@ -114,17 +114,6 @@ const UserChatsScreen = ({ navigation, route }) => {
     __getUpdatedChatMessage();
   }, []);
 
-  const leaveChat = () => {
-    const data = {
-      id: senderID,
-      group_id: uniqueId,
-    };
-
-    console.log("datattatatat", data);
-
-    _leaveGroup(data);
-  };
-
   const reduceChat = (chatData) => {
     const groupedChats = chatData?.reduce((acc, chat) => {
       const date = new Date(chat.timestamp);
@@ -277,6 +266,7 @@ const UserChatsScreen = ({ navigation, route }) => {
     if (value == 1) {
       if (uniqueId) {
         leaveGroup();
+        navigation.goBack();
       } else {
         deleteChatHistory();
         setGroupedChats([]);

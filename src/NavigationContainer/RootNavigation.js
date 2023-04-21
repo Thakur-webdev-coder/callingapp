@@ -19,8 +19,6 @@ import { participantJoined } from "../lib-jitsi-meet/actions";
 const Stack = createNativeStackNavigator();
 
 const RootNavigation = () => {
-  //const asa= useSelector((store) => store);
-  // const { loginDetails,isLoadingEnable } = useSelector((store) => store.reducer);
   const { loginDetails, isLoadingEnable } = useSelector(
     (store) => store.sliceReducer
   );
@@ -31,11 +29,6 @@ const RootNavigation = () => {
         initialRouteName={
           loginDetails != null ? "StackNavigator" : BOARDING_SCREEN
         }
-        //initialRouteName={ StackNavigator}
-
-        // initialRouteName={
-        //   loginDetails != null ? "StackNavigator" : BOARDING_SCREEN
-        // }
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="StackNavigator" component={StackNavigator} />

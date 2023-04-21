@@ -6,6 +6,8 @@ let navigations = null;
 import InCallManager from "react-native-incall-manager";
 import { Store } from "../redux";
 import { hangupMeeting } from "../lib-jitsi-meet/actions";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { saveDataToAsyncStorage } from "./commonUtils";
 
 export const navigateScreen = (nav) => {
   console.log(nav, "dpoaopf");
@@ -38,7 +40,7 @@ export const showNotification = () => {
       Store.dispatch(hangupMeeting());
 
       navigations.navigate("Home");
-    } else {
+    } else if (remoteMessage?.data?.notification_type == "call") {
       InCallManager.startRingtone();
 
       navigations.navigate("IncomingScreen", {
@@ -50,7 +52,14 @@ export const showNotification = () => {
   messaging().setBackgroundMessageHandler(async (remoteMessage) => {
     console.log("Message handled in the background!", remoteMessage);
 
-    InCallManager.startRingtone();
+    if (remoteMessage?.data?.notification_type == "call") {
+      InCallManager.startRingtone();
+      navigations.navigate("IncomingScreen", {
+        callData: remoteMessage?.data,
+      });
+    } else if (remoteMessage?.data?.notification_type == "hangup_call") {
+      InCallManager.stopRingtone();
+    }
 
     // // Create a notification
     // const notification = new firebase.notifications.Notification()
@@ -63,10 +72,25 @@ export const showNotification = () => {
     // firebase.notifications().displayNotification(notification);
   });
 
-  messaging().onNotificationOpenedApp((remoteMessage) => {
-    console.log("notification opened", remoteMessage);
-    navigations.navigate("IncomingScreen", {
-      callData: remoteMessage?.data,
+  messaging()
+    .getInitialNotification()
+    .then((remoteMessage) => {
+      console.log("initialNotification", remoteMessage);
+      if (remoteMessage?.data?.notification_type == "call") {
+        InCallManager.startRingtone();
+        navigations.navigate("IncomingScreen", {
+          callData: remoteMessage?.data,
+        });
+      }
     });
+
+  messaging().onNotificationOpenedApp((remoteMessage) => {
+    console.log("hererrerererNotiitiitit");
+    if (remoteMessage?.data?.notification_type == "call") {
+      console.log("notification opened", remoteMessage);
+      navigations.navigate("IncomingScreen", {
+        callData: remoteMessage?.data,
+      });
+    }
   });
 };
