@@ -200,7 +200,7 @@ const Home = ({ navigation }) => {
         break;
 
       case "Transfer History":
-          navigation.navigate("TransferHistory");
+        navigation.navigate("TransferHistory");
         break;
 
       case "Call Details Report":
@@ -226,11 +226,13 @@ const Home = ({ navigation }) => {
           url: `https://voice.nonicoms.ng/billing/customer/billing_utility.php?pr_login=[username]&pr_password=[password]&mobiledone=submit_log`,
           title: "Data Bundle",
         });
+        break;
       case "Electricity Bill Pay":
         navigation.navigate("WebViewScreen", {
           url: `https://voice.nonicoms.ng/billing/customer/billing_utility.php?pr_login=[username]&pr_password=[password]&mobiledone=submit_log`,
           title: "Electricity Bill Pay",
         });
+        break;
       case "TV Recharge":
         navigation.navigate("WebViewScreen", {
           url: `https://voice.nonicoms.ng/billing/customer/billing_utility.php?pr_login=[username]&pr_password=[password]&mobiledone=submit_log`,
@@ -240,7 +242,7 @@ const Home = ({ navigation }) => {
       case "Voucher Recharge":
         setVoucherModal(true);
         break;
-        
+
       case "Logout":
         LogoutMethod();
         break;
@@ -419,202 +421,205 @@ const Home = ({ navigation }) => {
 
   return (
     <SafeAreaView style={AppStyle.wrapper}>
-      <View style={AppStyle.secondWrapper}>
-        <View style={styles.headerStyle}>
+      <View style={AppStyle.homeMainView}>
+
+        <View style={AppStyle.secondWrapper}>
+          <View style={styles.headerStyle}>
+            <CustomText
+              fontWeight={"bold"}
+              text={"Home"}
+              textColor={colors.white}
+              textSize={20}
+            />
+          </View>
+          <View style={styles.cardStyle}>
+            <CustomText
+              text={"Registered Number"}
+              textColor={colors.white}
+              fontWeight={700}
+            />
+            <CustomText
+              text={`+${loginDetails?.username}`}
+              textSize={20}
+              textColor={colors.white}
+            />
+            <View style={styles.balanceStyle}>
+              <View>
+                <CustomText
+                  text={"Balance"}
+                  textSize={18}
+                  textColor={colors.white}
+                />
+
+                <CustomText
+                  text={
+                    balanceDetail?.credit == "0"
+                      ? "₦" + "0.00"
+                      : "₦" + balanceDetail?.credit
+                  }
+                  textSize={18}
+                  textColor={colors.white}
+                />
+              </View>
+              <View style={styles.imgView}>
+                <Image source={logo_small_kokoa} />
+              </View>
+            </View>
+          </View>
+        </View>
+        <View style={styles.wrapper2}>
           <CustomText
+            text={" Services"}
+            textSize={20}
             fontWeight={"bold"}
-            text={"Home"}
-            textColor={colors.white}
-            textSize={20}
+            textColor={colors.black}
+            marginTop={wp(2)}
+            marginLeft={wp(2)}
           />
-        </View>
-        <View style={styles.cardStyle}>
-          <CustomText
-            text={"Registered Number"}
-            textColor={colors.white}
-            fontWeight={700}
-          />
-          <CustomText
-            text={`+${loginDetails?.username}`}
-            textSize={20}
-            textColor={colors.white}
-          />
-          <View style={styles.balanceStyle}>
-            <View>
-              <CustomText
-                text={"Balance"}
-                textSize={18}
-                textColor={colors.white}
-              />
 
+          <FlatList
+            columnWrapperStyle={{ justifyContent: "space-between" }}
+            data={DATA}
+            renderItem={RenderList}
+            keyExtractor={(item, index) => item.name}
+            numColumns={3}
+          />
+          <Modal
+            animationIn="slideInUp"
+            animationOut="slideOutDown"
+            isVisible={voucherModal}
+          >
+            <View style={styles.voucherModalStyle}>
               <CustomText
-                text={
-                  balanceDetail?.credit == "0"
-                    ? "₦" + "0.00"
-                    : "₦" + balanceDetail?.credit
-                }
-                textSize={18}
-                textColor={colors.white}
+                text={"Voucher Recharge"}
+                textSize={20}
+                fontWeight={"bold"}
+                textColor={colors.appColor}
               />
+              <CustomText
+                text={"Enter the Voucher Number"}
+                textColor={colors.appColor}
+              />
+              <TextInput
+                style={styles.textInputStyle}
+                //placeholder="Search Destination"
+                placeholderTextColor={colors.appColor}
+                onChangeText={(txt) => setState({ voucherNum: txt })}
+                maxLength={30}
+              />
+              <View style={styles.btnStyle}>
+                <TouchableOpacity onPress={() => setVoucherModal(false)}>
+                  <CustomText
+                    text={"Cancel"}
+                    textSize={16}
+                    fontWeight={"600"}
+                    textColor={colors.dodgeBlue}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => RechargeMethod()}>
+                  <CustomText
+                    text={"Redeem"}
+                    textSize={16}
+                    fontWeight={"600"}
+                    textColor={colors.dodgeBlue}
+                    marginLeft={wp(10)}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
-            <View style={styles.imgView}>
-              <Image source={logo_small_kokoa} />
-            </View>
-          </View>
-        </View>
-      </View>
-      <View style={styles.wrapper2}>
-        <CustomText
-          text={" Services"}
-          textSize={20}
-          fontWeight={"bold"}
-          textColor={colors.black}
-          marginTop={wp(2)}
-          marginLeft={wp(2)}
-        />
-
-        <FlatList
-          columnWrapperStyle={{ justifyContent: "space-between" }}
-          data={DATA}
-          renderItem={RenderList}
-          keyExtractor={(item, index) => item.name}
-          numColumns={3}
-        />
-        <Modal
-          animationIn="slideInUp"
-          animationOut="slideOutDown"
-          isVisible={voucherModal}
-        >
-          <View style={styles.voucherModalStyle}>
-            <CustomText
-              text={"Voucher Recharge"}
-              textSize={20}
-              fontWeight={"bold"}
-              textColor={colors.appColor}
-            />
-            <CustomText
-              text={"Enter the Voucher Number"}
-              textColor={colors.appColor}
-            />
-            <TextInput
-              style={styles.textInputStyle}
-              //placeholder="Search Destination"
-              placeholderTextColor={colors.appColor}
-              onChangeText={(txt) => setState({ voucherNum: txt })}
-              maxLength={30}
-            />
-            <View style={styles.btnStyle}>
-              <TouchableOpacity onPress={() => setVoucherModal(false)}>
+          </Modal>
+          <Modal
+            animationIn="slideInUp"
+            animationOut="slideOutDown"
+            isVisible={balanceModal}
+          >
+            <View style={styles.rechargeModalStyle}>
+              <CustomText
+                text={"Kokoafone"}
+                textSize={20}
+                fontWeight={"bold"}
+                textColor={colors.appColor}
+              />
+              <CustomText
+                text={"Balance : " + "₦" + balanceDetail?.credit}
+                textColor={colors.appColor}
+                paddingVertical={hp(3)}
+              />
+              <TouchableOpacity onPress={() => RechargeDoneMethod()}>
                 <CustomText
-                  text={"Cancel"}
-                  textSize={16}
-                  fontWeight={"600"}
-                  textColor={colors.dodgeBlue}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => RechargeMethod()}>
-                <CustomText
-                  text={"Redeem"}
+                  text={"OK"}
                   textSize={16}
                   fontWeight={"600"}
                   textColor={colors.dodgeBlue}
                   marginLeft={wp(10)}
+                  textAlign={"right"}
                 />
               </TouchableOpacity>
             </View>
-          </View>
-        </Modal>
-        <Modal
-          animationIn="slideInUp"
-          animationOut="slideOutDown"
-          isVisible={balanceModal}
-        >
-          <View style={styles.rechargeModalStyle}>
-            <CustomText
-              text={"Kokoafone"}
-              textSize={20}
-              fontWeight={"bold"}
-              textColor={colors.appColor}
-            />
-            <CustomText
-              text={"Balance : " + "₦" + balanceDetail?.credit}
-              textColor={colors.appColor}
-              paddingVertical={hp(3)}
-            />
-            <TouchableOpacity onPress={() => RechargeDoneMethod()}>
+          </Modal>
+          <Modal
+            animationIn="slideInUp"
+            animationOut="slideOutDown"
+            isVisible={transferModal}
+          >
+            <View style={styles.voucherModalStyle}>
               <CustomText
-                text={"OK"}
-                textSize={16}
-                fontWeight={"600"}
-                textColor={colors.dodgeBlue}
-                marginLeft={wp(10)}
-                textAlign={"right"}
+                text={"Transfer Credit"}
+                textSize={20}
+                fontWeight={"bold"}
+                textColor={colors.appColor}
               />
-            </TouchableOpacity>
-          </View>
-        </Modal>
-        <Modal
-          animationIn="slideInUp"
-          animationOut="slideOutDown"
-          isVisible={transferModal}
-        >
-          <View style={styles.voucherModalStyle}>
-            <CustomText
-              text={"Transfer Credit"}
-              textSize={20}
-              fontWeight={"bold"}
-              textColor={colors.appColor}
-            />
 
-            <TextInput
-              style={styles.textInputStyle}
-              placeholder="Enter the Recepient Number"
-              placeholderTextColor={colors.appColor}
-              keyboardType="numeric"
-              onChangeText={(txt) => {
-                setRecepientNum(txt);
-              }}
-              maxLength={20}
-            />
+              <TextInput
+                style={styles.textInputStyle}
+                placeholder="Enter the Recepient Number"
+                placeholderTextColor={colors.appColor}
+                keyboardType="numeric"
+                onChangeText={(txt) => {
+                  setRecepientNum(txt);
+                }}
+                maxLength={20}
+              />
 
-            <TextInput
-              style={styles.textInputStyle}
-              placeholder="Enter Amount"
-              placeholderTextColor={colors.appColor}
-              onChangeText={(txt) => setTransferAmt(txt)}
-              maxLength={10}
-              keyboardType="numeric"
-            />
-            <View style={styles.btnStyle}>
-              <TouchableOpacity onPress={() => setTransferModal(false)}>
-                <CustomText
-                  text={"Cancel"}
-                  textSize={16}
-                  fontWeight={"600"}
-                  textColor={colors.dodgeBlue}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => TransferCreditMethod()}>
-                <CustomText
-                  text={"Transfer"}
-                  textSize={16}
-                  fontWeight={"600"}
-                  textColor={colors.dodgeBlue}
-                  marginLeft={wp(10)}
-                />
-              </TouchableOpacity>
+              <TextInput
+                style={styles.textInputStyle}
+                placeholder="Enter Amount"
+                placeholderTextColor={colors.appColor}
+                onChangeText={(txt) => setTransferAmt(txt)}
+                maxLength={10}
+                keyboardType="numeric"
+              />
+              <View style={styles.btnStyle}>
+                <TouchableOpacity onPress={() => setTransferModal(false)}>
+                  <CustomText
+                    text={"Cancel"}
+                    textSize={16}
+                    fontWeight={"600"}
+                    textColor={colors.dodgeBlue}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => TransferCreditMethod()}>
+                  <CustomText
+                    text={"Transfer"}
+                    textSize={16}
+                    fontWeight={"600"}
+                    textColor={colors.dodgeBlue}
+                    marginLeft={wp(10)}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        </Modal>
-      </View>
+          </Modal>
+        </View>
 
-      {/* <Loading
+        {/* <Loading
         style={{
           flex: 1,
           justifyContent: "center",
         }}
         loading={isLoading}
       /> */}
+      </View>
     </SafeAreaView>
   );
 };

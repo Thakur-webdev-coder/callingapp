@@ -43,6 +43,7 @@ import Sip from "@khateeb00/react-jssip";
 import { Show_Toast } from "../../utils/toast";
 import Loading from "react-native-whc-loading";
 import { AlphabetList } from "react-native-section-alphabet-list";
+import AppStyle from "../../components/AppStyle";
 
 const { Popover } = renderers;
 
@@ -356,7 +357,8 @@ const Contacts = ({ navigation }) => {
     };
 
     return (
-      <SafeAreaView>
+      <SafeAreaView style={AppStyle.wrapper}>
+        <View style={AppStyle.homeMainView}>
         <View style={styles.toolBar}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image source={ic_back} />
@@ -461,6 +463,7 @@ const Contacts = ({ navigation }) => {
         />
 
         <Loading loading={isLoading} />
+        </View>
       </SafeAreaView>
     );
   };

@@ -112,7 +112,7 @@ const CallDetailsScreen = ({ navigation, route }) => {
   };
   return (
     <SafeAreaView style={AppStyle.wrapper}>
-    
+     <View style={AppStyle.homeMainView}>
       <CommonHeader 
       headerText={"Contacts Details"}
       onPress={() => navigation.goBack()} />
@@ -256,7 +256,7 @@ const CallDetailsScreen = ({ navigation, route }) => {
       </Modal>
 }
       <Loading loading={state.isLoading} />
-      
+      </View>
     </SafeAreaView>
   );
 };

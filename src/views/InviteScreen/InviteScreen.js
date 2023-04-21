@@ -13,6 +13,7 @@ import {
 import colors from "../../../assets/colors";
 import styles from "./styles";
 import { CommonHeader } from "../../components";
+import AppStyle from "../../components/AppStyle";
 
 const InviteScreen = ({navigation}) => {
   const shareLink = async () => {
@@ -31,7 +32,8 @@ const InviteScreen = ({navigation}) => {
     }
   };
   return (
-    <SafeAreaView style={styles.wrapper}>
+    <SafeAreaView style={AppStyle.wrapper}>
+      <View style={AppStyle.homeMainView}>
       <CommonHeader 
       headerText={"Invite Friend"}
        paddingHorizontal={18}
@@ -64,6 +66,7 @@ const InviteScreen = ({navigation}) => {
         horzontalPadding={wp(15)}
         onPress={() => shareLink()}
       />
+      </View>
     </SafeAreaView>
   );
 };

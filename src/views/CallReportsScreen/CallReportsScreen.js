@@ -8,6 +8,7 @@ import { CommonHeader } from "../../components";
 import { hitGetCallDetailsApi } from "../../constants/APi";
 import { useSelector } from "react-redux";
 import Loading from "react-native-whc-loading";
+import AppStyle from "../../components/AppStyle";
 
 const CallReportsScreen = ({navigation}) => {
   const [state, setState] = useState({
@@ -75,7 +76,8 @@ const CallReportsScreen = ({navigation}) => {
   );
 
   return (
-    <SafeAreaView style={styles.wrapper}>
+    <SafeAreaView style={AppStyle.wrapper}>
+      <View style={AppStyle.homeMainView}>
       <CommonHeader
         headerText={"Call Details Reports"}
         paddingHorizontal={20}
@@ -113,6 +115,7 @@ const CallReportsScreen = ({navigation}) => {
         />
       </View>
       <Loading loading={state.isLoading} />
+      </View>
     </SafeAreaView>
   );
 };

@@ -9,11 +9,24 @@ import CustomLoader from "./src/helpers/CustomLoader";
 import Store, { persistor } from "./src/redux/store";
 import { checkToken } from "./src/utils/notificationHandler";
 import { MenuProvider } from "react-native-popup-menu";
+import messaging from '@react-native-firebase/messaging';
 const App = () => {
   useEffect(() => {
     SplashScreen.hide(); //hides the splash screen on app load.
     checkToken();
   }, []);
+
+  // async function requestUserPermission() {
+  //   const authStatus = await messaging().requestPermission();
+  //   const enabled =
+  //     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+  //     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+  
+  //   if (enabled) {
+  //     console.log('Authorization status:', authStatus);
+  //     checkToken();
+  //   }
+  // }
   return (
     <Provider store={Store}>
       <PersistGate loading={<CustomLoader />} persistor={persistor}>

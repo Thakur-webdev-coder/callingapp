@@ -13,7 +13,7 @@ import colors from "../../assets/colors";
 const WebViewScreen = ({ navigation, route }) => {
   const { url, title } = route.params;
   const [isLoading, setIsLoading] = useState(false);
-
+console.log('title========>>>>',title);
   const handleLoadStart = () => {
     setIsLoading(true);
   };

@@ -79,7 +79,8 @@ const StartChatScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={AppStyle.wrapper}>
+        <View style={AppStyle.homeMainView}>
       <View style={styles.toolBar}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image source={ic_back} />
@@ -129,6 +130,7 @@ const StartChatScreen = ({ navigation }) => {
           source={ic_AddGroup}
         />
       </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };

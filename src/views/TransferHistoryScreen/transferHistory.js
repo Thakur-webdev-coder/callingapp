@@ -8,6 +8,7 @@ import { CommonHeader } from "../../components";
 import { hitGetCallDetailsApi, hitTransferHistoryApi } from "../../constants/APi";
 import { useSelector } from "react-redux";
 import Loading from "react-native-whc-loading";
+import AppStyle from "../../components/AppStyle";
 
 const TransferHistory = ({navigation}) => {
   const [state, setState] = useState({
@@ -98,7 +99,8 @@ const TransferHistory = ({navigation}) => {
   );
 
   return (
-    <SafeAreaView style={styles.wrapper}>
+    <SafeAreaView style={AppStyle.wrapper}>
+      <View style={AppStyle.homeMainView}>
       <CommonHeader
         headerText={"Transfer History "}
         paddingHorizontal={20}
@@ -138,6 +140,7 @@ const TransferHistory = ({navigation}) => {
         />
       </View>
       <Loading loading={state.isLoading} />
+      </View>
     </SafeAreaView>
   );
 };

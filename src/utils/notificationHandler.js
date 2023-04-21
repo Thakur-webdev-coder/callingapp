@@ -13,13 +13,48 @@ export const navigateScreen = (nav) => {
 };
 
 export const checkToken = async () => {
+  firebase
+  .messaging()
+  .hasPermission()
+  .then(enabled => {
+    if (enabled) {
+      console.log('askpermission---hasPermission------',enabled);
+      // User has permissions
+      getFcmToken(); // const fcmToken = await firebase.messaging().getToken();
+    } else {
+      // User doesn't have permission
+      firebase
+        .messaging()
+        .requestPermission()
+        .then(() => {
+          console.log('askpermission---requestPermission------',enabled);
+
+          // User has authorized
+          getFcmToken(); // const fcmToken = await firebase.messaging().getToken();
+        })
+        .catch(error => {
+          // User has rejected permissions
+          console.log(
+            'PERMISSION REQUEST :: notification permission rejected',
+          );
+        });
+    }
+  }) .catch(error => {
+    // User has rejected permissions
+    console.log(
+      'error----',error
+    );
+  });
+ 
+};
+const getFcmToken =async()=>{
   const fcmToken = await messaging().getToken();
   if (fcmToken) {
     console.log("fcm_tokennnn", fcmToken);
 
     return fcmToken;
   }
-};
+}
 
 export const showNotification = () => {
   messaging().onMessage(async (remoteMessage) => {

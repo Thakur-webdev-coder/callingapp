@@ -189,10 +189,8 @@ const TabNavigator = () => {
         },
         tabBarStyle: {
           backgroundColor: colors.secondary,
-          // borderTopColor: colors.bordercolor,
-          // borderTopWidth: wp(0.2),
-          height: hp(9),
-          paddingBottom: hp(0.8),
+          height: hp(10),
+          paddingBottom: hp(2),
         },
         tabBarActiveTintColor: colors.buttonColor,
         tabBarInactiveTintColor: colors.white,

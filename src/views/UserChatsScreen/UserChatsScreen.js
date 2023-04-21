@@ -56,6 +56,7 @@ import {
   MenuTrigger,
   renderers,
 } from "react-native-popup-menu";
+import AppStyle from "../../components/AppStyle";
 
 const { Popover } = renderers;
 
@@ -477,7 +478,8 @@ const UserChatsScreen = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={AppStyle.wrapper} >
+    <View style={AppStyle.homeMainView}>
       <TouchableOpacity
         onPress={() =>
           groupName
@@ -694,6 +696,7 @@ const UserChatsScreen = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
       </Modal>
+      </View>
     </SafeAreaView>
   );
 };

@@ -130,8 +130,9 @@ console.log('phone-----',phone);
   const { dialedNumber } = state;
   return (
     <SafeAreaView
-      style={[AppStyle.wrapper, { backgroundColor: colors.offWhite }]}
+      style={AppStyle.wrapper}
     >
+      <View style={{flex:1, backgroundColor:colors.offWhite}}>
       <View style={styles.secondWrapper}>
         <CommonHeader 
         headerText={"Dialpad"} 
@@ -203,6 +204,7 @@ console.log('phone-----',phone);
         <TouchableOpacity onPress={() => BackSpaceMethod()}>
           <Image style={styles.bottomImgStyle} source={ic_delete} />
         </TouchableOpacity>
+      </View>
       </View>
     </SafeAreaView>
   );

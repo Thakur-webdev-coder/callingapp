@@ -28,6 +28,7 @@ import styles from "./styles";
 import { ScrollView } from "react-native-gesture-handler";
 import Loading from "react-native-whc-loading";
 import { checkToken } from "../../utils/notificationHandler";
+import messaging from '@react-native-firebase/messaging';
 let otpEncryptedCode = null;
 
 const OtpScreen = ({ navigation, route }) => {
@@ -86,6 +87,19 @@ const OtpScreen = ({ navigation, route }) => {
     data.append("phone_type", Platform.OS);
 
     console.log("dataaaa=======>", data);
+
+    // async function requestUserPermission() {
+    //   const authStatus = await messaging().requestPermission();
+    //   const enabled =
+    //     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+    //     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+    
+    //   if (enabled) {
+    //     console.log('Authorization status:', authStatus);
+    //     checkToken();
+    //   }
+    // }
+    
 
     hitOtpVerificationAPI(data)
       .then((response) => {

@@ -45,7 +45,7 @@ export default StyleSheet.create({
   },
 
   sendMessageImg: {
-    // marginTop: hp(30),
+    marginBottom: hp(1),
     marginTop: hp(2),
     flexDirection: "row",
     marginHorizontal: wp(3),
@@ -58,6 +58,9 @@ export default StyleSheet.create({
     // height: hp(10),
     // fontSize: 20,
     color: colors.black,
+    paddingTop:hp(1),
+    alignSelf: "center",
+    
   },
   arrowStyle: {
     height: 40,

@@ -3,6 +3,7 @@ import {
   FlatList,
   Image,
   SafeAreaView,
+  StatusBar,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -118,7 +119,9 @@ const LiveChat = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={AppStyle.wrapper}>
+      <View style={AppStyle.homeMainView}>
+      {Platform.OS === 'ios' && <StatusBar barStyle="light-content" hidden />} 
       <CommonHeader 
       headerText={"Chat"}
       onPress={() => navigation.goBack()} />
@@ -162,6 +165,7 @@ const LiveChat = ({ navigation }) => {
           source={ic_add}
         />
       </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };

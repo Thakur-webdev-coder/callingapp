@@ -278,6 +278,7 @@ const CallScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={voiceCall ? AppStyle.wrapper : styles.wrapper}>
+      <View style={AppStyle.homeMainView}>
       <View style={{ flex: 4 }}>
         {voiceCall ? (
           <View>
@@ -380,6 +381,7 @@ const CallScreen = ({ navigation, route }) => {
         >
           <Image source={enableAudio ? ic_mic_off : ic_mic_on} />
         </TouchableOpacity>
+      </View>
       </View>
     </SafeAreaView>
   );

@@ -95,8 +95,11 @@ const SelectScreen = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <CommonHeader headerText={"Add Members"} />
+    <SafeAreaView style={AppStyle.wrapper} >
+    <View style={AppStyle.homeMainView}>
+      <CommonHeader headerText={"Add Members"}
+           onPress={() => navigation.goBack()}
+       />
       {kokoaContacts.length > 0 ? (
         <FlatList
           //style={{ marginTop: hp(2) }}
@@ -129,6 +132,7 @@ const SelectScreen = ({ navigation, route }) => {
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
       /> */}
+      </View>
     </SafeAreaView>
   );
 };

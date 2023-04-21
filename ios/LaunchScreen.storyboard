@@ -25,7 +25,7 @@
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="DEq-AI-Lls" firstAttribute="centerX" secondItem="Bcu-3y-fUS" secondAttribute="centerX" id="2Jf-mh-UwC"/>
                             <constraint firstItem="DEq-AI-Lls" firstAttribute="centerY" secondItem="Bcu-3y-fUS" secondAttribute="centerY" id="gxF-gL-3N0"/>
@@ -38,6 +38,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="LaunchScreen" width="159" height="194"/>
+        <image name="LaunchScreen" width="256" height="256"/>
     </resources>
 </document>

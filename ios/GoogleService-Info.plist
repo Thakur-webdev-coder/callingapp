@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>848340449787-lqfk5kkbrq02u7a3sq331bthsne0t32b.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.848340449787-lqfk5kkbrq02u7a3sq331bthsne0t32b</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>848340449787-bvh0akb6a80ohc1hnpk1046cl2lln32s.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD70Ef0GrAoRda-hLeSP0RaKzbIbX7scSs</string>
+	<key>GCM_SENDER_ID</key>
+	<string>848340449787</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.kokoafone</string>
+	<key>PROJECT_ID</key>
+	<string>kokoafone</string>
+	<key>STORAGE_BUCKET</key>
+	<string>kokoafone.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:848340449787:ios:6017623541899905c1735e</string>
+</dict>
+</plist>

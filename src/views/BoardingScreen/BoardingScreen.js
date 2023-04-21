@@ -123,7 +123,7 @@ const BoardingScreen = ({ navigation }) => {
   // }
 
   return (
-    <SafeAreaView style={AppStyle.wrapper}>
+    <SafeAreaView style={[AppStyle.wrapper,{backgroundColor:colors.white}]}>
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <CustomImage alignSelf={"center"} imgSrc={ic_app_logo} />
       </View>

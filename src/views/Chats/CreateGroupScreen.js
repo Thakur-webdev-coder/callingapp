@@ -127,7 +127,8 @@ const CreateGroup = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={AppStyle.wrapper}>
+        <View style={AppStyle.homeMainView}>
       {/* <CommonHeader headerText={"Start Chat"} /> */}
 
       <View style={styles.toolBar}>
@@ -229,6 +230,7 @@ const CreateGroup = ({ navigation }) => {
           </View>
         </View>
       </Modal>
+      </View>
     </SafeAreaView>
   );
 };
