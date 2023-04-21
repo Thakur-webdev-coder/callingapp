@@ -63,6 +63,8 @@ const UserChatsScreen = ({ navigation, route }) => {
   const [messageInput, onChangeMessageInput] = useState("");
   const [groupedChats, setGroupedChats] = useState([]);
 
+  console.log("groupedChatsssssssss", groupedChats);
+
   const socket = getSocket();
 
   const [state, setState] = useState({
@@ -182,7 +184,6 @@ const UserChatsScreen = ({ navigation, route }) => {
     console.log("deleteChatttt", data);
 
     _deleteChat(data);
-    // setDeleted(true);
   };
 
   const onHistoryReceived = () => {
@@ -190,7 +191,7 @@ const UserChatsScreen = ({ navigation, route }) => {
 
     socket.on("chat-history", (data) => {
       console.log("_getChatHistoryy=======>", data);
-      const arrayReverse = data.reverse();
+      const arrayReverse = data.slice().reverse();
 
       reduceChat(arrayReverse);
 
@@ -270,8 +271,7 @@ const UserChatsScreen = ({ navigation, route }) => {
       } else {
         deleteChatHistory();
         setGroupedChats([]);
-        gettingChatHistory();
-        onHistoryReceived();
+        navigation.goBack();
       }
     }
   };
