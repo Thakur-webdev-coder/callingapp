@@ -106,20 +106,20 @@ export async function uriToFile(uri) {
   }
 }
 
-export const saveDataToAsyncStorage = async (key, value) => {
+export const setToken = async (token) => {
   try {
-    AsyncStorage.setItem(key, value);
+    await AsyncStorage.setItem("token", token);
+    console.log("Token save successfully.");
   } catch (error) {
-    console.log(error);
+    console.log("Error setting token:", error);
   }
 };
-
-export const getDataFromAsyncStorage = async (key) => {
+export const getToken = async () => {
   try {
-    AsyncStorage.getItem(key).then((data) => console.log(data, "notiiii"));
-    return;
-    return jsonValue != null ? JSON.parse(jsonValue) : null;
+    const token = await AsyncStorage.getItem("token");
+    console.log("Token retrieved successfully:", token);
+    return token;
   } catch (error) {
-    console.log("eroorororor", error);
+    console.log("Error retrieving token:", error);
   }
 };

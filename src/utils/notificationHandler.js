@@ -6,8 +6,7 @@ let navigations = null;
 import InCallManager from "react-native-incall-manager";
 import { Store } from "../redux";
 import { hangupMeeting } from "../lib-jitsi-meet/actions";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { saveDataToAsyncStorage } from "./commonUtils";
+import { setToken } from "./commonUtils";
 
 export const navigateScreen = (nav) => {
   console.log(nav, "dpoaopf");
@@ -18,6 +17,8 @@ export const checkToken = async () => {
   const fcmToken = await messaging().getToken();
   if (fcmToken) {
     console.log("fcm_tokennnn", fcmToken);
+
+    setToken(fcmToken);
 
     return fcmToken;
   }
@@ -74,7 +75,7 @@ export const showNotification = () => {
 
   messaging()
     .getInitialNotification()
-    .then((remoteMessage) => {
+    .then(async (remoteMessage) => {
       console.log("initialNotification", remoteMessage);
       if (remoteMessage?.data?.notification_type == "call") {
         InCallManager.startRingtone();
@@ -84,7 +85,7 @@ export const showNotification = () => {
       }
     });
 
-  messaging().onNotificationOpenedApp((remoteMessage) => {
+  messaging().onNotificationOpenedApp(async (remoteMessage) => {
     console.log("hererrerererNotiitiitit");
     if (remoteMessage?.data?.notification_type == "call") {
       console.log("notification opened", remoteMessage);
@@ -92,5 +93,9 @@ export const showNotification = () => {
         callData: remoteMessage?.data,
       });
     }
+
+    messaging().removeDeliveredNotification(
+      remoteMessage.notification.notificationId
+    );
   });
 };

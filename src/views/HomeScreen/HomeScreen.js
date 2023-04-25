@@ -61,11 +61,6 @@ import { CommonActions, useIsFocused } from "@react-navigation/native";
 import CommonHeader from "../../components/Header/commonHeader";
 import { removeLocalParticipant } from "../../redux/participants";
 import { navigateScreen } from "../../utils/notificationHandler";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import {
-  getDataFromAsyncStorage,
-  saveDataToAsyncStorage,
-} from "../../utils/commonUtils";
 
 let myBalanceData = null;
 let usernameEncryptedCode = null;
@@ -234,17 +229,17 @@ const Home = ({ navigation }) => {
 
       case "Data Bundle":
         navigation.navigate("WebViewScreen", {
-          url: `https://voice.nonicoms.ng/billing/customer/billing_utility.php?pr_login=[username]&pr_password=[password]&mobiledone=submit_log`,
+          url: `https://billing.kokoafone.com/billing/customer/billing_databundles.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
           title: "Data Bundle",
         });
       case "Electricity Bill Pay":
         navigation.navigate("WebViewScreen", {
-          url: `https://voice.nonicoms.ng/billing/customer/billing_utility.php?pr_login=[username]&pr_password=[password]&mobiledone=submit_log`,
+          url: `https://billing.kokoafone.com/billing/customer/billing_electricity_bill.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
           title: "Electricity Bill Pay",
         });
       case "TV Recharge":
         navigation.navigate("WebViewScreen", {
-          url: `https://voice.nonicoms.ng/billing/customer/billing_utility.php?pr_login=[username]&pr_password=[password]&mobiledone=submit_log`,
+          url: `https://billing.kokoafone.com/billing/customer/billing_dth.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
           title: "TV Recharge",
         });
         break;

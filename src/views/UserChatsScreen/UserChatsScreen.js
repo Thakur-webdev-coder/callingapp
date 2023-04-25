@@ -210,9 +210,16 @@ const UserChatsScreen = ({ navigation, route }) => {
       participants: allParticipant,
     };
 
+    const myData = {
+      sid: senderID,
+      rid: uniqueId,
+    };
+
     console.log("datattatatat", data);
+    console.log("datattatatat", myData);
 
     _addGroup(data);
+    _leaveGroup(myData);
 
     sendChatMethod(" Member leaved group");
   };
