@@ -60,7 +60,10 @@ import {
 import { CommonActions, useIsFocused } from "@react-navigation/native";
 import CommonHeader from "../../components/Header/commonHeader";
 import { removeLocalParticipant } from "../../redux/participants";
-import { navigateScreen } from "../../utils/notificationHandler";
+import {
+  changelCreated,
+  navigateScreen,
+} from "../../utils/notificationHandler";
 
 let myBalanceData = null;
 let usernameEncryptedCode = null;
@@ -89,6 +92,8 @@ const Home = ({ navigation }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    changelCreated();
+
     InCallManager.stopRingback();
     InCallManager.stopRingtone();
 

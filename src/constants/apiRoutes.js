@@ -16,9 +16,12 @@ let ApiRoutes = {
   API_HANG_UP_CALL: "join_video/hangup_call.php",
 
   API_REGISTERED_NUMBER: "join_video/call_phone_number.php",
-  SYNC_CONTACTS:"billing_auto_register/sync_contacts.php",
-  API_TRANSFER_HISTORY: "billing_balance_transfer_balance/balance_transfer_report.php",
-  API_RATES_NEW: "billing_rates/get_rates_new.php"
+  SYNC_CONTACTS: "billing_auto_register/sync_contacts.php",
+  API_TRANSFER_HISTORY:
+    "billing_balance_transfer_balance/balance_transfer_report.php",
+  API_RATES_NEW: "billing_rates/get_rates_new.php",
+  API_SINGLE_CHAT_PUSH: "join_video/single-chat-push.php",
+  API_GROUP_CHAT_PUSH: "join_video/group-chat-push.php",
 };
 
 export default ApiRoutes;

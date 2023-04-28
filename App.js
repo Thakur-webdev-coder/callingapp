@@ -7,7 +7,12 @@ import { RootSiblingParent } from "react-native-root-siblings";
 import SplashScreen from "react-native-splash-screen";
 import CustomLoader from "./src/helpers/CustomLoader";
 import Store, { persistor } from "./src/redux/store";
-import { checkToken, showNotification } from "./src/utils/notificationHandler";
+import {
+  changelCreated,
+  checkToken,
+  configureNotification,
+  showNotification,
+} from "./src/utils/notificationHandler";
 import { MenuProvider } from "react-native-popup-menu";
 const App = () => {
   useEffect(() => {
@@ -15,6 +20,7 @@ const App = () => {
     checkToken();
     showNotification();
   }, []);
+
   return (
     <Provider store={Store}>
       <PersistGate loading={<CustomLoader />} persistor={persistor}>

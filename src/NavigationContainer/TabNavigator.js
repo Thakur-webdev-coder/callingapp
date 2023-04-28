@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   widthPercentageToDP as wp,
@@ -26,7 +26,7 @@ const TabNavigator = () => {
   useEffect(() => {
     const { password, did, username } = loginDetails;
     getToken().then((token) => {
-      const param = { id: username, token: token };
+      const param = { id: username, token: token, device: Platform.OS };
       console.log("tokennn", token);
       _socketConnect(param);
     });

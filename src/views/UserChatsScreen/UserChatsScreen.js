@@ -10,10 +10,10 @@ import {
   FlatList,
   Alert,
   KeyboardAvoidingView,
-} from "react-native";
-import React, { useEffect, useState } from "react";
-import styles from "./styles";
-import DocumentPicker from "react-native-document-picker";
+} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import styles from './styles';
+import DocumentPicker from 'react-native-document-picker';
 
 import {
   ic_audiocall,
@@ -25,13 +25,13 @@ import {
   ic_menu,
   ic_small_plus,
   ic_videocall,
-} from "../../routes/imageRoutes";
-import colors from "../../../assets/colors";
-import CustomText from "../../components/CustomText";
+} from '../../routes/imageRoutes';
+import colors from '../../../assets/colors';
+import CustomText from '../../components/CustomText';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
 import {
   _addGroup,
   _deleteChat,
@@ -41,29 +41,33 @@ import {
   _sendChatRoomDetail,
   _sendloadMoreChatData,
   getSocket,
-} from "../../utils/socketManager";
-import { useSelector } from "react-redux";
+} from '../../utils/socketManager';
+import { useSelector } from 'react-redux';
 import {
   omitSpecialCharacters,
   timestampToDate,
   timestampToLocalTime,
   uriToFile,
-} from "../../utils/commonUtils";
+} from '../../utils/commonUtils';
 import {
   Menu,
   MenuOption,
   MenuOptions,
   MenuTrigger,
   renderers,
-} from "react-native-popup-menu";
+} from 'react-native-popup-menu';
+import {
+  hitSendGroupChatPush,
+  hitSendSingleChatPush,
+} from '../../constants/APi';
 
 const { Popover } = renderers;
 
 const UserChatsScreen = ({ navigation, route }) => {
-  const [messageInput, onChangeMessageInput] = useState("");
+  const [messageInput, onChangeMessageInput] = useState('');
   const [groupedChats, setGroupedChats] = useState([]);
 
-  console.log("groupedChatsssssssss", groupedChats);
+  console.log('groupedChatsssssssss', groupedChats);
 
   const socket = getSocket();
 
@@ -91,21 +95,21 @@ const UserChatsScreen = ({ navigation, route }) => {
   );
   let senderID = loginDetails.username;
 
-  console.log("myNUmberrrrrr", added);
+  console.log('myNUmberrrrrr', added);
 
   useEffect(() => {
     if (added) {
-      console.log("herererrerererrere");
-      sendChatMethod("Added New Member");
+      console.log('herererrerererrere');
+      sendChatMethod('Added New Member');
     }
 
     if (created) {
-      sendChatMethod("Craeted New Group");
+      sendChatMethod('Craeted New Group');
     }
   }, [route]);
 
   console.log(
-    "callData",
+    'callData',
     callData ? receiverID.callData : groupMembers,
     uniqueId
   );
@@ -129,13 +133,13 @@ const UserChatsScreen = ({ navigation, route }) => {
       return acc;
     }, []);
 
-    console.log("previousstate", groupedChats);
+    console.log('previousstate', groupedChats);
     setGroupedChats(groupedChats);
   };
 
   const __getUpdatedChatMessage = () => {
-    socket.on("chat", (data) => {
-      console.log("_getUpdatedChatMessage=======>", data);
+    socket.on('chat', (data) => {
+      console.log('_getUpdatedChatMessage=======>', data);
 
       setArray((array) => {
         const a = array.slice(0).reverse();
@@ -159,16 +163,16 @@ const UserChatsScreen = ({ navigation, route }) => {
       };
     } else {
       data = {
-        type: "group",
+        type: 'group',
         rid: uniqueId,
         sid: senderID,
         group_name: groupName,
       };
     }
 
-    console.log("chat_history", data);
+    console.log('chat_history', data);
 
-    socket.emit("chat-history", data);
+    socket.emit('chat-history', data);
   };
 
   const deleteChatHistory = () => {
@@ -179,18 +183,18 @@ const UserChatsScreen = ({ navigation, route }) => {
       sid: senderID,
     };
 
-    console.log("myyydeleteChatttt", data);
+    console.log('myyydeleteChatttt', data);
 
-    console.log("deleteChatttt", data);
+    console.log('deleteChatttt', data);
 
     _deleteChat(data);
   };
 
   const onHistoryReceived = () => {
-    console.log("_getChatHistoryy=======>");
+    console.log('_getChatHistoryy=======>');
 
-    socket.on("chat-history", (data) => {
-      console.log("_getChatHistoryy=======>", data);
+    socket.on('chat-history', (data) => {
+      console.log('_getChatHistoryy=======>', data);
       const arrayReverse = data.slice().reverse();
 
       reduceChat(arrayReverse);
@@ -202,7 +206,7 @@ const UserChatsScreen = ({ navigation, route }) => {
   const leaveGroup = () => {
     const allParticipant = participants.filter((item) => item !== senderID);
 
-    console.log("allParticipant", uniqueId, allParticipant);
+    console.log('allParticipant', uniqueId, allParticipant);
     const data = {
       id: senderID,
       group_id: uniqueId,
@@ -215,22 +219,22 @@ const UserChatsScreen = ({ navigation, route }) => {
       rid: uniqueId,
     };
 
-    console.log("datattatatat", data);
-    console.log("datattatatat", myData);
+    console.log('datattatatat', data);
+    console.log('datattatatat', myData);
 
     _addGroup(data);
     _leaveGroup(myData);
 
-    sendChatMethod(" Member leaved group");
+    sendChatMethod(' Member leaved group');
   };
 
   const sendChatMethod = (message) => {
     if (!added) {
-      if (message === "" || message == null) {
+      if (message === '' || message == null) {
         Alert.alert(
-          "Alert!",
-          "Enter your message please...",
-          [{ text: "Ok" }],
+          'Alert!',
+          'Enter your message please...',
+          [{ text: 'Ok' }],
           {
             cancelable: false,
           }
@@ -240,33 +244,53 @@ const UserChatsScreen = ({ navigation, route }) => {
     }
 
     let data = null;
+    let data1 = null;
 
     // console.log("receiverarray-->>>", state.arr.concat(receiverID));
     if (receiverID.callData) {
       receiverID = omitSpecialCharacters(receiverID.callData);
-
       data = {
         msg: message,
         rid: receiverID,
         sid: senderID,
-        type: "private",
+        type: 'private',
+      };
+
+      data1 = {
+        msg: message,
+        rid: receiverID,
+        sid: senderID,
       };
     } else {
+      const mapContact = participants?.map((str) => parseInt(str));
       data = {
         msg: message,
         rid: uniqueId,
         sid: senderID,
-        type: "group",
+        type: 'group',
         group_name: groupName,
+      };
+
+      data1 = {
+        msg: message,
+        group_id: uniqueId,
+        group_name: groupName,
+        participants: mapContact,
       };
     }
 
-    console.log("groupchatDatta", data);
+    console.log('groupchatDatta', data1);
 
     _sendChatMessage(data);
 
-    onChangeMessageInput("");
+    onChangeMessageInput('');
+    if (uniqueId) {
+      hitSendGroupChatPush(data1);
+    } else {
+      hitSendSingleChatPush(data1);
+    }
   };
+  0;
 
   const onInviteOptionSelect = (value) => {
     // console.log('item_________:)', item)
@@ -295,7 +319,7 @@ const UserChatsScreen = ({ navigation, route }) => {
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
       } else {
-        console.error("Failed to pick a file", err);
+        console.error('Failed to pick a file', err);
       }
     }
   };
@@ -307,8 +331,8 @@ const UserChatsScreen = ({ navigation, route }) => {
           <Text
             style={{
               color: colors.black,
-              fontWeight: "bold",
-              alignSelf: "center",
+              fontWeight: 'bold',
+              alignSelf: 'center',
             }}
           >
             {item.timestamp}
@@ -328,7 +352,7 @@ const UserChatsScreen = ({ navigation, route }) => {
     const { msg, timestamp } = item;
     const contact = kokoaContacts.find(
       (myItem) =>
-        myItem?.phoneNumbers[0]?.number.replace(/[^0-9]/g, "") === item?.sid
+        myItem?.phoneNumbers[0]?.number.replace(/[^0-9]/g, '') === item?.sid
     );
 
     // console.log("item------>>>>>>>>>>>>>>>>>>>>>>>>&&&&&&&&&&&&&&&", item);
@@ -345,7 +369,7 @@ const UserChatsScreen = ({ navigation, route }) => {
       marginRight: 15,
       marginTop: 8,
       borderRadius: 8,
-      alignSelf: "flex-end",
+      alignSelf: 'flex-end',
     };
 
     receiverMsgStyle = {
@@ -355,12 +379,12 @@ const UserChatsScreen = ({ navigation, route }) => {
       borderRadius: 8,
     };
     textStyle = {
-      color: "white",
+      color: 'white',
       paddingVertical: 10,
       paddingHorizontal: 15,
       fontSize: 16,
       borderRadius: 8,
-      textAlign: "left",
+      textAlign: 'left',
     };
 
     return (
@@ -372,7 +396,7 @@ const UserChatsScreen = ({ navigation, route }) => {
                 borderRadius: 8,
                 // backgroundColor: local ? "#E21019" : "#5C5D5F",
                 backgroundColor: colors.greenTop,
-                alignSelf: "flex-start",
+                alignSelf: 'flex-start',
               }}
             >
               {/* <Hyperlink
@@ -393,7 +417,7 @@ const UserChatsScreen = ({ navigation, route }) => {
                       marginTop: 5,
                     }}
                   >
-                    {contact?.givenName + " " + contact?.familyName}
+                    {contact?.givenName + ' ' + contact?.familyName}
                   </Text>
                 ) : (
                   <Text
@@ -420,9 +444,9 @@ const UserChatsScreen = ({ navigation, route }) => {
             <Text
               style={{
                 fontSize: 8,
-                alignSelf: "flex-start",
+                alignSelf: 'flex-start',
                 color: colors.blueBottom,
-                fontWeight: "bold",
+                fontWeight: 'bold',
                 marginBottom: 5,
               }}
             >
@@ -435,8 +459,8 @@ const UserChatsScreen = ({ navigation, route }) => {
               style={{
                 borderRadius: 8,
                 // backgroundColor: local ? "#E21019" : "#5C5D5F",
-                backgroundColor: "#5C5D5F",
-                alignSelf: "flex-start",
+                backgroundColor: '#5C5D5F',
+                alignSelf: 'flex-start',
               }}
             >
               {/* <Hyperlink
@@ -459,9 +483,9 @@ const UserChatsScreen = ({ navigation, route }) => {
             <Text
               style={{
                 fontSize: 8,
-                alignSelf: "flex-end",
+                alignSelf: 'flex-end',
                 color: colors.blueBottom,
-                fontWeight: "bold",
+                fontWeight: 'bold',
                 marginBottom: 5,
               }}
             >
@@ -478,7 +502,7 @@ const UserChatsScreen = ({ navigation, route }) => {
       <TouchableOpacity
         onPress={() =>
           groupName
-            ? navigation.navigate("ParticipantsScreen", {
+            ? navigation.navigate('ParticipantsScreen', {
                 participants: participants,
               })
             : null
@@ -490,7 +514,7 @@ const UserChatsScreen = ({ navigation, route }) => {
           </TouchableOpacity>
 
           <View style={styles.nameContainer}>
-            <Text style={[styles.textStyleToolbar, { fontWeight: "700" }]}>
+            <Text style={[styles.textStyleToolbar, { fontWeight: '700' }]}>
               {Name || callData ? (Name ? Name : callData) : groupName}
             </Text>
           </View>
@@ -502,7 +526,7 @@ const UserChatsScreen = ({ navigation, route }) => {
               <TouchableOpacity
                 style={{ marginHorizontal: 25, padding: 10 }}
                 onPress={() =>
-                  navigation.navigate("SelectScreen", {
+                  navigation.navigate('SelectScreen', {
                     groupName: groupName,
                     uniqueId: uniqueId,
                     participants: participants,
@@ -525,7 +549,7 @@ const UserChatsScreen = ({ navigation, route }) => {
             </TouchableOpacity> */}
             <Menu
               renderer={Popover}
-              rendererProps={{ placement: "bottom" }}
+              rendererProps={{ placement: 'bottom' }}
               onSelect={(value) => onInviteOptionSelect(value)}
             >
               <MenuTrigger children={<Image source={ic_menu} />} />
@@ -536,11 +560,11 @@ const UserChatsScreen = ({ navigation, route }) => {
                     style={{
                       fontSize: 14,
                       color: colors.black,
-                      fontWeight: "bold",
+                      fontWeight: 'bold',
                       padding: 5,
                     }}
                   >
-                    {uniqueId ? "Leave Group" : "Delete chat"}
+                    {uniqueId ? 'Leave Group' : 'Delete chat'}
                   </Text>
                 </MenuOption>
               </MenuOptions>
@@ -567,16 +591,16 @@ const UserChatsScreen = ({ navigation, route }) => {
           <View
             style={{
               flex: 1,
-              justifyContent: "center",
-              alignItems: "center",
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
             <Text
               style={{
-                alignSelf: "center",
+                alignSelf: 'center',
                 fontSize: 20,
                 color: colors.black,
-                fontWeight: "bold",
+                fontWeight: 'bold',
               }}
             >
               Start New Conversation!
@@ -600,13 +624,13 @@ const UserChatsScreen = ({ navigation, route }) => {
             </KeyboardAvoidingView>
 
             <TouchableOpacity
-              style={{ justifyContent: "center" }}
+              style={{ justifyContent: 'center' }}
               onPress={uploadFile}
             >
               <Image source={ic_chat_attach} />
             </TouchableOpacity>
             <TouchableOpacity
-              style={{ alignSelf: "center" }}
+              style={{ alignSelf: 'center' }}
               onPress={() => setState({ callModal: true })}
             >
               <Image source={ic_chat_call} />
@@ -619,7 +643,7 @@ const UserChatsScreen = ({ navigation, route }) => {
             }}
           >
             <Image
-              style={{ transform: [{ rotate: "180deg" }], alignSelf: "center" }}
+              style={{ transform: [{ rotate: '180deg' }], alignSelf: 'center' }}
               source={ic_back}
             />
           </TouchableOpacity>
@@ -637,7 +661,7 @@ const UserChatsScreen = ({ navigation, route }) => {
             style={styles.callBoxStyle}
             onPress={() => {
               if (callData) {
-                navigation.navigate("CallScreen", {
+                navigation.navigate('CallScreen', {
                   voiceCall: true,
                   callData: callData,
                 });
@@ -649,17 +673,17 @@ const UserChatsScreen = ({ navigation, route }) => {
 
             <CustomText
               //fontWeight={"bold"}
-              text={"Voice Call"}
+              text={'Voice Call'}
               textColor={colors.secondary}
               textSize={22}
               marginLeft={wp(6)}
             />
           </TouchableOpacity>
           <TouchableOpacity
-            style={{ flexDirection: "row", alignItems: "center" }}
+            style={{ flexDirection: 'row', alignItems: 'center' }}
             onPress={() => {
               if (callData) {
-                navigation.navigate("CallScreen", {
+                navigation.navigate('CallScreen', {
                   voiceCall: false,
                   callData: callData,
                 });
@@ -670,19 +694,19 @@ const UserChatsScreen = ({ navigation, route }) => {
             <Image source={ic_videocall} />
             <CustomText
               //fontWeight={"bold"}
-              text={"Video Call"}
+              text={'Video Call'}
               textColor={colors.secondary}
               textSize={22}
               marginLeft={wp(3)}
             />
           </TouchableOpacity>
           <TouchableOpacity
-            style={{ alignItems: "flex-end" }}
+            style={{ alignItems: 'flex-end' }}
             onPress={() => setState({ callModal: false })}
           >
             <CustomText
               //fontWeight={"bold"}
-              text={"CANCEL"}
+              text={'CANCEL'}
               textColor={colors.secondary}
               textSize={20}
               //textAlign={'center'}

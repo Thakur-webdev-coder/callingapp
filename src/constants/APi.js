@@ -79,7 +79,7 @@ export const hitCallRatesApi = () => {
 //   });
 // };
 export const hitCallRatesNewApi = (payload) => {
-  console.log('-----paylod',payload);
+  console.log("-----paylod", payload);
   return apiClient({
     baseURL: ApiRoutes.BASE_URL,
     method: "POST",
@@ -95,7 +95,6 @@ export const hitApiAssignDid = (username) => {
     params: { pr_login: username },
   });
 };
-
 
 export const hitCreditTransferApi = (payload) => {
   return apiClient({
@@ -137,6 +136,24 @@ export const hitSyncContactApi = (payload) => {
     baseURL: ApiRoutes.BASE_URL,
     method: "post",
     url: ApiRoutes.SYNC_CONTACTS,
+    data: payload,
+  });
+};
+
+export const hitSendSingleChatPush = (payload) => {
+  return apiClient({
+    baseURL: ApiRoutes.BASE_URL,
+    method: "post",
+    url: ApiRoutes.API_SINGLE_CHAT_PUSH,
+    data: payload,
+  });
+};
+
+export const hitSendGroupChatPush = (payload) => {
+  return apiClient({
+    baseURL: ApiRoutes.BASE_URL,
+    method: "post",
+    url: ApiRoutes.API_GROUP_CHAT_PUSH,
     data: payload,
   });
 };
