@@ -23,8 +23,10 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
+
+
 
 
 
@@ -51,8 +53,21 @@
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
+
         </intent-filter>
+
+          <intent-filter>
+              <action android:name="android.intent.action.VIEW" />
+              <category android:name="android.intent.category.DEFAULT" />
+              <category android:name="android.intent.category.BROWSABLE" />
+
+              <!-- Define your deep link scheme here -->
+              <data android:scheme="kokoafone" android:host="open"  android:pathPrefix="/deeplink" />
+          </intent-filter>
       </activity>
+
+
+
 
 
 

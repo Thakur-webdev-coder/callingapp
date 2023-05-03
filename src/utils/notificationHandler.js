@@ -6,10 +6,11 @@ let navigations = null;
 import InCallManager from 'react-native-incall-manager';
 import { Store } from '../redux';
 import { hangupMeeting } from '../lib-jitsi-meet/actions';
-import { setToken } from './commonUtils';
+import { getBooleanValue, setToken } from './commonUtils';
 import { Socket } from 'socket.io-client';
 import { getSocket } from './socketManager';
 import PushNotification, { Importance } from 'react-native-push-notification';
+import Loading from 'react-native-whc-loading';
 
 const { NotificationManager } = NativeModules;
 
@@ -32,6 +33,8 @@ export const checkToken = async () => {
 export const showNotification = () => {
   messaging().onMessage(async (remoteMessage) => {
     console.log('remoteMegssage', remoteMessage);
+    console.log('uniqueIddd22', remoteMessage?.data.participants);
+
     // Check if app is in foreground
 
     // CustomAlert(remoteMessage);
@@ -53,12 +56,21 @@ export const showNotification = () => {
         callData: remoteMessage?.data,
       });
     } else if (remoteMessage?.data?.notification_type === 'SINGLE_CHAT') {
-      showLocalNotification(remoteMessage);
-      // navigations.navigate("UserChatsScreen", {
-      //   callData: remoteMessage?.data?.sid,
-      // });
+      const isFocused = getBooleanValue('isFocused').then((data) => {
+        console.log('isFocused', data);
+
+        if (!data) {
+          showLocalNotification(remoteMessage);
+        }
+      });
     } else if (remoteMessage?.data?.notification_type === 'GROUP_CHAT') {
-      showLocalNotification(remoteMessage);
+      const isFocused = getBooleanValue('isFocused').then((data) => {
+        console.log('isFocused', data);
+
+        if (!data) {
+          showLocalNotification(remoteMessage);
+        }
+      });
     }
   });
 
@@ -66,9 +78,13 @@ export const showNotification = () => {
     console.log('Message handled in the background!', remoteMessage);
 
     if (remoteMessage?.data?.notification_type == 'call') {
-      navigations.navigate('IncomingScreen', {
-        callData: remoteMessage?.data,
-      });
+      showIncomingCallNotification(remoteMessage);
+      // navigations.navigate('IncomingScreen', {
+      //   callData: remoteMessage?.data,
+      // });
+    } else if (remoteMessage?.data?.notification_type == 'hangup_call') {
+      InCallManager.stopRingtone();
+      PushNotification.cancelAllLocalNotifications();
     }
 
     // // Create a notification
@@ -91,22 +107,27 @@ export const showNotification = () => {
           navigations.navigate('IncomingScreen', {
             callData: remoteMessage?.data,
           });
-        }, 500);
+        }, 200);
       } else if (remoteMessage?.data?.notification_type === 'hangup_call') {
       } else if (remoteMessage?.data?.notification_type === 'SINGLE_CHAT') {
         setTimeout(() => {
           navigations.navigate('UserChatsScreen', {
             callData: remoteMessage?.data?.sid,
           });
-        }, 500);
+        }, 200);
       } else if (remoteMessage?.data?.notification_type === 'GROUP_CHAT') {
         setTimeout(() => {
+          let participants = remoteMessage?.data?.participants;
+
+          let result = participants.split(',').map(function (value) {
+            return value.trim();
+          });
           navigations.navigate('UserChatsScreen', {
             groupName: remoteMessage?.data?.group_name,
             uniqueId: remoteMessage?.data?.group_id,
-            participants: remoteMessage?.data?.participants,
+            participants: result,
           });
-        }, 500);
+        }, 200);
       }
     });
 
@@ -122,10 +143,15 @@ export const showNotification = () => {
         callData: remoteMessage?.data?.sid,
       });
     } else if (remoteMessage?.data?.notification_type === 'GROUP_CHAT') {
+      let participants = remoteMessage?.data?.participants;
+
+      let result = participants.split(',').map(function (value) {
+        return value.trim();
+      });
       navigations.navigate('UserChatsScreen', {
         groupName: remoteMessage?.data?.group_name,
         uniqueId: remoteMessage?.data?.group_id,
-        participants: remoteMessage?.data?.participants,
+        participants: result,
       });
     }
   });
@@ -139,6 +165,7 @@ const showLocalNotification = (remoteMessage) => {
     soundName: 'default',
     importance: Importance.HIGH,
     id: '12345',
+    channelId: '12345',
     data: remoteMessage,
   });
 };
@@ -148,7 +175,7 @@ export const configureNotification = () => {
     onNotification: function (notification) {
       console.log(
         'NOTIFICATION:===>>>>',
-        notification,
+        notification.action,
         notification?.data?.data?.notification_type === 'SINGLE_CHAT'
       );
 
@@ -157,13 +184,53 @@ export const configureNotification = () => {
           callData: notification?.data?.data?.sid,
         });
       } else if (notification?.data?.data?.notification_type === 'GROUP_CHAT') {
+        let participants = notification?.data?.data?.participants;
+
+        let result = participants.split(',').map(function (value) {
+          return value.trim();
+        });
         navigations.navigate('UserChatsScreen', {
           groupName: notification?.data?.data?.group_name,
           uniqueId: notification?.data?.data?.group_id,
-          participants: notification?.data?.data?.participants,
+          participants: result,
         });
+      } else if (notification?.data?.data?.notification_type === 'call') {
+        if (notification.userInteraction) {
+          if (notification.action == 'Accept') {
+            InCallManager.stopRingtone();
+            navigations.navigate('CallScreen', {
+              voiceCall: notification?.data?.data?.Type == 'A' ? true : false,
+              fromNotification: true,
+              callData: notification?.data?.data?.sender_phone,
+              meetimgUrl: notification?.data?.data?.Meeting_url,
+            });
+          } else if (notification.action == 'Reject') {
+            console.log('User pressed Reject button on the notification!');
+          }
+        }
       }
     },
+  });
+};
+
+messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+  console.log('right hererrerer', remoteMessage);
+  //   launchApp();
+
+  if (remoteMessage?.data?.notification_type == 'call') {
+    InCallManager.startRingtone();
+  }
+});
+
+const showIncomingCallNotification = (remoteMessage) => {
+  InCallManager.startRingtone();
+  PushNotification.localNotification({
+    channelId: '12345',
+    title: remoteMessage.notification.title,
+    message: remoteMessage.notification.body,
+    smallIcon: null,
+    ongoing: true,
+    actions: ['Accept', 'Reject'],
   });
 };
 
@@ -176,5 +243,6 @@ export const changelCreated = () => {
     soundName: 'default', // (optional) See `soundName` parameter of `localNotification` function
     importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
     vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
+    actions: ['Accept', 'Reject'],
   });
 };

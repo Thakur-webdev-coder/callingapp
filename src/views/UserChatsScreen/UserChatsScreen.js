@@ -45,6 +45,7 @@ import {
 import { useSelector } from 'react-redux';
 import {
   omitSpecialCharacters,
+  saveBooleanValue,
   timestampToDate,
   timestampToLocalTime,
   uriToFile,
@@ -60,6 +61,8 @@ import {
   hitSendGroupChatPush,
   hitSendSingleChatPush,
 } from '../../constants/APi';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+import PushNotification from 'react-native-push-notification';
 
 const { Popover } = renderers;
 
@@ -110,8 +113,18 @@ const UserChatsScreen = ({ navigation, route }) => {
 
   console.log(
     'callData',
-    callData ? receiverID.callData : groupMembers,
+    callData ? receiverID.callData : participants,
     uniqueId
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      saveBooleanValue('isFocused', true);
+
+      return () => {
+        saveBooleanValue('isFocused', false);
+      };
+    }, [])
   );
 
   useEffect(() => {
@@ -262,7 +275,9 @@ const UserChatsScreen = ({ navigation, route }) => {
         sid: senderID,
       };
     } else {
-      const mapContact = participants?.map((str) => parseInt(str));
+      // const mapContact = participants?.map((str) => parseInt(str));
+      const mapContact = participants.join(', ');
+
       data = {
         msg: message,
         rid: uniqueId,
@@ -285,12 +300,15 @@ const UserChatsScreen = ({ navigation, route }) => {
 
     onChangeMessageInput('');
     if (uniqueId) {
+      console.log('groupchatDatta222', data1);
+
       hitSendGroupChatPush(data1);
     } else {
+      console.log('singleDatta222', data1);
+
       hitSendSingleChatPush(data1);
     }
   };
-  0;
 
   const onInviteOptionSelect = (value) => {
     // console.log('item_________:)', item)
@@ -519,12 +537,9 @@ const UserChatsScreen = ({ navigation, route }) => {
             </Text>
           </View>
           <View style={styles.headerComponent}>
-            <TouchableOpacity>
-              <Image source={ic_chat_search} />
-            </TouchableOpacity>
             {groupName ? (
               <TouchableOpacity
-                style={{ marginHorizontal: 25, padding: 10 }}
+                style={{ marginHorizontal: 40, padding: 10 }}
                 onPress={() =>
                   navigation.navigate('SelectScreen', {
                     groupName: groupName,
@@ -536,7 +551,7 @@ const UserChatsScreen = ({ navigation, route }) => {
                 <Image source={ic_small_plus} />
               </TouchableOpacity>
             ) : (
-              <View style={{ marginHorizontal: 25, padding: 10 }}></View>
+              <View style={{ marginHorizontal: 40, padding: 10 }}></View>
             )}
 
             {/* <TouchableOpacity

@@ -1,39 +1,44 @@
-import { View, FlatList, SafeAreaView, Text } from "react-native";
-import React, { useEffect, useState } from "react";
-import colors from "../../../assets/colors";
-import CustomText from "../../components/CustomText";
-import styles from "./styles";
-import { widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { CommonHeader } from "../../components";
-import { hitGetCallDetailsApi, hitTransferHistoryApi } from "../../constants/APi";
-import { useSelector } from "react-redux";
-import Loading from "react-native-whc-loading";
+import { View, FlatList, SafeAreaView, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import colors from '../../../assets/colors';
+import CustomText from '../../components/CustomText';
+import styles from './styles';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { CommonHeader } from '../../components';
+import {
+  hitGetCallDetailsApi,
+  hitTransferHistoryApi,
+} from '../../constants/APi';
+import { useSelector } from 'react-redux';
+import Loading from 'react-native-whc-loading';
 
-const TransferHistory = ({navigation}) => {
+const TransferHistory = ({ navigation }) => {
   const [state, setState] = useState({
-    callDetailRes: "",
+    callDetailRes: '',
     isLoading: false,
   });
 
-  const DATA=[
+  const DATA = [
     {
       date: '2022-11-11',
       called_user: '0987890987',
-      duration: 'USD 0.50'
+      duration: 'USD 0.50',
     },
     {
       date: '2022-11-11',
       called_user: '0987890987',
-      duration: 'USD 0.50'
+      duration: 'USD 0.50',
     },
     {
       date: '2022-11-11',
       called_user: '0987890987',
-      duration: 'USD 0.50'
+      duration: 'USD 0.50',
     },
-  ]
+  ];
 
-  const { encrypt_detail } = useSelector((store) => store.sliceReducer);
+  const { encrypt_detail, loginDetails } = useSelector(
+    (store) => store.sliceReducer
+  );
 
   useEffect(() => {
     hitCallDetail();
@@ -42,20 +47,20 @@ const TransferHistory = ({navigation}) => {
   const hitCallDetail = async () => {
     setState({ isLoading: true });
     const data = new FormData();
-    data.append("cust_id", encrypt_detail?.encryptUser);
+    data.append('cust_id', loginDetails?.did);
 
     hitTransferHistoryApi(data)
       .then((response) => {
-        console.log("hitTransferHistoryApi----res---->>", response.data);
+        console.log('hitTransferHistoryApi----res---->>', response.data);
         setState({ isLoading: false });
-        if (response.data.result == "success") {
+        if (response.data.result == 'success') {
           setState({
             callDetailRes: response.data.msg,
           });
         }
       })
       .catch((err) => {
-        console.log("reeeeeeeeerrrrrrrr====>>>>>>", err);
+        console.log('reeeeeeeeerrrrrrrr====>>>>>>', err);
         setState({ isLoading: false });
       });
   };
@@ -77,7 +82,7 @@ const TransferHistory = ({navigation}) => {
           textColor={colors.black}
         />
         <CustomText
-          text={item.called_user}
+          text={item.reciever}
           textSize={14}
           textColor={colors.black}
         />
@@ -86,8 +91,8 @@ const TransferHistory = ({navigation}) => {
           textSize={14}
           textColor={colors.black}
         /> */}
-          <CustomText
-          text={item.duration}
+        <CustomText
+          text={item.currency + ' ' + item.amount}
           textSize={14}
           textColor={colors.black}
         />
@@ -100,7 +105,7 @@ const TransferHistory = ({navigation}) => {
   return (
     <SafeAreaView style={styles.wrapper}>
       <CommonHeader
-        headerText={"Transfer History "}
+        headerText={'Transfer History '}
         paddingHorizontal={20}
         onPress={() => navigation.goBack()}
       />
@@ -109,29 +114,25 @@ const TransferHistory = ({navigation}) => {
         <View style={styles.horizontalLine}></View>
         <View style={styles.titleView}>
           <CustomText
-             width={wp(16)}
-            text={"Date"}
+            width={wp(16)}
+            text={'Date'}
             textSize={16}
             textColor={colors.black}
           />
           <CustomText
-             width={wp(16)}
-            text={"Receiver"}
+            width={wp(16)}
+            text={'Receiver'}
             textSize={16}
             textColor={colors.black}
           />
-          <CustomText
-            text={"Amount"}
-            textSize={16}
-            textColor={colors.black}
-          />
+          <CustomText text={'Amount'} textSize={16} textColor={colors.black} />
 
           {/* <CustomText text={"Cost"} textSize={16} textColor={colors.black} /> */}
         </View>
         <View style={styles.horizontalLine}></View>
 
         <FlatList
-           data={state?.callDetailRes}
+          data={state?.callDetailRes}
           //data={DATA}
           renderItem={renderItem}
           ListEmptyComponent={EmptyListMessage}

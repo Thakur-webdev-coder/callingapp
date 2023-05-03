@@ -50,6 +50,7 @@ public class MainActivity extends ReactActivity {
       notificationChannel.setVibrationPattern(new long[]{400, 1000, 400});
       notificationChannel.setLockscreenVisibility(NotificationCompat.VISIBILITY_PUBLIC);
       NotificationManager manager = getSystemService(NotificationManager.class);
+
       manager.createNotificationChannel(notificationChannel);
 
     }
