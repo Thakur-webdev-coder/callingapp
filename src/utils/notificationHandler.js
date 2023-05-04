@@ -175,7 +175,7 @@ export const configureNotification = () => {
     onNotification: function (notification) {
       console.log(
         'NOTIFICATION:===>>>>',
-        notification.action,
+        notification?.action,
         notification?.data?.data?.notification_type === 'SINGLE_CHAT'
       );
 
@@ -196,6 +196,7 @@ export const configureNotification = () => {
         });
       } else if (notification?.data?.data?.notification_type === 'call') {
         if (notification.userInteraction) {
+          console.log('acccept Clciked', notification.action);
           if (notification.action == 'Accept') {
             InCallManager.stopRingtone();
             navigations.navigate('CallScreen', {
@@ -210,17 +211,13 @@ export const configureNotification = () => {
         }
       }
     },
+
+    onAction: function (notification) {
+      console.log('ACTION:', notification.action);
+      console.log('NOTIFICATION:', notification);
+    },
   });
 };
-
-messaging().setBackgroundMessageHandler(async (remoteMessage) => {
-  console.log('right hererrerer', remoteMessage);
-  //   launchApp();
-
-  if (remoteMessage?.data?.notification_type == 'call') {
-    InCallManager.startRingtone();
-  }
-});
 
 const showIncomingCallNotification = (remoteMessage) => {
   InCallManager.startRingtone();
@@ -243,6 +240,5 @@ export const changelCreated = () => {
     soundName: 'default', // (optional) See `soundName` parameter of `localNotification` function
     importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
     vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
-    actions: ['Accept', 'Reject'],
   });
 };

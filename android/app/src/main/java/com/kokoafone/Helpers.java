@@ -23,7 +23,7 @@ public class Helpers extends ReactContextBaseJavaModule {
         super(context);
     }
     @ReactMethod
-    void openApp() {
+   public void openApp() {
         try {
             Intent newIntent = new Intent(getReactApplicationContext(), Class.forName("com.kokoafone.MainActivity"));
             newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

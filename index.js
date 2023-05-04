@@ -25,10 +25,10 @@ import PushNotification from 'react-native-push-notification';
 const { Helpers } = NativeModules;
 import InCallManager from 'react-native-incall-manager';
 
-configureNotification();
 changelCreated();
-
 showNotification();
+
+configureNotification();
 
 function HeadlessCheck({ isHeadless }) {
   if (isHeadless) {
