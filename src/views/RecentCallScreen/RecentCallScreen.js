@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   FlatList,
   Image,
@@ -6,31 +6,31 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
+} from 'react-native';
 import {
   ic_recent,
   ic_contact_avatar,
   ic_recentcall_small,
-} from "../../routes/imageRoutes";
-import styles from "./styles";
-import AppStyle from "../../components/AppStyle";
-import { CommonHeader } from "../../components";
-import { useSelector } from "react-redux";
-import { hitGetCallDetailsApi } from "../../constants/APi";
-import { dateFormater } from "../../utils/commonUtils";
-import { parsePhoneNumber } from "libphonenumber-js";
-import { Show_Toast } from "../../utils/toast";
-import Sip from "@khateeb00/react-jssip";
+} from '../../routes/imageRoutes';
+import styles from './styles';
+import AppStyle from '../../components/AppStyle';
+import { CommonHeader } from '../../components';
+import { useSelector } from 'react-redux';
+import { hitGetCallDetailsApi } from '../../constants/APi';
+import { dateFormater } from '../../utils/commonUtils';
+import { parsePhoneNumber } from 'libphonenumber-js';
+import { Show_Toast } from '../../utils/toast';
+import Sip from '@khateeb00/react-jssip';
 
 const RecentCall = ({ navigation }) => {
   const [state, setState] = useState({
-    callDetailRes: "",
+    callDetailRes: '',
     contacts: [],
   });
 
   useEffect(() => {
     hitCallDetail();
-    const unsubscribe = navigation.addListener("focus", () => {
+    const unsubscribe = navigation.addListener('focus', () => {
       hitCallDetail();
     });
     return unsubscribe;
@@ -43,10 +43,10 @@ const RecentCall = ({ navigation }) => {
   } = useSelector((store) => store.sliceReducer);
   const hitCallDetail = async () => {
     const data = new FormData();
-    data.append("cust_id", encrypt_detail?.encryptUser);
+    data.append('cust_id', encrypt_detail?.encryptUser);
     const myResponse = await hitGetCallDetailsApi(data);
-    console.log("hitCallDetailApi----res----->>>", myResponse.data.msg);
-    if (myResponse.data.result == "success") {
+    console.log('hitCallDetailApi----res----->>>', myResponse.data.msg);
+    if (myResponse.data.result == 'success') {
       setState({
         callDetailRes: myResponse.data.msg,
       });
@@ -66,10 +66,10 @@ const RecentCall = ({ navigation }) => {
       </View>
       <View style={styles.userDetailView}>
         <Text style={styles.nameTxtStyle}>
-          {" "}
-          {parsePhoneNumber("+" + item.called_user).formatInternational()}
+          {' '}
+          {parsePhoneNumber('+' + item.called_user).formatInternational()}
         </Text>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Image source={ic_recent} />
           <Text style={styles.dateTxtStyle}>{dateFormater(item.date)}</Text>
         </View>
@@ -77,23 +77,24 @@ const RecentCall = ({ navigation }) => {
       <TouchableOpacity
         onPress={() => {
           if (balanceDetail.credit > 0) {
-            Sip.makeCall(item.called_user.replace(/ /g, ""));
-            navigation.navigate("CallingScreen", { callData: item });
+            Sip.makeCall(item.called_user.replace(/ /g, ''));
+            navigation.navigate('CallingScreen', { callData: item });
           } else {
-            Show_Toast("Insufficient balance. Please recharge your account.");
+            Show_Toast('Insufficient balance. Please recharge your account.');
           }
         }}
       >
-        <Image style={{ alignSelf: "center" }} source={ic_recentcall_small} />
+        <Image style={{ alignSelf: 'center' }} source={ic_recentcall_small} />
       </TouchableOpacity>
     </View>
   );
   return (
     <SafeAreaView style={AppStyle.wrapper}>
       <View style={AppStyle.secondWrapper}>
-        <CommonHeader 
-        headerText={"Recent Call"}
-        onPress={() => navigation.goBack()} />
+        <CommonHeader
+          headerText={'Recent Call'}
+          onPress={() => navigation.goBack()}
+        />
         <FlatList
           style={styles.containerStyle}
           data={state?.callDetailRes}

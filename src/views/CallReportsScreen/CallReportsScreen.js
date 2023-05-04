@@ -1,17 +1,17 @@
-import { View, FlatList, SafeAreaView, Text } from "react-native";
-import React, { useEffect, useState } from "react";
-import colors from "../../../assets/colors";
-import CustomText from "../../components/CustomText";
-import styles from "./styles";
-import { widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { CommonHeader } from "../../components";
-import { hitGetCallDetailsApi } from "../../constants/APi";
-import { useSelector } from "react-redux";
-import Loading from "react-native-whc-loading";
+import { View, FlatList, SafeAreaView, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import colors from '../../../assets/colors';
+import CustomText from '../../components/CustomText';
+import styles from './styles';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { CommonHeader } from '../../components';
+import { hitGetCallDetailsApi } from '../../constants/APi';
+import { useSelector } from 'react-redux';
+import Loading from 'react-native-whc-loading';
 
-const CallReportsScreen = ({navigation}) => {
+const CallReportsScreen = ({ navigation }) => {
   const [state, setState] = useState({
-    callDetailRes: "",
+    callDetailRes: '',
     isLoading: false,
   });
 
@@ -24,20 +24,20 @@ const CallReportsScreen = ({navigation}) => {
   const hitCallDetail = async () => {
     setState({ isLoading: true });
     const data = new FormData();
-    data.append("cust_id", encrypt_detail?.encryptUser);
+    data.append('cust_id', encrypt_detail?.encryptUser);
 
     hitGetCallDetailsApi(data)
       .then((response) => {
-        console.log("res------->>", response.data);
+        console.log('res------->>', response.data);
         setState({ isLoading: false });
-        if (response.data.result == "success") {
+        if (response.data.result == 'success') {
           setState({
             callDetailRes: response.data.msg,
           });
         }
       })
       .catch((err) => {
-        console.log("reeeeeeeeerrrrrrrr====>>>>>>", err);
+        console.log('reeeeeeeeerrrrrrrr====>>>>>>', err);
         setState({ isLoading: false });
       });
   };
@@ -77,7 +77,7 @@ const CallReportsScreen = ({navigation}) => {
   return (
     <SafeAreaView style={styles.wrapper}>
       <CommonHeader
-        headerText={"Call Details Reports"}
+        headerText={'Call Details Reports'}
         paddingHorizontal={20}
         onPress={() => navigation.goBack()}
       />
@@ -87,22 +87,22 @@ const CallReportsScreen = ({navigation}) => {
         <View style={styles.titleView}>
           <CustomText
             width={wp(22)}
-            text={"Date"}
+            text={'Date'}
             textSize={16}
             textColor={colors.black}
           />
           <CustomText
-            text={"Destination"}
+            text={'Destination'}
             textSize={16}
             textColor={colors.black}
           />
           <CustomText
-            text={"Duration"}
+            text={'Duration'}
             textSize={16}
             textColor={colors.black}
           />
 
-          <CustomText text={"Cost"} textSize={16} textColor={colors.black} />
+          <CustomText text={'Cost'} textSize={16} textColor={colors.black} />
         </View>
         <View style={styles.horizontalLine}></View>
 

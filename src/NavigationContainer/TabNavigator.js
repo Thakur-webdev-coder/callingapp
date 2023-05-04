@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   widthPercentageToDP as wp,
@@ -16,20 +16,20 @@ import IconTab from "../components/IconTab";
 import { useDispatch, useSelector } from "react-redux";
 import Sip from "@khateeb00/react-jssip";
 import { _getloadMoreChatData, _socketConnect } from "../utils/socketManager";
+import { getToken } from "../utils/commonUtils";
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
-  const { loginDetails = {}, encrypt_detail = {} } = useSelector(
-    (store) => store.sliceReducer
-  );
-  const dispatch = useDispatch();
-
-  const { encryptPassword, encryptUser } = encrypt_detail;
+  const { loginDetails = {} } = useSelector((store) => store.sliceReducer);
 
   useEffect(() => {
     const { password, did, username } = loginDetails;
-    const param = { id: username };
+    getToken().then((token) => {
+      const param = { id: username, token: token, device: Platform.OS };
+      console.log("tokennn", token);
+      _socketConnect(param);
+    });
 
     Sip.register({
       websocket: "wss://billing.kokoafone.com:8089/ws",
@@ -38,7 +38,6 @@ const TabNavigator = () => {
       password,
       name: did,
     });
-    _socketConnect(param);
   }, []);
 
   return (
@@ -65,13 +64,6 @@ const TabNavigator = () => {
           return (
             <View
               key={route.key}
-              // onStartShouldSetResponder={()=>{        //needed comment
-              //   if(route.name === "LiveChat"){
-              //     Linking.openURL('https://tawk.to/chat/63de1f18c2f1ac1e20315d9d/1godqiuj4')
-              //     return true
-              //   }
-              //   return false
-              // }}
               style={{
                 alignItems: "center",
                 paddingTop: hp(3),
@@ -84,8 +76,6 @@ const TabNavigator = () => {
         },
         tabBarStyle: {
           backgroundColor: colors.secondary,
-          // borderTopColor: colors.bordercolor,
-          // borderTopWidth: wp(0.2),
           height: hp(9),
           paddingBottom: hp(0.8),
         },

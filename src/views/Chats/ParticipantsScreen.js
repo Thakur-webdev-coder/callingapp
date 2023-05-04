@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  SafeAreaView,
-  FlatList,
-} from "react-native";
+import { View, Text, Image, SafeAreaView, FlatList } from "react-native";
 import React, { useEffect, useState } from "react";
 import { CommonHeader } from "../../components";
 import { ic_avatar, ic_contact_avatar } from "../../routes/imageRoutes";
@@ -24,14 +17,6 @@ const ParticipantsScreen = ({ navigation, route }) => {
   );
 
   let senderID = loginDetails.username;
-
-  useEffect(() => {
-    // getKokoaContacts();
-  }, []);
-
-  const getKokoaContacts = () => {
-    console.log("nammemmememem", kokoaContacts.map(participants));
-  };
 
   const renderItem = ({ item }) => {
     const contact = kokoaContacts.find(
@@ -72,9 +57,11 @@ const ParticipantsScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <CommonHeader headerText={"All Participants"} />
+      <CommonHeader
+        headerText={"All Participants"}
+        onPress={() => navigation.goBack()}
+      />
       <FlatList
-        //style={{ marginTop: hp(2) }}
         data={participants}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}

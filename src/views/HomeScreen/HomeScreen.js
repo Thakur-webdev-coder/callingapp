@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   Alert,
   BackHandler,
@@ -8,8 +8,8 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native";
-import colors from "../../../assets/colors";
+} from 'react-native';
+import colors from '../../../assets/colors';
 import {
   logo_smallfrog,
   ic_setting,
@@ -32,51 +32,49 @@ import {
   ic_money,
   ic_transfer_credit,
   ic_tvrecharge,
-} from "../../routes/imageRoutes";
-import styles from "./styles";
-import AppStyle from "../../components/AppStyle";
+} from '../../routes/imageRoutes';
+import styles from './styles';
+import AppStyle from '../../components/AppStyle';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
-import CustomText from "../../components/CustomText";
-import Modal from "react-native-modal";
-import { Show_Toast } from "../../utils/toast";
-import { useDispatch, useSelector } from "react-redux";
-import InCallManager from "react-native-incall-manager";
+} from 'react-native-responsive-screen';
+import CustomText from '../../components/CustomText';
+import Modal from 'react-native-modal';
+import { Show_Toast } from '../../utils/toast';
+import { useDispatch, useSelector } from 'react-redux';
+import InCallManager from 'react-native-incall-manager';
 
 import {
   hitCreditTransferApi,
   hitEncryptionApi,
   hitFetchUserBalanceApi,
   hitVoucherApi,
-} from "../../constants/APi";
+} from '../../constants/APi';
 import {
   saveBalanceData,
   saveEncrLoginDetails,
   saveLoginDetails,
   saveNotificationData,
-} from "../../redux/reducer";
-import { CommonActions, useIsFocused } from "@react-navigation/native";
-import CommonHeader from "../../components/Header/commonHeader";
-import { removeLocalParticipant } from "../../redux/participants";
-import { navigateScreen } from "../../utils/notificationHandler";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+} from '../../redux/reducer';
+import { CommonActions, useIsFocused } from '@react-navigation/native';
+import CommonHeader from '../../components/Header/commonHeader';
+import { removeLocalParticipant } from '../../redux/participants';
 import {
-  getDataFromAsyncStorage,
-  saveDataToAsyncStorage,
-} from "../../utils/commonUtils";
+  changelCreated,
+  navigateScreen,
+} from '../../utils/notificationHandler';
 
 let myBalanceData = null;
 let usernameEncryptedCode = null;
 let passwordEncryptedCode = null;
 let activeScreen = true;
 const Home = ({ navigation }) => {
-  const [recepientNum, setRecepientNum] = useState("");
-  const [transfreAmt, setTransferAmt] = useState("");
+  const [recepientNum, setRecepientNum] = useState('');
+  const [transfreAmt, setTransferAmt] = useState('');
 
   const [state, setState] = useState({
-    voucherNum: "",
+    voucherNum: '',
   });
   const [voucherModal, setVoucherModal] = useState(false);
   const [balanceModal, setBalanceModal] = useState(false);
@@ -94,22 +92,31 @@ const Home = ({ navigation }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    changelCreated();
+
     InCallManager.stopRingback();
     InCallManager.stopRingtone();
 
     navigateScreen(navigation);
-    hitBalanceAPi();
   }, []);
+
+  useEffect(() => {
+    hitBalanceAPi();
+    const unsubscribe = navigation.addListener('focus', () => {
+      hitBalanceAPi();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   const isFocused = useIsFocused();
 
   useEffect(() => {
     if (isFocused) {
-      BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
+      BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
     }
     return () => {
       BackHandler.removeEventListener(
-        "hardwareBackPress",
+        'hardwareBackPress',
         handleBackButtonClick
       );
     };
@@ -123,157 +130,157 @@ const Home = ({ navigation }) => {
   const DATA = [
     {
       id: 0,
-      name: "Invite Friends",
+      name: 'Invite Friends',
       image: ic_users,
     },
     {
       id: 1,
-      name: "My Balance",
+      name: 'My Balance',
       image: ic_mybalance,
     },
     {
       id: 2,
-      name: "Buy Credits",
+      name: 'Buy Credits',
       image: ic_buycredit,
     },
     {
       id: 3,
-      name: "Transfer Credit",
+      name: 'Transfer Credit',
       image: ic_transfer_credit,
     },
     {
       id: 4,
-      name: "Transfer History",
+      name: 'Transfer History',
       image: ic_transfer,
     },
     {
       id: 5,
-      name: "Voucher Recharge",
+      name: 'Voucher Recharge',
       image: ic_voucher,
     },
     {
       id: 6,
-      name: "Call Details Report",
+      name: 'Call Details Report',
       image: ic_calldetails,
     },
     {
       id: 7,
-      name: "Mobile Money",
+      name: 'Mobile Money',
       image: ic_money,
     },
     {
       id: 8,
-      name: "Mobile Topup",
+      name: 'Mobile Topup',
       image: ic_popup,
     },
     {
       id: 9,
-      name: "Data Bundle",
+      name: 'Data Bundle',
       image: ic_databundle,
     },
     {
       id: 10,
-      name: "Electricity Bill Pay",
+      name: 'Electricity Bill Pay',
       image: ic_electricity,
     },
     {
       id: 11,
-      name: "TV Recharge",
+      name: 'TV Recharge',
       image: ic_tvrecharge,
     },
     {
       id: 12,
-      name: "Logout",
+      name: 'Logout',
       image: ic_logout,
     },
   ];
 
   const ViewItemClicked_Method = (name) => {
     switch (name) {
-      case "Invite Friends":
+      case 'Invite Friends':
         // navigation.navigate("InviteScreen");
-        navigation.navigate("InviteScreen");
+        navigation.navigate('InviteScreen');
         break;
 
-      case "My Balance":
+      case 'My Balance':
         setBalanceModal(true);
         break;
 
-      case "Buy Credits":
-        navigation.navigate("WebViewScreen", {
+      case 'Buy Credits':
+        navigation.navigate('WebViewScreen', {
           url: `https://billing.kokoafone.com/billing/customer/mobile_payment.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
-          title: "Buy Credit",
+          title: 'Buy Credit',
         });
         break;
 
-      case "Transfer Credit":
+      case 'Transfer Credit':
         setTransferModal(true);
         break;
 
-      case "Transfer History":
-        navigation.navigate("TransferHistory");
+      case 'Transfer History':
+        navigation.navigate('TransferHistory');
         break;
 
-      case "Call Details Report":
-        navigation.navigate("CallReportsScreen");
+      case 'Call Details Report':
+        navigation.navigate('CallReportsScreen');
         break;
 
-      case "Mobile Money":
-        navigation.navigate("WebViewScreen", {
+      case 'Mobile Money':
+        navigation.navigate('WebViewScreen', {
           url: `https://billing.kokoafone.com/billing/customer/billing_mobile_money.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
-          title: "Mobile Money",
+          title: 'Mobile Money',
         });
         break;
 
-      case "Mobile Topup":
-        navigation.navigate("WebViewScreen", {
+      case 'Mobile Topup':
+        navigation.navigate('WebViewScreen', {
           url: `https://billing.kokoafone.com/billing/customer/billing_airtime.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
-          title: "Mobile Topup",
+          title: 'Mobile Topup',
         });
         break;
 
-      case "Data Bundle":
-        navigation.navigate("WebViewScreen", {
-          url: `https://voice.nonicoms.ng/billing/customer/billing_utility.php?pr_login=[username]&pr_password=[password]&mobiledone=submit_log`,
-          title: "Data Bundle",
+      case 'Data Bundle':
+        navigation.navigate('WebViewScreen', {
+          url: `https://billing.kokoafone.com/billing/customer/billing_databundles.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
+          title: 'Data Bundle',
         });
-      case "Electricity Bill Pay":
-        navigation.navigate("WebViewScreen", {
-          url: `https://voice.nonicoms.ng/billing/customer/billing_utility.php?pr_login=[username]&pr_password=[password]&mobiledone=submit_log`,
-          title: "Electricity Bill Pay",
+      case 'Electricity Bill Pay':
+        navigation.navigate('WebViewScreen', {
+          url: `https://billing.kokoafone.com/billing/customer/billing_electricity_bill.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
+          title: 'Electricity Bill Pay',
         });
-      case "TV Recharge":
-        navigation.navigate("WebViewScreen", {
-          url: `https://voice.nonicoms.ng/billing/customer/billing_utility.php?pr_login=[username]&pr_password=[password]&mobiledone=submit_log`,
-          title: "TV Recharge",
+      case 'TV Recharge':
+        navigation.navigate('WebViewScreen', {
+          url: `https://billing.kokoafone.com/billing/customer/billing_dth.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
+          title: 'TV Recharge',
         });
         break;
-      case "Voucher Recharge":
+      case 'Voucher Recharge':
         setVoucherModal(true);
         break;
 
-      case "Logout":
+      case 'Logout':
         LogoutMethod();
         break;
       default:
-        console.log("Voucher Recharge");
+        console.log('Voucher Recharge');
     }
   };
 
   const hitBalanceAPi = async () => {
-    console.log("herrreee=========");
+    console.log('herrreee=========');
 
     // setIsLoading(true);
 
     const data = new FormData();
-    data.append("source", did);
+    data.append('source', did);
     const myResponse = await hitEncryptionApi(data);
 
-    if (myResponse.data.result == "success") {
+    if (myResponse.data.result == 'success') {
       usernameEncryptedCode = myResponse.data.value;
       hitPhoneEncryptionAPi();
     } else {
-      alert("Please Enter a Valid Phone Number");
+      alert('Please enter a valid phone number.');
     }
   };
 
@@ -281,11 +288,11 @@ const Home = ({ navigation }) => {
     const { username, password } = loginDetails;
 
     const data = new FormData();
-    data.append("source", password);
+    data.append('source', password);
 
     const myResponse = await hitEncryptionApi(data);
 
-    if (myResponse.data.result == "success") {
+    if (myResponse.data.result == 'success') {
       passwordEncryptedCode = myResponse?.data?.value;
       dispatch(
         saveEncrLoginDetails({
@@ -298,65 +305,65 @@ const Home = ({ navigation }) => {
     }
   };
   const hitFetchBalanceApi = async () => {
-    console.log("myDtaaaa___", usernameEncryptedCode, passwordEncryptedCode);
+    console.log('myDtaaaa___', usernameEncryptedCode, passwordEncryptedCode);
 
     // setIsLoading(false);
 
     const data = new FormData();
-    data.append("cust_id", usernameEncryptedCode);
-    data.append("cust_pass", passwordEncryptedCode);
-    console.log("myResponseData=====", data);
+    data.append('cust_id', usernameEncryptedCode);
+    data.append('cust_pass', passwordEncryptedCode);
+    console.log('myResponseData=====', data);
 
     myBalanceData = await hitFetchUserBalanceApi(data);
-    console.log("myResponseData=====", myBalanceData.data);
+    console.log('myResponseData=====', myBalanceData.data);
     dispatch(saveBalanceData(myBalanceData.data));
   };
 
   const RechargeMethod = async () => {
     const { voucherNum } = state;
-    console.log("aaaaaa", voucherNum);
+    console.log('aaaaaa', voucherNum);
     if (voucherNum.length != 0) {
       setVoucherModal(false);
       // setIsLoading(true);
 
       const data = new FormData();
-      data.append("source", voucherNum);
+      data.append('source', voucherNum);
       const myResponse = await hitEncryptionApi(data);
 
-      if (myResponse.data.result == "success") {
+      if (myResponse.data.result == 'success') {
         // setIsLoading(false);
         const vouchereEncryptedCode = myResponse.data.value;
         hitVoucherApi_Method(vouchereEncryptedCode);
       } else {
         // setIsLoading(false);
       }
-      setState({ voucherNum: "" });
+      setState({ voucherNum: '' });
     } else {
-      Alert.alert("", "Please enter a voucher number");
+      Alert.alert('', 'Please enter a voucher number.');
     }
 
     //setRechargerModal(true);
   };
 
   const TransferCreditMethod = async () => {
-    console.log("rrrrrrrr--------", recepientNum);
+    console.log('rrrrrrrr--------', recepientNum);
     if (recepientNum.length >= 6 && transfreAmt.length > 0) {
-      console.log("numberr", recepientNum);
+      console.log('numberr', recepientNum);
 
       setTransferModal(false);
       const data = new FormData();
-      data.append("source", recepientNum);
+      data.append('source', recepientNum);
       const myResponse = await hitEncryptionApi(data);
 
-      console.log("myResponse", myResponse.data);
+      console.log('myResponse', myResponse.data);
 
-      if (myResponse.data.result == "success") {
+      if (myResponse.data.result == 'success') {
         const recepientEncryptedNumber = myResponse.data.value;
         hitTransferCreditApi(recepientEncryptedNumber);
       } else {
       }
     } else {
-      Alert.alert("", "Please Enter Valid recepient number or amount");
+      Alert.alert('', 'Please enter valid recepient number or amount.');
     }
   };
 
@@ -364,13 +371,13 @@ const Home = ({ navigation }) => {
     const { transfreAmt } = state;
 
     const data = new FormData();
-    data.append("cust_id", usernameEncryptedCode);
-    data.append("cust_pass", passwordEncryptedCode);
-    data.append("credit", transfreAmt);
-    data.append("transferaccount", recepientAccount);
+    data.append('cust_id', usernameEncryptedCode);
+    data.append('cust_pass', passwordEncryptedCode);
+    data.append('credit', transfreAmt);
+    data.append('transferaccount', recepientAccount);
     const myResponse = await hitCreditTransferApi(data);
 
-    if (myResponse.data.result == "sucess") {
+    if (myResponse.data.result == 'sucess') {
       Show_Toast(myResponse.data.msg);
     } else {
       Show_Toast(myResponse.data.msg);
@@ -379,12 +386,12 @@ const Home = ({ navigation }) => {
 
   const hitVoucherApi_Method = async (vouchereCode) => {
     const data = new FormData();
-    data.append("username", usernameEncryptedCode);
-    data.append("password", passwordEncryptedCode);
-    data.append("voucher", vouchereCode);
+    data.append('username', usernameEncryptedCode);
+    data.append('password', passwordEncryptedCode);
+    data.append('voucher', vouchereCode);
     const myResponse = await hitVoucherApi(data);
 
-    if (myResponse.data.result == "success") {
+    if (myResponse.data.result == 'success') {
       // setIsLoading(false);
       Show_Toast(myResponse.data.msg);
     } else {
@@ -401,7 +408,7 @@ const Home = ({ navigation }) => {
     navigation?.dispatch(
       CommonActions.reset({
         index: 0,
-        routes: [{ name: "Verify Screen" }],
+        routes: [{ name: 'Verify Screen' }],
       })
     );
     dispatch(saveLoginDetails(null));
@@ -418,10 +425,10 @@ const Home = ({ navigation }) => {
         <Image source={item.image} />
         <CustomText
           textColor={colors.secondary}
-          textAlign={"center"}
+          textAlign={'center'}
           marginTop={hp(1)}
           text={item.name}
-          fontWeight={"600"}
+          fontWeight={'600'}
           textSize={13}
         />
       </TouchableOpacity>
@@ -433,15 +440,15 @@ const Home = ({ navigation }) => {
       <View style={AppStyle.secondWrapper}>
         <View style={styles.headerStyle}>
           <CustomText
-            fontWeight={"bold"}
-            text={"Home"}
+            fontWeight={'bold'}
+            text={'Home'}
             textColor={colors.white}
             textSize={20}
           />
         </View>
         <View style={styles.cardStyle}>
           <CustomText
-            text={"Registered Number"}
+            text={'Registered Number'}
             textColor={colors.white}
             fontWeight={700}
           />
@@ -453,16 +460,16 @@ const Home = ({ navigation }) => {
           <View style={styles.balanceStyle}>
             <View>
               <CustomText
-                text={"Balance"}
+                text={'Balance'}
                 textSize={18}
                 textColor={colors.white}
               />
 
               <CustomText
                 text={
-                  balanceDetail?.credit == "0"
-                    ? "₦" + "0.00"
-                    : "₦" + balanceDetail?.credit
+                  balanceDetail?.credit == '0'
+                    ? '₦' + '0.00'
+                    : '₦' + balanceDetail?.credit
                 }
                 textSize={18}
                 textColor={colors.white}
@@ -476,16 +483,16 @@ const Home = ({ navigation }) => {
       </View>
       <View style={styles.wrapper2}>
         <CustomText
-          text={" Services"}
+          text={' Services'}
           textSize={20}
-          fontWeight={"bold"}
+          fontWeight={'bold'}
           textColor={colors.black}
           marginTop={wp(2)}
           marginLeft={wp(2)}
         />
 
         <FlatList
-          columnWrapperStyle={{ justifyContent: "space-between" }}
+          columnWrapperStyle={{ justifyContent: 'space-between' }}
           data={DATA}
           renderItem={RenderList}
           keyExtractor={(item, index) => item.name}
@@ -498,13 +505,13 @@ const Home = ({ navigation }) => {
         >
           <View style={styles.voucherModalStyle}>
             <CustomText
-              text={"Voucher Recharge"}
+              text={'Voucher Recharge'}
               textSize={20}
-              fontWeight={"bold"}
+              fontWeight={'bold'}
               textColor={colors.appColor}
             />
             <CustomText
-              text={"Enter the Voucher Number"}
+              text={'Enter the Voucher Number'}
               textColor={colors.appColor}
             />
             <TextInput
@@ -517,17 +524,17 @@ const Home = ({ navigation }) => {
             <View style={styles.btnStyle}>
               <TouchableOpacity onPress={() => setVoucherModal(false)}>
                 <CustomText
-                  text={"Cancel"}
+                  text={'Cancel'}
                   textSize={16}
-                  fontWeight={"600"}
+                  fontWeight={'600'}
                   textColor={colors.dodgeBlue}
                 />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => RechargeMethod()}>
                 <CustomText
-                  text={"Redeem"}
+                  text={'Redeem'}
                   textSize={16}
-                  fontWeight={"600"}
+                  fontWeight={'600'}
                   textColor={colors.dodgeBlue}
                   marginLeft={wp(10)}
                 />
@@ -542,24 +549,24 @@ const Home = ({ navigation }) => {
         >
           <View style={styles.rechargeModalStyle}>
             <CustomText
-              text={"Kokoafone"}
+              text={'Kokoafone'}
               textSize={20}
-              fontWeight={"bold"}
+              fontWeight={'bold'}
               textColor={colors.appColor}
             />
             <CustomText
-              text={"Balance : " + "₦" + balanceDetail?.credit}
+              text={'Balance : ' + '₦' + balanceDetail?.credit}
               textColor={colors.appColor}
               paddingVertical={hp(3)}
             />
             <TouchableOpacity onPress={() => RechargeDoneMethod()}>
               <CustomText
-                text={"OK"}
+                text={'OK'}
                 textSize={16}
-                fontWeight={"600"}
+                fontWeight={'600'}
                 textColor={colors.dodgeBlue}
                 marginLeft={wp(10)}
-                textAlign={"right"}
+                textAlign={'right'}
               />
             </TouchableOpacity>
           </View>
@@ -571,15 +578,15 @@ const Home = ({ navigation }) => {
         >
           <View style={styles.voucherModalStyle}>
             <CustomText
-              text={"Transfer Credit"}
+              text={'Transfer Credit'}
               textSize={20}
-              fontWeight={"bold"}
+              fontWeight={'bold'}
               textColor={colors.appColor}
             />
 
             <TextInput
               style={styles.textInputStyle}
-              placeholder="Enter the Recepient Number"
+              placeholder="Enter the recepient number."
               placeholderTextColor={colors.appColor}
               keyboardType="numeric"
               onChangeText={(txt) => {
@@ -599,17 +606,17 @@ const Home = ({ navigation }) => {
             <View style={styles.btnStyle}>
               <TouchableOpacity onPress={() => setTransferModal(false)}>
                 <CustomText
-                  text={"Cancel"}
+                  text={'Cancel'}
                   textSize={16}
-                  fontWeight={"600"}
+                  fontWeight={'600'}
                   textColor={colors.dodgeBlue}
                 />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => TransferCreditMethod()}>
                 <CustomText
-                  text={"Transfer"}
+                  text={'Transfer'}
                   textSize={16}
-                  fontWeight={"600"}
+                  fontWeight={'600'}
                   textColor={colors.dodgeBlue}
                   marginLeft={wp(10)}
                 />
