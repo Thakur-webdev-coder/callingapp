@@ -47,7 +47,7 @@ const TabNavigator = () => {
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarLabelPosition: "below-icon",
-
+        tabBarHideOnKeyboard: true,
         tabBarIcon: ({ focused }) => {
           let index;
           if (route.name === "Home") {

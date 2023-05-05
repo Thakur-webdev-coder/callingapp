@@ -112,7 +112,6 @@ const Contacts = ({ navigation }) => {
     };
     const syncContacts = (contactNumber) => {
       console.log("inApi======");
-      setIsLoading(true);
       const mapContact = (contactNumber || allContacts)?.map((l) =>
         // l.phoneNumbers[0]?.number
         omitSpecialCharacters(l.phoneNumbers[0]?.number)
@@ -127,6 +126,7 @@ const Contacts = ({ navigation }) => {
       data.append("phonenos", mapContact.toString());
 
       console.log("datattattatatta>>>", data);
+      setIsLoading(true);
 
       hitSyncContactApi(data)
         .then((response) => {
@@ -171,12 +171,16 @@ const Contacts = ({ navigation }) => {
 
             //   setIsLoading(false);
           }
+          else{
+            setIsLoading(false);
+          }
         })
         .catch((err) => {
+          setIsLoading(false);
           console.log("errrror------", err);
           Alert.alert("Something went wrong herreee");
-          setState({ isLoading: false });
-          setIsLoading(false);
+          // setState({ isLoading: false });
+          
         });
     };
 
