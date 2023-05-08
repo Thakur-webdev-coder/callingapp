@@ -21,7 +21,7 @@ export default StyleSheet.create({
     flexDirection: "column",
   },
   containerStyle: {
-    marginBottom: hp(7),
+    // marginBottom: hp(1),
   },
   imgBox: {
     height: 48,

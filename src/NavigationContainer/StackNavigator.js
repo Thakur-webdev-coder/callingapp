@@ -23,6 +23,7 @@ import IncomingScreen from "../views/IncomingCallScreen/IncomingScreen";
 import TransferHistory from "../views/TransferHistoryScreen/transferHistory";
 import ParticipantsScreen from "../views/Chats/ParticipantsScreen";
 import CreateGroup from "../views/Chats/CreateGroupScreen";
+import GroupCallScreen from "../views/GroupCallScreen/GroupCallScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -67,6 +68,7 @@ const StackNavigator = () => {
         component={ParticipantsScreen}
       />
       <Stack.Screen name={"CreateGroup"} component={CreateGroup} />
+      <Stack.Screen name={"GroupCallScreen"} component={GroupCallScreen} />
     </Stack.Navigator>
   );
 };

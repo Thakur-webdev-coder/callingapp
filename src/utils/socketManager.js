@@ -74,8 +74,8 @@ export const _addGroup = (data) => {
 };
 
 export const _leaveGroup = (data) => {
-  console.log("group-leave__", data);
-  socket.emit("group-leave", data);
+  console.log("chat-atten-delete___", data);
+  socket.emit("chat-atten-delete", data);
   console.log("sucessful======_group-leave__");
 };
 

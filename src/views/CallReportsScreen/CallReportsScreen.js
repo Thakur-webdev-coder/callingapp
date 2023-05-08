@@ -10,9 +10,9 @@ import { useSelector } from "react-redux";
 import Loading from "react-native-whc-loading";
 import AppStyle from "../../components/AppStyle";
 
-const CallReportsScreen = ({navigation}) => {
+const CallReportsScreen = ({ navigation }) => {
   const [state, setState] = useState({
-    callDetailRes: "",
+    callDetailRes: '',
     isLoading: false,
   });
 
@@ -25,20 +25,20 @@ const CallReportsScreen = ({navigation}) => {
   const hitCallDetail = async () => {
     setState({ isLoading: true });
     const data = new FormData();
-    data.append("cust_id", encrypt_detail?.encryptUser);
+    data.append('cust_id', encrypt_detail?.encryptUser);
 
     hitGetCallDetailsApi(data)
       .then((response) => {
-        console.log("res------->>", response.data);
+        console.log('res------->>', response.data);
         setState({ isLoading: false });
-        if (response.data.result == "success") {
+        if (response.data.result == 'success') {
           setState({
             callDetailRes: response.data.msg,
           });
         }
       })
       .catch((err) => {
-        console.log("reeeeeeeeerrrrrrrr====>>>>>>", err);
+        console.log('reeeeeeeeerrrrrrrr====>>>>>>', err);
         setState({ isLoading: false });
       });
   };
@@ -79,7 +79,7 @@ const CallReportsScreen = ({navigation}) => {
     <SafeAreaView style={AppStyle.wrapper}>
       <View style={AppStyle.homeMainView}>
       <CommonHeader
-        headerText={"Call Details Reports"}
+        headerText={'Call Details Reports'}
         paddingHorizontal={20}
         onPress={() => navigation.goBack()}
       />
@@ -89,22 +89,22 @@ const CallReportsScreen = ({navigation}) => {
         <View style={styles.titleView}>
           <CustomText
             width={wp(22)}
-            text={"Date"}
+            text={'Date'}
             textSize={16}
             textColor={colors.black}
           />
           <CustomText
-            text={"Destination"}
+            text={'Destination'}
             textSize={16}
             textColor={colors.black}
           />
           <CustomText
-            text={"Duration"}
+            text={'Duration'}
             textSize={16}
             textColor={colors.black}
           />
 
-          <CustomText text={"Cost"} textSize={16} textColor={colors.black} />
+          <CustomText text={'Cost'} textSize={16} textColor={colors.black} />
         </View>
         <View style={styles.horizontalLine}></View>
 

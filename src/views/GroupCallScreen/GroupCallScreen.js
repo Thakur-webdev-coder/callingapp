@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
-  Alert,
   AppState,
   BackHandler,
   Image,
@@ -8,14 +7,14 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from 'react-native';
-import AppStyle from '../../components/AppStyle';
-import styles from './styles';
+} from "react-native";
+import AppStyle from "../../components/AppStyle";
+import styles from "./styles";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
-import { request, RESULTS, PERMISSIONS } from 'react-native-permissions';
+} from "react-native-responsive-screen";
+import { request, RESULTS, PERMISSIONS } from "react-native-permissions";
 
 import {
   ic_back,
@@ -33,43 +32,43 @@ import {
   ic_speaker_small,
   ic_video_off,
   ic_video_on,
-} from '../../routes/imageRoutes';
-import CustomText from '../../components/CustomText';
+} from "../../routes/imageRoutes";
+import CustomText from "../../components/CustomText";
 import {
   hangupMeeting,
   setAudioMuted,
   setVideoMuted,
   startMeeting,
   toggleCamera,
-} from '../../lib-jitsi-meet/actions';
-import { useDispatch, useSelector } from 'react-redux';
-import { RTCView } from 'react-native-webrtc';
+} from "../../lib-jitsi-meet/actions";
+import { useDispatch, useSelector } from "react-redux";
+import { RTCView } from "react-native-webrtc";
 import {
   DEFAULT_MEETING_URL,
   MEDIA_TYPE,
-} from '../../lib-jitsi-meet/constants';
-import { getTrackByMediaTypeAndParticipant } from '../../lib-jitsi-meet/functions';
-import { hitJoinVideoCallApi, hithangUpCallApi } from '../../constants/APi';
-import { Show_Toast } from '../../utils/toast';
-import InCallManager from 'react-native-incall-manager';
-import colors from '../../../assets/colors';
-import { generateRandomString, secondsToHMS } from '../../utils/commonUtils';
-import Loading from 'react-native-whc-loading';
+} from "../../lib-jitsi-meet/constants";
+import { getTrackByMediaTypeAndParticipant } from "../../lib-jitsi-meet/functions";
+import { hitJoinVideoCallApi, hithangUpCallApi } from "../../constants/APi";
+import { Show_Toast } from "../../utils/toast";
+import InCallManager from "react-native-incall-manager";
+import colors from "../../../assets/colors";
+import { generateRandomString, secondsToHMS } from "../../utils/commonUtils";
+import Loading from "react-native-whc-loading";
 
 let roomId = null;
 
-const CallScreen = ({ navigation, route }) => {
+const GroupCallScreen = ({ navigation, route }) => {
   const { voiceCall, callData, fromNotification, meetimgUrl } = route.params;
-  console.log('rouuu---', route.params);
+  console.log("rouuu---", route.params);
   const { tracks, participants } = useSelector((state) => state);
   const [enableVideo, setEnableVideo] = useState(false);
   const [enableAudio, setEnableAudio] = useState(false);
   const [largeVideoId, setLargeVideoId] = useState(
-    participants.sortedRemoteParticipants[0] || ''
+    participants.sortedRemoteParticipants[0] || ""
   );
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log('getRemoteParticipants', participants);
+  console.log("getRemoteParticipants", participants);
 
   const [smallVideoID, setSmallVideoId] = useState(participants.local.id);
   const [timerCount, setTimerCount] = useState(0);
@@ -78,7 +77,7 @@ const CallScreen = ({ navigation, route }) => {
   const { loginDetails = {} } = useSelector((store) => store.sliceReducer);
   const { username } = loginDetails;
 
-  console.log('participantsss', participants);
+  console.log("participantsss", participants);
 
   const dispatch = useDispatch();
   var largeVideoTrack = getTrackByMediaTypeAndParticipant(
@@ -147,7 +146,7 @@ const CallScreen = ({ navigation, route }) => {
       setEnableVideo(false);
     }
 
-    console.log('herreee---', 'hereeee');
+    console.log("herreee---", "hereeee");
   };
 
   const audioEnable = () => {
@@ -159,7 +158,7 @@ const CallScreen = ({ navigation, route }) => {
       setEnableAudio(false);
     }
 
-    console.log('herreee---', 'hereeee');
+    console.log("herreee---", "hereeee");
   };
 
   const switchStreamUrl = () => {
@@ -169,18 +168,18 @@ const CallScreen = ({ navigation, route }) => {
 
   const hitJoinVideoApi = async () => {
     const data = new FormData();
-    data.append('receiver_phone', callData);
-    data.append('sender_phone', username);
-    data.append('meeting_url', roomId);
-    data.append('Type', voiceCall ? 'A' : 'V');
+    data.append("receiver_phone", callData);
+    data.append("sender_phone", username);
+    data.append("meeting_url", roomId);
+    data.append("Type", voiceCall ? "A" : "V");
 
-    console.log('data -->', data);
+    console.log("data -->", data);
     hitJoinVideoCallApi(data).then((response) => {
-      if (response.data.result == 'success') {
+      if (response.data.result == "success") {
         checkPeermission();
       } else {
         InCallManager.stopRingback();
-        Show_Toast('Something went Wrong');
+        Show_Toast("Something went Wrong");
         navigation.goBack();
       }
     });
@@ -188,9 +187,9 @@ const CallScreen = ({ navigation, route }) => {
 
   const hitHanupCall = async () => {
     const data = new FormData();
-    data.append('receiver_number', callData);
+    data.append("receiver_number", callData);
 
-    console.log('dataasfhas -->', data);
+    console.log("dataasfhas -->", data);
     hithangUpCallApi(data).then((response) => {
       disconnectMeeting();
     });
@@ -215,48 +214,35 @@ const CallScreen = ({ navigation, route }) => {
       hitJoinVideoApi();
     }
 
-    console.log('myyyy_tracksss', tracks);
+    console.log("myyyy_tracksss", tracks);
 
     const handleAppStateChange = (nextAppState) => {
-      if (nextAppState === 'inactive') {
+      if (nextAppState === "inactive") {
         hitHanupCall();
       }
     };
 
-    AppState.addEventListener('change', handleAppStateChange);
+    AppState.addEventListener("change", handleAppStateChange);
 
     const backAction = () => {
-      console.log('Back button is pressed');
-      Alert.alert(
-        '',
-        'Do you want to continue call ?',
-        [
-          { text: 'Hangup', onPress: () => hitHanupCall() },
-          {
-            text: 'Continue',
-            onPress: () => console.log('Cancel Pressed'),
-            style: 'cancel',
-          },
-        ],
-        { cancelable: true }
-      );
-      // hitHanupCall();
+      console.log("Back button is pressed");
+      hitHanupCall();
       return true;
     };
 
     const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
+      "hardwareBackPress",
       backAction
     );
 
     return () => {
-      AppState.removeEventListener('change', handleAppStateChange);
+      AppState.removeEventListener("change", handleAppStateChange);
       backHandler.remove();
     };
   }, []);
 
   const permissions =
-    Platform.OS === 'ios' ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA;
+    Platform.OS === "ios" ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA;
 
   const disconnectMeeting = () => {
     InCallManager.stopRingback();
@@ -264,7 +250,7 @@ const CallScreen = ({ navigation, route }) => {
     InCallManager.setSpeakerphoneOn(false);
     dispatch(hangupMeeting());
     if (fromNotification) {
-      navigation.navigate('Home');
+      navigation.navigate("Home");
     } else {
       navigation.goBack();
     }
@@ -276,36 +262,35 @@ const CallScreen = ({ navigation, route }) => {
         switch (result) {
           case RESULTS.UNAVAILABLE:
             console.log(
-              'This feature is not available (on this device / in this context)'
+              "This feature is not available (on this device / in this context)"
             );
             break;
           case RESULTS.DENIED:
             console.log(
-              'The permission has not been requested / is denied but requestable',
+              "The permission has not been requested / is denied but requestable",
               RESULTS.DENIED
             );
             break;
           case RESULTS.LIMITED:
-            console.log('The permission is limited: some actions are possible');
+            console.log("The permission is limited: some actions are possible");
             break;
           case RESULTS.GRANTED:
-            console.log('granted------');
+            console.log("granted------");
             dispatch(startMeeting(fromNotification ? meetimgUrl : roomId));
 
             break;
           case RESULTS.BLOCKED:
-            console.log('The permission is denied and not requestable anymore');
+            console.log("The permission is denied and not requestable anymore");
             break;
         }
       })
       .catch((error) => {
-        console.log('errr----', error);
+        console.log("errr----", error);
       });
   };
 
   return (
     <SafeAreaView style={voiceCall ? AppStyle.wrapper : styles.wrapper}>
-      <View style={AppStyle.homeMainView}>
       <View style={{ flex: 4 }}>
         {voiceCall ? (
           <View>
@@ -319,18 +304,18 @@ const CallScreen = ({ navigation, route }) => {
             <CustomText
               textColor={colors.black}
               text={callData}
-              alignText={'center'}
+              alignText={"center"}
               textSize={20}
               marginTop={hp(5)}
-              fontWeight={'500'}
+              fontWeight={"500"}
             />
             <CustomText
               textColor={colors.black}
-              text={timerCount > 0 ? secondsToHMS(timerCount) : 'Connecting'}
-              alignText={'center'}
+              text={timerCount > 0 ? secondsToHMS(timerCount) : "Connecting"}
+              alignText={"center"}
               textSize={12}
               marginTop={hp(1)}
-              fontWeight={'400'}
+              fontWeight={"400"}
             />
 
             <Image style={styles.avatarStyle} source={ic_callAvatar} />
@@ -349,11 +334,11 @@ const CallScreen = ({ navigation, route }) => {
                 style={{
                   color: colors.white,
                   flex: 1,
-                  alignSelf: 'center',
-                  justifyContent: 'center',
+                  alignSelf: "center",
+                  justifyContent: "center",
                   fontSize: 20,
-                  fontWeight: 'bold',
-                  position: 'absolute',
+                  fontWeight: "bold",
+                  position: "absolute",
                   top: hp(40),
                   bottom: hp(40),
                 }}
@@ -367,8 +352,8 @@ const CallScreen = ({ navigation, route }) => {
                 style={{
                   height: hp(25),
                   width: wp(40),
-                  backgroundColor: 'green',
-                  position: 'absolute',
+                  backgroundColor: "green",
+                  position: "absolute",
                   right: 10,
                   bottom: hp(5),
                 }}
@@ -427,8 +412,7 @@ const CallScreen = ({ navigation, route }) => {
           <Image source={enableAudio ? ic_mic_off : ic_mic_on} />
         </TouchableOpacity>
       </View>
-      </View>
     </SafeAreaView>
   );
 };
-export default CallScreen;
+export default GroupCallScreen;
