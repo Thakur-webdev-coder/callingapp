@@ -33,7 +33,6 @@
     "react-native-callkeep": "^4.3.8",
     "react-native-contacts": "^7.0.5",
     "react-native-document-picker": "^8.2.0",
-    "react-native-gesture-handler": "^2.9.0",
     "react-native-incall-manager": "^4.0.1",
     "react-native-linear-gradient": "^2.6.2",
     "react-native-localize": "^2.2.4",

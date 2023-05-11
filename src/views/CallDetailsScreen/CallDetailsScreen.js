@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Modal,
+  FlatList
 } from "react-native";
 import React, { useState } from "react";
 import styles from "./styles";
@@ -25,7 +26,6 @@ import { hitCallRatesNewApi } from "../../constants/APi";
 import Loading from "react-native-whc-loading";
 import colors from "../../../assets/colors";
 import CustomText from "../../components/CustomText";
-import { FlatList } from "react-native-gesture-handler";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,

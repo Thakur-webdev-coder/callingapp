@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   View,
+  ScrollView
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import CustomText from "../../components/CustomText";
@@ -25,7 +26,6 @@ import { showErrorMessage } from "../../utils/commonUtils";
 import { useDispatch } from "react-redux";
 import { saveLoginDetails } from "../../redux/reducer";
 import styles from "./styles";
-import { ScrollView } from "react-native-gesture-handler";
 import Loading from "react-native-whc-loading";
 import { checkToken } from "../../utils/notificationHandler";
 import messaging from '@react-native-firebase/messaging';
