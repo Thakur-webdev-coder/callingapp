@@ -29,6 +29,11 @@ export default StyleSheet.create({
   wrapper: {
     flex: 1,
     backgroundColor: "#FFFFFF",
+    // backgroundColor: "red",
+  },
+  scrollWrapper: {
+    flex: 1,
+    backgroundColor: "pink",
   },
   wrapper2: {
     backgroundColor: colors.secondary,

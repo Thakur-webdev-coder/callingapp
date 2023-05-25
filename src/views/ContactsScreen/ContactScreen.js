@@ -91,7 +91,7 @@ const Contacts = ({ navigation }) => {
   }, []);
   const permissions =
     Platform.OS === 'ios'
-      ? PERMISSIONS.IOS.READ_CONTACTS
+      ? PERMISSIONS.IOS.CONTACTS
       : PERMISSIONS.ANDROID.READ_CONTACTS;
 
   let sortedData = allContacts.slice().sort((a, b) => {

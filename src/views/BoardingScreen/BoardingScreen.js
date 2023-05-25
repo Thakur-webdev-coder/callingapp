@@ -1,4 +1,4 @@
-import { PermissionsAndroid, SafeAreaView, Text, View } from "react-native";
+import { PermissionsAndroid, Platform, SafeAreaView, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import CustomImage from "../../components/CustomImage";
 import CustomButton from "../../components/CustomButton";
