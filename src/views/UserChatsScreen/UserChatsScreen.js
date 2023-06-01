@@ -10,6 +10,7 @@ import {
   FlatList,
   Alert,
   KeyboardAvoidingView,
+  Linking,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import styles from './styles';
@@ -65,6 +66,7 @@ import {
 } from '../../constants/APi';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import PushNotification from 'react-native-push-notification';
+import { PERMISSIONS, requestMultiple } from 'react-native-permissions';
 
 const { Popover } = renderers;
 
@@ -95,13 +97,17 @@ const UserChatsScreen = ({ navigation, route }) => {
     added,
     created,
   } = route.params;
+
   const { kokoaContacts = [], loginDetails = {} } = useSelector(
     (store) => store.sliceReducer
   );
+
   let senderID = loginDetails.username;
 
   console.log('myNUmberrrrrr', added);
 
+  const cameraPermissions = Platform.OS == 'ios' ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA;
+  const micPermissions = Platform.OS == 'ios' ? PERMISSIONS.IOS.MICROPHONE : PERMISSIONS.ANDROID.RECORD_AUDIO;
   useEffect(() => {
     if (added) {
       console.log('herererrerererrere');
@@ -134,6 +140,43 @@ const UserChatsScreen = ({ navigation, route }) => {
     onHistoryReceived();
     __getUpdatedChatMessage();
   }, []);
+
+  const openAppSettings = () => {
+    if (Platform.OS === 'android') {
+      Linking.openSettings();
+    } else {
+      Linking.openURL('app-settings:')
+    }
+  };
+
+  const checkPeermission = (callType) => {
+    console.log('checkPeermission------->>>');
+    requestMultiple([cameraPermissions, micPermissions]).then((result) => {
+      console.log(result[cameraPermissions], result[micPermissions], 'result--------->>>', result);
+
+      if (result[cameraPermissions] !== 'granted' || result[micPermissions] !== 'granted') {
+        Alert.alert('Insufficient permissions!', 'You need to grant camera and Microphone access permissions to use this app.', [
+          { text: 'Okay', onPress: () => openAppSettings() }
+        ]);
+        return false;
+      } else {
+        callType =='voiceCall'?
+        navigation.navigate('CallScreen', {
+          voiceCall: true,
+          callData: callData,
+        }):
+        navigation.navigate('CallScreen', {
+          voiceCall: false,
+          callData: callData,
+        });
+        
+        setState({ callModal: false });
+      }
+    })
+      .catch((error) => {
+        console.log('errr----', error);
+      });
+  };
 
   const reduceChat = (chatData) => {
     const groupedChats = chatData?.reduce((acc, chat) => {
@@ -519,30 +562,30 @@ const UserChatsScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={AppStyle.wrapper} >
-    <View style={AppStyle.homeMainView}>
-      <TouchableOpacity
-        onPress={() =>
-          groupName
-            ? navigation.navigate('ParticipantsScreen', {
-                participants: participants,
-              })
-            : null
-        }
-      >
+      <View style={AppStyle.homeMainView}>
+
         <View style={styles.toolBar}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image source={ic_back} />
           </TouchableOpacity>
+          <TouchableOpacity style={styles.nameContainer}
+            onPress={() =>
+              groupName
+                ? navigation.navigate('ParticipantsScreen', {
+                  participants: participants,
+                })
+                : null
+            }
+          >
 
-          <View style={styles.nameContainer}>
             <Text style={[styles.textStyleToolbar, { fontWeight: '700' }]}>
               {Name || callData ? (Name ? Name : callData) : groupName}
             </Text>
-          </View>
+          </TouchableOpacity>
           <View style={styles.headerComponent}>
             {groupName ? (
               <TouchableOpacity
-                style={{ marginHorizontal: 40, padding: 10 }}
+                style={{ marginHorizontal: 35, padding: 10 }}
                 onPress={() =>
                   navigation.navigate('SelectScreen', {
                     groupName: groupName,
@@ -554,7 +597,7 @@ const UserChatsScreen = ({ navigation, route }) => {
                 <Image source={ic_small_plus} />
               </TouchableOpacity>
             ) : (
-              <View style={{ marginHorizontal: 40, padding: 10 }}></View>
+              <View style={{ marginHorizontal: 35, padding: 10 }}></View>
             )}
 
             {/* <TouchableOpacity
@@ -589,150 +632,151 @@ const UserChatsScreen = ({ navigation, route }) => {
             </Menu>
           </View>
         </View>
-      </TouchableOpacity>
 
-      <ImageBackground style={{ flex: 1 }} source={ic_chat_bg}>
-        {/* <View style={styles.dateBg}>
+
+        <ImageBackground style={{ flex: 1 }} source={ic_chat_bg}>
+          {/* <View style={styles.dateBg}>
           <Text style={{ color: colors.black, fontWeight: "bold" }}>
             Thu , 12 Jan 2023
           </Text>
         </View> */}
-        {groupedChats.length > 0 ? (
-          <FlatList
-            inverted
-            data={groupedChats}
-            renderItem={renderItem}
-            keyExtractor={(group) => group.timestamp}
-            style={{ flex: 1 }}
-          />
-        ) : (
-          <View
-            style={{
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Text
+         <KeyboardAvoidingView
+              behavior={Platform.OS === 'ios' ? 'padding' : null}
+               style={{flex:1}}
+               keyboardVerticalOffset={100}
+             
+              >
+          {groupedChats.length > 0 ? (
+            <FlatList
+              inverted
+              data={groupedChats}
+              renderItem={renderItem}
+              keyExtractor={(group) => group.timestamp}
+              style={{ flex: 1 }}
+            />
+          ) : (
+            <View
               style={{
-                alignSelf: 'center',
-                fontSize: 20,
-                color: colors.black,
-                fontWeight: 'bold',
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
               }}
             >
-              Start New Conversation!
-            </Text>
-          </View>
-        )}
+              <Text
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 20,
+                  color: colors.black,
+                  fontWeight: 'bold',
+                }}
+              >
+                Start New Conversation!
+              </Text>
+            </View>
+          )}
         <View style={styles.sendMessageImg}>
-          <View style={styles.searchTnputStyle}>
-            <KeyboardAvoidingView
-              behavior="padding"
-              style={{ flex: 1 }}
-              keyboardVerticalOffset={64}
+            <View style={styles.searchTnputStyle}>
+              {/* <KeyboardAvoidingView
+               behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+                style={{ flex: 1 }}
+                keyboardVerticalOffset={64}
+              >
+                 */}
+                <TextInput
+                  style={styles.searchTnputStyleee}
+                  placeholder="Type message here"
+                  placeholderTextColor={colors.searchBarTxt}
+                  onChangeText={(text) => onChangeMessageInput(text)}
+                  value={messageInput}
+                />
+              {/* </KeyboardAvoidingView> */}
+
+              <TouchableOpacity
+                style={{ justifyContent: 'center' }}
+                onPress={uploadFile}
+              >
+                <Image source={ic_chat_attach} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ alignSelf: 'center' }}
+                onPress={() => setState({ callModal: true })}
+              >
+                <Image source={ic_chat_call} />
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity
+              style={styles.arrowStyle}
+              onPress={() => {
+                sendChatMethod(messageInput);
+              }}
             >
-              <TextInput
-                style={styles.searchTnputStyleee}
-                placeholder="Type  message here"
-                placeholderTextColor={colors.searchBarTxt}
-                onChangeText={(text) => onChangeMessageInput(text)}
-                value={messageInput}
+              <Image
+                style={{ transform: [{ rotate: '180deg' }], alignSelf: 'center' }}
+                source={ic_back}
               />
-            </KeyboardAvoidingView>
-
-            <TouchableOpacity
-              style={{ justifyContent: 'center' }}
-              onPress={uploadFile}
-            >
-              <Image source={ic_chat_attach} />
             </TouchableOpacity>
-            <TouchableOpacity
-              style={{ alignSelf: 'center' }}
-              onPress={() => setState({ callModal: true })}
-            >
-              <Image source={ic_chat_call} />
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity
-            style={styles.arrowStyle}
-            onPress={() => {
-              sendChatMethod(messageInput);
-            }}
-          >
-            <Image
-              style={{ transform: [{ rotate: '180deg' }], alignSelf: 'center' }}
-              source={ic_back}
-            />
-          </TouchableOpacity>
         </View>
-      </ImageBackground>
-      <Modal
-        animationIn="slideInUp"
-        animationOut="slideOutDown"
-        backdropColor={colors.white}
-        transparent={true}
-        visible={state.callModal}
-      >
-        <View style={styles.callModalStyle}>
-          <TouchableOpacity
-            style={styles.callBoxStyle}
-            onPress={() => {
-              if (callData) {
-                navigation.navigate('CallScreen', {
-                  voiceCall: true,
-                  callData: callData,
-                });
-                setState({ callModal: false });
-              }
-            }}
-          >
-            <Image source={ic_audiocall} />
+        </KeyboardAvoidingView>
+        </ImageBackground>
+        <Modal
+          animationIn="slideInUp"
+          animationOut="slideOutDown"
+          backdropColor={colors.white}
+          transparent={true}
+          visible={state.callModal}
+        >
+          <View style={styles.callModalStyle}>
+            <TouchableOpacity
+              style={styles.callBoxStyle}
+              onPress={() => {
+                if (callData) {
+                  checkPeermission('voiceCall')
+                }
+              }}
+            >
+              <Image source={ic_audiocall} />
 
-            <CustomText
-              //fontWeight={"bold"}
-              text={'Voice Call'}
-              textColor={colors.secondary}
-              textSize={22}
-              marginLeft={wp(6)}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{ flexDirection: 'row', alignItems: 'center' }}
-            onPress={() => {
-              if (callData) {
-                navigation.navigate('CallScreen', {
-                  voiceCall: false,
-                  callData: callData,
-                });
-                setState({ callModal: false });
-              }
-            }}
-          >
-            <Image source={ic_videocall} />
-            <CustomText
-              //fontWeight={"bold"}
-              text={'Video Call'}
-              textColor={colors.secondary}
-              textSize={22}
-              marginLeft={wp(3)}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{ alignItems: 'flex-end' }}
-            onPress={() => setState({ callModal: false })}
-          >
-            <CustomText
-              //fontWeight={"bold"}
-              text={'CANCEL'}
-              textColor={colors.secondary}
-              textSize={20}
+              <CustomText
+                //fontWeight={"bold"}
+                text={'Voice Call'}
+                textColor={colors.secondary}
+                textSize={22}
+                marginLeft={wp(6)}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{ flexDirection: 'row', alignItems: 'center' }}
+              onPress={() => {
+                if (callData) {
+                  checkPeermission('videoCall')
+                
+                }
+              }}
+            >
+              <Image source={ic_videocall} />
+              <CustomText
+                //fontWeight={"bold"}
+                text={'Video Call'}
+                textColor={colors.secondary}
+                textSize={22}
+                marginLeft={wp(3)}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{ alignItems: 'flex-end' }}
+              onPress={() => setState({ callModal: false })}
+            >
+              <CustomText
+                //fontWeight={"bold"}
+                text={'CANCEL'}
+                textColor={colors.secondary}
+                textSize={20}
               //textAlign={'center'}
               //marginLeft={wp(50)}
-            />
-          </TouchableOpacity>
-        </View>
-      </Modal>
+              />
+            </TouchableOpacity>
+          </View>
+        </Modal>
       </View>
     </SafeAreaView>
   );

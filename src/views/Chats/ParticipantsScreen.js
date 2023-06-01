@@ -8,6 +8,7 @@ import {
 } from "react-native-responsive-screen";
 import { useSelector } from "react-redux";
 import styles from "./styles";
+import AppStyle from "../../components/AppStyle";
 
 const ParticipantsScreen = ({ navigation, route }) => {
   const { participants } = route.params;
@@ -56,7 +57,8 @@ const ParticipantsScreen = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={AppStyle.wrapper}>
+         <View style={AppStyle.homeMainView}>
       <CommonHeader
         headerText={"All Participants"}
         onPress={() => navigation.goBack()}
@@ -66,6 +68,7 @@ const ParticipantsScreen = ({ navigation, route }) => {
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
       />
+      </View>
     </SafeAreaView>
   );
 };

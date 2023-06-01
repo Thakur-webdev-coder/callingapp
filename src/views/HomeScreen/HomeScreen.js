@@ -64,6 +64,7 @@ import {
   changelCreated,
   navigateScreen,
 } from '../../utils/notificationHandler';
+import PushNotification from 'react-native-push-notification';
 
 let myBalanceData = null;
 let usernameEncryptedCode = null;
@@ -90,6 +91,21 @@ const Home = ({ navigation }) => {
   const { username, password, did } = loginDetails;
 
   const dispatch = useDispatch();
+
+
+  const shownote = () =>{
+   
+    PushNotification.localNotification({
+      channelId: '12345',
+      title: "rfsdgg",
+      message: "remoteMessage.notification.body",
+     
+     
+    });
+  }
+
+
+
 
   useEffect(() => {
     changelCreated();
@@ -484,15 +500,18 @@ const Home = ({ navigation }) => {
           </View>
         </View>
         <View style={styles.wrapper2}>
-          <CustomText
-            text={" Services"}
-            textSize={20}
-            fontWeight={"bold"}
-            textColor={colors.black}
-            marginTop={wp(2)}
-            marginLeft={wp(2)}
-          />
+          {/* <TouchableOpacity onPress={()=>shownote()}> */}
 
+
+            <CustomText
+              text={" Services"}
+              textSize={20}
+              fontWeight={"bold"}
+              textColor={colors.black}
+              marginTop={wp(2)}
+              marginLeft={wp(2)}
+            />
+          {/* </TouchableOpacity> */}
           <FlatList
             columnWrapperStyle={{ justifyContent: "space-between" }}
             data={DATA}

@@ -14,10 +14,12 @@ export default StyleSheet.create({
     //justifyContent: "space-between",
     paddingVertical: hp(1.4),
     paddingHorizontal: wp(5),
+   
   },
   nameContainer: {
     width: wp(55),
-    paddingLeft: wp(5),
+    marginLeft: wp(5),
+    
   },
   headerComponent: {
     flexDirection: "row",
@@ -28,24 +30,20 @@ export default StyleSheet.create({
   textStyleToolbar: {
     color: colors.white,
     fontSize: 13,
+    padding:7
   },
 
   searchTnputStyle: {
     borderRadius: 10,
     backgroundColor: colors.white,
     width: wp(80),
-    // // height: hp(10),
-    // marginTop: hp(3),
-    // marginBottom:hp(1),
-    // alignSelf: "center",
     borderWidth: 1,
-    // borderColor: colors.black,
     flexDirection: "row",
-    // justifyContent: "space-evenly",
   },
 
   sendMessageImg: {
-    marginBottom: hp(1),
+    // flex:0,
+     marginBottom: hp(1),
     marginTop: hp(2),
     flexDirection: "row",
     marginHorizontal: wp(3),

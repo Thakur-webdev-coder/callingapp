@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  Alert,
   FlatList,
   Image,
   Modal,
@@ -49,6 +50,7 @@ const CreateGroup = ({ navigation }) => {
   };
 
   const navigateToGroupChat = () => {
+    const {voucherNum} =state;
     const uniqueId = generateRandomId();
 
     const allParticipant = selectedItems
@@ -58,20 +60,23 @@ const CreateGroup = ({ navigation }) => {
     const data = {
       id: senderID,
       group_id: uniqueId,
-      group_name: state.voucherNum,
+      group_name: voucherNum,
       participants: allParticipant,
     };
 
     console.log("datattatatat", data);
-
+    if (voucherNum.length != 0) {
     _addGroup(data);
-
+    setVoucherModal(false)
     navigation.navigate("UserChatsScreen", {
       created: true,
-      groupName: state.voucherNum,
+      groupName: voucherNum,
       participants: allParticipant,
       uniqueId: uniqueId,
     });
+  }else{
+    Alert.alert('', 'Please enter a group name.');
+  }
   };
 
   const [state, setState] = useState({
@@ -218,7 +223,7 @@ const CreateGroup = ({ navigation }) => {
                 textColor={colors.dodgeBlue}
               />
             </TouchableOpacity>
-            <TouchableOpacity onPress={navigateToGroupChat}>
+            <TouchableOpacity onPress={()=>navigateToGroupChat()}>
               <CustomText
                 text={"Create"}
                 textSize={16}

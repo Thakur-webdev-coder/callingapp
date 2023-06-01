@@ -5,7 +5,9 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Modal,
-  FlatList
+  FlatList,
+  Alert,
+  Linking
 } from "react-native";
 import React, { useState } from "react";
 import styles from "./styles";
@@ -30,18 +32,29 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
+import { openSettings, PERMISSIONS, request, requestMultiple, RESULTS } from "react-native-permissions";
 const CallDetailsScreen = ({ navigation, route }) => {
   //  const [ratesModal,setRatesModal]= useState(false)
   const [state, setState] = useState({
     isLoading: false,
-     ratesModal:false,
-     ratesData:[]
+    ratesModal: false,
+    ratesData: []
   });
   const { Name, phoneNumber, isKokaContact } = route.params;
 
   const { balanceDetail = {} } = useSelector((store) => store.sliceReducer);
   console.log("route.params--->0", route.params);
 
+  const cameraPermissions = Platform.OS == 'ios' ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA;
+  const micPermissions = Platform.OS == 'ios' ? PERMISSIONS.IOS.MICROPHONE : PERMISSIONS.ANDROID.RECORD_AUDIO;
+
+  const openAppSettings = () => {
+    if (Platform.OS === 'android') {
+      Linking.openSettings();
+    } else {
+      Linking.openURL('app-settings:')
+    }
+  };
 
   const CallRatesMethod = async () => {
     console.log('-----nnnnnnn----', phoneNumber);
@@ -52,13 +65,13 @@ const CallDetailsScreen = ({ navigation, route }) => {
     hitCallRatesNewApi(data).then((myResponse) => {
       setState({
         isLoading: false,
-         ratesModal: true,
-         ratesData:myResponse?.data?.rates
+        ratesModal: true,
+        ratesData: myResponse?.data?.rates
       })
       // setRatesModal(true)
 
-   console.log('---res-->>>>>',myResponse.data.rates)
-       
+      console.log('---res-->>>>>', myResponse.data.rates)
+
       // let txt = Rate[0]
       // console.log('------aa-----',Rate[0])
       // Alert.alert('',Rate[0])
@@ -69,8 +82,35 @@ const CallDetailsScreen = ({ navigation, route }) => {
       })
   }
 
+  const checkPeermission = (callType) => {
+    console.log('checkPeermission------->>>');
+    requestMultiple([cameraPermissions, micPermissions]).then((result) => {
+      console.log(result[cameraPermissions], result[micPermissions], 'result--------->>>', result);
+
+      if (result[cameraPermissions] !== 'granted' || result[micPermissions] !== 'granted') {
+        Alert.alert('Insufficient permissions!', 'You need to grant camera and Microphone access permissions to use this app.', [
+          { text: 'Okay', onPress: () => openAppSettings() }
+        ]);
+        return false;
+      } else {
+        callType =='voiceCall'?
+        navigation.navigate("CallScreen", {
+          voiceCall: true,
+          callData: phoneNumber,
+        }):
+        navigation.navigate("CallScreen", {
+          voiceCall: false,
+          callData: phoneNumber,
+        })
+      }
+    })
+      .catch((error) => {
+        console.log('errr----', error);
+      });
+  };
+
   const renderItem = ({ item }) => {
-    const {rate,destination} =item;
+    const { rate, destination } = item;
     console.log("item-------", item);
     // const {callprefix,dialprefix,rates}=item
     return (
@@ -81,7 +121,7 @@ const CallDetailsScreen = ({ navigation, route }) => {
             textSize={18}
             fontWeight={"bold"}
             textColor={colors.appColor}
-            
+
           />
           <CustomText
             text={destination}
@@ -90,14 +130,14 @@ const CallDetailsScreen = ({ navigation, route }) => {
             textColor={colors.appColor}
             marginLeft={wp(2)}
           />
-          </View>
-          <View style={[styles.ratesTxtStyle,{paddingTop:hp(1)}]}>
+        </View>
+        <View style={[styles.ratesTxtStyle, { paddingTop: hp(1) }]}>
           <CustomText
             text={"Rates :"}
             textSize={18}
             fontWeight={"bold"}
             textColor={colors.appColor}
-            
+
           />
           <CustomText
             text={rate}
@@ -106,114 +146,109 @@ const CallDetailsScreen = ({ navigation, route }) => {
             textColor={colors.appColor}
             marginLeft={wp(14)}
           />
-          </View>
+        </View>
       </View>
     );
   };
   return (
     <SafeAreaView style={AppStyle.wrapper}>
-     <View style={AppStyle.homeMainView}>
-      <CommonHeader 
-      headerText={"Contacts Details"}
-      onPress={() => navigation.goBack()} />
+      <View style={AppStyle.homeMainView}>
+        <CommonHeader
+          headerText={"Contacts Details"}
+          onPress={() => navigation.goBack()} />
 
-      <View style={styles.mainView}>
-        <View style={styles.container_view}>
-          <Image source={ic_contact_avatar} />
-          <Text style={styles.textStyle}>{Name}</Text>
-        </View>
-
-        <View style={styles.container_view2}>
-          <View>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("CallScreen", {
-                  voiceCall: true,
-                  callData: phoneNumber,
-                })
-              }
-              disabled={isKokaContact}
-              
-            >
-              <View style={[styles.imgBoxStyle, { backgroundColor: !isKokaContact ? '#4D3E3E' : 'rgba(77, 62, 62, 0.6)' }]}>
-                <Image source={ic_phone} />
-              </View>
-              <Text style={styles.iconTilteStle}>Call</Text>
-            </TouchableOpacity>
+        <View style={styles.mainView}>
+          <View style={styles.container_view}>
+            <Image source={ic_contact_avatar} />
+            <Text style={styles.textStyle}>{Name}</Text>
           </View>
 
-          <View>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("CallScreen", {
-                  voiceCall: false,
-                  callData: phoneNumber,
-                })
-              }
-              disabled={isKokaContact}
-            >
-              <View style={[styles.imgBoxStyle, { backgroundColor: !isKokaContact ? "#4D3E3E" : 'rgba(77, 62, 62, 0.6)' }]}>
-                <Image source={ic_video} />
-              </View>
-              <Text style={styles.iconTilteStle}>Video</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("UserChatsScreen", {
-                  Name: Name,
-                  callData: phoneNumber,
-
-                })
-              }
-              disabled={isKokaContact}
-            >
-              <View style={[styles.imgBoxStyle, { backgroundColor: !isKokaContact ? "#4D3E3E" : 'rgba(77, 62, 62, 0.6)' }]}>
-                <Image source={ic_double_chat} />
-              </View>
-
-              <Text style={styles.iconTilteStle}>Chat</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View>
-            <TouchableOpacity
-              onPress={() => {
-                if (balanceDetail.credit > 0) {
-                  Sip.makeCall(phoneNumber);
-                  navigation.navigate("CallingScreen", {
-                    callData: { name: Name },
-                  });
-                } else {
-                  Show_Toast(
-                    "Insufficient balance. Please recharge your account."
-                  );
+          <View style={styles.container_view2}>
+            <View>
+              <TouchableOpacity
+                onPress={() =>
+                  checkPeermission('voiceCall')
+                 
                 }
-              }}
-            >
-              <View style={styles.imgBoxStyle}>
-                <Image source={ic_phoneforward} />
-              </View>
-              <Text style={styles.iconTilteStle}> Paid Call</Text>
-            </TouchableOpacity>
+                disabled={isKokaContact}
+
+              >
+                <View style={[styles.imgBoxStyle, { backgroundColor: !isKokaContact ? '#4D3E3E' : 'rgba(77, 62, 62, 0.6)' }]}>
+                  <Image source={ic_phone} />
+                </View>
+                <Text style={styles.iconTilteStle}>Call</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View>
+              <TouchableOpacity
+                onPress={() =>
+                  checkPeermission('videoCall')
+                }
+                disabled={isKokaContact}
+              >
+                <View style={[styles.imgBoxStyle, { backgroundColor: !isKokaContact ? "#4D3E3E" : 'rgba(77, 62, 62, 0.6)' }]}>
+                  <Image source={ic_video} />
+                </View>
+                <Text style={styles.iconTilteStle}>Video</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("UserChatsScreen", {
+                    Name: Name,
+                    callData: phoneNumber,
+
+                  })
+                }
+                disabled={isKokaContact}
+              >
+                <View style={[styles.imgBoxStyle, { backgroundColor: !isKokaContact ? "#4D3E3E" : 'rgba(77, 62, 62, 0.6)' }]}>
+                  <Image source={ic_double_chat} />
+                </View>
+
+                <Text style={styles.iconTilteStle}>Chat</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View>
+              <TouchableOpacity
+                onPress={() => {
+                  if (balanceDetail.credit > 0) {
+                    Sip.makeCall(phoneNumber);
+                    navigation.navigate("CallingScreen", {
+                      callData: { name: Name },
+                    });
+                  } else {
+                    Show_Toast(
+                      "Insufficient balance. Please recharge your account."
+                    );
+                  }
+                }}
+              >
+                <View style={styles.imgBoxStyle}>
+                  <Image source={ic_phoneforward} />
+                </View>
+                <Text style={styles.iconTilteStle}> Paid Call</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
-      <View style={styles.ratesContainer}>
-        <View style={styles.numBox}>
-          <Text style={styles.mobileNumberText}>{phoneNumber}</Text>
-          <Text style={styles.mobileNumberText}>Mobile</Text>
+        <View style={styles.ratesContainer}>
+          <View style={styles.numBox}>
+            <Text style={styles.mobileNumberText}>{phoneNumber}</Text>
+            <Text style={styles.mobileNumberText}>Mobile</Text>
+          </View>
+          <TouchableOpacity
+            style={styles.arrowRatesBox}
+            onPress={() => CallRatesMethod()}>
+            <Text style={styles.textStyle}>Rates</Text>
+            <Image style={{ marginTop: 5 }} source={ic_rightArror} />
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={styles.arrowRatesBox}
-          onPress={() => CallRatesMethod()}>
-          <Text style={styles.textStyle}>Rates</Text>
-          <Image style={{ marginTop: 5 }} source={ic_rightArror} />
-        </TouchableOpacity>
-      </View>
-      {/* <Modal
+        {/* <Modal
           animationIn="slideInUp"
           animationOut="slideOutDown"
           backdropColor={colors.white}
@@ -228,34 +263,34 @@ const CallDetailsScreen = ({ navigation, route }) => {
           </View>
         </Modal> */}
 
-     {state.ratesModal &&
-        <Modal
-        animationIn="slideInUp"
-        animationOut="slideOutDown"
-        backdropColor={colors.white}
-        transparent={true}
-        isVisible={state.ratesModal}
-        >
-        <View style={styles.ratesModalStyle}>
-        <FlatList
-             data={state?.ratesData}
-             // keyExtractor={keyExtractor}
-             renderItem={renderItem}/>
-          <TouchableOpacity onPress={() => setState({ratesModal:false})}>
-              <CustomText
-                text={"OK"}
-                textSize={16}
-                fontWeight={"600"}
-                textColor={colors.dodgeBlue}
-                marginTop={10}
-                textAlign={"right"}
-              />
-            </TouchableOpacity>
-        
-        </View>
-      </Modal>
-}
-      <Loading loading={state.isLoading} />
+        {state.ratesModal &&
+          <Modal
+            animationIn="slideInUp"
+            animationOut="slideOutDown"
+            backdropColor={colors.white}
+            transparent={true}
+            isVisible={state.ratesModal}
+          >
+            <View style={styles.ratesModalStyle}>
+              <FlatList
+                data={state?.ratesData}
+                // keyExtractor={keyExtractor}
+                renderItem={renderItem} />
+              <TouchableOpacity onPress={() => setState({ ratesModal: false })}>
+                <CustomText
+                  text={"OK"}
+                  textSize={16}
+                  fontWeight={"600"}
+                  textColor={colors.dodgeBlue}
+                  marginTop={10}
+                  textAlign={"right"}
+                />
+              </TouchableOpacity>
+
+            </View>
+          </Modal>
+        }
+        <Loading loading={state.isLoading} />
       </View>
     </SafeAreaView>
   );

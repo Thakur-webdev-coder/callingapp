@@ -14,7 +14,8 @@
     "BluetoothPeripheral",
     "Contacts",
     "Microphone",
-    "Notifications"
+    "Notifications",
+    "Camera"
   ],
   "dependencies": {
     "@khateeb00/react-jssip": "^1.0.18",

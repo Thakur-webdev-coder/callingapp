@@ -67,6 +67,7 @@ const TabNavigator = () => {
               style={{
                 alignItems: "center",
                 paddingTop: hp(3),
+                height:hp(10.5),
                 paddingBottom: hp(2.5),
               }}
             >

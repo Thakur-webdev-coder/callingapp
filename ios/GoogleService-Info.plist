@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>848340449787-fnbsfb18d0cr119okb03ijkncbf61h89.apps.googleusercontent.com</string>
+	<string>848340449787-0sl1biucdhjj5m5e8aonm8a4ekv8pbnt.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.848340449787-fnbsfb18d0cr119okb03ijkncbf61h89</string>
+	<string>com.googleusercontent.apps.848340449787-0sl1biucdhjj5m5e8aonm8a4ekv8pbnt</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>848340449787-bvh0akb6a80ohc1hnpk1046cl2lln32s.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.app.kokoafone</string>
+	<string>kokoafone.app.com</string>
 	<key>PROJECT_ID</key>
 	<string>kokoafone</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:848340449787:ios:73e1c734b19e599dc1735e</string>
+	<string>1:848340449787:ios:8dab1abb1124490ec1735e</string>
 </dict>
 </plist>

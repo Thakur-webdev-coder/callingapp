@@ -1,4 +1,4 @@
-import { Image, SafeAreaView, ScrollView, View } from "react-native";
+import { Image, KeyboardAvoidingView, SafeAreaView, ScrollView, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import AppStyle from "../../components/AppStyle";
 import CustomText from "../../components/CustomText";
@@ -93,15 +93,19 @@ const VerificationScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.wrapper}>
       {/* <ScrollView style={styles.scrollWrapper}> */}
-      {/* <View style={{ flex: 1 }}> */}
+      <View style={{ flex: 1 }}>
         <Image
         style={{alignSelf:'center',marginVertical:wp(20)}}
           // alignSelf={"center"}
           // marginTop={wp(20)}
           source={ic_app_logo}
         />
-      {/* </View> */}
-      <ScrollView style={styles.wrapper2}>
+      </View>
+     
+      <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      style={styles.wrapper2}>
+         <ScrollView >
         <CustomText
           text={"Enter Phone Number to Login or Signup"}
           textColor={colors.white}
@@ -132,7 +136,9 @@ const VerificationScreen = ({ navigation }) => {
           onPress={() => hitCountryEncryptionApi()}
           // onPress={() => navigation.navigate(OTP_SCREEN)}
         />
-      </ScrollView>
+          </ScrollView>
+        </KeyboardAvoidingView>
+    
       <Loading loading={isLoading} />
       {/* </ScrollView> */}
     </SafeAreaView>

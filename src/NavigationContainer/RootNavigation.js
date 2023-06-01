@@ -29,7 +29,7 @@ const RootNavigation = () => {
         initialRouteName={
           loginDetails != null ? "StackNavigator" : BOARDING_SCREEN
         }
-        screenOptions={{ headerShown: false }}
+        screenOptions={{ headerShown: false,gestureEnabled:   false }}
       >
         <Stack.Screen name="StackNavigator" component={StackNavigator} />
         <Stack.Screen name={BOARDING_SCREEN} component={BoardingScreen} />

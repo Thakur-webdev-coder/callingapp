@@ -136,7 +136,7 @@ console.log('phone-----',phone);
       <View style={styles.secondWrapper}>
         <CommonHeader 
         headerText={"Dialpad"} 
-        onPress={() => navigation.goBack()}/>
+        onPress={() => navigation.goBack(null)}/>
 
         <View style={styles.registerBox}>
           <CustomText
@@ -159,6 +159,7 @@ console.log('phone-----',phone);
           style={styles.inputTxtBoxStyle}
           value={dialedNumber}
           showSoftInputOnFocus={false}
+          selectTextOnFocus={true}
         />
       </View>
       <View style={styles.wrapper3}>

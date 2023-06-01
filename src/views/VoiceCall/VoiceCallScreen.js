@@ -60,7 +60,6 @@ let roomId = null;
 
 const CallScreen = ({ navigation, route }) => {
   const { voiceCall, callData, fromNotification, meetimgUrl } = route.params;
-  console.log('rouuu---', route.params);
   const { tracks, participants } = useSelector((state) => state);
   const [enableVideo, setEnableVideo] = useState(false);
   const [enableAudio, setEnableAudio] = useState(false);
@@ -96,16 +95,25 @@ const CallScreen = ({ navigation, route }) => {
     let interval;
 
     if (fromNotification) {
+      console.log('fromNotification--if--->>>', fromNotification);
       InCallManager.stopRingback();
     } else {
+      console.log('fromNotification--else--->>>');
+
       if (participants.sortedRemoteParticipants[0]) {
+        console.log('fromNotification--ifinelse--->>>');
+
         InCallManager.stopRingback();
       } else {
+        console.log('fromNotification--elseinelse--->>>');
+
         InCallManager.startRingback();
       }
     }
 
     if (voiceCall && participants.sortedRemoteParticipants[0]) {
+      console.log('voiceCall && participants--if--->>>', voiceCall, participants.sortedRemoteParticipants[0]);
+
       dispatch(setVideoMuted(true));
 
       interval = setInterval(() => {
@@ -114,13 +122,16 @@ const CallScreen = ({ navigation, route }) => {
         });
       }, 1000);
     } else {
+      console.log('fromNotification--inelse--->>>');
       InCallManager.setSpeakerphoneOn(true);
     }
 
     setLargeVideoId(
       participants.sortedRemoteParticipants[0] || participants.local.id
     );
+
     if (participants.sortedRemoteParticipants[0]) {
+      console.log('participants.sortedRemoteParticipants[0]--inif--->>>');
       setLargeVideoId(participants.sortedRemoteParticipants[0]);
       setSmallVideoId(participants.local.id);
     }
@@ -137,6 +148,10 @@ const CallScreen = ({ navigation, route }) => {
       clearInterval(interval);
     };
   }, [participants.local.id, participants.sortedRemoteParticipants[0]]);
+
+
+
+
 
   const videoEnable = () => {
     if (!enableVideo) {
@@ -167,7 +182,8 @@ const CallScreen = ({ navigation, route }) => {
     setSmallVideoId(largeVideoId);
   };
 
-  const hitJoinVideoApi = async () => {
+  const hitJoinVideoApi = () => {
+   
     const data = new FormData();
     data.append('receiver_phone', callData);
     data.append('sender_phone', username);
@@ -177,7 +193,8 @@ const CallScreen = ({ navigation, route }) => {
     console.log('data -->', data);
     hitJoinVideoCallApi(data).then((response) => {
       if (response.data.result == 'success') {
-        checkPeermission();
+        // checkPeermission();
+        dispatch(startMeeting(fromNotification ? meetimgUrl : roomId));
       } else {
         InCallManager.stopRingback();
         Show_Toast('Something went Wrong');
@@ -207,11 +224,15 @@ const CallScreen = ({ navigation, route }) => {
   };
 
   useEffect(() => {
+    console.log('in2nduseeffect----->>>');
     roomId = generateRandomString();
-
+    console.log('roomId==========>', roomId);
     if (fromNotification) {
-      checkPeermission();
+      console.log('inif--------->>>>');
+      dispatch(startMeeting(fromNotification ? meetimgUrl : roomId));
+      // checkPeermission();
     } else {
+      console.log('inelse--------->>>>');
       hitJoinVideoApi();
     }
 
@@ -219,6 +240,7 @@ const CallScreen = ({ navigation, route }) => {
 
     const handleAppStateChange = (nextAppState) => {
       if (nextAppState === 'inactive') {
+        console.log('hitHanupCall----->>111');
         hitHanupCall();
       }
     };
@@ -255,8 +277,8 @@ const CallScreen = ({ navigation, route }) => {
     };
   }, []);
 
-  const permissions =
-    Platform.OS === 'ios' ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA;
+  // const permissions =
+  //   Platform.OS == 'ios' ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA;
 
   const disconnectMeeting = () => {
     InCallManager.stopRingback();
@@ -270,163 +292,164 @@ const CallScreen = ({ navigation, route }) => {
     }
   };
 
-  const checkPeermission = () => {
-    request(permissions)
-      .then((result) => {
-        switch (result) {
-          case RESULTS.UNAVAILABLE:
-            console.log(
-              'This feature is not available (on this device / in this context)'
-            );
-            break;
-          case RESULTS.DENIED:
-            console.log(
-              'The permission has not been requested / is denied but requestable',
-              RESULTS.DENIED
-            );
-            break;
-          case RESULTS.LIMITED:
-            console.log('The permission is limited: some actions are possible');
-            break;
-          case RESULTS.GRANTED:
-            console.log('granted------');
-            dispatch(startMeeting(fromNotification ? meetimgUrl : roomId));
+  // const checkPeermission = () => {
+  //   console.log('checkPeermission------->>>');
+  //   request(permissions)
+  //     .then((result) => {
+  //       switch (result) {
+  //         case RESULTS.UNAVAILABLE:
+  //           console.log(
+  //             'This feature is not available (on this device / in this context)================>>>>>>>'
+  //           );
+  //           break;
+  //         case RESULTS.DENIED:
+  //           console.log(
+  //             'The permission has not been requested / is denied but requestable',
+  //             RESULTS.DENIED
+  //           );
+  //           break;
+  //         case RESULTS.LIMITED:
+  //           console.log('The permission is limited: some actions are possible');
+  //           break;
+  //         case RESULTS.GRANTED:
+  //           console.log('granted------');
+  //           dispatch(startMeeting(fromNotification ? meetimgUrl : roomId));
 
-            break;
-          case RESULTS.BLOCKED:
-            console.log('The permission is denied and not requestable anymore');
-            break;
-        }
-      })
-      .catch((error) => {
-        console.log('errr----', error);
-      });
-  };
+  //           break;
+  //         case RESULTS.BLOCKED:
+  //           console.log('The permission is denied and not requestable anymore');
+  //           break;
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log('errr----', error);
+  //     });
+  // };
 
   return (
     <SafeAreaView style={voiceCall ? AppStyle.wrapper : styles.wrapper}>
       <View style={AppStyle.homeMainView}>
-      <View style={{ flex: 4 }}>
-        {voiceCall ? (
-          <View>
-            <TouchableOpacity
-              onPress={() => hitHanupCall()}
-              style={styles.backArrowBox}
-            >
-              <Image source={ic_brownArrow} />
-            </TouchableOpacity>
-
-            <CustomText
-              textColor={colors.black}
-              text={callData}
-              alignText={'center'}
-              textSize={20}
-              marginTop={hp(5)}
-              fontWeight={'500'}
-            />
-            <CustomText
-              textColor={colors.black}
-              text={timerCount > 0 ? secondsToHMS(timerCount) : 'Connecting'}
-              alignText={'center'}
-              textSize={12}
-              marginTop={hp(1)}
-              fontWeight={'400'}
-            />
-
-            <Image style={styles.avatarStyle} source={ic_callAvatar} />
-          </View>
-        ) : (
-          <View style={{ flex: 1 }}>
-            <RTCView
-              style={{ flex: 1 }}
-              objectFit="cover"
-              mirror={largeVideoTrack?.mirror}
-              streamURL={largeVideoTrack?.jitsiTrack?.stream.toURL()}
-            />
-
-            {isLoading ? (
-              <Text
-                style={{
-                  color: colors.white,
-                  flex: 1,
-                  alignSelf: 'center',
-                  justifyContent: 'center',
-                  fontSize: 20,
-                  fontWeight: 'bold',
-                  position: 'absolute',
-                  top: hp(40),
-                  bottom: hp(40),
-                }}
-              >
-                Connecting
-              </Text>
-            ) : null}
-
-            {participants.sortedRemoteParticipants.length > 0 ? (
+        <View style={{ flex: 4 }}>
+          {voiceCall ? (
+            <View>
               <TouchableOpacity
-                style={{
-                  height: hp(25),
-                  width: wp(40),
-                  backgroundColor: 'green',
-                  position: 'absolute',
-                  right: 10,
-                  bottom: hp(5),
-                }}
-                onPress={() => switchStreamUrl()}
+                onPress={() => hitHanupCall()}
+                style={styles.backArrowBox}
               >
-                <RTCView
-                  style={{ height: hp(25), width: wp(40) }}
-                  objectFit="cover"
-                  streamURL={smallVideoTrack?.jitsiTrack?.stream.toURL()}
-                />
+                <Image source={ic_brownArrow} />
               </TouchableOpacity>
-            ) : null}
-          </View>
-        )}
-      </View>
 
-      <View style={styles.bottomStyle}>
-        {/* <Image source={ic_msg} style={styles.avatarStyle} />
+              <CustomText
+                textColor={colors.black}
+                text={callData}
+                alignText={'center'}
+                textSize={20}
+                marginTop={hp(5)}
+                fontWeight={'500'}
+              />
+              <CustomText
+                textColor={colors.black}
+                text={timerCount > 0 ? secondsToHMS(timerCount) : 'Connecting'}
+                alignText={'center'}
+                textSize={12}
+                marginTop={hp(1)}
+                fontWeight={'400'}
+              />
+
+              <Image style={styles.avatarStyle} source={ic_callAvatar} />
+            </View>
+          ) : (
+            <View style={{ flex: 1 }}>
+              <RTCView
+                style={{ flex: 1 }}
+                objectFit="cover"
+                mirror={largeVideoTrack?.mirror}
+                streamURL={largeVideoTrack?.jitsiTrack?.stream.toURL()}
+              />
+
+              {isLoading ? (
+                <Text
+                  style={{
+                    color: colors.white,
+                    flex: 1,
+                    alignSelf: 'center',
+                    justifyContent: 'center',
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                    position: 'absolute',
+                    top: hp(40),
+                    bottom: hp(40),
+                  }}
+                >
+                  Connecting
+                </Text>
+              ) : null}
+
+              {participants.sortedRemoteParticipants.length > 0 ? (
+                <TouchableOpacity
+                  style={{
+                    height: hp(25),
+                    width: wp(40),
+                    backgroundColor: 'green',
+                    position: 'absolute',
+                    right: 10,
+                    bottom: hp(5),
+                  }}
+                  onPress={() => switchStreamUrl()}
+                >
+                  <RTCView
+                    style={{ height: hp(25), width: wp(40) }}
+                    objectFit="cover"
+                    streamURL={smallVideoTrack?.jitsiTrack?.stream.toURL()}
+                  />
+                </TouchableOpacity>
+              ) : null}
+            </View>
+          )}
+        </View>
+
+        <View style={styles.bottomStyle}>
+          {/* <Image source={ic_msg} style={styles.avatarStyle} />
         <Image source={ic_speaker_small} style={styles.avatarStyle} /> */}
-        {!voiceCall ? (
-          <TouchableOpacity
-            style={styles.avatarStyle}
-            onPress={() => dispatch(toggleCamera())}
-          >
-            <Image source={ic_camera_switch} />
-          </TouchableOpacity>
-        ) : null}
+          {!voiceCall ? (
+            <TouchableOpacity
+              style={styles.avatarStyle}
+              onPress={() => dispatch(toggleCamera())}
+            >
+              <Image source={ic_camera_switch} />
+            </TouchableOpacity>
+          ) : null}
 
-        {voiceCall ? (
+          {voiceCall ? (
+            <TouchableOpacity
+              style={styles.avatarStyle}
+              onPress={() => enableSpeaker()}
+            >
+              <Image source={!speaker ? ic_speaker : ic_speaker_fill} />
+            </TouchableOpacity>
+          ) : null}
           <TouchableOpacity
             style={styles.avatarStyle}
-            onPress={() => enableSpeaker()}
+            onPress={() => hitHanupCall()}
           >
-            <Image source={!speaker ? ic_speaker : ic_speaker_fill} />
+            <Image source={ic_endcall} />
           </TouchableOpacity>
-        ) : null}
-        <TouchableOpacity
-          style={styles.avatarStyle}
-          onPress={() => hitHanupCall()}
-        >
-          <Image source={ic_endcall} />
-        </TouchableOpacity>
-        {!voiceCall ? (
-          <TouchableOpacity
-            style={styles.avatarStyle}
-            onPress={() => videoEnable()}
-          >
-            <Image source={enableVideo ? ic_video_off : ic_video_on} />
-          </TouchableOpacity>
-        ) : null}
+          {!voiceCall ? (
+            <TouchableOpacity
+              style={styles.avatarStyle}
+              onPress={() => videoEnable()}
+            >
+              <Image source={enableVideo ? ic_video_off : ic_video_on} />
+            </TouchableOpacity>
+          ) : null}
 
-        <TouchableOpacity
-          style={styles.avatarStyle}
-          onPress={() => audioEnable()}
-        >
-          <Image source={enableAudio ? ic_mic_off : ic_mic_on} />
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            style={styles.avatarStyle}
+            onPress={() => audioEnable()}
+          >
+            <Image source={enableAudio ? ic_mic_off : ic_mic_on} />
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );

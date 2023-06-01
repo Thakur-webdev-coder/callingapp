@@ -20,41 +20,6 @@ export const navigateScreen = (nav) => {
 };
 
 export const checkToken = async () => {
-  firebase
-  .messaging()
-  .hasPermission()
-  .then(enabled => {
-    if (enabled) {
-      console.log('askpermission---hasPermission------',enabled);
-      // User has permissions
-      getFcmToken(); // const fcmToken = await firebase.messaging().getToken();
-    } else {
-      // User doesn't have permission
-      firebase
-        .messaging()
-        .requestPermission()
-        .then(() => {
-          console.log('askpermission---requestPermission------',enabled);
-
-          // User has authorized
-          getFcmToken(); // const fcmToken = await firebase.messaging().getToken();
-        })
-        .catch(error => {
-          // User has rejected permissions
-          console.log(
-            'PERMISSION REQUEST :: notification permission rejected',
-          );
-        });
-    }
-  }) .catch(error => {
-    // User has rejected permissions
-    console.log(
-      'error----',error
-    );
-  });
- 
-};
-const getFcmToken =async()=>{
   const fcmToken = await messaging().getToken();
   if (fcmToken) {
     console.log('fcm_tokennnn', fcmToken);
@@ -63,7 +28,7 @@ const getFcmToken =async()=>{
 
     return fcmToken;
   }
-}
+};
 
 export const showNotification = () => {
   messaging().onMessage(async (remoteMessage) => {
@@ -113,7 +78,7 @@ export const showNotification = () => {
     console.log('Message handled in the background!', remoteMessage);
 
     if (remoteMessage?.data?.notification_type == 'call') {
-      showIncomingCallNotification(remoteMessage);
+      // showIncomingCallNotification(remoteMessage);
       // navigations.navigate('IncomingScreen', {
       //   callData: remoteMessage?.data,
       // });
@@ -210,7 +175,7 @@ export const configureNotification = () => {
     onNotification: function (notification) {
       console.log(
         'NOTIFICATION:===>>>>',
-        notification?.action,
+        notification,
         notification?.data?.data?.notification_type === 'SINGLE_CHAT'
       );
 
