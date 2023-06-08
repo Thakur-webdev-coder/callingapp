@@ -15,6 +15,12 @@ export default StyleSheet.create({
   container_view: {
     flexDirection: "row",
   },
+  imgstyle: {
+    alignSelf: "center",
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+  },
   container_view2: {
     marginTop: hp(6),
     flexDirection: "row",

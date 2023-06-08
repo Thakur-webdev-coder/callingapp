@@ -20,4 +20,11 @@ export default StyleSheet.create({
     marginHorizontal: wp(10),
     marginTop: hp(5),
   },
+  imgStyle:{
+    marginTop:hp(10),
+    alignSelf:'center',
+    height:200,
+    width:200,
+    borderRadius:100
+  }
 });

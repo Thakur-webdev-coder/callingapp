@@ -15,6 +15,7 @@ import Login from "../views/LoginSignupScreen/Login";
 import UpdateProfile from "../views/UpdateProfileScreen/UpdateProfile";
 import DIDScreen from "../views/DIDScreen/DIDScreen";
 import { participantJoined } from "../lib-jitsi-meet/actions";
+import WebViewScreen from "../views/webView";
 
 const Stack = createNativeStackNavigator();
 
@@ -27,8 +28,9 @@ const RootNavigation = () => {
     <>
       <Stack.Navigator
         initialRouteName={
-          loginDetails != null ? "StackNavigator" : BOARDING_SCREEN
+          loginDetails ? "StackNavigator" : BOARDING_SCREEN
         }
+        // initialRouteName={OTP_SCREEN}
         screenOptions={{ headerShown: false,gestureEnabled:   false }}
       >
         <Stack.Screen name="StackNavigator" component={StackNavigator} />
@@ -37,7 +39,8 @@ const RootNavigation = () => {
         <Stack.Screen name={"UpdateProfile"} component={UpdateProfile} />
         <Stack.Screen name={"DIDScreen"} component={DIDScreen} />
         <Stack.Screen name={VERIFY_SCREEN} component={VerificationScreen} />
-        <Stack.Screen name={OTP_SCREEN} component={OtpScreen} />
+        <Stack.Screen name={OTP_SCREEN} initialParams={{}} component={OtpScreen} />
+        <Stack.Screen name={"WebViewScreen"} component={WebViewScreen} />
       </Stack.Navigator>
       <Loading loading={isLoadingEnable} />
     </>

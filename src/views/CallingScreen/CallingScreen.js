@@ -2,6 +2,7 @@ import {
   View,
   Text,
   SafeAreaView,
+  Image,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import AppStyle from "../../components/AppStyle";
@@ -36,7 +37,7 @@ const CallingScreen = ({ navigation, route }) => {
   const [mute, setMute] = useState(false);
   const [hold, setHold] = useState(false);
   const [speaker, setSpeaker] = useState(false);
-  const { callData } = route.params;
+  const { callData,avatarImg } = route.params;
 
   console.log("route.params---->", route.params);
 
@@ -125,11 +126,7 @@ const CallingScreen = ({ navigation, route }) => {
         <Text style={styles.timerText}>
           {timerCount > 0 ? secondsToHMS(timerCount) : "Calling"}
         </Text>
-        <CustomImage
-          imgSrc={ic_avatar}
-          alignSelf={"center"}
-          marginTop={hp(10)}
-        />
+        <Image style={styles.imgStyle} source={avatarImg?{ uri: avatarImg }:ic_avatar} />
         <View>
           <View style={styles.callingView}>
             <View>
@@ -197,11 +194,11 @@ const CallingScreen = ({ navigation, route }) => {
               </View>
             </View> */}
         </View>
-        <View>
+        <View >
           <CustomImage
             imgSrc={ic_endcall}
             alignSelf={"center"}
-            marginTop={hp(8)}
+             marginTop={hp(8)}
             onpress={() => {
               callDisconnect();
             }}

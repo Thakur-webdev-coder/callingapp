@@ -1,4 +1,4 @@
-import { PermissionsAndroid, Platform, SafeAreaView, Text, View } from "react-native";
+import { Alert, PermissionsAndroid, Platform, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import CustomImage from "../../components/CustomImage";
 import CustomButton from "../../components/CustomButton";
@@ -59,15 +59,19 @@ const BoardingScreen = ({ navigation }) => {
       });
   };
 
+  const createTwoButtonAlert = () =>
+  Show_Toast('Please accept privacy policy');
+
+
   return (
-    <SafeAreaView style={[AppStyle.wrapper,{backgroundColor:colors.white}]}>
+    <SafeAreaView style={[AppStyle.wrapper, { backgroundColor: colors.white }]}>
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <CustomImage alignSelf={"center"} imgSrc={ic_app_logo} />
       </View>
 
       <View>
         <CustomButton
-          onPress={() => navigation.navigate("Login")}
+          onPress={() => checked?navigation.navigate("Login"):createTwoButtonAlert()}
           primary
           title={"Get Started"}
           horzontalPadding={wp(15)}
@@ -87,16 +91,22 @@ const BoardingScreen = ({ navigation }) => {
             onValueChange={(newValue) => setChecked(newValue)}
             tintColors={{ true: colors.buttonColor, false: colors.grayColor }}
           />
-
-          <Text
-            style={{
-              color: colors.grayColor,
-              alignSelf: "center",
-            }}
-          >
-            Agree to{" "}
-            <Text style={{ color: colors.buttonColor }}>Privacy Policy</Text>
-          </Text>
+          <View style={{ flexDirection: 'row',paddingTop:5 }}>
+            <Text
+              style={{
+                color: colors.grayColor,
+                // alignSelf: "center",
+                // textAlign:'center'
+              }}
+            >
+              Agree to{" "}</Text>
+            <TouchableOpacity onPress={()=>navigation.navigate('WebViewScreen', {
+            url: `https://billing.kokoafone.com/privacy-policy.html`,
+            title: 'Privacy Policy',
+          })}>
+              <Text style={{ color: colors.buttonColor }}>Privacy Policy</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </SafeAreaView>

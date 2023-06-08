@@ -21,7 +21,7 @@ import { dateFormater } from '../../utils/commonUtils';
 import { parsePhoneNumber } from 'libphonenumber-js';
 import { Show_Toast } from '../../utils/toast';
 import Sip from '@khateeb00/react-jssip';
-
+import NetInfo from "@react-native-community/netinfo";
 const RecentCall = ({ navigation }) => {
   const [state, setState] = useState({
     callDetailRes: '',
@@ -77,8 +77,24 @@ const RecentCall = ({ navigation }) => {
       <TouchableOpacity
         onPress={() => {
           if (balanceDetail.credit > 0) {
-            Sip.makeCall(item.called_user.replace(/ /g, ''));
-            navigation.navigate('CallingScreen', { callData: item });
+            NetInfo.fetch().then((status)=>{
+              if(status.isConnected){
+                if(Sip.isRegistered){
+                  console.log('inhererrere------->>>><<<<<');
+                Sip.makeCall(item.called_user.replace(/ /g, ''));
+                navigation.navigate('CallingScreen', { callData: item });
+                }else{
+                  Show_Toast(
+                    "Something went wrong. Please wait..."
+                  );
+                }
+              }else{
+                Show_Toast(
+                  "Check your data connection and try again."
+                );
+              }
+            })
+           
           } else {
             Show_Toast('Insufficient balance. Please recharge your account.');
           }

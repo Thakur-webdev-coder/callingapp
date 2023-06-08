@@ -33,6 +33,9 @@ import {
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 import { openSettings, PERMISSIONS, request, requestMultiple, RESULTS } from "react-native-permissions";
+import NetInfo from "@react-native-community/netinfo";
+
+
 const CallDetailsScreen = ({ navigation, route }) => {
   //  const [ratesModal,setRatesModal]= useState(false)
   const [state, setState] = useState({
@@ -40,7 +43,7 @@ const CallDetailsScreen = ({ navigation, route }) => {
     ratesModal: false,
     ratesData: []
   });
-  const { Name, phoneNumber, isKokaContact } = route.params;
+  const { Name, phoneNumber, isKokaContact,avatarImg } = route.params;
 
   const { balanceDetail = {} } = useSelector((store) => store.sliceReducer);
   console.log("route.params--->0", route.params);
@@ -83,7 +86,7 @@ const CallDetailsScreen = ({ navigation, route }) => {
   }
 
   const checkPeermission = (callType) => {
-    console.log('checkPeermission------->>>');
+    console.log('checkPeermission------->>>',callType);
     requestMultiple([cameraPermissions, micPermissions]).then((result) => {
       console.log(result[cameraPermissions], result[micPermissions], 'result--------->>>', result);
 
@@ -92,16 +95,29 @@ const CallDetailsScreen = ({ navigation, route }) => {
           { text: 'Okay', onPress: () => openAppSettings() }
         ]);
         return false;
+        
       } else {
-        callType =='voiceCall'?
-        navigation.navigate("CallScreen", {
-          voiceCall: true,
-          callData: phoneNumber,
-        }):
-        navigation.navigate("CallScreen", {
-          voiceCall: false,
-          callData: phoneNumber,
+        NetInfo.fetch().then((status)=>{
+          if(status.isConnected){
+            console.log('status.isConnected------>>>',status.isConnected);
+            callType =='voiceCall'?
+            navigation.navigate("CallScreen", {
+              voiceCall: true,
+              callData: phoneNumber,
+              
+            }):
+            navigation.navigate("CallScreen", {
+              voiceCall: false,
+              callData: phoneNumber,
+            
+            })
+          }else{
+            Show_Toast(
+              "Check your data connection and try again."
+            );
+          }
         })
+       
       }
     })
       .catch((error) => {
@@ -159,7 +175,7 @@ const CallDetailsScreen = ({ navigation, route }) => {
 
         <View style={styles.mainView}>
           <View style={styles.container_view}>
-            <Image source={ic_contact_avatar} />
+            <Image style={styles.imgstyle} source={avatarImg?{ uri: avatarImg }: ic_contact_avatar} />
             <Text style={styles.textStyle}>{Name}</Text>
           </View>
 
@@ -216,16 +232,33 @@ const CallDetailsScreen = ({ navigation, route }) => {
             <View>
               <TouchableOpacity
                 onPress={() => {
-                  if (balanceDetail.credit > 0) {
-                    Sip.makeCall(phoneNumber);
-                    navigation.navigate("CallingScreen", {
-                      callData: { name: Name },
-                    });
-                  } else {
-                    Show_Toast(
-                      "Insufficient balance. Please recharge your account."
-                    );
-                  }
+                  NetInfo.fetch().then((status)=>{
+                    if(status.isConnected){
+                      if (balanceDetail.credit > 0) {
+                        if(Sip.isRegistered){
+                          console.log('inhererrere------->>>><<<<<');
+                        Sip.makeCall(phoneNumber);
+                        navigation.navigate("CallingScreen", {
+                          callData: { name: Name },
+                          avatarImg:avatarImg
+                        });
+                      }else{
+                        Show_Toast(
+                          "Something went wrong. Please wait..."
+                        );
+                      }
+                      } else {
+                        Show_Toast(
+                          "Insufficient balance. Please recharge your account."
+                        );
+                      }
+                    }else {
+                      Show_Toast(
+                        "Check your data connection and try again."
+                      );
+                    }
+                  })
+              
                 }}
               >
                 <View style={styles.imgBoxStyle}>

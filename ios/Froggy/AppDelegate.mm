@@ -11,6 +11,9 @@
   self.moduleName = @"kokoafone";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
+  UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+   center.delegate = self;
+  
   self.initialProps = @{};
   [FIRApp configure];
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
@@ -49,6 +52,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
   [RNCPushNotificationIOS didReceiveNotificationResponse:response];
 }
 
+-(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
+{
+  completionHandler(UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionBadge);
+}
 
 
 /// This method controls whether the `concurrentRoot`feature of React18 is turned on or off.

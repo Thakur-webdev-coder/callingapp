@@ -11,6 +11,8 @@ import { Socket } from 'socket.io-client';
 import { getSocket } from './socketManager';
 import PushNotification, { Importance } from 'react-native-push-notification';
 import Loading from 'react-native-whc-loading';
+let myMesaggeNotification = null;
+
 
 const { NotificationManager } = NativeModules;
 
@@ -32,12 +34,15 @@ export const checkToken = async () => {
 
 export const showNotification = () => {
   messaging().onMessage(async (remoteMessage) => {
-    console.log('remoteMegssage', remoteMessage);
+    console.log('remoteMegssagetitle', remoteMessage?.notification?.title);
+    console.log('remoteMegssagebody', remoteMessage?.notification?.body);
     console.log('uniqueIddd22', remoteMessage?.data.participants);
 
     // Check if app is in foreground
 
     // CustomAlert(remoteMessage);
+
+    myMesaggeNotification = remoteMessage;
 
     if (remoteMessage?.data?.notification_type == 'hangup_call') {
       console.log('hereeee -->>', remoteMessage?.data);
@@ -56,15 +61,16 @@ export const showNotification = () => {
         callData: remoteMessage?.data,
       });
     } else if (remoteMessage?.data?.notification_type === 'SINGLE_CHAT') {
-      const isFocused = getBooleanValue('isFocused').then((data) => {
+       getBooleanValue('isFocused').then((data) => {
         console.log('isFocused', data);
 
         if (!data) {
+          console.log("i'm herer", remoteMessage);
           showLocalNotification(remoteMessage);
         }
       });
     } else if (remoteMessage?.data?.notification_type === 'GROUP_CHAT') {
-      const isFocused = getBooleanValue('isFocused').then((data) => {
+     getBooleanValue('isFocused').then((data) => {
         console.log('isFocused', data);
 
         if (!data) {
@@ -133,12 +139,15 @@ export const showNotification = () => {
 
   messaging().onNotificationOpenedApp(async (remoteMessage) => {
     console.log('hererrerererNotiitiitit');
+
+   
     if (remoteMessage?.data?.notification_type == 'call') {
       console.log('notification opened', remoteMessage);
       navigations.navigate('IncomingScreen', {
         callData: remoteMessage?.data,
       });
     } else if (remoteMessage?.data?.notification_type === 'SINGLE_CHAT') {
+      console.log('hererrerererNotiitiitit----------');
       navigations.navigate('UserChatsScreen', {
         callData: remoteMessage?.data?.sid,
       });
@@ -155,6 +164,28 @@ export const showNotification = () => {
       });
     }
   });
+};
+
+
+const mesageViewnavigation = () => {
+   if (myMesaggeNotification?.data?.notification_type === 'SINGLE_CHAT') {
+    navigations.navigate('UserChatsScreen', {
+      callData: myMesaggeNotification?.data?.sid,
+    });
+   
+ } else if (myMesaggeNotification?.data?.notification_type === 'GROUP_CHAT') {
+  let participants = myMesaggeNotification?.data?.participants;
+
+      let result = participants.split(',').map(function (value) {
+        return value.trim();
+      });
+      navigations.navigate('UserChatsScreen', {
+        groupName: myMesaggeNotification?.data?.group_name,
+        uniqueId: myMesaggeNotification?.data?.group_id,
+        participants: result,
+      });
+ 
+ }
 };
 
 const showLocalNotification = (remoteMessage) => {
@@ -178,6 +209,10 @@ export const configureNotification = () => {
         notification,
         notification?.data?.data?.notification_type === 'SINGLE_CHAT'
       );
+
+      if (notification?.userInteraction && notification?.foreground) {
+        mesageViewnavigation();
+      }
 
       if (notification?.data?.data?.notification_type === 'SINGLE_CHAT') {
         navigations.navigate('UserChatsScreen', {

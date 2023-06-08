@@ -5,6 +5,9 @@ import {
   TouchableOpacity,
   AppState,
   BackHandler,
+  Alert,
+  Platform,
+  Linking,
 } from "react-native";
 import React, { useEffect } from "react";
 import { ic_avatar, ic_callrecive, ic_endcall } from "../../routes/imageRoutes";
@@ -14,11 +17,15 @@ import InCallManager from "react-native-incall-manager";
 import LinearGradient from "react-native-linear-gradient";
 import { hithangUpCallApi } from "../../constants/APi";
 import { hangupMeeting } from "../../lib-jitsi-meet/actions";
+import { PERMISSIONS, requestMultiple } from "react-native-permissions";
 
 const IncomingScreen = ({ navigation, route }) => {
   const notificationData = route.params.callData;
-
+  const cameraPermissions = Platform.OS == 'ios' ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA;
+  const micPermissions = Platform.OS == 'ios' ? PERMISSIONS.IOS.MICROPHONE : PERMISSIONS.ANDROID.RECORD_AUDIO;
+   console.log('notificationData------>>>',notificationData);
   useEffect(() => {
+    checkPeermission()
     const handleAppStateChange = (nextAppState) => {
       if (nextAppState === "inactive") {
         rejectCall();
@@ -44,6 +51,35 @@ const IncomingScreen = ({ navigation, route }) => {
     };
   }, []);
 
+
+
+  const checkPeermission = () => {
+    console.log('checkPeermission------->>>');
+    requestMultiple([cameraPermissions, micPermissions]).then((result) => {
+      console.log(result[cameraPermissions], result[micPermissions], 'result--------->>>', result);
+
+      if (result[cameraPermissions] !== 'granted' || result[micPermissions] !== 'granted') {
+        Alert.alert('Insufficient permissions!', 'You need to grant camera and Microphone access permissions to use this app.', [
+          { text: 'Okay', onPress: () => openAppSettings() }
+        ]);
+        rejectCall();
+        return false;
+        
+      } 
+    })
+      .catch((error) => {
+        console.log('errr----', error);
+      });
+  };
+
+  const openAppSettings = () => {
+    if (Platform.OS === 'android') {
+      Linking.openSettings();
+    } else {
+      Linking.openURL('app-settings:')
+    }
+  };
+
   const acceptCall = () => {
     InCallManager.stopRingtone();
     navigation.navigate("CallScreen", {
@@ -57,7 +93,7 @@ const IncomingScreen = ({ navigation, route }) => {
   const rejectCall = () => {
     InCallManager.stopRingtone();
     hitHanupCall();
-    navigation.goBack();
+     navigation.goBack();
   };
 
   const hitHanupCall = async () => {
@@ -111,7 +147,8 @@ const IncomingScreen = ({ navigation, route }) => {
         style={{
           flexDirection: "row",
           justifyContent: "space-around",
-          marginTop: hp(30),
+          marginTop: hp(20),
+          paddingBottom:hp(5)
         }}
       >
         <TouchableOpacity onPress={() => acceptCall()}>

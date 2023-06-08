@@ -29,6 +29,7 @@ import styles from "./styles";
 import Loading from "react-native-whc-loading";
 import { checkToken } from "../../utils/notificationHandler";
 import messaging from '@react-native-firebase/messaging';
+import { CommonActions } from "@react-navigation/native";
 let otpEncryptedCode = null;
 
 const OtpScreen = ({ navigation, route }) => {
@@ -56,6 +57,7 @@ const OtpScreen = ({ navigation, route }) => {
   }, [counter]);
 
   const hitOtpEncryptionAPI = async () => {
+ 
     setIsLoading(true);
 
     if (otpText.length == 4) {
@@ -106,8 +108,15 @@ const OtpScreen = ({ navigation, route }) => {
         if (response.data.result == "success") {
           // otp = response.data.OTP;
           dispatch(saveLoginDetails(response.data.userinfo));
-          navigation.navigate("StackNavigator");
           setIsLoading(false);
+          navigation?.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{ name: 'StackNavigator' }],
+            })
+          );
+          //  navigation.navigate("StackNavigator");
+          
         } else {
           showErrorMessage(response.data.OTP);
           setIsLoading(false);

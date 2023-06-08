@@ -67,7 +67,7 @@ import {
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import PushNotification from 'react-native-push-notification';
 import { PERMISSIONS, requestMultiple } from 'react-native-permissions';
-
+import NetInfo from "@react-native-community/netinfo";
 const { Popover } = renderers;
 
 const UserChatsScreen = ({ navigation, route }) => {
@@ -160,15 +160,25 @@ const UserChatsScreen = ({ navigation, route }) => {
         ]);
         return false;
       } else {
-        callType =='voiceCall'?
-        navigation.navigate('CallScreen', {
-          voiceCall: true,
-          callData: callData,
-        }):
-        navigation.navigate('CallScreen', {
-          voiceCall: false,
-          callData: callData,
-        });
+        NetInfo.fetch().then((status)=>{
+          if(status.isConnected){
+            callType =='voiceCall'?
+            navigation.navigate('CallScreen', {
+              voiceCall: true,
+              callData: callData,
+            }):
+            navigation.navigate('CallScreen', {
+              voiceCall: false,
+              callData: callData,
+            });
+
+          }else{
+            Show_Toast(
+              "Check your data connection and try again."
+            );
+          }
+        })
+       
         
         setState({ callModal: false });
       }
@@ -643,7 +653,7 @@ const UserChatsScreen = ({ navigation, route }) => {
          <KeyboardAvoidingView
               behavior={Platform.OS === 'ios' ? 'padding' : null}
                style={{flex:1}}
-               keyboardVerticalOffset={100}
+               keyboardVerticalOffset={65}
              
               >
           {groupedChats.length > 0 ? (

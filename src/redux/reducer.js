@@ -4,6 +4,7 @@ const initialState = {
   isLoadingEnable: false,
   chatMessage: [],
   chatRoom: "",
+  kokoaContacts:[]
 };
 
 const sliceReducer = createSlice({

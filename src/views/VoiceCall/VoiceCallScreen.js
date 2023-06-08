@@ -247,33 +247,33 @@ const CallScreen = ({ navigation, route }) => {
 
     AppState.addEventListener('change', handleAppStateChange);
 
-    const backAction = () => {
-      console.log('Back button is pressed');
-      Alert.alert(
-        '',
-        'Do you want to continue call ?',
-        [
-          { text: 'Hangup', onPress: () => hitHanupCall() },
-          {
-            text: 'Continue',
-            onPress: () => console.log('Cancel Pressed'),
-            style: 'cancel',
-          },
-        ],
-        { cancelable: true }
-      );
-      // hitHanupCall();
-      return true;
-    };
+    // const backAction = () => {
+    //   console.log('Back button is pressed');
+    //   Alert.alert(
+    //     '',
+    //     'Do you want to continue call ?',
+    //     [
+    //       { text: 'Hangup', onPress: () => hitHanupCall() },
+    //       {
+    //         text: 'Continue',
+    //         onPress: () => console.log('Cancel Pressed'),
+    //         style: 'cancel',
+    //       },
+    //     ],
+    //     { cancelable: true }
+    //   );
+    //   // hitHanupCall();
+    //   return true;
+    // };
 
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      backAction
-    );
+    // const backHandler = BackHandler.addEventListener(
+    //   'hardwareBackPress',
+    //   backAction
+    // );
 
     return () => {
       AppState.removeEventListener('change', handleAppStateChange);
-      backHandler.remove();
+      // backHandler.remove();
     };
   }, []);
 

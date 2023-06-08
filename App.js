@@ -8,10 +8,7 @@ import SplashScreen from 'react-native-splash-screen';
 import CustomLoader from './src/helpers/CustomLoader';
 import Store, { persistor } from './src/redux/store';
 import {
-  changelCreated,
   checkToken,
-  configureNotification,
-  showNotification,
 } from './src/utils/notificationHandler';
 import { MenuProvider } from 'react-native-popup-menu';
 const App = () => {

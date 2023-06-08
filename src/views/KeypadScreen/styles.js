@@ -38,16 +38,17 @@ export default StyleSheet.create({
     justifyContent: "space-between",
     // marginTop: hp(5),
     paddingHorizontal: wp(6),
+    paddingVertical:hp(1)
 
   },
   linearGradient: {
     height: 70,
     width: 70,
     borderRadius: 40,
-    backgroundColor: colors.primary,
+    // backgroundColor: colors.primary,
     alignItems: "center",
     justifyContent: "center",
-    marginTop:hp(1.5)
+    marginTop:hp(1.3)
   },
 
   bottomImgStyle: {

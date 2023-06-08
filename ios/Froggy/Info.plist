@@ -26,6 +26,8 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -46,17 +48,19 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Allow app to use camera</string>
+	<string>Allow app to use camera during video call</string>
 	<key>NSContactsUsageDescription</key>
-	<string>To access contact</string>
+	<string>Allow app to access contact to make calls and to send messages</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Allow app to discover and communicate with nearby devices.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Allows the developer to describe why the app wants to always have access to the user&apos;s location.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Allow Microphone usage in app</string>
-	<key>NSRemoteNotificationUsageDescription</key>
-	<string>Receive push notifications to stay updated with the latest information and updates.</string>
+	<string>Allow Microphone usage in app to video and audio call</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>This app requires constant access to Bluetooth in order to connect and communicate with our Bluetooth peripheral device</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>This app requires access to Bluetooth to connect and communicate with our Bluetooth peripheral device.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Inter-Bold.ttf</string>
@@ -66,9 +70,10 @@
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>audio</string>
 		<string>fetch</string>
-		<string>processing</string>
 		<string>remote-notification</string>
+		<string>voip</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

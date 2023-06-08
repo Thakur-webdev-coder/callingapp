@@ -174,7 +174,7 @@ const Contacts = ({ navigation }) => {
       })
       .catch((err) => {
         console.log('errrror------', err);
-        Alert.alert('Something went wrong herreee');
+        Alert.alert('Something went wrong');
         setState({ isLoading: false });
         setIsLoading(false);
       });
@@ -203,7 +203,7 @@ const Contacts = ({ navigation }) => {
           case RESULTS.GRANTED:
             ContactList?.getAll()?.then((contact) => {
               dispatch(saveContacts(contact));
-              syncContacts(contact);
+              // syncContacts(contact);
 
               setState({
                 contacts: contact,
@@ -241,7 +241,7 @@ const Contacts = ({ navigation }) => {
   };
 
   const { kokaContact = [], contacts } = state;
-  let commonGivenNames = commonKokacontact.map(
+  let commonGivenNames = kokoaContacts.map(
     (l) => l.phoneNumbers[0]?.number
   );
   // console.log("commonKokacontact------", commonKokacontact);
@@ -254,13 +254,15 @@ const Contacts = ({ navigation }) => {
   };
 
   const renderItem = ({ item }) => {
-    // console.log("item============", item?.phoneNumbers[0]?.number);
+  //  console.log("item============", item);
     // console.log('find============', commonGivenNames.find(el => el== item?.givenName))
     const onPressCall = () => {
       navigation.navigate('CallDetailsScreen', {
         Name: item?.givenName + ' ' + item?.familyName,
         phoneNumber: item?.phoneNumbers[0]?.number,
         isKokaContact: true,
+        avatarImg:item?.thumbnailPath
+
       });
     };
     const onPressNextPage = () => {
@@ -270,6 +272,7 @@ const Contacts = ({ navigation }) => {
         Name: item?.givenName + ' ' + item?.familyName,
         phoneNumber: item?.phoneNumbers[0]?.number,
         isKokaContact: false,
+        avatarImg:item?.thumbnailPath
       });
     };
 
@@ -295,7 +298,10 @@ const Contacts = ({ navigation }) => {
               />
             </View>
             <Text style={styles.nameTxtStyle}>
-              {item?.givenName + ' ' + item?.familyName}
+              {item.givenName || item.familyName ? 
+              item?.givenName + ' ' + item?.familyName 
+              :
+              item?.phoneNumbers[0]?.number}
             </Text>
 
             {commonGivenNames.includes(item?.phoneNumbers[0]?.number) ? (
@@ -434,7 +440,7 @@ const Contacts = ({ navigation }) => {
               ? searchTxt
                 ? state.contacts
                 : sortedData
-              : commonKokacontact
+              : kokoaContacts
           }
           renderItem={renderItem}
           showsVerticalScrollIndicator={false}

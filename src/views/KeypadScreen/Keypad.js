@@ -28,6 +28,7 @@ import Sip from "@khateeb00/react-jssip";
 import { useSelector } from "react-redux";
 import { Show_Toast } from "../../utils/toast";
 import Contacts from "react-native-contacts";
+import NetInfo from "@react-native-community/netinfo";
 
 const Keypad = ({ navigation }) => {
   // const [inputNumber, setInputNumber] = useState('')
@@ -181,10 +182,25 @@ console.log('phone-----',phone);
             // console.log("dialedNumber=====", dialedNumber);
             if (dialedNumber.length > 8) {
             if (balanceDetail.credit > 0) {
-              Sip.makeCall(dialedNumber);
-              navigation.navigate("CallingScreen", {
-                callData: dialedNumber,
-              });
+              NetInfo.fetch().then((status)=>{
+                if(status.isConnected){
+                  if(Sip.isRegistered){
+                  Sip.makeCall(dialedNumber);
+                  navigation.navigate("CallingScreen", {
+                    callData: dialedNumber,
+                  });
+                }else{
+                  Show_Toast(
+                    "Something went wrong. Please wait..."
+                  );
+                }
+                }else{
+                Show_Toast(
+                  "Check your data connection and try again."
+                );
+              }
+              })
+             
             } else {
               Show_Toast("Insufficient balance. Please recharge your account.");
             }
