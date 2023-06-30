@@ -47,6 +47,10 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>This app requires constant access to Bluetooth in order to connect and communicate with our Bluetooth peripheral device</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>This app requires access to Bluetooth to connect and communicate with our Bluetooth peripheral device.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Allow app to use camera during video call</string>
 	<key>NSContactsUsageDescription</key>
@@ -54,13 +58,9 @@
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Allow app to discover and communicate with nearby devices.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Allows the developer to describe why the app wants to always have access to the user&apos;s location.</string>
+	<string>Allows the developer to describe why the app wants to always have access to the user's location.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Allow Microphone usage in app to video and audio call</string>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>This app requires constant access to Bluetooth in order to connect and communicate with our Bluetooth peripheral device</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>This app requires access to Bluetooth to connect and communicate with our Bluetooth peripheral device.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Inter-Bold.ttf</string>

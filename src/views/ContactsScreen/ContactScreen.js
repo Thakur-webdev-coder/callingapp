@@ -258,7 +258,10 @@ const Contacts = ({ navigation }) => {
     // console.log('find============', commonGivenNames.find(el => el== item?.givenName))
     const onPressCall = () => {
       navigation.navigate('CallDetailsScreen', {
-        Name: item?.givenName + ' ' + item?.familyName,
+        Name: item.givenName || item.familyName ? 
+        item?.givenName + ' ' + item?.familyName 
+        :
+        item?.phoneNumbers[0]?.number,
         phoneNumber: item?.phoneNumbers[0]?.number,
         isKokaContact: true,
         avatarImg:item?.thumbnailPath
@@ -269,7 +272,10 @@ const Contacts = ({ navigation }) => {
       console.log('callDetail--------', item?.phoneNumbers[0]?.number);
 
       navigation.navigate('CallDetailsScreen', {
-        Name: item?.givenName + ' ' + item?.familyName,
+        Name: item.givenName || item.familyName ? 
+        item?.givenName + ' ' + item?.familyName 
+        :
+        item?.phoneNumbers[0]?.number,
         phoneNumber: item?.phoneNumbers[0]?.number,
         isKokaContact: false,
         avatarImg:item?.thumbnailPath
