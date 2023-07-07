@@ -578,6 +578,7 @@ const UserChatsScreen = ({ navigation, route }) => {
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image source={ic_back} />
           </TouchableOpacity>
+          <View style={styles.headerBox}>
           <TouchableOpacity style={styles.nameContainer}
             onPress={() =>
               groupName
@@ -641,6 +642,7 @@ const UserChatsScreen = ({ navigation, route }) => {
               </MenuOptions>
             </Menu>
           </View>
+          </View>
         </View>
 
 
@@ -693,14 +695,18 @@ const UserChatsScreen = ({ navigation, route }) => {
               >
                  */}
                 <TextInput
+                  multiline
                   style={styles.searchTnputStyleee}
                   placeholder="Type message here"
                   placeholderTextColor={colors.searchBarTxt}
                   onChangeText={(text) => onChangeMessageInput(text)}
                   value={messageInput}
+                  numberOfLines={3}
+                   ReturnKeyType='done' 
                 />
               {/* </KeyboardAvoidingView> */}
-
+           
+             <View style={{flexDirection:'row'}} >
               <TouchableOpacity
                 style={{ justifyContent: 'center' }}
                 onPress={uploadFile}
@@ -713,6 +719,7 @@ const UserChatsScreen = ({ navigation, route }) => {
               >
                 <Image source={ic_chat_call} />
               </TouchableOpacity>
+            </View>
             </View>
             <TouchableOpacity
               style={styles.arrowStyle}

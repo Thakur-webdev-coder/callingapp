@@ -4,6 +4,7 @@ import {
   BackHandler,
   FlatList,
   Image,
+  Platform,
   SafeAreaView,
   TextInput,
   TouchableOpacity,
@@ -82,7 +83,7 @@ const Home = ({ navigation }) => {
   const [transferModal, setTransferModal] = useState(false);
 
   const [LogoutModal, setLogOutModal] = useState(false);
-  const { loginDetails = {}, balanceDetail = {} } = useSelector(
+  const { loginDetails = {}, balanceDetail = {},saveStatus={} } = useSelector(
     (store) => store.sliceReducer
   );
 
@@ -209,8 +210,60 @@ const Home = ({ navigation }) => {
       name: 'Logout',
       image: ic_logout,
     },
+    
   ];
 
+  const DATA2 = [
+    {
+      id: 0,
+      name: 'Invite Friends',
+      image: ic_users,
+    },
+    {
+      id: 1,
+      name: 'My Balance',
+      image: ic_mybalance,
+    },
+    
+    {
+      id: 2,
+      name: 'Transfer Credit',
+      image: ic_transfer_credit,
+    },
+    {
+      id: 3,
+      name: 'Transfer History',
+      image: ic_transfer,
+    },
+    {
+      id: 4,
+      name: 'Voucher Recharge',
+      image: ic_voucher,
+    },
+    {
+      id: 5,
+      name: 'Call Details Report',
+      image: ic_calldetails,
+    },
+  
+    
+    {
+      id: 6,
+      name: 'Data Bundle',
+      image: ic_databundle,
+    },
+   
+    {
+      id: 7,
+      name: 'Logout',
+      image: ic_logout,
+    },
+    {
+      id: 8,
+      name: 'Delete Account',
+      image: ic_logout,
+    },
+  ];
   const ViewItemClicked_Method = (name) => {
     switch (name) {
       case 'Invite Friends':
@@ -278,6 +331,9 @@ const Home = ({ navigation }) => {
       case 'Logout':
         LogoutMethod();
         break;
+        case 'Delete Account':
+          DeleteAccountMethod();
+          break;
       default:
         console.log('Voucher Recharge');
     }
@@ -431,6 +487,33 @@ const Home = ({ navigation }) => {
     dispatch(saveBalanceData(null));
     dispatch(removeLocalParticipant());
   };
+  const DeleteAccountMethod =()=>{
+    Alert.alert(
+      'Delete Account',
+      'Are you sure you want to Delete Account?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel'
+        },
+        {
+          text: 'OK',
+          onPress: () => {
+            setTimeout(() => {
+              navigation?.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [{ name: "Boarding Screen" }],
+                })
+              );
+            }, 100);
+            // dispatch(saveLoginDetails(null));
+            // dispatch(saveBalanceData(null));
+          }
+        }
+      ]
+    );
+  }
 
   const RenderList = ({ item, index }) => {
     return (
@@ -514,7 +597,8 @@ const Home = ({ navigation }) => {
           {/* </TouchableOpacity> */}
           <FlatList
             columnWrapperStyle={{ justifyContent: "space-between" }}
-            data={DATA}
+            // data={DATA2}
+             data={Platform.OS == "ios" ?saveStatus && saveStatus ==0 ? DATA2:DATA:DATA}
             renderItem={RenderList}
             keyExtractor={(item, index) => item.name}
             numColumns={3}

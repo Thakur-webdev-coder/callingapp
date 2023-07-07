@@ -157,3 +157,11 @@ export const hitSendGroupChatPush = (payload) => {
     data: payload,
   });
 };
+export const hitHiddenPageApi = (payload) => {
+  return apiClient({
+    baseURL: ApiRoutes.BASE_URL,
+    method: "GET",
+    url: ApiRoutes.API_HIDDENPAGE,
+    data: payload,
+  });
+};

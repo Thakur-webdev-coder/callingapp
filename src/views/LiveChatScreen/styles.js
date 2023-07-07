@@ -10,12 +10,14 @@ export default StyleSheet.create({
     flexDirection: "row",
     marginVertical: hp(1.5),
     paddingLeft: wp(5),
+   
   },
 
   nameTextColoumn: {
-    flexDirection: "column",
+    
     alignSelf: "center",
-    width: wp(62),
+    // width: wp(62),
+   
   },
   containerStyle: {
     marginTop: hp(2),

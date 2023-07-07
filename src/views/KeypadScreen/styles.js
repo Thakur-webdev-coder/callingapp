@@ -84,6 +84,7 @@ export default StyleSheet.create({
     borderRadius: 12,
     alignSelf:'center',
     width:wp(60),
+    justifyContent:'center',
     //marginHorizontal: wp(18),
     marginTop: hp(3)
   },

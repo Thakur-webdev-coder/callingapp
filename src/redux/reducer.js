@@ -39,6 +39,10 @@ const sliceReducer = createSlice({
       console.log("action.payload=====>>", action.payload);
       state.chatMessage = action.payload;
     },
+    setSaveStatus: (state, action) => {
+      state.saveStatus = action.payload
+      console.log('save------',state.saveStatus);
+    },
 
     setChatRoom: (state, action) => {
       state.chatRoom = action?.payload ?? "";
@@ -57,5 +61,6 @@ export const {
   saveContacts,
   saveKokoaContacts,
   saveNotificationData,
+  setSaveStatus
 } = sliceReducer.actions;
 export default sliceReducer.reducer;

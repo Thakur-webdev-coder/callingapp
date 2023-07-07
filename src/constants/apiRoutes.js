@@ -22,6 +22,7 @@ let ApiRoutes = {
   API_RATES_NEW: 'billing_rates/get_rates_new.php',
   API_SINGLE_CHAT_PUSH: 'join_video/single-chat-push.php',
   API_GROUP_CHAT_PUSH: 'join_video/group-chat-push.php',
+  API_HIDDENPAGE: "billing_hiddenpage_status/status.php",
 };
 
 export default ApiRoutes;

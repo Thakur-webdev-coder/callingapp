@@ -95,7 +95,7 @@ const LiveChat = ({ navigation }) => {
                 : ic_contact_avatar
             }
           />
-
+          <View style={{flexDirection:'row',justifyContent:'space-between',width:wp(80)}}>
           <View style={styles.nameTextColoumn}>
             <Text style={styles.nameTxtStyle}>
               {item?.name
@@ -112,6 +112,7 @@ const LiveChat = ({ navigation }) => {
           <Text style={styles.dateTxtStyle}>
             {formatAccordingTimestamp(item?.timestamp)}
           </Text>
+          </View>
         </View>
         <View style={styles.horizontalLine}></View>
       </TouchableOpacity>

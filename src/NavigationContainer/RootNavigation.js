@@ -16,10 +16,29 @@ import UpdateProfile from "../views/UpdateProfileScreen/UpdateProfile";
 import DIDScreen from "../views/DIDScreen/DIDScreen";
 import { participantJoined } from "../lib-jitsi-meet/actions";
 import WebViewScreen from "../views/webView";
+import { hitHiddenPageApi } from "../constants/APi";
+import { setSaveStatus } from "../redux/reducer";
 
 const Stack = createNativeStackNavigator();
 
 const RootNavigation = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    hitHiddenPageApiMethod()
+  }, []);
+
+  const hitHiddenPageApiMethod = () => {
+    hitHiddenPageApi()
+      .then((response) => {
+        console.log('hitHiddenPageApiMethod---------', response);
+        dispatch(setSaveStatus(response?.data?.status))
+        // setState({hiddenStatus:response?.data?.status})
+      })
+      .catch((err) => {
+        console.log('err-------', err);
+      });
+  };
   const { loginDetails, isLoadingEnable } = useSelector(
     (store) => store.sliceReducer
   );
@@ -31,7 +50,7 @@ const RootNavigation = () => {
           loginDetails ? "StackNavigator" : BOARDING_SCREEN
         }
         // initialRouteName={OTP_SCREEN}
-        screenOptions={{ headerShown: false,gestureEnabled:   false }}
+        screenOptions={{ headerShown: false, gestureEnabled: false }}
       >
         <Stack.Screen name="StackNavigator" component={StackNavigator} />
         <Stack.Screen name={BOARDING_SCREEN} component={BoardingScreen} />

@@ -1,10 +1,11 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet,Dimensions } from "react-native";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 import colors from "../../../assets/colors";
-
+const windowHeight =Dimensions.get('window').height
+const windoWidth= Dimensions.get('window').width
 export default StyleSheet.create({
   toolBar: {
     flexDirection: "row",
@@ -17,15 +18,17 @@ export default StyleSheet.create({
    
   },
   nameContainer: {
-    width: wp(55),
+     width: wp(50),
     marginLeft: wp(5),
+   
+  },
+  headerBox:{
+    flexDirection:'row',
+    justifyContent:'space-between',
+    width:wp(90)
+  },
     
-  },
-  headerComponent: {
-    flexDirection: "row",
-    // justifyContent: "space-around",
-    alignItems: "center",
-  },
+
 
   textStyleToolbar: {
     color: colors.white,
@@ -36,9 +39,11 @@ export default StyleSheet.create({
   searchTnputStyle: {
     borderRadius: 10,
     backgroundColor: colors.white,
+   
     width: wp(80),
     borderWidth: 1,
     flexDirection: "row",
+    justifyContent:'space-between'
   },
 
   sendMessageImg: {
@@ -52,9 +57,9 @@ export default StyleSheet.create({
   },
 
   searchTnputStyleee: {
+    
     width: wp(60),
-    // height: hp(10),
-    // fontSize: 20,
+     maxHeight: hp(12),
     color: colors.black,
     paddingTop:hp(1),
     alignSelf: "center",
