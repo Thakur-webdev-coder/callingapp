@@ -10,6 +10,7 @@ import com.facebook.react.defaults.DefaultReactNativeHost;
 import com.facebook.soloader.SoLoader;
 import java.util.List;
 import com.BV.LinearGradient.LinearGradientPackage;
+import io.invertase.firebase.messaging.ReactNativeFirebaseMessagingPackage;
 
 
 public class MainApplication extends Application implements ReactApplication {

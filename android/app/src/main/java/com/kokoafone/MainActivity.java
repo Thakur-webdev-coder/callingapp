@@ -20,7 +20,8 @@ import com.google.firebase.FirebaseApp;
 import org.devio.rn.splashscreen.SplashScreen; // here
 
 
-public class MainActivity extends ReactActivity {
+public class
+MainActivity extends ReactActivity {
 
   /**
    * Returns the name of the main component registered from JavaScript. This is used to schedule
@@ -34,26 +35,26 @@ public class MainActivity extends ReactActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     SplashScreen.show(this);  // here
-    FirebaseApp.initializeApp(this);
+//    FirebaseApp.initializeApp(this);
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      NotificationChannel notificationChannel = new NotificationChannel("incoming_call", "Incoming Call", NotificationManager.IMPORTANCE_HIGH);
-      notificationChannel.setShowBadge(true);
-      notificationChannel.setDescription("");
-
-      AudioAttributes att = new AudioAttributes.Builder()
-              .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-              .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-              .build();
-      notificationChannel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE), att);
-      notificationChannel.enableVibration(true);
-      notificationChannel.setVibrationPattern(new long[]{400, 1000, 400});
-      notificationChannel.setLockscreenVisibility(NotificationCompat.VISIBILITY_PUBLIC);
-      NotificationManager manager = getSystemService(NotificationManager.class);
-
-      manager.createNotificationChannel(notificationChannel);
-
-    }
+//    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//      NotificationChannel notificationChannel = new NotificationChannel("incoming_call", "Incoming Call", NotificationManager.IMPORTANCE_HIGH);
+//      notificationChannel.setShowBadge(true);
+//      notificationChannel.setDescription("");
+//
+//      AudioAttributes att = new AudioAttributes.Builder()
+//              .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+//              .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+//              .build();
+//      notificationChannel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE), att);
+//      notificationChannel.enableVibration(true);
+//      notificationChannel.setVibrationPattern(new long[]{400, 1000, 400});
+//      notificationChannel.setLockscreenVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+//      NotificationManager manager = getSystemService(NotificationManager.class);
+//
+//      manager.createNotificationChannel(notificationChannel);
+//
+//    }
 
 
 

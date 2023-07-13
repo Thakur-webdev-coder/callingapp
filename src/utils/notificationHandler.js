@@ -6,12 +6,15 @@ let navigations = null;
 import InCallManager from 'react-native-incall-manager';
 import { Store } from '../redux';
 import { hangupMeeting } from '../lib-jitsi-meet/actions';
-import { getBooleanValue, setToken } from './commonUtils';
+import { fromInActiveState, getBooleanValue, setToken } from './commonUtils';
 import { Socket } from 'socket.io-client';
 import { getSocket } from './socketManager';
 import PushNotification, { Importance } from 'react-native-push-notification';
 import Loading from 'react-native-whc-loading';
 let myMesaggeNotification = null;
+import notifee from '@notifee/react-native';
+import { hithangUpCallApi } from '../constants/APi';
+
 
 
 const { NotificationManager } = NativeModules;
@@ -33,8 +36,9 @@ export const checkToken = async () => {
 };
 
 export const showNotification = () => {
+  console.log('innotifiiiishaowww');
   messaging().onMessage(async (remoteMessage) => {
-    console.log('remoteMegssagetitle', remoteMessage?.notification?.title);
+    console.log('remoteMegssagetitle', remoteMessage);
     console.log('remoteMegssagebody', remoteMessage?.notification?.body);
     console.log('uniqueIddd22', remoteMessage?.data.participants);
 
@@ -55,12 +59,14 @@ export const showNotification = () => {
 
       navigations.navigate('Home');
     } else if (remoteMessage?.data?.notification_type == 'call') {
+      console.log('callll====s');
       InCallManager.startRingtone();
 
       navigations.navigate('IncomingScreen', {
         callData: remoteMessage?.data,
       });
     } else if (remoteMessage?.data?.notification_type === 'SINGLE_CHAT') {
+      console.log('insinglechat');
        getBooleanValue('isFocused').then((data) => {
         console.log('isFocused', data);
 
@@ -82,8 +88,12 @@ export const showNotification = () => {
 
   messaging().setBackgroundMessageHandler(async (remoteMessage) => {
     console.log('Message handled in the background!', remoteMessage);
-
+   
     if (remoteMessage?.data?.notification_type == 'call') {
+      console.log('Message handled in the background!3333333333333s', remoteMessage);
+      InCallManager.startRingtone()
+      fromInActiveState(remoteMessage)
+      
       // showIncomingCallNotification(remoteMessage);
       // navigations.navigate('IncomingScreen', {
       //   callData: remoteMessage?.data,
@@ -91,6 +101,7 @@ export const showNotification = () => {
     } else if (remoteMessage?.data?.notification_type == 'hangup_call') {
       InCallManager.stopRingtone();
       PushNotification.cancelAllLocalNotifications();
+      
     }
 
     // // Create a notification
@@ -137,6 +148,27 @@ export const showNotification = () => {
       }
     });
 
+    notifee.onBackgroundEvent(async ({ type, detail }) => {
+      console.log("abcdefghi=============",detail);
+      
+      if (detail?.pressAction?.id === "decline") {
+       
+        InCallManager.stopRingtone();
+        const data = new FormData();
+    data.append("receiver_number", detail.notification?.data?.sender_phone);
+
+    console.log("data -->", data);
+    hithangUpCallApi(data).then((response) => {
+      Store.dispatch(hangupMeeting());
+    });
+       
+      
+      }
+     
+    });
+
+    
+
   messaging().onNotificationOpenedApp(async (remoteMessage) => {
     console.log('hererrerererNotiitiitit');
 
@@ -146,7 +178,8 @@ export const showNotification = () => {
       navigations.navigate('IncomingScreen', {
         callData: remoteMessage?.data,
       });
-    } else if (remoteMessage?.data?.notification_type === 'SINGLE_CHAT') {
+    }
+     else if (remoteMessage?.data?.notification_type === 'SINGLE_CHAT') {
       console.log('hererrerererNotiitiitit----------');
       navigations.navigate('UserChatsScreen', {
         callData: remoteMessage?.data?.sid,
@@ -202,6 +235,7 @@ const showLocalNotification = (remoteMessage) => {
 };
 
 export const configureNotification = () => {
+  console.log('inherererrerer====');
   PushNotification.configure({
     onNotification: function (notification) {
       console.log(
@@ -218,7 +252,19 @@ export const configureNotification = () => {
         navigations.navigate('UserChatsScreen', {
           callData: notification?.data?.data?.sid,
         });
-      } else if (notification?.data?.data?.notification_type === 'GROUP_CHAT') {
+      } else if(notification.userInteraction && notification.id === "KILLSTATE" ){
+        setTimeout(() => {
+        InCallManager.stopRingtone();
+          navigations.navigate("CallScreen", {
+            voiceCall: notification?.data?.Type == "A" ? true : false,
+            fromNotification: true,
+            callData: notification?.data?.sender_phone,
+            meetimgUrl: notification?.data?.Meeting_url,
+          });
+        }, 200)
+      }
+      
+      else if (notification?.data?.data?.notification_type === 'GROUP_CHAT') {
         let participants = notification?.data?.data?.participants;
 
         let result = participants.split(',').map(function (value) {
@@ -230,6 +276,8 @@ export const configureNotification = () => {
           participants: result,
         });
       } else if (notification?.data?.data?.notification_type === 'call') {
+
+       
         if (notification.userInteraction) {
           console.log('acccept Clciked', notification.action);
           if (notification.action == 'Accept') {
@@ -277,3 +325,6 @@ export const changelCreated = () => {
     vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
   });
 };
+
+
+

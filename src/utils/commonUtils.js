@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
+import notifee, { AndroidCategory } from '@notifee/react-native';
 
 export function showErrorMessage(Message) {
   alert(Message);
@@ -143,4 +144,44 @@ export const getBooleanValue = async (key) => {
     console.log(error);
     return false;
   }
+};
+
+export const fromInActiveState = async (remoteMessage) => {
+
+console.log('inactiivvv====>>>>>',remoteMessage);
+
+  const channelId = await notifee.createChannel({
+    id: "KILLSTATE",
+    name: "Important Notifications",
+    importance: 4,
+  });
+  await notifee.displayNotification({
+    title: remoteMessage?.data?.title,
+    body: remoteMessage?.data?.sender_phone,
+    id: "KILLSTATE",
+    data: remoteMessage.data,
+    
+    android: {
+      category: AndroidCategory.CALL,
+      channelId,
+      color: "#1DAF98",
+      loopSound: true,
+      fullScreenAction: { id: "default" },
+      pressAction: {
+        id: "default",
+        launchActivity: "default",
+      },
+      actions: [
+        {
+          title: '<p style="color: #8F0D0D ">Decline</p>',
+          pressAction: { id: "decline" },
+        },
+        {
+          title: '<p style="color: #112401;">Answer</p>',
+          pressAction: { id: "accept", launchActivity: "default" },
+        },
+      ],
+      ongoing:true
+    },
+  });
 };
