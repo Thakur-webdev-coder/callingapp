@@ -6,7 +6,7 @@ let navigations = null;
 import InCallManager from 'react-native-incall-manager';
 import { Store } from '../redux';
 import { hangupMeeting } from '../lib-jitsi-meet/actions';
-import { fromInActiveState, getBooleanValue, setToken } from './commonUtils';
+import { fromInActiveState, getBooleanValue, setCategories, setToken } from './commonUtils';
 import { Socket } from 'socket.io-client';
 import { getSocket } from './socketManager';
 import PushNotification, { Importance } from 'react-native-push-notification';
@@ -72,7 +72,8 @@ export const showNotification = () => {
 
         if (!data) {
           console.log("i'm herer", remoteMessage);
-          showLocalNotification(remoteMessage);
+          // showLocalNotification(remoteMessage);
+          showLocallotification(remoteMessage);
         }
       });
     } else if (remoteMessage?.data?.notification_type === 'GROUP_CHAT') {
@@ -80,7 +81,9 @@ export const showNotification = () => {
         console.log('isFocused', data);
 
         if (!data) {
-          showLocalNotification(remoteMessage);
+          // showLocalNotification(remoteMessage);
+          showLocallotification(remoteMessage);
+
         }
       });
     }
@@ -88,10 +91,11 @@ export const showNotification = () => {
 
   messaging().setBackgroundMessageHandler(async (remoteMessage) => {
     console.log('Message handled in the background!', remoteMessage);
-   
+  
     if (remoteMessage?.data?.notification_type == 'call') {
       console.log('Message handled in the background!3333333333333s', remoteMessage);
       InCallManager.startRingtone()
+      setCategories()
       fromInActiveState(remoteMessage)
       
       // showIncomingCallNotification(remoteMessage);
@@ -149,7 +153,7 @@ export const showNotification = () => {
     });
 
     notifee.onBackgroundEvent(async ({ type, detail }) => {
-      console.log("abcdefghi=============",detail);
+      console.log("abcdefghi=============",detail , type);
       
       if (detail?.pressAction?.id === "decline") {
        
@@ -163,9 +167,19 @@ export const showNotification = () => {
     });
        
       
+      }else if(detail?.pressAction?.id === "accept"){
+        InCallManager.stopRingtone();
+        navigations.navigate('CallScreen', {
+          voiceCall: detail?.notification?.data?.Type == 'A' ? true : false,
+          fromNotification: true,
+          callData: detail?.notification?.data?.sender_phone,
+          meetimgUrl: detail?.notification?.data?.Meeting_url,
+        });
       }
      
     });
+
+   
 
     
 
@@ -222,6 +236,8 @@ const mesageViewnavigation = () => {
 };
 
 const showLocalNotification = (remoteMessage) => {
+
+  console.log('sln------------------------------------------->>');
   PushNotification.localNotification({
     title: remoteMessage?.notification?.title,
     message: remoteMessage?.notification?.body,
@@ -233,6 +249,24 @@ const showLocalNotification = (remoteMessage) => {
     data: remoteMessage,
   });
 };
+
+export const showLocallotification = async (remoteMessage) => {
+
+  console.log('inactiivvv====>>>>>',remoteMessage);
+  
+    const channelId = await notifee.createChannel({
+      id: "12345",
+      name: "Important Notifications",
+      importance: 4,
+    });
+    await notifee.displayNotification({
+      title: remoteMessage?.notification?.title,
+      body: remoteMessage?.notification?.body,
+      id: "12345",
+      data: remoteMessage.data,
+      
+    });
+  };
 
 export const configureNotification = () => {
   console.log('inherererrerer====');
@@ -249,6 +283,8 @@ export const configureNotification = () => {
       }
 
       if (notification?.data?.data?.notification_type === 'SINGLE_CHAT') {
+        console.log('inherer--------------------------------22',notification?.data?.data?.sid);
+
         navigations.navigate('UserChatsScreen', {
           callData: notification?.data?.data?.sid,
         });

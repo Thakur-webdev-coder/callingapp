@@ -45,11 +45,14 @@ import Modal from 'react-native-modal';
 import { Show_Toast } from '../../utils/toast';
 import { useDispatch, useSelector } from 'react-redux';
 import InCallManager from 'react-native-incall-manager';
+import notifee from '@notifee/react-native';
+
 
 import {
   hitCreditTransferApi,
   hitEncryptionApi,
   hitFetchUserBalanceApi,
+  hithangUpCallApi,
   hitVoucherApi,
 } from '../../constants/APi';
 import {
@@ -83,7 +86,7 @@ const Home = ({ navigation }) => {
   const [transferModal, setTransferModal] = useState(false);
 
   const [LogoutModal, setLogOutModal] = useState(false);
-  const { loginDetails = {}, balanceDetail = {},saveStatus={} } = useSelector(
+  const { loginDetails = {}, balanceDetail = {}, saveStatus = {} } = useSelector(
     (store) => store.sliceReducer
   );
 
@@ -94,25 +97,63 @@ const Home = ({ navigation }) => {
   const dispatch = useDispatch();
 
 
-  const shownote = () =>{
-   
-    PushNotification.localNotification({
-      channelId: '12345',
-      title: "rfsdgg",
-      message: "remoteMessage.notification.body",
-     
-     
-    });
-  }
-
-
-
 
   useEffect(() => {
-    changelCreated();
 
-    InCallManager.stopRingback();
-    InCallManager.stopRingtone();
+    notifee.onForegroundEvent(async ({ type, detail }) => {
+      const { notification_type } = detail?.notification?.data
+      const { id } = detail?.pressAction
+      console.log("INHOMESCREEN=============", notification_type);
+
+      if (id === "decline") {
+
+        InCallManager.stopRingtone();
+        const data = new FormData();
+        data.append("receiver_number", detail.notification?.data?.sender_phone);
+
+        console.log("data -->", data);
+        hithangUpCallApi(data).then((response) => {
+          Store.dispatch(hangupMeeting());
+        });
+
+      } else if (id === "accept") {
+        InCallManager.stopRingtone();
+        navigation.navigate('CallScreen', {
+          voiceCall: detail?.notification?.data?.Type == 'A' ? true : false,
+          fromNotification: true,
+          callData: detail?.notification?.data?.sender_phone,
+          meetimgUrl: detail?.notification?.data?.Meeting_url,
+        });
+      } else if (notification_type === "call" && id === "default") {
+        console.log("inc=============2222", detail);
+        navigation.navigate('IncomingScreen', {
+          callData: detail?.notification?.data,
+        });
+      } else if (notification_type === 'SINGLE_CHAT') {
+        console.log('hererrerererNotiitiitit----------');
+        setTimeout(()=>{
+        navigation.navigate('UserChatsScreen', {
+          callData: detail?.notification?.data.sid,
+        });
+      },200)
+      } else if (notification_type === 'GROUP_CHAT') {
+        let participants = detail?.notification?.data.participants;
+  
+        let result = participants.split(',').map(function (value) {
+          return value.trim();
+        });
+        setTimeout(()=>{
+          navigation.navigate('UserChatsScreen', {
+            groupName: detail?.notification?.data.group_name,
+            uniqueId: detail?.notification?.data.group_id,
+            participants: result,
+          });
+        },200)
+        
+      }
+
+    });
+
 
     navigateScreen(navigation);
   }, []);
@@ -210,7 +251,7 @@ const Home = ({ navigation }) => {
       name: 'Logout',
       image: ic_logout,
     },
-    
+
   ];
 
   const DATA2 = [
@@ -224,7 +265,7 @@ const Home = ({ navigation }) => {
       name: 'My Balance',
       image: ic_mybalance,
     },
-    
+
     {
       id: 2,
       name: 'Transfer Credit',
@@ -245,14 +286,14 @@ const Home = ({ navigation }) => {
       name: 'Call Details Report',
       image: ic_calldetails,
     },
-  
-    
+
+
     {
       id: 6,
       name: 'Data Bundle',
       image: ic_databundle,
     },
-   
+
     {
       id: 7,
       name: 'Logout',
@@ -331,9 +372,9 @@ const Home = ({ navigation }) => {
       case 'Logout':
         LogoutMethod();
         break;
-        case 'Delete Account':
-          DeleteAccountMethod();
-          break;
+      case 'Delete Account':
+        DeleteAccountMethod();
+        break;
       default:
         console.log('Voucher Recharge');
     }
@@ -487,7 +528,7 @@ const Home = ({ navigation }) => {
     dispatch(saveBalanceData(null));
     dispatch(removeLocalParticipant());
   };
-  const DeleteAccountMethod =()=>{
+  const DeleteAccountMethod = () => {
     Alert.alert(
       'Delete Account',
       'Are you sure you want to Delete Account?',
@@ -586,19 +627,19 @@ const Home = ({ navigation }) => {
           {/* <TouchableOpacity onPress={()=>shownote()}> */}
 
 
-            <CustomText
-              text={" Services"}
-              textSize={20}
-              fontWeight={"bold"}
-              textColor={colors.black}
-              marginTop={wp(2)}
-              marginLeft={wp(2)}
-            />
+          <CustomText
+            text={" Services"}
+            textSize={20}
+            fontWeight={"bold"}
+            textColor={colors.black}
+            marginTop={wp(2)}
+            marginLeft={wp(2)}
+          />
           {/* </TouchableOpacity> */}
           <FlatList
             columnWrapperStyle={{ justifyContent: "space-between" }}
             // data={DATA2}
-             data={Platform.OS == "ios" ?saveStatus && saveStatus ==0 ? DATA2:DATA:DATA}
+            data={Platform.OS == "ios" ? saveStatus && saveStatus == 0 ? DATA2 : DATA : DATA}
             renderItem={RenderList}
             keyExtractor={(item, index) => item.name}
             numColumns={3}

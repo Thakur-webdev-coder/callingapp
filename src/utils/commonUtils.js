@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 import notifee, { AndroidCategory } from '@notifee/react-native';
+import InCallManager from 'react-native-incall-manager';
 
 export function showErrorMessage(Message) {
   alert(Message);
@@ -183,5 +184,32 @@ console.log('inactiivvv====>>>>>',remoteMessage);
       ],
       ongoing:true
     },
+     ios: {
+    categoryId: 'post',
+    
+    
+    
+
+     
+  },
   });
 };
+export const setCategories=async()=> {
+  console.log("insidefunction--------");
+  await notifee.setNotificationCategories([
+    {
+      id: 'post',
+      actions: [
+        {
+          title: 'Decline',
+           id: "decline" 
+        },
+        {
+          title: 'Answer',
+           id: "accept",
+           foreground: true, 
+        },
+      ],
+    },
+  ]);
+}
