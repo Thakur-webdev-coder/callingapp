@@ -44,8 +44,16 @@ const Login = ({ navigation }) => {
           title={"Phone Number"}
           primary
           horzontalPadding={wp(15)}
-          marginTop={hp(5)}
+          marginTop={hp(3)}
           onPress={() => navigation.navigate(VERIFY_SCREEN)}
+        />
+
+        <CustomButton
+          title={"Existing User Login"}
+          primary
+          horzontalPadding={wp(15)}
+          marginTop={hp(1)}
+          onPress={() => navigation.navigate("ExistingUserLoginScreen")}
         />
       </View>
     </SafeAreaView>

@@ -55,6 +55,7 @@ import InCallManager from 'react-native-incall-manager';
 import colors from '../../../assets/colors';
 import { generateRandomString, secondsToHMS } from '../../utils/commonUtils';
 import Loading from 'react-native-whc-loading';
+import KeepAwake from 'react-native-keep-awake';
 
 let roomId = null;
 
@@ -91,6 +92,17 @@ const CallScreen = ({ navigation, route }) => {
     MEDIA_TYPE.VIDEO,
     smallVideoID
   );
+
+  useEffect(() => {
+    // Activate screen awake when screen is focused
+    KeepAwake.activate();
+    
+    return () => {
+      // Deactivate screen awake when screen loses focus
+      KeepAwake.deactivate();
+    };
+  }, []);
+  
   useEffect(() => {
     let interval;
 

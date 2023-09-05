@@ -237,7 +237,7 @@ const CallDetailsScreen = ({ navigation, route }) => {
                       if (balanceDetail.credit > 0) {
                         if(Sip.isRegistered){
                           console.log('inhererrere------->>>><<<<<');
-                        Sip.makeCall(phoneNumber);
+                        Sip.makeCall(phoneNumber.replace(/ /g, ''));
                         navigation.navigate("CallingScreen", {
                           callData: { name: Name },
                           avatarImg:avatarImg

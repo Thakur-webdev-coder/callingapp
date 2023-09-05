@@ -165,3 +165,12 @@ export const hitHiddenPageApi = (payload) => {
     data: payload,
   });
 };
+
+export const hitExistingUserLogin = (payload) => {
+  return apiClient({
+    baseURL: ApiRoutes.BASE_URL,
+    method: "post",
+    url: ApiRoutes.API_EXIISING_USER_LOGIN,
+    data: payload,
+  });
+};

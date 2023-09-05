@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Alert,
   FlatList,
@@ -45,6 +45,16 @@ const Keypad = ({ navigation }) => {
     // },
   });
 
+  const [cursorPosition, setCursorPosition] = useState(0);
+
+  const cursorPositionRef = useRef(0);
+
+  const inputWidthRef = useRef(null);
+
+  const inputLayout = useRef(null); // Use useRef to initialize inputLayout
+
+  const inputRef = useRef(null); // Reference to the TextInput
+
   const DialerData = [
     { num: "1", char: " " },
     { num: "2", char: "ABC" },
@@ -61,40 +71,82 @@ const Keypad = ({ navigation }) => {
   ];
 
   const DialNumberMethod = (item) => {
-    const { dialedNumber, selection } = state;
+    const { dialedNumber } = state;
+    let cursorPosition = cursorPositionRef.current; // Store the current cursor position
 
-    const dialedNum = dialedNumber + item.num;
-    if (dialedNum.length < 16) {
-      _setState({ dialedNumber: dialedNumber + item.num });
-    }
+    console.log("cursorPosition--->>", cursorPosition);
+
+    // Calculate the new cursor position after adding the digit
+    const newCursorPosition = cursorPosition + 1;
+
+    const newText =
+      dialedNumber.substring(0, cursorPosition) +
+      item.num +
+      dialedNumber.substring(cursorPosition);
+
+    // Update the input value and cursor position
+    _setState({ dialedNumber: newText });
+
+    // Set the cursor position to the new position
+    cursorPositionRef.current = newCursorPosition;
+
+    // Ensure the input is focused and set the cursor position
+    inputRef.current.focus();
+    inputRef.current.setSelection(newCursorPosition);
   };
+
   const BackSpaceMethod = () => {
     const { dialedNumber } = state;
-    var newStr;
-    newStr = dialedNumber.split(""); // or newStr = [...str];
-    newStr.splice(-1);
-    newStr = newStr.join("");
-    _setState({ dialedNumber: newStr });
+    let cursorPosition = cursorPositionRef.current; // Store the current cursor position
+
+    // Check if the cursor position is not at the beginning
+    if (cursorPosition > 0) {
+      // Calculate the new cursor position after removing a digit
+      const newCursorPosition = cursorPosition - 1;
+
+      const newText =
+        dialedNumber.substring(0, cursorPosition - 1) +
+        dialedNumber.substring(cursorPosition);
+
+      // Update the input value and cursor position
+      _setState({ dialedNumber: newText });
+
+      // Set the cursor position to the new position
+      cursorPositionRef.current = newCursorPosition;
+
+      // Ensure the input is focused and set the cursor position
+      inputRef.current.focus();
+      inputRef.current.setSelection(newCursorPosition);
+    }
   };
 
+  // const BackSpaceMethod = () => {
+  //   const { dialedNumber } = state;
+  //   var newStr;
+  //   newStr = dialedNumber.split(""); // or newStr = [...str];
+  //   newStr.splice(-1);
+  //   newStr = newStr.join("");
+  //   _setState({ dialedNumber: newStr });
+  // };
 
-
-  const GetContacts = (phone ) => {
-console.log('phone-----',phone);
+  const GetContacts = (phone) => {
+    console.log("phone-----", phone);
     var newPerson = {
-      
       phoneNumbers: [
         {
           label: "mobile",
           number: phone,
         },
       ],
-      
     };
-    Contacts.openContactForm(newPerson).then((contact) => {
-    });
+    Contacts.openContactForm(newPerson).then((contact) => {});
   };
-  
+
+  handleInputChange = (text) => {
+    // Update the state when the text changes
+    _setState({ dialedNumber: text });
+    cursorPositionRef.current = text.length;
+  };
 
   const RenderList = ({ item }) => {
     const { dialedNumber } = state;
@@ -130,98 +182,134 @@ console.log('phone-----',phone);
   };
   const { dialedNumber } = state;
   return (
-    <SafeAreaView
-      style={AppStyle.wrapper}
-    >
-      <View style={{flex:1, backgroundColor:colors.offWhite}}>
-      <View style={styles.secondWrapper}>
-        <CommonHeader 
-        headerText={"Dialpad"} 
-        onPress={() => navigation.goBack(null)}/>
-
-        <View style={styles.registerBox}>
-          <CustomText
-            textColor={colors.black}
-            textAlign={"center"}
-            text={"Registered"}
-            fontWeight={"bold"}
-            textSize={17}
+    <SafeAreaView style={AppStyle.wrapper}>
+      <View style={{ flex: 1, backgroundColor: colors.offWhite }}>
+        <View style={styles.secondWrapper}>
+          <CommonHeader
+            headerText={"Dialpad"}
+            onPress={() => navigation.goBack(null)}
           />
-          <CustomText
-            textColor={colors.black}
-            textAlign={"center"}
-            text={loginDetails.did}
-            //fontWeight={"bold"}
-            marginLeft={wp(2)}
-            textSize={17}
+
+          <View style={styles.registerBox}>
+            <CustomText
+              textColor={colors.black}
+              textAlign={"center"}
+              text={"Registered"}
+              fontWeight={"bold"}
+              textSize={17}
+            />
+            <CustomText
+              textColor={colors.black}
+              textAlign={"center"}
+              text={loginDetails.did}
+              //fontWeight={"bold"}
+              marginLeft={wp(2)}
+              textSize={17}
+            />
+          </View>
+          <TextInput
+            ref={inputRef}
+            style={styles.inputTxtBoxStyle}
+            value={dialedNumber}
+            onChangeText={this.handleInputChange}
+            showSoftInputOnFocus={false}
+            selectTextOnFocus={true}
+            onSelectionChange={(event) => {
+              // Update the cursor position when the selection changes
+              cursorPositionRef.current = event.nativeEvent.selection.start;
+            }}
+            onLayout={(event) => {
+              // Store the layout information when it becomes available
+              inputLayout.current = event.nativeEvent.layout;
+            }}
+            onPressIn={(event) => {
+              const { dialedNumber } = state;
+
+              const layout = inputLayout.current; // Access the layout information
+
+              if (!layout) {
+                return; // Wait for layout information to become available
+              }
+
+              const tapX = event.nativeEvent.locationX;
+              const inputWidth = layout.width;
+              const textLength = dialedNumber.length;
+              const newPosition = Math.floor((tapX / inputWidth) * textLength);
+              cursorPositionRef.current = newPosition;
+
+              // Set the cursor position when tapping
+              inputRef.current.focus(); // Ensure the input is focused
+              inputRef.current.setSelection(newPosition, newPosition);
+
+              // Calculate the cursor position based on the tap position
+              // const tapX = event.nativeEvent.locationX;
+              // const textLength = dialedNumber.length;
+              // const newPosition = Math.floor(
+              //   (tapX / inputLayout.width) * textLength
+              // );
+              // cursorPositionRef.current = newPosition;
+
+              // // Set the cursor position when tapping
+              // inputRef.current.focus(); // Ensure the input is focused
+              // inputRef.current.setSelection(newPosition);
+            }}
           />
         </View>
-        <TextInput
-          style={styles.inputTxtBoxStyle}
-          value={dialedNumber}
-          showSoftInputOnFocus={false}
-          selectTextOnFocus={true}
-        />
-      </View>
-      <View style={styles.wrapper3}>
-        <FlatList
-          columnWrapperStyle={{ justifyContent: "space-between" }}
-          data={DialerData}
-          renderItem={RenderList}
-          keyExtractor={(item, index) => item.num}
-          numColumns={3}
-        />
-      </View>
-      <View style={[styles.bottomRowStyle]}>
-        <TouchableOpacity onPress={() => GetContacts(state?.dialedNumber)}>
-          <Image style={styles.bottomImgStyle} source={ic_people} />
-        </TouchableOpacity>
+        <View style={styles.wrapper3}>
+          <FlatList
+            columnWrapperStyle={{ justifyContent: "space-between" }}
+            data={DialerData}
+            renderItem={RenderList}
+            keyExtractor={(item, index) => item.num}
+            numColumns={3}
+          />
+        </View>
+        <View style={[styles.bottomRowStyle]}>
+          <TouchableOpacity onPress={() => GetContacts(state?.dialedNumber)}>
+            <Image style={styles.bottomImgStyle} source={ic_people} />
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={() => {
-            // console.log("dialedNumber=====", dialedNumber);
-            if (dialedNumber.length > 8) {
-            if (balanceDetail.credit > 0) {
-              NetInfo.fetch().then((status)=>{
-                if(status.isConnected){
-                  if(Sip.isRegistered){
-                  Sip.makeCall(dialedNumber);
-                  navigation.navigate("CallingScreen", {
-                    callData: dialedNumber,
+          <TouchableOpacity
+            onPress={() => {
+              // console.log("dialedNumber=====", dialedNumber);
+              if (dialedNumber.length > 6) {
+                if (balanceDetail.credit > 0) {
+                  NetInfo.fetch().then((status) => {
+                    if (status.isConnected) {
+                      if (Sip.isRegistered) {
+                        Sip.makeCall(dialedNumber);
+                        navigation.navigate("CallingScreen", {
+                          callData: dialedNumber,
+                        });
+                      } else {
+                        Show_Toast("Something went wrong. Please wait...");
+                      }
+                    } else {
+                      Show_Toast("Check your data connection and try again.");
+                    }
                   });
-                }else{
+                } else {
                   Show_Toast(
-                    "Something went wrong. Please wait..."
+                    "Insufficient balance. Please recharge your account."
                   );
                 }
-                }else{
-                Show_Toast(
-                  "Check your data connection and try again."
-                );
+              } else {
+                Alert.alert("", "Please enter a valid number for call");
               }
-              })
-             
-            } else {
-              Show_Toast("Insufficient balance. Please recharge your account.");
-            }
-          }else {
-            Alert.alert("", "Please enter a valid number for call");
-          }
-            
-          }}
-        >
-          <LinearGradient
-            colors={[colors.greenTop, colors.greenMid, colors.greenMid]}
-            style={styles.linearGradient}
+            }}
           >
-            <Image source={ic_callrecive} />
-          </LinearGradient>
-        </TouchableOpacity>
+            <LinearGradient
+              colors={[colors.greenTop, colors.greenMid, colors.greenMid]}
+              style={styles.linearGradient}
+            >
+              <Image source={ic_callrecive} />
+            </LinearGradient>
+          </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => BackSpaceMethod()}>
-          <Image style={styles.bottomImgStyle} source={ic_delete} />
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity onPress={() => BackSpaceMethod()}>
+            <Image style={styles.bottomImgStyle} source={ic_delete} />
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );

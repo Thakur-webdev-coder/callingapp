@@ -18,6 +18,7 @@ import { participantJoined } from "../lib-jitsi-meet/actions";
 import WebViewScreen from "../views/webView";
 import { hitHiddenPageApi } from "../constants/APi";
 import { setSaveStatus } from "../redux/reducer";
+import ExistingUserLoginScreen from "../views/LoginExistingUserScreen/ExistingUserLoginScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -59,6 +60,8 @@ const RootNavigation = () => {
         <Stack.Screen name={"DIDScreen"} component={DIDScreen} />
         <Stack.Screen name={VERIFY_SCREEN} component={VerificationScreen} />
         <Stack.Screen name={OTP_SCREEN} initialParams={{}} component={OtpScreen} />
+        <Stack.Screen name={"ExistingUserLoginScreen"} component={ExistingUserLoginScreen} />
+
         <Stack.Screen name={"WebViewScreen"} component={WebViewScreen} />
       </Stack.Navigator>
       <Loading loading={isLoadingEnable} />

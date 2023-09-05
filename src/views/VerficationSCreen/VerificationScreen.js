@@ -1,4 +1,10 @@
-import { Image, KeyboardAvoidingView, SafeAreaView, ScrollView, View } from "react-native";
+import {
+  Image,
+  KeyboardAvoidingView,
+  SafeAreaView,
+  ScrollView,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import AppStyle from "../../components/AppStyle";
 import CustomText from "../../components/CustomText";
@@ -95,50 +101,51 @@ const VerificationScreen = ({ navigation }) => {
       {/* <ScrollView style={styles.scrollWrapper}> */}
       <View style={{ flex: 1 }}>
         <Image
-        style={{alignSelf:'center',marginVertical:wp(20)}}
+          style={{ alignSelf: "center", marginVertical: wp(20) }}
           // alignSelf={"center"}
           // marginTop={wp(20)}
           source={ic_app_logo}
         />
       </View>
-     
+
       <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      style={styles.wrapper2}>
-         <ScrollView >
-        <CustomText
-          text={"Enter Phone Number to Login or Signup"}
-          textColor={colors.white}
-          textSize={20}
-          fontWeight={"bold"}
-          alignText={"center"}
-          marginTop={hp(8)}
-        />
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        style={styles.wrapper2}
+      >
+        <ScrollView>
+          <CustomText
+            text={"Enter Phone Number to Login or Signup"}
+            textColor={colors.white}
+            textSize={20}
+            fontWeight={"bold"}
+            alignText={"center"}
+            marginTop={hp(8)}
+          />
 
-        <ReactNativePhoneInput
-          ref={(ref) => {
-            this.phone = ref;
-            setcountryCode(ref?.getCountryCode());
-            console.log("reff", countryCode);
-          }}
-          onChangePhoneNumber={(text) => setPhoneInput(text)}
-          style={styles?.phoneViewStyle}
-          flagStyle={styles?.flagStyle}
-          initialCountry={RNLocalize.getCountry().toLocaleLowerCase()}
-          textStyle={styles?.inputTextStyle}
-        />
+          <ReactNativePhoneInput
+            ref={(ref) => {
+              this.phone = ref;
+              setcountryCode(ref?.getCountryCode());
+              console.log("reff", countryCode);
+            }}
+            onChangePhoneNumber={(text) => setPhoneInput(text)}
+            style={styles?.phoneViewStyle}
+            flagStyle={styles?.flagStyle}
+            initialCountry={RNLocalize.getCountry().toLocaleLowerCase()}
+            textStyle={styles?.inputTextStyle}
+          />
 
-        <CustomButton
-          title={"Continue"}
-          primary
-          horzontalPadding={wp(15)}
-          marginTop={hp(8)}
-          onPress={() => hitCountryEncryptionApi()}
-          // onPress={() => navigation.navigate(OTP_SCREEN)}
-        />
-          </ScrollView>
-        </KeyboardAvoidingView>
-    
+          <CustomButton
+            title={"Continue"}
+            primary
+            horzontalPadding={wp(15)}
+            marginTop={hp(8)}
+            onPress={() => hitCountryEncryptionApi()}
+            // onPress={() => navigation.navigate(OTP_SCREEN)}
+          />
+        </ScrollView>
+      </KeyboardAvoidingView>
+
       <Loading loading={isLoading} />
       {/* </ScrollView> */}
     </SafeAreaView>

@@ -36,7 +36,7 @@ const CallingScreen = ({ navigation, route }) => {
   const [timerCount, setTimerCount] = useState(0);
   const [mute, setMute] = useState(false);
   const [hold, setHold] = useState(false);
-  const [speaker, setSpeaker] = useState(false);
+  const [mySpeaker, setSpeaker] = useState(false);
   const { callData,avatarImg } = route.params;
 
   console.log("route.params---->", route.params);
@@ -65,6 +65,17 @@ const CallingScreen = ({ navigation, route }) => {
     };
   }, []);
 
+  const enableSpeaker = () => {
+      if (!mySpeaker) {
+        InCallManager.setSpeakerphoneOn(true);
+        setSpeaker(true);
+      } else {
+        InCallManager.setSpeakerphoneOn(false);
+        setSpeaker(false);
+      }
+  
+  };
+
   const callDisconnect = () => {
     Sip.hangupCall(Sip.ActiveCallId);
     navigation.goBack();
@@ -88,10 +99,7 @@ const CallingScreen = ({ navigation, route }) => {
         Sip?.unholdCall(Sip?.ActiveCallId);
         setHold(false);
       }
-    } else {
-      InCallManager.setSpeakerphoneOn(!speaker);
-      setSpeaker(!speaker);
-    }
+    } 
   };
 
   return (
@@ -131,8 +139,8 @@ const CallingScreen = ({ navigation, route }) => {
           <View style={styles.callingView}>
             <View>
               <CustomImage
-                onpress={callFeatures}
-                imgSrc={!speaker ? ic_speaker : ic_speaker_fill}
+                onpress={enableSpeaker}
+                imgSrc={!mySpeaker ? ic_speaker : ic_speaker_fill}
                 alignSelf={"center"}
               />
               <CustomText

@@ -24,6 +24,7 @@ import TransferHistory from "../views/TransferHistoryScreen/transferHistory";
 import ParticipantsScreen from "../views/Chats/ParticipantsScreen";
 import CreateGroup from "../views/Chats/CreateGroupScreen";
 import GroupCallScreen from "../views/GroupCallScreen/GroupCallScreen";
+import IncomingAudioCall from "../views/InComingAudioCall/IncomingAudioCall";
 
 const Stack = createNativeStackNavigator();
 
@@ -62,7 +63,9 @@ const StackNavigator = () => {
       <Stack.Screen name="CallScreen" component={CallScreen} />
       {/* <Stack.Screen name={"WebViewScreen"} component={WebViewScreen} /> */}
       <Stack.Screen name={"IncomingScreen"} component={IncomingScreen} />
+      <Stack.Screen name={"IncomingAudioCall"} component={IncomingAudioCall} />
       <Stack.Screen name={"TransferHistory"} component={TransferHistory} />
+
       <Stack.Screen
         name={"ParticipantsScreen"}
         component={ParticipantsScreen}

@@ -17,11 +17,15 @@ import { useDispatch, useSelector } from "react-redux";
 import Sip from "@khateeb00/react-jssip";
 import { _getloadMoreChatData, _socketConnect } from "../utils/socketManager";
 import { getToken } from "../utils/commonUtils";
+import { useNavigation } from "@react-navigation/native";
+import InCallManager from 'react-native-incall-manager';
+
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   const { loginDetails = {} } = useSelector((store) => store.sliceReducer);
+  const navigation = useNavigation()
 
   useEffect(() => {
     const { password, did, username } = loginDetails;
@@ -38,7 +42,21 @@ const TabNavigator = () => {
       password,
       name: did,
     });
+
+    const callReceivedListener = Sip.on('call_received', onSipCallReceived);
+
+
+    return () => {
+      callReceivedListener.remove()
+    };
+
   }, []);
+
+  const onSipCallReceived = (call) => {
+    console.log("call=====>",call)
+    InCallManager.startRingtone('_DEFAULT_')
+    navigation.navigate('IncomingAudioCall', { call })
+  }
 
   return (
     <Tab.Navigator
