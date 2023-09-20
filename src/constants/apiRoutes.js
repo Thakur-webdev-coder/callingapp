@@ -24,6 +24,7 @@ let ApiRoutes = {
   API_GROUP_CHAT_PUSH: "join_video/group-chat-push.php",
   API_HIDDENPAGE: "billing_hiddenpage_status/status.php",
   API_EXIISING_USER_LOGIN: "billing_encryption/login.php",
+  API_VOICE_NOTIFICATION: "kokofone_api/call_notification/audio_notification.php",
 };
 
 export default ApiRoutes;

@@ -1,9 +1,4 @@
-import {
-  View,
-  Text,
-  SafeAreaView,
-  Image,
-} from "react-native";
+import { View, Text, SafeAreaView, Image } from "react-native";
 import React, { useEffect, useState } from "react";
 import AppStyle from "../../components/AppStyle";
 import CustomImage from "../../components/CustomImage";
@@ -21,11 +16,13 @@ import CustomText from "../../components/CustomText";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import styles from "./styles";
 import colors from "../../../assets/colors";
+import { useDispatch, useSelector } from "react-redux";
 
 import Sip from "@khateeb00/react-jssip";
 import { secondsToHMS } from "../../utils/commonUtils";
 
 import InCallManager from "react-native-incall-manager";
+import postFormData, { hitJoinVideoCallApi, hitVoiceNotificationApi } from "../../constants/APi";
 
 let isCallGoing = null;
 
@@ -37,10 +34,17 @@ const CallingScreen = ({ navigation, route }) => {
   const [mute, setMute] = useState(false);
   const [hold, setHold] = useState(false);
   const [mySpeaker, setSpeaker] = useState(false);
-  const { callData,avatarImg } = route.params;
+  const { callData, avatarImg } = route.params || {};
+  const { loginDetails = {} } = useSelector((store) => store.sliceReducer);
+  const { username } = loginDetails;
+  // console.log("route.params---->", route.params);
+  useEffect(() => {
 
-  console.log("route.params---->", route.params);
-
+    
+     incomingCallNotification();
+   
+    // incomingCallNotification()
+  }, []);
   useEffect(() => {
     console.log("ashfioasf", Sip);
     let interval;
@@ -64,16 +68,51 @@ const CallingScreen = ({ navigation, route }) => {
       clearInterval(interval);
     };
   }, []);
+  
+  const incomingCallNotification = async () => {
+   
+    const data = new FormData();
+  data.append("receiver_phone", username);
+    data.append("sender_phone", callData);
+const apiUrl = 'https://billing.kokoafone.com/billing/kokofone_api/call_notification/audio_notification.php';
+postFormData(apiUrl, data)
+  .then(data => {
+   const {success}= JSON.parse(data.msg)
+  if(success){
+
+  } // Handle the JSON response data
+  })
+  .catch(error => {
+    // Handle the error
+  });
+    // const data = new FormData();
+
+    // data.append("receiver_phone", callData);
+    // data.append("sender_phone", username);
+    // console.log("data71111-->", data);
+    // hitVoiceNotificationApi(data)
+    // .then((response) => {
+    //   console.log(response, "response80====>");
+    //   alert("hiii");
+    //   if (response.data.result == "success") {
+    //     checkPeermission();
+    //   } else {
+    //     alert("bye");
+    //     InCallManager.stopRingback();
+    //     Show_Toast("Something went Wrong");
+    //     navigation.goBack();
+    //   }
+    // });
+  };
 
   const enableSpeaker = () => {
-      if (!mySpeaker) {
-        InCallManager.setSpeakerphoneOn(true);
-        setSpeaker(true);
-      } else {
-        InCallManager.setSpeakerphoneOn(false);
-        setSpeaker(false);
-      }
-  
+    if (!mySpeaker) {
+      InCallManager.setSpeakerphoneOn(true);
+      setSpeaker(true);
+    } else {
+      InCallManager.setSpeakerphoneOn(false);
+      setSpeaker(false);
+    }
   };
 
   const callDisconnect = () => {
@@ -99,7 +138,7 @@ const CallingScreen = ({ navigation, route }) => {
         Sip?.unholdCall(Sip?.ActiveCallId);
         setHold(false);
       }
-    } 
+    }
   };
 
   return (
@@ -134,7 +173,10 @@ const CallingScreen = ({ navigation, route }) => {
         <Text style={styles.timerText}>
           {timerCount > 0 ? secondsToHMS(timerCount) : "Calling"}
         </Text>
-        <Image style={styles.imgStyle} source={avatarImg?{ uri: avatarImg }:ic_avatar} />
+        <Image
+          style={styles.imgStyle}
+          source={avatarImg ? { uri: avatarImg } : ic_avatar}
+        />
         <View>
           <View style={styles.callingView}>
             <View>
@@ -202,11 +244,11 @@ const CallingScreen = ({ navigation, route }) => {
               </View>
             </View> */}
         </View>
-        <View >
+        <View>
           <CustomImage
             imgSrc={ic_endcall}
             alignSelf={"center"}
-             marginTop={hp(8)}
+            marginTop={hp(8)}
             onpress={() => {
               callDisconnect();
             }}

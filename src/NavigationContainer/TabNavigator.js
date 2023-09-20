@@ -19,6 +19,7 @@ import { _getloadMoreChatData, _socketConnect } from "../utils/socketManager";
 import { getToken } from "../utils/commonUtils";
 import { useNavigation } from "@react-navigation/native";
 import InCallManager from 'react-native-incall-manager';
+import { sendDataTonofiyHandler } from "../utils/notificationHandler";
 
 
 const Tab = createBottomTabNavigator();
@@ -53,7 +54,8 @@ const TabNavigator = () => {
   }, []);
 
   const onSipCallReceived = (call) => {
-    console.log("call=====>",call)
+    console.log("call=====>this is here",call)
+    sendDataTonofiyHandler(call);
     InCallManager.startRingtone('_DEFAULT_')
     navigation.navigate('IncomingAudioCall', { call })
   }

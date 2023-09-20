@@ -30,6 +30,9 @@ showNotification();
 
 configureNotification();
 
+
+
+
 function HeadlessCheck({ isHeadless }) {
   if (isHeadless) {
     return null;

@@ -15,12 +15,14 @@ const sliceReducer = createSlice({
       state.isLoadingEnable = action.payload;
     },
     saveLoginDetails: (state, action) => {
+      console.log("action.payload=====>>", action.payload);
       state.loginDetails = action.payload;
     },
     saveEncrLoginDetails: (state, action) => {
       state.encrypt_detail = action.payload;
     },
     saveBalanceData: (state, action) => {
+      console.log("action.payload=====>>", action.payload);
       state.balanceDetail = action.payload;
     },
     saveContacts: (state, action) => {

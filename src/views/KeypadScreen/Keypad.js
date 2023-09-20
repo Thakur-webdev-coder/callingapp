@@ -271,12 +271,13 @@ const Keypad = ({ navigation }) => {
 
           <TouchableOpacity
             onPress={() => {
-              // console.log("dialedNumber=====", dialedNumber);
+           
+       
               if (dialedNumber.length > 6) {
                 if (balanceDetail.credit > 0) {
                   NetInfo.fetch().then((status) => {
                     if (status.isConnected) {
-                      if (Sip.isRegistered) {
+                      if (Sip.isRegistered) {                        
                         Sip.makeCall(dialedNumber);
                         navigation.navigate("CallingScreen", {
                           callData: dialedNumber,

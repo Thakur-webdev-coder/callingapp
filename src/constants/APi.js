@@ -174,3 +174,40 @@ export const hitExistingUserLogin = (payload) => {
     data: payload,
   });
 };
+export const hitVoiceNotificationApi = (payload) => {
+alert("7888===>");
+console.log(payload,"payloaddddddddd")
+  return apiClient({
+    baseURL: ApiRoutes.BASE_URL,
+    method: "post",
+    url: ApiRoutes.API_VOICE_NOTIFICATION,
+    data: payload,
+  });
+};
+export default function  postFormData(url, formData, options = {}) {
+  console.log("pppppp188")
+  // Define the default options for the fetch request
+  const defaultOptions = {
+    method: 'POST',
+    body: formData,
+    headers: {
+      
+      // Include any headers you need, e.g., for handling form data
+    },
+  };
+  // Merge the default options with user-provided options
+  const requestOptions = { ...defaultOptions, ...options };
+  // Make the POST request
+  return fetch(url, requestOptions)
+    .then(response => {
+      console.log(response,"response201")
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json(); // Parse the response body as JSON
+    })
+    .catch(error => {
+      console.error('There was a problem with the fetch operation:', error);
+      throw error; // Rethrow the error for the caller to handle
+    });
+}

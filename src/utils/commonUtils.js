@@ -151,6 +151,8 @@ export const fromInActiveState = async (remoteMessage) => {
 
 console.log('inactiivvv====>>>>>',remoteMessage);
 
+
+
   const channelId = await notifee.createChannel({
     id: "KILLSTATE",
     name: "Important Notifications",
