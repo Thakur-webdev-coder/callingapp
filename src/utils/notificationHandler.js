@@ -11,61 +11,42 @@ import {
   getBooleanValue,
   setCategories,
   setToken,
+  showIncVoiceCall,
+  showLocallotification,
 } from "./commonUtils";
-import { Socket } from "socket.io-client";
-import { getSocket } from "./socketManager";
 import PushNotification, { Importance } from "react-native-push-notification";
-import Loading from "react-native-whc-loading";
+
 let myMesaggeNotification = null;
 import notifee, { AndroidCategory } from "@notifee/react-native";
-import { hithangUpCallApi } from "../constants/APi";
 import Sip from "@khateeb00/react-jssip";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const { NotificationManager } = NativeModules;
-
-export const navigateScreen = (nav) => {
-  console.log(nav, "dpoaopf");
-  navigations = nav;
-};
+export const navigateScreen = (nav) => (navigations = nav);
+export const sendDataTonofiyHandler = (data) => (callingData = data);
 
 export const checkToken = async () => {
   const fcmToken = await messaging().getToken();
   if (fcmToken) {
-    console.log("fcm_tokennnn", fcmToken);
-
     setToken(fcmToken);
-
     return fcmToken;
   }
 };
+// NOTIFICATION RELATED SECTION =======>>>>>>>>>>>>
 
+// NOTIFICATION FORGROUND  SECTION STARTS =======>>>>>>>>>>>>
 export const showNotification = () => {
-  console.log("innotifiiiishaowww");
   messaging().onMessage(async (remoteMessage) => {
-    console.log("remoteMegssagetitle", remoteMessage);
-    console.log("remoteMegssagebody", remoteMessage?.notification?.body);
-    console.log("uniqueIddd22", remoteMessage?.data.participants);
-    // showIncVoiceCall(remoteMessage)
-    // Check if app is in foreground
-
-    // CustomAlert(remoteMessage);
-
     myMesaggeNotification = remoteMessage;
-
     if (remoteMessage?.data?.notification_type == "hangup_call") {
       console.log("hereeee -->>", remoteMessage?.data);
-
       InCallManager.setSpeakerphoneOn(false);
       InCallManager.stopRingtone();
       InCallManager.stopRingback();
-
       Store.dispatch(hangupMeeting());
-
       navigations.navigate("Home");
     } else if (remoteMessage?.data?.notification_type == "call") {
       console.log("callll====s");
       InCallManager.startRingtone();
-
       navigations.navigate("IncomingScreen", {
         callData: remoteMessage?.data,
       });
@@ -91,46 +72,28 @@ export const showNotification = () => {
       });
     }
   });
+  // NOTIFICATION FORGROUND  SECTION ENDS =======>>>>>>>>>>>>
+
+  // NOTIFICATION BACKGROUND  SECTION STARTS =======>>>>>>>>>>>>
 
   messaging().setBackgroundMessageHandler(async (remoteMessage) => {
-    console.log(
-      "Message handled in the background!",
-      remoteMessage.data?.notification_type
-    );
-    // showIncVoiceCall();
-
     if (remoteMessage?.data?.notification_type == "call") {
       InCallManager.startRingtone();
       setCategories();
       fromInActiveState(remoteMessage);
-
-      // showIncomingCallNotification(remoteMessage);
-      // navigations.navigate('IncomingScreen', {
-      //   callData: remoteMessage?.data,
-      // });
     } else if (remoteMessage?.data?.notification_type == "hangup_call") {
       InCallManager.stopRingtone();
       PushNotification.cancelAllLocalNotifications();
-    } else if (remoteMessage?.data?.notification_type === "audio_call") {
-      console.log("INActive state====>>>>>");
+    } else if (remoteMessage?.data?.body === "Audio Calling") {
       showIncVoiceCall(remoteMessage);
     }
-
-    // // Create a notification
-    // const notification = new firebase.notifications.Notification()
-    //   .setTitle("New Notification Title")
-    //   .setBody("New Notification Body")
-    //   .setNotificationId("my_notification_id")
-    //   .android.setChannelId("my_notification_channel");
-
-    // // Display the notification
-    // firebase.notifications().displayNotification(notification);
   });
+
+  // NOTIFICATION BACKGROUND  SECTION ENDS =======>>>>>>>>>>>>
 
   messaging()
     .getInitialNotification()
     .then(async (remoteMessage) => {
-      console.log("initialNotificationsssss====>>>>134", remoteMessage);
       if (remoteMessage?.data?.notification_type === "call") {
         setTimeout(() => {
           navigations.navigate("IncomingScreen", {
@@ -207,36 +170,16 @@ const mesageViewnavigation = () => {
   }
 };
 
-export const showLocallotification = async (remoteMessage) => {
-  console.log("inactiivvv====>>>>>", remoteMessage);
-
-  const channelId = await notifee.createChannel({
-    id: "12345",
-    name: "Important Notifications",
-    importance: 4,
-  });
-  await notifee.displayNotification({
-    title: remoteMessage?.notification?.title,
-    body: remoteMessage?.notification?.body,
-    id: "12345",
-    data: remoteMessage.data,
-  });
-};
+// NOFICATION CONFIGURATION ===========CONFIGURATION =================>>>CONFIGRATION
 
 export const configureNotification = () => {
+  console.log("this is congitugrie  =========>>>>>>");
   PushNotification.configure({
     onNotification: function (notification) {
-      console.log("NOTIFICATION:===>>>>", notification);
-
       if (notification?.userInteraction && notification?.foreground) {
         mesageViewnavigation();
       }
       if (notification?.data?.data?.notification_type === "SINGLE_CHAT") {
-        console.log(
-          "inherer--------------------------------22",
-          notification?.data?.data?.sid
-        );
-
         navigations.navigate("UserChatsScreen", {
           callData: notification?.data?.data?.sid,
         });
@@ -255,9 +198,8 @@ export const configureNotification = () => {
         }, 200);
       } else if (
         notification.userInteraction &&
-        notification.id === "voicekillstate"
+        notification.android.channelId === "voicecallkillstate"
       ) {
-        console.log("=====data is coming form");
       } else if (notification?.data?.data?.notification_type === "GROUP_CHAT") {
         let participants = notification?.data?.data?.participants;
 
@@ -294,17 +236,19 @@ export const configureNotification = () => {
   });
 };
 
-const showIncomingCallNotification = (remoteMessage) => {
-  InCallManager.startRingtone();
-  PushNotification.localNotification({
-    channelId: "12345",
-    title: remoteMessage.notification.title,
-    message: remoteMessage.notification.body,
-    smallIcon: null,
-    ongoing: true,
-    actions: ["Accept", "Reject"],
-  });
-};
+// NOFICATION CONFIGURATION ===========CONFIGURATION =================>>>CONFIGRATION
+
+// const showIncomingCallNotification = (remoteMessage) => {
+//   InCallManager.startRingtone();
+//   PushNotification.localNotification({
+//     channelId: "12345",
+//     title: remoteMessage.notification.title,
+//     message: remoteMessage.notification.body,
+//     smallIcon: null,
+//     ongoing: true,
+//     actions: ["Accept", "Reject"],
+//   });
+// };
 
 export const changelCreated = () => {
   PushNotification.createChannel({
@@ -319,150 +263,45 @@ export const changelCreated = () => {
 };
 
 notifee.onBackgroundEvent(async ({ type, detail }) => {
-  if (detail?.pressAction?.id === "decline") {
+  console.log(
+    detail?.notification?.android?.channelId,
+    "=========>>>267",
+    detail?.pressAction?.id
+  );
+  if (
+    detail?.pressAction?.id === "decline" &&
+    detail?.notification?.android?.channelId === "voicecallBcg"
+  ) {
     rejectCall(callingData);
-  } else if (detail?.pressAction?.id === "accept") {
-    console.log(callingData,"=========325")
-    acceptCall(callingData);
+  } else if (
+    detail?.pressAction?.id === "accept" &&
+    detail?.notification?.android?.channelId === "voicecallBcg"
+  ) {
+    acceptVoiceCall(callingData);
     InCallManager.stopRingtone();
-  } 
- 
-  //  acceptCall(callingData);
-    // InCallManager.stopRingtone();
-
-    return;
-
-    // navigations.navigate('CallScreen', {
-    //   voiceCall: detail?.notification?.data?.Type == 'A' ? true : false,
-    //   fromNotification: true,
-    //   callData: detail?.notification?.data?.sender_phone,
-    //   meetimgUrl: detail?.notification?.data?.Meeting_url,
-    //   fromouter:true
-    // });
-  //}
+  }
 });
 
-export const showIncVoiceCall = async (remoteMessage) => {
+const acceptVoiceCall = (call) => {
+  const SipCallID = Sip.getFormattedCallId(call);
+  if (SipCallID) {
+    Sip.answerCall(SipCallID)
+      .then(() => {
+        InCallManager.stopRingtone();
+        navigations.navigate("CallingScreen", {
+          callData: call._remote_identity._display_name,
+        });
+      })
+      .catch((error) => {
+        console.log("---answerCall-error-incoming---", error);
+      });
+    return;
+  }
 
-  console.log(remoteMessage?.from,"=======347")
-  const channelId = await notifee.createChannel({
-    id: "voicecallBcg",
-    name: "Default Channel",
-    importance: 4,
-  });
-  await notifee.displayNotification({
-    title: "Incoming Audio Call",
-    body: remoteMessage?.from,
-    id: "voiceCallNotify",
-    // data: {
-    //   drName: doctor_name || "Drnewmad",
-    //   duration: remaining_seconds,
-    //   meetId: video_meet_id,
-    // },
-    android: {
-      category: AndroidCategory.CALL,
-     // timeoutAfter: 10000,
-      colorized: true,
-      //  ongoing:true,
-      //  autoCancel:true,
-      launchActivity: true,
-      channelId,
-      // color: AndroidColor.GREEN,
-      loopSound: true,
-      //  fullScreenAction: { id: "default", launchActivity: "default" },
-      fullScreenAction: { id: "default" },
-      pressAction: {
-        id: "default",
-        launchActivity: "default",
-      },
-
-      actions: [
-        {
-          title: '<p style="color: #FFFFFF ">Decline</p>',
-          pressAction: { id: "decline" },
-        },
-        {
-          title: '<p style="color: #FFFFFF;">Answer</p>',
-          pressAction: { id: "accept", launchActivity: "default" },
-        },
-      ],
-      ongoing: true,
-    },
-
-    ios: {
-      categoryId: "post",
-    },
-  });
-  await notifee.cancelNotification(channelId);
-};
-
-export const showIncVoiceCallInKill = async (remoteMessage) => {
-  const channelId = await notifee.createChannel({
-    id: "voicecallBcg",
-    name: "Default Channel",
-    importance: 4,
-  });
-  await notifee.displayNotification({
-    title: "Incoming Audio Call",
-    body: remoteMessage?.from,
-    id: "voicekillstate",
-    // data: {
-    //   drName: doctor_name || "Drnewmad",
-    //   duration: remaining_seconds,
-    //   meetId: video_meet_id,
-    // },
-    android: {
-      category: AndroidCategory.CALL,
-      timeoutAfter: 10000,
-      colorized: true,
-      //  ongoing:true,
-      //  autoCancel:true,
-      launchActivity: true,
-      channelId,
-      // color: AndroidColor.GREEN,
-      loopSound: true,
-      fullScreenAction: { id: "default" },
-      pressAction: {
-        id: "default",
-        launchActivity: "default",
-      },
-      actions: [
-        {
-          title: '<p style="color: #FFFFFF ">Decline</p>',
-          pressAction: { id: "decline" },
-        },
-        {
-          title: '<p style="color: #FFFFFF;">Answer</p>',
-          pressAction: { id: "accept", launchActivity: "default" },
-        },
-      ],
-    },
-  });
-  await notifee.cancelNotification(channelId);
-};
-
-export const sendDataTonofiyHandler = (data) => (callingData = data);
-
-const acceptCall = (call) => {
-  console.log(call,"call from 444====>>>>>>>.")
-  navigations.navigate("IncomingAudioCall", {
-    call: call,
-  });
-
-  // const SipCallID = Sip.getFormattedCallId(call);
-  // if (SipCallID) {
-  //   Sip.answerCall(SipCallID)
-  //     .then(() => {
-  //       InCallManager.stopRingtone();
-  //       navigations.navigate("IncomingScreen", {
-  //         callData: call
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       console.log("---answerCall-error-incoming---", error);
-  //     });
-  //   return;
-  // }
+  // console.log(call, "call from 444====>>>>>>>.");
+  // navigations.navigate("IncomingAudioCall", {
+  //   call: call,
+  // });
 };
 
 const rejectCall = (call) => {
@@ -473,7 +312,7 @@ const rejectCall = (call) => {
     Vibration.cancel();
     Sip.declineCall(SipCallId);
     navigations.navigate("Home");
-    onSipCallAccepted();
+    // onSipCallAccepted();
   } else {
     console.log("--Else-SipCallId--");
   }

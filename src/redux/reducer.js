@@ -16,6 +16,7 @@ const sliceReducer = createSlice({
     },
     saveLoginDetails: (state, action) => {
       console.log("action.payload=====>>", action.payload);
+    
       state.loginDetails = action.payload;
     },
     saveEncrLoginDetails: (state, action) => {

@@ -18,15 +18,14 @@ import Sip from "@khateeb00/react-jssip";
 import { _getloadMoreChatData, _socketConnect } from "../utils/socketManager";
 import { getToken } from "../utils/commonUtils";
 import { useNavigation } from "@react-navigation/native";
-import InCallManager from 'react-native-incall-manager';
+import InCallManager from "react-native-incall-manager";
 import { sendDataTonofiyHandler } from "../utils/notificationHandler";
-
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   const { loginDetails = {} } = useSelector((store) => store.sliceReducer);
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
   useEffect(() => {
     const { password, did, username } = loginDetails;
@@ -44,21 +43,18 @@ const TabNavigator = () => {
       name: did,
     });
 
-    const callReceivedListener = Sip.on('call_received', onSipCallReceived);
-
+    const callReceivedListener = Sip.on("call_received", onSipCallReceived);
 
     return () => {
-      callReceivedListener.remove()
+      callReceivedListener.remove();
     };
-
   }, []);
 
   const onSipCallReceived = (call) => {
-    console.log("call=====>this is here",call)
     sendDataTonofiyHandler(call);
-    InCallManager.startRingtone('_DEFAULT_')
-    navigation.navigate('IncomingAudioCall', { call })
-  }
+    InCallManager.startRingtone("_DEFAULT_");
+    navigation.navigate("IncomingAudioCall", { call });
+  };
 
   return (
     <Tab.Navigator
@@ -87,7 +83,7 @@ const TabNavigator = () => {
               style={{
                 alignItems: "center",
                 paddingTop: hp(3),
-                height:hp(10.5),
+                height: hp(10.5),
                 paddingBottom: hp(2.5),
               }}
             >

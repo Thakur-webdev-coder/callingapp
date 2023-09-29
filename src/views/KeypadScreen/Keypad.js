@@ -277,11 +277,19 @@ const Keypad = ({ navigation }) => {
                 if (balanceDetail.credit > 0) {
                   NetInfo.fetch().then((status) => {
                     if (status.isConnected) {
-                      if (Sip.isRegistered) {                        
+                      if (Sip.isRegistered) {  
+
+
+                    
                         Sip.makeCall(dialedNumber);
                         navigation.navigate("CallingScreen", {
                           callData: dialedNumber,
                         });
+
+
+
+
+
                       } else {
                         Show_Toast("Something went wrong. Please wait...");
                       }

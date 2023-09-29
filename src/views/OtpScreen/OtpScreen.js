@@ -30,6 +30,7 @@ import Loading from "react-native-whc-loading";
 import { checkToken } from "../../utils/notificationHandler";
 import messaging from '@react-native-firebase/messaging';
 import { CommonActions } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 let otpEncryptedCode = null;
 
 const OtpScreen = ({ navigation, route }) => {
@@ -108,6 +109,7 @@ const OtpScreen = ({ navigation, route }) => {
         if (response.data.result == "success") {
           // otp = response.data.OTP;
           dispatch(saveLoginDetails(response.data.userinfo));
+          AsyncStorage.setItem("loginData",JSON.stringify(response?.data?.userinfo))
           setIsLoading(false);
           navigation?.dispatch(
             CommonActions.reset({

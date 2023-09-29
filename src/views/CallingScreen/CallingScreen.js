@@ -22,7 +22,10 @@ import Sip from "@khateeb00/react-jssip";
 import { secondsToHMS } from "../../utils/commonUtils";
 
 import InCallManager from "react-native-incall-manager";
-import postFormData, { hitJoinVideoCallApi, hitVoiceNotificationApi } from "../../constants/APi";
+import postFormData, {
+  hitJoinVideoCallApi,
+  hitVoiceNotificationApi,
+} from "../../constants/APi";
 
 let isCallGoing = null;
 
@@ -30,6 +33,7 @@ const CallingScreen = ({ navigation, route }) => {
   // const [state, setState] = useState({
   //   timerCount: 0,
   // });
+
   const [timerCount, setTimerCount] = useState(0);
   const [mute, setMute] = useState(false);
   const [hold, setHold] = useState(false);
@@ -39,14 +43,10 @@ const CallingScreen = ({ navigation, route }) => {
   const { username } = loginDetails;
   // console.log("route.params---->", route.params);
   useEffect(() => {
-
-    
-     incomingCallNotification();
-   
+    incomingCallNotification();
     // incomingCallNotification()
   }, []);
   useEffect(() => {
-    console.log("ashfioasf", Sip);
     let interval;
     const callTerminatedListener = Sip.on("call_terminated", () => {
       isCallGoing = false;
@@ -68,23 +68,21 @@ const CallingScreen = ({ navigation, route }) => {
       clearInterval(interval);
     };
   }, []);
-  
-  const incomingCallNotification = async () => {
-   
-    const data = new FormData();
-  data.append("receiver_phone", username);
-    data.append("sender_phone", callData);
-const apiUrl = 'https://billing.kokoafone.com/billing/kokofone_api/call_notification/audio_notification.php';
-postFormData(apiUrl, data)
-  .then(data => {
-   const {success}= JSON.parse(data.msg)
-  if(success){
 
-  } // Handle the JSON response data
-  })
-  .catch(error => {
-    // Handle the error
-  });
+  const incomingCallNotification = async () => {
+    data.append("receiver_phone", callData);
+    data.append("sender_phone", username);
+    const apiUrl =
+      "https://billing.kokoafone.com/billing/kokofone_api/call_notification/silent_audio_notification.php";
+    postFormData(apiUrl, data)
+      .then((data) => {
+        const { success } = JSON.parse(data.msg);
+        if (success) {
+        } // Handle the JSON response data
+      })
+      .catch((error) => {
+        // Handle the error
+      });
     // const data = new FormData();
 
     // data.append("receiver_phone", callData);

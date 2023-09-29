@@ -1,4 +1,12 @@
-import { Alert, PermissionsAndroid, Platform, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  PermissionsAndroid,
+  Platform,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import CustomImage from "../../components/CustomImage";
 import CustomButton from "../../components/CustomButton";
@@ -59,9 +67,7 @@ const BoardingScreen = ({ navigation }) => {
       });
   };
 
-  const createTwoButtonAlert = () =>
-  Show_Toast('Please accept privacy policy');
-
+  const createTwoButtonAlert = () => Show_Toast("Please accept privacy policy");
 
   return (
     <SafeAreaView style={[AppStyle.wrapper, { backgroundColor: colors.white }]}>
@@ -71,7 +77,9 @@ const BoardingScreen = ({ navigation }) => {
 
       <View>
         <CustomButton
-          onPress={() => checked?navigation.navigate("Login"):createTwoButtonAlert()}
+          onPress={() =>
+            checked ? navigation.navigate("Login") : createTwoButtonAlert()
+          }
           primary
           title={"Get Started"}
           horzontalPadding={wp(15)}
@@ -91,7 +99,7 @@ const BoardingScreen = ({ navigation }) => {
             onValueChange={(newValue) => setChecked(newValue)}
             tintColors={{ true: colors.buttonColor, false: colors.grayColor }}
           />
-          <View style={{ flexDirection: 'row',paddingTop:5 }}>
+          <View style={{ flexDirection: "row", paddingTop: 5 }}>
             <Text
               style={{
                 color: colors.grayColor,
@@ -99,11 +107,16 @@ const BoardingScreen = ({ navigation }) => {
                 // textAlign:'center'
               }}
             >
-              Agree to{" "}</Text>
-            <TouchableOpacity onPress={()=>navigation.navigate('WebViewScreen', {
-            url: `https://billing.kokoafone.com/privacy-policy.html`,
-            title: 'Privacy Policy',
-          })}>
+              Agree to{" "}
+            </Text>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("WebViewScreen", {
+                  url: `https://billing.kokoafone.com/privacy-policy.html`,
+                  title: "Privacy Policy",
+                })
+              }
+            >
               <Text style={{ color: colors.buttonColor }}>Privacy Policy</Text>
             </TouchableOpacity>
           </View>
