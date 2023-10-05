@@ -15,6 +15,8 @@ let ApiRoutes = {
   API_JOIN_VIDEO: "join_video/join_video_call.php",
   API_HANG_UP_CALL: "join_video/hangup_call.php",
 
+  API_GROUP_VIDEOCALL_PUSH: "join_video/join_group_video_call.php",
+
   API_REGISTERED_NUMBER: "join_video/call_phone_number.php",
   SYNC_CONTACTS: "billing_auto_register/sync_contacts.php",
   API_TRANSFER_HISTORY:
@@ -24,7 +26,8 @@ let ApiRoutes = {
   API_GROUP_CHAT_PUSH: "join_video/group-chat-push.php",
   API_HIDDENPAGE: "billing_hiddenpage_status/status.php",
   API_EXIISING_USER_LOGIN: "billing_encryption/login.php",
-  API_VOICE_NOTIFICATION: "kokofone_api/call_notification/audio_notification.php",
+  API_VOICE_NOTIFICATION:
+    "kokofone_api/call_notification/audio_notification.php",
 };
 
 export default ApiRoutes;

@@ -27,6 +27,7 @@ export const sendDataTonofiyHandler = (data) => (callingData = data);
 export const checkToken = async () => {
   const fcmToken = await messaging().getToken();
   if (fcmToken) {
+    console.log(fcmToken, "=========31");
     setToken(fcmToken);
     return fcmToken;
   }
@@ -36,6 +37,8 @@ export const checkToken = async () => {
 // NOTIFICATION FORGROUND  SECTION STARTS =======>>>>>>>>>>>>
 export const showNotification = () => {
   messaging().onMessage(async (remoteMessage) => {
+    console.log(remoteMessage, "================onForGround");
+
     myMesaggeNotification = remoteMessage;
     if (remoteMessage?.data?.notification_type == "hangup_call") {
       console.log("hereeee -->>", remoteMessage?.data);
@@ -77,6 +80,7 @@ export const showNotification = () => {
   // NOTIFICATION BACKGROUND  SECTION STARTS =======>>>>>>>>>>>>
 
   messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+    console.log("BACKGROUND HANDLERE", remoteMessage);
     if (remoteMessage?.data?.notification_type == "call") {
       InCallManager.startRingtone();
       setCategories();
@@ -102,6 +106,7 @@ export const showNotification = () => {
         }, 200);
       } else if (remoteMessage?.data?.notification_type === "hangup_call") {
       } else if (remoteMessage?.data?.notification_type === "SINGLE_CHAT") {
+        console.log("=========>>109");
         setTimeout(() => {
           navigations.navigate("UserChatsScreen", {
             callData: remoteMessage?.data?.sid,
@@ -174,8 +179,11 @@ const mesageViewnavigation = () => {
 
 export const configureNotification = () => {
   console.log("this is congitugrie  =========>>>>>>");
+
   PushNotification.configure({
     onNotification: function (notification) {
+      console.log(notification, "============185");
+
       if (notification?.userInteraction && notification?.foreground) {
         mesageViewnavigation();
       }
@@ -185,7 +193,7 @@ export const configureNotification = () => {
         });
       } else if (
         notification.userInteraction &&
-        notification.id === "KILLSTATE"
+        notification?.id === "KILLSTATE"
       ) {
         setTimeout(() => {
           InCallManager.stopRingtone();
@@ -197,8 +205,8 @@ export const configureNotification = () => {
           });
         }, 200);
       } else if (
-        notification.userInteraction &&
-        notification.android.channelId === "voicecallkillstate"
+        notification?.userInteraction &&
+        notification?.android?.channelId === "voicecallkillstate"
       ) {
       } else if (notification?.data?.data?.notification_type === "GROUP_CHAT") {
         let participants = notification?.data?.data?.participants;

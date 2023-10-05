@@ -67,6 +67,7 @@ const LiveChat = ({ navigation }) => {
     return (
       <TouchableOpacity
         onPress={() => {
+   
           item?.type === "group"
             ? navigation.navigate("UserChatsScreen", {
                 groupName: item?.name,

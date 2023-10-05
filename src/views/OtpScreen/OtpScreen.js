@@ -5,7 +5,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   View,
-  ScrollView
+  ScrollView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import CustomText from "../../components/CustomText";
@@ -28,7 +28,7 @@ import { saveLoginDetails } from "../../redux/reducer";
 import styles from "./styles";
 import Loading from "react-native-whc-loading";
 import { checkToken } from "../../utils/notificationHandler";
-import messaging from '@react-native-firebase/messaging';
+import messaging from "@react-native-firebase/messaging";
 import { CommonActions } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 let otpEncryptedCode = null;
@@ -58,7 +58,6 @@ const OtpScreen = ({ navigation, route }) => {
   }, [counter]);
 
   const hitOtpEncryptionAPI = async () => {
- 
     setIsLoading(true);
 
     if (otpText.length == 4) {
@@ -96,29 +95,30 @@ const OtpScreen = ({ navigation, route }) => {
     //   const enabled =
     //     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
     //     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-    
+
     //   if (enabled) {
     //     console.log('Authorization status:', authStatus);
     //     checkToken();
     //   }
     // }
-    
 
     hitOtpVerificationAPI(data)
       .then((response) => {
         if (response.data.result == "success") {
           // otp = response.data.OTP;
           dispatch(saveLoginDetails(response.data.userinfo));
-          AsyncStorage.setItem("loginData",JSON.stringify(response?.data?.userinfo))
+          AsyncStorage.setItem(
+            "loginData",
+            JSON.stringify(response?.data?.userinfo)
+          );
           setIsLoading(false);
           navigation?.dispatch(
             CommonActions.reset({
               index: 0,
-              routes: [{ name: 'StackNavigator' }],
+              routes: [{ name: "StackNavigator" }],
             })
           );
           //  navigation.navigate("StackNavigator");
-          
         } else {
           showErrorMessage(response.data.OTP);
           setIsLoading(false);

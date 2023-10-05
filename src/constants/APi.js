@@ -123,6 +123,17 @@ export const hithangUpCallApi = (payload) => {
   });
 };
 
+
+export const hitgroupVideoCallNotify = (payload) => {
+  return apiClient({
+    baseURL: ApiRoutes.BASE_URL,
+    method: "post",
+    url: ApiRoutes.API_GROUP_VIDEOCALL_PUSH,
+    data: payload,
+  });
+};
+
+
 export const hitGetRegisteredNumberApi = () => {
   return apiClient({
     baseURL: ApiRoutes.BASE_URL,
@@ -141,6 +152,11 @@ export const hitSyncContactApi = (payload) => {
 };
 
 export const hitSendSingleChatPush = (payload) => {
+  console.log(
+    ApiRoutes.API_SINGLE_CHAT_PUSH,
+    "========145",
+    ApiRoutes.BASE_URL
+  );
   return apiClient({
     baseURL: ApiRoutes.BASE_URL,
     method: "post",
@@ -175,8 +191,8 @@ export const hitExistingUserLogin = (payload) => {
   });
 };
 export const hitVoiceNotificationApi = (payload) => {
-alert("7888===>");
-console.log(payload,"payloaddddddddd")
+  alert("7888===>");
+  console.log(payload, "payloaddddddddd");
   return apiClient({
     baseURL: ApiRoutes.BASE_URL,
     method: "post",
@@ -184,14 +200,13 @@ console.log(payload,"payloaddddddddd")
     data: payload,
   });
 };
-export default function  postFormData(url, formData, options = {}) {
-  console.log("pppppp188")
+export default function postFormData(url, formData, options = {}) {
+  console.log("pppppp188");
   // Define the default options for the fetch request
   const defaultOptions = {
-    method: 'POST',
+    method: "POST",
     body: formData,
     headers: {
-      
       // Include any headers you need, e.g., for handling form data
     },
   };
@@ -199,15 +214,15 @@ export default function  postFormData(url, formData, options = {}) {
   const requestOptions = { ...defaultOptions, ...options };
   // Make the POST request
   return fetch(url, requestOptions)
-    .then(response => {
-      console.log(response,"response201")
+    .then((response) => {
+      console.log(response, "response201");
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       }
       return response.json(); // Parse the response body as JSON
     })
-    .catch(error => {
-      console.error('There was a problem with the fetch operation:', error);
+    .catch((error) => {
+      console.error("There was a problem with the fetch operation:", error);
       throw error; // Rethrow the error for the caller to handle
     });
 }

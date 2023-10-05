@@ -29,6 +29,7 @@ import { useSelector } from "react-redux";
 import { Show_Toast } from "../../utils/toast";
 import Contacts from "react-native-contacts";
 import NetInfo from "@react-native-community/netinfo";
+import InCallManager from "react-native-incall-manager";
 
 const Keypad = ({ navigation }) => {
   // const [inputNumber, setInputNumber] = useState('')
@@ -271,25 +272,17 @@ const Keypad = ({ navigation }) => {
 
           <TouchableOpacity
             onPress={() => {
-           
-       
               if (dialedNumber.length > 6) {
                 if (balanceDetail.credit > 0) {
                   NetInfo.fetch().then((status) => {
                     if (status.isConnected) {
-                      if (Sip.isRegistered) {  
+                      if (Sip.isRegistered) {
+                        InCallManager.startRingback();
 
-
-                    
                         Sip.makeCall(dialedNumber);
                         navigation.navigate("CallingScreen", {
                           callData: dialedNumber,
                         });
-
-
-
-
-
                       } else {
                         Show_Toast("Something went wrong. Please wait...");
                       }

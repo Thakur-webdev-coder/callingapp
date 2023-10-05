@@ -210,7 +210,7 @@ const CreateGroup = ({ navigation }) => {
           <TextInput
             style={styles.textInputStyle}
             //placeholder="Search Destination"
-            placeholderTextColor={colors.appColor}
+            placeholderTextColor={"black"}
             onChangeText={(txt) => setState({ voucherNum: txt })}
             maxLength={30}
           />

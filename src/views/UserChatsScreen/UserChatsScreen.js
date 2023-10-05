@@ -11,10 +11,10 @@ import {
   Alert,
   KeyboardAvoidingView,
   Linking,
-} from 'react-native';
-import React, { useEffect, useState } from 'react';
-import styles from './styles';
-import DocumentPicker from 'react-native-document-picker';
+} from "react-native";
+import React, { useEffect, useState } from "react";
+import styles from "./styles";
+import DocumentPicker from "react-native-document-picker";
 
 import {
   ic_audiocall,
@@ -26,13 +26,13 @@ import {
   ic_menu,
   ic_small_plus,
   ic_videocall,
-} from '../../routes/imageRoutes';
-import colors from '../../../assets/colors';
-import CustomText from '../../components/CustomText';
+} from "../../routes/imageRoutes";
+import colors from "../../../assets/colors";
+import CustomText from "../../components/CustomText";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
+} from "react-native-responsive-screen";
 import {
   _addGroup,
   _deleteChat,
@@ -42,15 +42,15 @@ import {
   _sendChatRoomDetail,
   _sendloadMoreChatData,
   getSocket,
-} from '../../utils/socketManager';
-import { useSelector } from 'react-redux';
+} from "../../utils/socketManager";
+import { useSelector } from "react-redux";
 import {
   omitSpecialCharacters,
   saveBooleanValue,
   timestampToDate,
   timestampToLocalTime,
   uriToFile,
-} from '../../utils/commonUtils';
+} from "../../utils/commonUtils";
 import {
   Menu,
   MenuOption,
@@ -63,18 +63,18 @@ import AppStyle from "../../components/AppStyle";
 import {
   hitSendGroupChatPush,
   hitSendSingleChatPush,
-} from '../../constants/APi';
-import { useFocusEffect, useIsFocused } from '@react-navigation/native';
-import PushNotification from 'react-native-push-notification';
-import { PERMISSIONS, requestMultiple } from 'react-native-permissions';
+} from "../../constants/APi";
+import { useFocusEffect, useIsFocused } from "@react-navigation/native";
+import PushNotification from "react-native-push-notification";
+import { PERMISSIONS, requestMultiple } from "react-native-permissions";
 import NetInfo from "@react-native-community/netinfo";
 const { Popover } = renderers;
 
 const UserChatsScreen = ({ navigation, route }) => {
-  const [messageInput, onChangeMessageInput] = useState('');
+  const [messageInput, onChangeMessageInput] = useState("");
   const [groupedChats, setGroupedChats] = useState([]);
 
-  console.log('groupedChatsssssssss', groupedChats);
+  console.log("groupedChatsssssssss", groupedChats);
 
   const socket = getSocket();
 
@@ -98,39 +98,45 @@ const UserChatsScreen = ({ navigation, route }) => {
     created,
   } = route.params;
 
+  console.log(callData, "===N", Name, "=====>", groupName, "====A", added);
+
   const { kokoaContacts = [], loginDetails = {} } = useSelector(
     (store) => store.sliceReducer
   );
 
   let senderID = loginDetails.username;
 
-  console.log('myNUmberrrrrr', added);
+  console.log("myNUmberrrrrr", added);
 
-  const cameraPermissions = Platform.OS == 'ios' ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA;
-  const micPermissions = Platform.OS == 'ios' ? PERMISSIONS.IOS.MICROPHONE : PERMISSIONS.ANDROID.RECORD_AUDIO;
+  const cameraPermissions =
+    Platform.OS == "ios" ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA;
+  const micPermissions =
+    Platform.OS == "ios"
+      ? PERMISSIONS.IOS.MICROPHONE
+      : PERMISSIONS.ANDROID.RECORD_AUDIO;
   useEffect(() => {
     if (added) {
-      console.log('herererrerererrere');
-      sendChatMethod('Added New Member');
+      console.log("herererrerererrere");
+      sendChatMethod("Added New Member");
     }
 
     if (created) {
-      sendChatMethod('Craeted New Group');
+      sendChatMethod("Craeted New Group");
     }
   }, [route]);
 
   console.log(
-    'callData',
+    "callData",
     callData ? receiverID.callData : participants,
     uniqueId
   );
 
   useFocusEffect(
     React.useCallback(() => {
-      saveBooleanValue('isFocused', true);
+      saveBooleanValue("isFocused", true);
 
       return () => {
-        saveBooleanValue('isFocused', false);
+        saveBooleanValue("isFocused", false);
       };
     }, [])
   );
@@ -142,49 +148,68 @@ const UserChatsScreen = ({ navigation, route }) => {
   }, []);
 
   const openAppSettings = () => {
-    if (Platform.OS === 'android') {
+    if (Platform.OS === "android") {
       Linking.openSettings();
     } else {
-      Linking.openURL('app-settings:')
+      Linking.openURL("app-settings:");
     }
   };
 
   const checkPeermission = (callType) => {
-    console.log('checkPeermission------->>>');
-    requestMultiple([cameraPermissions, micPermissions]).then((result) => {
-      console.log(result[cameraPermissions], result[micPermissions], 'result--------->>>', result);
+    console.log("checkPeermission------->>>");
+    requestMultiple([cameraPermissions, micPermissions])
+      .then((result) => {
+        console.log(
+          result[cameraPermissions],
+          result[micPermissions],
+          "result--------->>>",
+          result
+        );
 
-      if (result[cameraPermissions] !== 'granted' || result[micPermissions] !== 'granted') {
-        Alert.alert('Insufficient permissions!', 'You need to grant camera and Microphone access permissions to use this app.', [
-          { text: 'Okay', onPress: () => openAppSettings() }
-        ]);
-        return false;
-      } else {
-        NetInfo.fetch().then((status)=>{
-          if(status.isConnected){
-            callType =='voiceCall'?
-            navigation.navigate('CallScreen', {
-              voiceCall: true,
-              callData: callData,
-            }):
-            navigation.navigate('CallScreen', {
-              voiceCall: false,
-              callData: callData,
-            });
+        if (
+          result[cameraPermissions] !== "granted" ||
+          result[micPermissions] !== "granted"
+        ) {
+          Alert.alert(
+            "Insufficient permissions!",
+            "You need to grant camera and Microphone access permissions to use this app.",
+            [{ text: "Okay", onPress: () => openAppSettings() }]
+          );
+          return false;
+        } else {
+          NetInfo.fetch().then((status) => {
+            if (status.isConnected) {
+              if (groupName) {
+                callType == "voiceCall"
+                  ? navigation.navigate("GroupCallScreen", {
+                      voiceCall: true,
+                      callData: participants,
+                    })
+                  : navigation.navigate("GroupCallScreen", {
+                      voiceCall: false,
+                      callData: participants,
+                    });
+              } else {
+                callType == "voiceCall"
+                  ? navigation.navigate("CallScreen", {
+                      voiceCall: true,
+                      callData: callData,
+                    })
+                  : navigation.navigate("CallScreen", {
+                      voiceCall: false,
+                      callData: callData,
+                    });
+              }
+            } else {
+              Show_Toast("Check your data connection and try again.");
+            }
+          });
 
-          }else{
-            Show_Toast(
-              "Check your data connection and try again."
-            );
-          }
-        })
-       
-        
-        setState({ callModal: false });
-      }
-    })
+          setState({ callModal: false });
+        }
+      })
       .catch((error) => {
-        console.log('errr----', error);
+        console.log("errr----", error);
       });
   };
 
@@ -201,13 +226,13 @@ const UserChatsScreen = ({ navigation, route }) => {
       return acc;
     }, []);
 
-    console.log('previousstate', groupedChats);
+    console.log("previousstate", groupedChats);
     setGroupedChats(groupedChats);
   };
 
   const __getUpdatedChatMessage = () => {
-    socket.on('chat', (data) => {
-      console.log('_getUpdatedChatMessage=======>', data);
+    socket.on("chat", (data) => {
+      console.log("_getUpdatedChatMessage=======>", data);
 
       setArray((array) => {
         const a = array.slice(0).reverse();
@@ -231,16 +256,16 @@ const UserChatsScreen = ({ navigation, route }) => {
       };
     } else {
       data = {
-        type: 'group',
+        type: "group",
         rid: uniqueId,
         sid: senderID,
         group_name: groupName,
       };
     }
 
-    console.log('chat_history', data);
+    console.log("chat_history", data);
 
-    socket.emit('chat-history', data);
+    socket.emit("chat-history", data);
   };
 
   const deleteChatHistory = () => {
@@ -251,18 +276,18 @@ const UserChatsScreen = ({ navigation, route }) => {
       sid: senderID,
     };
 
-    console.log('myyydeleteChatttt', data);
+    console.log("myyydeleteChatttt", data);
 
-    console.log('deleteChatttt', data);
+    console.log("deleteChatttt", data);
 
     _deleteChat(data);
   };
 
   const onHistoryReceived = () => {
-    console.log('_getChatHistoryy=======>');
+    console.log("_getChatHistoryy=======>");
 
-    socket.on('chat-history', (data) => {
-      console.log('_getChatHistoryy=======>', data);
+    socket.on("chat-history", (data) => {
+      console.log("_getChatHistoryy=======>", data);
       const arrayReverse = data.slice().reverse();
 
       reduceChat(arrayReverse);
@@ -274,7 +299,7 @@ const UserChatsScreen = ({ navigation, route }) => {
   const leaveGroup = () => {
     const allParticipant = participants.filter((item) => item !== senderID);
 
-    console.log('allParticipant', uniqueId, allParticipant);
+    console.log("allParticipant", uniqueId, allParticipant);
     const data = {
       id: senderID,
       group_id: uniqueId,
@@ -287,22 +312,22 @@ const UserChatsScreen = ({ navigation, route }) => {
       rid: uniqueId,
     };
 
-    console.log('datattatatat', data);
-    console.log('datattatatat', myData);
+    console.log("datattatatat", data);
+    console.log("datattatatat", myData);
 
     _addGroup(data);
     _leaveGroup(myData);
 
-    sendChatMethod(' Member leaved group');
+    sendChatMethod(" Member leaved group");
   };
 
   const sendChatMethod = (message) => {
     if (!added) {
-      if (message === '' || message == null) {
+      if (message === "" || message == null) {
         Alert.alert(
-          'Alert!',
-          'Enter your message please...',
-          [{ text: 'Ok' }],
+          "Alert!",
+          "Enter your message please...",
+          [{ text: "Ok" }],
           {
             cancelable: false,
           }
@@ -321,7 +346,7 @@ const UserChatsScreen = ({ navigation, route }) => {
         msg: message,
         rid: receiverID,
         sid: senderID,
-        type: 'private',
+        type: "private",
       };
 
       data1 = {
@@ -331,13 +356,13 @@ const UserChatsScreen = ({ navigation, route }) => {
       };
     } else {
       // const mapContact = participants?.map((str) => parseInt(str));
-      const mapContact = participants.join(', ');
+      const mapContact = participants?.join(", ");
 
       data = {
         msg: message,
         rid: uniqueId,
         sid: senderID,
-        type: 'group',
+        type: "group",
         group_name: groupName,
       };
 
@@ -349,17 +374,17 @@ const UserChatsScreen = ({ navigation, route }) => {
       };
     }
 
-    console.log('groupchatDatta', data1);
+    console.log("groupchatDatta", data1);
 
     _sendChatMessage(data);
 
-    onChangeMessageInput('');
+    onChangeMessageInput("");
     if (uniqueId) {
-      console.log('groupchatDatta222', data1);
+      console.log("groupchatDatta222", data1);
 
       hitSendGroupChatPush(data1);
     } else {
-      console.log('singleDatta222', data1);
+      console.log("singleDatta222", data1, "=====dddddddddd");
 
       hitSendSingleChatPush(data1);
     }
@@ -392,7 +417,7 @@ const UserChatsScreen = ({ navigation, route }) => {
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
       } else {
-        console.error('Failed to pick a file', err);
+        console.error("Failed to pick a file", err);
       }
     }
   };
@@ -404,8 +429,8 @@ const UserChatsScreen = ({ navigation, route }) => {
           <Text
             style={{
               color: colors.black,
-              fontWeight: 'bold',
-              alignSelf: 'center',
+              fontWeight: "bold",
+              alignSelf: "center",
             }}
           >
             {item.timestamp}
@@ -425,7 +450,7 @@ const UserChatsScreen = ({ navigation, route }) => {
     const { msg, timestamp } = item;
     const contact = kokoaContacts.find(
       (myItem) =>
-        myItem?.phoneNumbers[0]?.number.replace(/[^0-9]/g, '') === item?.sid
+        myItem?.phoneNumbers[0]?.number.replace(/[^0-9]/g, "") === item?.sid
     );
 
     // console.log("item------>>>>>>>>>>>>>>>>>>>>>>>>&&&&&&&&&&&&&&&", item);
@@ -442,7 +467,7 @@ const UserChatsScreen = ({ navigation, route }) => {
       marginRight: 15,
       marginTop: 8,
       borderRadius: 8,
-      alignSelf: 'flex-end',
+      alignSelf: "flex-end",
     };
 
     receiverMsgStyle = {
@@ -452,12 +477,12 @@ const UserChatsScreen = ({ navigation, route }) => {
       borderRadius: 8,
     };
     textStyle = {
-      color: 'white',
+      color: "white",
       paddingVertical: 10,
       paddingHorizontal: 15,
       fontSize: 16,
       borderRadius: 8,
-      textAlign: 'left',
+      textAlign: "left",
     };
 
     return (
@@ -469,7 +494,7 @@ const UserChatsScreen = ({ navigation, route }) => {
                 borderRadius: 8,
                 // backgroundColor: local ? "#E21019" : "#5C5D5F",
                 backgroundColor: colors.greenTop,
-                alignSelf: 'flex-start',
+                alignSelf: "flex-start",
               }}
             >
               {/* <Hyperlink
@@ -490,7 +515,7 @@ const UserChatsScreen = ({ navigation, route }) => {
                       marginTop: 5,
                     }}
                   >
-                    {contact?.givenName + ' ' + contact?.familyName}
+                    {contact?.givenName + " " + contact?.familyName}
                   </Text>
                 ) : (
                   <Text
@@ -517,9 +542,9 @@ const UserChatsScreen = ({ navigation, route }) => {
             <Text
               style={{
                 fontSize: 8,
-                alignSelf: 'flex-start',
+                alignSelf: "flex-start",
                 color: colors.blueBottom,
-                fontWeight: 'bold',
+                fontWeight: "bold",
                 marginBottom: 5,
               }}
             >
@@ -532,8 +557,8 @@ const UserChatsScreen = ({ navigation, route }) => {
               style={{
                 borderRadius: 8,
                 // backgroundColor: local ? "#E21019" : "#5C5D5F",
-                backgroundColor: '#5C5D5F',
-                alignSelf: 'flex-start',
+                backgroundColor: "#5C5D5F",
+                alignSelf: "flex-start",
               }}
             >
               {/* <Hyperlink
@@ -556,9 +581,9 @@ const UserChatsScreen = ({ navigation, route }) => {
             <Text
               style={{
                 fontSize: 8,
-                alignSelf: 'flex-end',
+                alignSelf: "flex-end",
                 color: colors.blueBottom,
-                fontWeight: 'bold',
+                fontWeight: "bold",
                 marginBottom: 5,
               }}
             >
@@ -571,47 +596,46 @@ const UserChatsScreen = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={AppStyle.wrapper} >
+    <SafeAreaView style={AppStyle.wrapper}>
       <View style={AppStyle.homeMainView}>
-
         <View style={styles.toolBar}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image source={ic_back} />
           </TouchableOpacity>
           <View style={styles.headerBox}>
-          <TouchableOpacity style={styles.nameContainer}
-            onPress={() =>
-              groupName
-                ? navigation.navigate('ParticipantsScreen', {
-                  participants: participants,
-                })
-                : null
-            }
-          >
+            <TouchableOpacity
+              style={styles.nameContainer}
+              onPress={() =>
+                groupName
+                  ? navigation.navigate("ParticipantsScreen", {
+                      participants: participants,
+                    })
+                  : null
+              }
+            >
+              <Text style={[styles.textStyleToolbar, { fontWeight: "700" }]}>
+                {Name || callData ? (Name ? Name : callData) : groupName}
+              </Text>
+            </TouchableOpacity>
+            <View style={styles.headerComponent}>
+              {groupName ? (
+                <TouchableOpacity
+                  style={{ marginHorizontal: 35, padding: 10 }}
+                  onPress={() => {
+                    navigation.navigate("SelectScreen", {
+                      groupName: groupName,
+                      uniqueId: uniqueId,
+                      participants: participants,
+                    });
+                  }}
+                >
+                  <Image source={ic_small_plus} />
+                </TouchableOpacity>
+              ) : (
+                <View style={{ marginHorizontal: 35, padding: 10 }}></View>
+              )}
 
-            <Text style={[styles.textStyleToolbar, { fontWeight: '700' }]}>
-              {Name || callData ? (Name ? Name : callData) : groupName}
-            </Text>
-          </TouchableOpacity>
-          <View style={styles.headerComponent}>
-            {groupName ? (
-              <TouchableOpacity
-                style={{ marginHorizontal: 35, padding: 10 }}
-                onPress={() =>
-                  navigation.navigate('SelectScreen', {
-                    groupName: groupName,
-                    uniqueId: uniqueId,
-                    participants: participants,
-                  })
-                }
-              >
-                <Image source={ic_small_plus} />
-              </TouchableOpacity>
-            ) : (
-              <View style={{ marginHorizontal: 35, padding: 10 }}></View>
-            )}
-
-            {/* <TouchableOpacity
+              {/* <TouchableOpacity
               onPress={() => {
                 deleteChatHistory();
                 // leaveChat();
@@ -619,32 +643,31 @@ const UserChatsScreen = ({ navigation, route }) => {
             >
               <Image source={ic_menu} />
             </TouchableOpacity> */}
-            <Menu
-              renderer={Popover}
-              rendererProps={{ placement: 'bottom' }}
-              onSelect={(value) => onInviteOptionSelect(value)}
-            >
-              <MenuTrigger children={<Image source={ic_menu} />} />
+              <Menu
+                renderer={Popover}
+                rendererProps={{ placement: "bottom" }}
+                onSelect={(value) => onInviteOptionSelect(value)}
+              >
+                <MenuTrigger children={<Image source={ic_menu} />} />
 
-              <MenuOptions>
-                <MenuOption value={1}>
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      color: colors.black,
-                      fontWeight: 'bold',
-                      padding: 5,
-                    }}
-                  >
-                    {uniqueId ? 'Leave Group' : 'Delete chat'}
-                  </Text>
-                </MenuOption>
-              </MenuOptions>
-            </Menu>
-          </View>
+                <MenuOptions>
+                  <MenuOption value={1}>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        color: colors.black,
+                        fontWeight: "bold",
+                        padding: 5,
+                      }}
+                    >
+                      {uniqueId ? "Leave Group" : "Delete chat"}
+                    </Text>
+                  </MenuOption>
+                </MenuOptions>
+              </Menu>
+            </View>
           </View>
         </View>
-
 
         <ImageBackground style={{ flex: 1 }} source={ic_chat_bg}>
           {/* <View style={styles.dateBg}>
@@ -652,43 +675,42 @@ const UserChatsScreen = ({ navigation, route }) => {
             Thu , 12 Jan 2023
           </Text>
         </View> */}
-         <KeyboardAvoidingView
-              behavior={Platform.OS === 'ios' ? 'padding' : null}
-               style={{flex:1}}
-               keyboardVerticalOffset={65}
-             
-              >
-          {groupedChats.length > 0 ? (
-            <FlatList
-              inverted
-              data={groupedChats}
-              renderItem={renderItem}
-              keyExtractor={(group) => group.timestamp}
-              style={{ flex: 1 }}
-            />
-          ) : (
-            <View
-              style={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Text
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : null}
+            style={{ flex: 1 }}
+            keyboardVerticalOffset={65}
+          >
+            {groupedChats.length > 0 ? (
+              <FlatList
+                inverted
+                data={groupedChats}
+                renderItem={renderItem}
+                keyExtractor={(group) => group.timestamp}
+                style={{ flex: 1 }}
+              />
+            ) : (
+              <View
                 style={{
-                  alignSelf: 'center',
-                  fontSize: 20,
-                  color: colors.black,
-                  fontWeight: 'bold',
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
-                Start New Conversation!
-              </Text>
-            </View>
-          )}
-        <View style={styles.sendMessageImg}>
-            <View style={styles.searchTnputStyle}>
-              {/* <KeyboardAvoidingView
+                <Text
+                  style={{
+                    alignSelf: "center",
+                    fontSize: 20,
+                    color: colors.black,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Start New Conversation!
+                </Text>
+              </View>
+            )}
+            <View style={styles.sendMessageImg}>
+              <View style={styles.searchTnputStyle}>
+                {/* <KeyboardAvoidingView
                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
                 style={{ flex: 1 }}
                 keyboardVerticalOffset={64}
@@ -702,38 +724,41 @@ const UserChatsScreen = ({ navigation, route }) => {
                   onChangeText={(text) => onChangeMessageInput(text)}
                   value={messageInput}
                   numberOfLines={3}
-                   ReturnKeyType='done' 
+                  ReturnKeyType="done"
                 />
-              {/* </KeyboardAvoidingView> */}
-           
-             <View style={{flexDirection:'row'}} >
+                {/* </KeyboardAvoidingView> */}
+
+                <View style={{ flexDirection: "row" }}>
+                  <TouchableOpacity
+                    style={{ justifyContent: "center" }}
+                    onPress={uploadFile}
+                  >
+                    <Image source={ic_chat_attach} />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{ alignSelf: "center" }}
+                    onPress={() => setState({ callModal: true })}
+                  >
+                    <Image source={ic_chat_call} />
+                  </TouchableOpacity>
+                </View>
+              </View>
               <TouchableOpacity
-                style={{ justifyContent: 'center' }}
-                onPress={uploadFile}
+                style={styles.arrowStyle}
+                onPress={() => {
+                  sendChatMethod(messageInput);
+                }}
               >
-                <Image source={ic_chat_attach} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{ alignSelf: 'center' }}
-                onPress={() => setState({ callModal: true })}
-              >
-                <Image source={ic_chat_call} />
+                <Image
+                  style={{
+                    transform: [{ rotate: "180deg" }],
+                    alignSelf: "center",
+                  }}
+                  source={ic_back}
+                />
               </TouchableOpacity>
             </View>
-            </View>
-            <TouchableOpacity
-              style={styles.arrowStyle}
-              onPress={() => {
-                sendChatMethod(messageInput);
-              }}
-            >
-              <Image
-                style={{ transform: [{ rotate: '180deg' }], alignSelf: 'center' }}
-                source={ic_back}
-              />
-            </TouchableOpacity>
-        </View>
-        </KeyboardAvoidingView>
+          </KeyboardAvoidingView>
         </ImageBackground>
         <Modal
           animationIn="slideInUp"
@@ -746,8 +771,8 @@ const UserChatsScreen = ({ navigation, route }) => {
             <TouchableOpacity
               style={styles.callBoxStyle}
               onPress={() => {
-                if (callData) {
-                  checkPeermission('voiceCall')
+                if (callData || groupName) {
+                  checkPeermission("voiceCall");
                 }
               }}
             >
@@ -755,41 +780,42 @@ const UserChatsScreen = ({ navigation, route }) => {
 
               <CustomText
                 //fontWeight={"bold"}
-                text={'Voice Call'}
+                text={"Voice Call"}
                 textColor={colors.secondary}
                 textSize={22}
                 marginLeft={wp(6)}
               />
             </TouchableOpacity>
             <TouchableOpacity
-              style={{ flexDirection: 'row', alignItems: 'center' }}
+              style={{ flexDirection: "row", alignItems: "center" }}
               onPress={() => {
-                if (callData) {
-                  checkPeermission('videoCall')
-                
+                if (callData || groupName) {
+                  if (!groupName) {
+                    checkPeermission("videoCall");
+                  }
                 }
               }}
             >
               <Image source={ic_videocall} />
               <CustomText
                 //fontWeight={"bold"}
-                text={'Video Call'}
+                text={"Video Call"}
                 textColor={colors.secondary}
                 textSize={22}
                 marginLeft={wp(3)}
               />
             </TouchableOpacity>
             <TouchableOpacity
-              style={{ alignItems: 'flex-end' }}
+              style={{ alignItems: "flex-end" }}
               onPress={() => setState({ callModal: false })}
             >
               <CustomText
                 //fontWeight={"bold"}
-                text={'CANCEL'}
+                text={"CANCEL"}
                 textColor={colors.secondary}
                 textSize={20}
-              //textAlign={'center'}
-              //marginLeft={wp(50)}
+                //textAlign={'center'}
+                //marginLeft={wp(50)}
               />
             </TouchableOpacity>
           </View>

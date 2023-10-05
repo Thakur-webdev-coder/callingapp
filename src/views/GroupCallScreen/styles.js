@@ -8,8 +8,8 @@ import colors from "../../../assets/colors";
 export default StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: colors.black,
-    flexDirection: "column",
+    height:'100%'
+    // flexDirection: "column",
   },
   backArrowBox: {
     height: hp(2),
@@ -33,7 +33,7 @@ export default StyleSheet.create({
     paddingHorizontal: wp(3),
     backgroundColor: colors.white,
     paddingBottom: hp(1),
-    flex: 0.55,
+    // flex: 0.55,
 
     // alignContent:'flex-end',
     // /backgroundColor:'red'

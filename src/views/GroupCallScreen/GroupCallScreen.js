@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   AppState,
   BackHandler,
+  FlatList,
   Image,
   SafeAreaView,
   Text,
@@ -48,12 +49,22 @@ import {
   MEDIA_TYPE,
 } from "../../lib-jitsi-meet/constants";
 import { getTrackByMediaTypeAndParticipant } from "../../lib-jitsi-meet/functions";
-import { hitJoinVideoCallApi, hithangUpCallApi } from "../../constants/APi";
+import {
+  hitJoinVideoCallApi,
+  hithangUpCallApi,
+  hitJoinGroupVideoCallApi,
+  hitgroupVideoCallNotify,
+} from "../../constants/APi";
 import { Show_Toast } from "../../utils/toast";
 import InCallManager from "react-native-incall-manager";
 import colors from "../../../assets/colors";
 import { generateRandomString, secondsToHMS } from "../../utils/commonUtils";
 import Loading from "react-native-whc-loading";
+
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+
+import { Dimensions } from "react-native";
+const windowHeight = Dimensions.get("window").height;
 
 let roomId = null;
 
@@ -68,7 +79,12 @@ const GroupCallScreen = ({ navigation, route }) => {
   );
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log("getRemoteParticipants", participants);
+  console.log(
+    "getRemoteParticipants",
+    participants,
+    route.params,
+    "=========71 group callss"
+  );
 
   const [smallVideoID, setSmallVideoId] = useState(participants.local.id);
   const [timerCount, setTimerCount] = useState(0);
@@ -91,6 +107,8 @@ const GroupCallScreen = ({ navigation, route }) => {
     MEDIA_TYPE.VIDEO,
     smallVideoID
   );
+
+  let AllIds = [smallVideoID, ...largeVideoId];
   useEffect(() => {
     let interval;
 
@@ -168,13 +186,24 @@ const GroupCallScreen = ({ navigation, route }) => {
 
   const hitJoinVideoApi = async () => {
     const data = new FormData();
-    data.append("receiver_phone", callData);
+
+    console.log(callData, "=======182=====>>>8222222222");
+
+    const filteredList =
+      callData.length && callData?.filter((item) => item !== username);
+
+    const participants = filteredList?.join(", ");
+
+    console.log(participants, "========184====>>>>>>>>>>>>", username);
+
+    data.append("receiver_phone", participants);
     data.append("sender_phone", username);
     data.append("meeting_url", roomId);
     data.append("Type", voiceCall ? "A" : "V");
+    data.append("call_type", "group");
 
     console.log("data -->", data);
-    hitJoinVideoCallApi(data).then((response) => {
+    hitgroupVideoCallNotify(data).then((response) => {
       if (response.data.result == "success") {
         checkPeermission();
       } else {
@@ -289,8 +318,9 @@ const GroupCallScreen = ({ navigation, route }) => {
       });
   };
 
+  console.log(participants.sortedRemoteParticipants.length, "==========322");
   return (
-    <SafeAreaView style={voiceCall ? AppStyle.wrapper : styles.wrapper}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "orange" }}>
       <View style={{ flex: 4 }}>
         {voiceCall ? (
           <View>
@@ -303,7 +333,7 @@ const GroupCallScreen = ({ navigation, route }) => {
 
             <CustomText
               textColor={colors.black}
-              text={callData}
+              text={"group Call"}
               alignText={"center"}
               textSize={20}
               marginTop={hp(5)}
@@ -321,15 +351,15 @@ const GroupCallScreen = ({ navigation, route }) => {
             <Image style={styles.avatarStyle} source={ic_callAvatar} />
           </View>
         ) : (
-          <View style={{ flex: 1 }}>
-            <RTCView
-              style={{ flex: 1 }}
+          <>
+            {/* <RTCView
+              style={{ height: "100%", backgroundColor: "teal" }}
               objectFit="cover"
               mirror={largeVideoTrack?.mirror}
               streamURL={largeVideoTrack?.jitsiTrack?.stream.toURL()}
-            />
+            /> */}
 
-            {isLoading ? (
+            {/* {isLoading ? (
               <Text
                 style={{
                   color: colors.white,
@@ -345,28 +375,46 @@ const GroupCallScreen = ({ navigation, route }) => {
               >
                 Connecting
               </Text>
-            ) : null}
+            ) : null} */}
 
-            {participants.sortedRemoteParticipants.length > 0 ? (
-              <TouchableOpacity
-                style={{
-                  height: hp(25),
-                  width: wp(40),
-                  backgroundColor: "green",
-                  position: "absolute",
-                  right: 10,
-                  bottom: hp(5),
-                }}
-                onPress={() => switchStreamUrl()}
-              >
-                <RTCView
-                  style={{ height: hp(25), width: wp(40) }}
-                  objectFit="cover"
-                  streamURL={smallVideoTrack?.jitsiTrack?.stream.toURL()}
-                />
-              </TouchableOpacity>
-            ) : null}
-          </View>
+            {/* {participants.sortedRemoteParticipants.length > 0 &&
+            participants.sortedRemoteParticipants.length <
+              2 ? // <View style={{ height: "100%"}}>
+            //   <TouchableOpacity
+            //   style={{
+            //     height: "25%", width: "40%",
+            //     backgroundColor: "blue",
+            //     position: "absolute",
+            //     right: 10,
+            //     bottom: hp(5),
+            //     flex:1
+            //   }}
+            //   onPress={() => switchStreamUrl()}
+            // >
+            //   <RTCView
+            //     style={{ height: "605%", width: "40%" }}
+            //     objectFit="cover"
+            //     streamURL={smallVideoTrack?.jitsiTrack?.stream.toURL()}
+            //   />
+            //   </TouchableOpacity>
+            // </View>
+            null : (
+              <View style={{ flex: 1 }}>
+                <Text style={{ color: "black", fontSize: 20 }}>
+                  GROUP VIDEO IS IN TESTING MODE
+                </Text>
+
+                {/* <FlatList
+                  // numColumns={2}
+                  data={[{name:"d"},{name:"g"},{name:"4"}]}
+                  keyExtractor={(item) => item?.id}
+                  renderItem={(item) => <MultiParticipants item={item} />}
+                />  */}
+            {/* </View>  */}
+
+            {/* ""
+            )} */}
+          </>
         )}
       </View>
 
@@ -415,4 +463,49 @@ const GroupCallScreen = ({ navigation, route }) => {
     </SafeAreaView>
   );
 };
+
+const MultiParticipants = ({ item: { item } }) => {
+  console.log("DENDER HO RHA HAI");
+  const { tracks, participants }: any = useSelector((state) => state);
+  // const bottomTabHeight = useBottomTabBarHeight();
+  // const adjustFlot = bottomTabHeight;
+  // const editwindowHeight = windowHeight - adjustFlot;
+  const parcipanLength = participants?.sortedRemoteParticipants?.length;
+
+  InCallManager.stopRingback();
+  let AllVideoTrack = getTrackByMediaTypeAndParticipant(
+    tracks,
+    MEDIA_TYPE.VIDEO,
+    item
+  );
+  return (
+    <View
+      style={{
+        // flex: 1,
+        // Adjust the factor (100) according to your preference
+        borderWidth: 10,
+        height: "100%",
+        width: "100%",
+      }}
+    >
+      <RTCView
+        style={{
+          height: "100%",
+          width: "100%",
+          backgroundColor: "pink",
+          borderWidth: 2,
+          borderColor: "red",
+        }}
+        objectFit="cover"
+        mirror={AllVideoTrack?.mirror}
+        streamURL={AllVideoTrack?.jitsiTrack?.stream.toURL()}
+      />
+
+      {/* <View
+        style={{ padding: 30, backgroundColor: "red", height: 200, width: 300 }}
+      ></View> */}
+    </View>
+  );
+};
+
 export default GroupCallScreen;

@@ -52,7 +52,8 @@ const TabNavigator = () => {
 
   const onSipCallReceived = (call) => {
     sendDataTonofiyHandler(call);
-    InCallManager.startRingtone("_DEFAULT_");
+
+    InCallManager.startRingtone();
     navigation.navigate("IncomingAudioCall", { call });
   };
 

@@ -68,6 +68,7 @@ const IncomingAudioCall = ({ navigation, route }) => {
 
   const onSipCallAccepted = () => {
     console.log("onSipCallAccepted ->");
+    InCallManager.stopRingback();
     InCallManager.stopRingtone();
     Vibration.cancel();
   };

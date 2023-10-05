@@ -34,6 +34,7 @@ import {
 } from "react-native-responsive-screen";
 import { openSettings, PERMISSIONS, request, requestMultiple, RESULTS } from "react-native-permissions";
 import NetInfo from "@react-native-community/netinfo";
+import InCallManager from "react-native-incall-manager";
 
 
 const CallDetailsScreen = ({ navigation, route }) => {
@@ -232,10 +233,15 @@ const CallDetailsScreen = ({ navigation, route }) => {
             <View>
               <TouchableOpacity
                 onPress={() => {
+
+
+
+                
                   NetInfo.fetch().then((status)=>{
                     if(status.isConnected){
                       if (balanceDetail.credit > 0) {
                         if(Sip.isRegistered){
+                          InCallManager.startRingback();
                           console.log('inhererrere------->>>><<<<<');
                         Sip.makeCall(phoneNumber.replace(/ /g, ''));
                         navigation.navigate("CallingScreen", {
@@ -264,7 +270,7 @@ const CallDetailsScreen = ({ navigation, route }) => {
                 <View style={styles.imgBoxStyle}>
                   <Image source={ic_phoneforward} />
                 </View>
-                <Text style={styles.iconTilteStle}> Paid Call</Text>
+                <Text style={styles.iconTilteStle}> paid call</Text>
               </TouchableOpacity>
             </View>
           </View>

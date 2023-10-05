@@ -49,13 +49,14 @@ const CallingScreen = ({ navigation, route }) => {
   useEffect(() => {
     let interval;
     const callTerminatedListener = Sip.on("call_terminated", () => {
+      InCallManager.stopRingback();
       isCallGoing = false;
       InCallManager.setSpeakerphoneOn(false);
       navigation.goBack();
     });
     const callAcceptedListener = Sip.on("call_accepted", () => {
       isCallGoing = true;
-
+      InCallManager.stopRingback();
       interval = setInterval(() => {
         setTimerCount((lastTimerCount) => {
           return lastTimerCount + 1;
@@ -70,12 +71,16 @@ const CallingScreen = ({ navigation, route }) => {
   }, []);
 
   const incomingCallNotification = async () => {
+
+    const data = new FormData();
+  
     data.append("receiver_phone", callData);
     data.append("sender_phone", username);
     const apiUrl =
       "https://billing.kokoafone.com/billing/kokofone_api/call_notification/silent_audio_notification.php";
     postFormData(apiUrl, data)
       .then((data) => {
+  
         const { success } = JSON.parse(data.msg);
         if (success) {
         } // Handle the JSON response data
@@ -115,6 +120,7 @@ const CallingScreen = ({ navigation, route }) => {
 
   const callDisconnect = () => {
     Sip.hangupCall(Sip.ActiveCallId);
+    InCallManager.stopRingback();
     navigation.goBack();
   };
 
@@ -138,7 +144,6 @@ const CallingScreen = ({ navigation, route }) => {
       }
     }
   };
-
   return (
     <SafeAreaView style={AppStyle.wrapper}>
       <View style={AppStyle.secondWrapper}>
@@ -149,10 +154,10 @@ const CallingScreen = ({ navigation, route }) => {
         <CustomText
           textColor={colors.black}
           text={
-            callData.name
-              ? callData.name
-              : callData.givenName
-              ? callData.givenName + " " + callData.familyName
+            callData?.name
+              ? callData?.name
+              : callData?.givenName
+              ? callData?.givenName + " "
               : null
           }
           alignText={"center"}
@@ -163,7 +168,15 @@ const CallingScreen = ({ navigation, route }) => {
 
         <CustomText
           textColor={colors.black}
-          text={Sip.getRemoteNumber(Sip.ActiveCallId)}
+          text={
+            Sip.getRemoteNumber(Sip.ActiveCallId) &&
+            Sip.getRemoteNumber(Sip.ActiveCallId).includes("_web")
+              ? Sip.getRemoteNumber(Sip.ActiveCallId)?.slice(
+                  0,
+                  Sip.getRemoteNumber(Sip.ActiveCallId).indexOf("_web")
+                )
+              : Sip.getRemoteNumber(Sip.ActiveCallId)
+          }
           alignText={"center"}
           textSize={26}
           // marginTop={hp(10)}

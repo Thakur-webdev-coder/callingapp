@@ -16,6 +16,9 @@ const CustomText = ({
   width,
   marginLeft
 }) => {
+
+
+  console.log(text,"============21")
   return (
     <Text
       style={[
@@ -39,7 +42,7 @@ const CustomText = ({
       ]}
       allowFontScaling={false}
     >
-      {text}
+      {text} 
     </Text>
   );
 };

@@ -1,4 +1,4 @@
- import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   BackHandler,
@@ -9,8 +9,8 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from 'react-native';
-import colors from '../../../assets/colors';
+} from "react-native";
+import colors from "../../../assets/colors";
 import {
   logo_smallfrog,
   ic_setting,
@@ -33,20 +33,19 @@ import {
   ic_money,
   ic_transfer_credit,
   ic_tvrecharge,
-} from '../../routes/imageRoutes';
-import styles from './styles';
-import AppStyle from '../../components/AppStyle';
+} from "../../routes/imageRoutes";
+import styles from "./styles";
+import AppStyle from "../../components/AppStyle";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
-import CustomText from '../../components/CustomText';
-import Modal from 'react-native-modal';
-import { Show_Toast } from '../../utils/toast';
-import { useDispatch, useSelector } from 'react-redux';
-import InCallManager from 'react-native-incall-manager';
-import notifee from '@notifee/react-native';
-
+} from "react-native-responsive-screen";
+import CustomText from "../../components/CustomText";
+import Modal from "react-native-modal";
+import { Show_Toast } from "../../utils/toast";
+import { useDispatch, useSelector } from "react-redux";
+import InCallManager from "react-native-incall-manager";
+import notifee from "@notifee/react-native";
 
 import {
   hitCreditTransferApi,
@@ -54,41 +53,43 @@ import {
   hitFetchUserBalanceApi,
   hithangUpCallApi,
   hitVoucherApi,
-} from '../../constants/APi';
+} from "../../constants/APi";
 import {
   saveBalanceData,
   saveEncrLoginDetails,
   saveLoginDetails,
   saveNotificationData,
-} from '../../redux/reducer';
-import { CommonActions, useIsFocused } from '@react-navigation/native';
-import CommonHeader from '../../components/Header/commonHeader';
-import { removeLocalParticipant } from '../../redux/participants';
+} from "../../redux/reducer";
+import { CommonActions, useIsFocused } from "@react-navigation/native";
+import CommonHeader from "../../components/Header/commonHeader";
+import { removeLocalParticipant } from "../../redux/participants";
 import {
   changelCreated,
   navigateScreen,
-} from '../../utils/notificationHandler';
-import PushNotification from 'react-native-push-notification';
+} from "../../utils/notificationHandler";
+import PushNotification from "react-native-push-notification";
 
 let myBalanceData = null;
 let usernameEncryptedCode = null;
 let passwordEncryptedCode = null;
 let activeScreen = true;
 const Home = ({ navigation }) => {
-  const [recepientNum, setRecepientNum] = useState('');
-  const [transfreAmt, setTransferAmt] = useState('');
+  const [recepientNum, setRecepientNum] = useState("");
+  const [transfreAmt, setTransferAmt] = useState("");
 
   const [state, setState] = useState({
-    voucherNum: '',
+    voucherNum: "",
   });
   const [voucherModal, setVoucherModal] = useState(false);
   const [balanceModal, setBalanceModal] = useState(false);
   const [transferModal, setTransferModal] = useState(false);
 
   const [LogoutModal, setLogOutModal] = useState(false);
-  const { loginDetails = {}, balanceDetail = {}, saveStatus = {} } = useSelector(
-    (store) => store.sliceReducer
-  );
+  const {
+    loginDetails = {},
+    balanceDetail = {},
+    saveStatus = {},
+  } = useSelector((store) => store.sliceReducer);
 
   const { conference } = useSelector((state) => state);
 
@@ -96,17 +97,13 @@ const Home = ({ navigation }) => {
 
   const dispatch = useDispatch();
 
-
-
   useEffect(() => {
-
     notifee.onForegroundEvent(async ({ type, detail }) => {
-      const { notification_type } = detail?.notification?.data
-      const { id } = detail?.pressAction
+      const { notification_type } = detail?.notification?.data;
+      const { id } = detail?.pressAction;
       console.log("INHOMESCREEN=============", notification_type);
 
       if (id === "decline") {
-
         InCallManager.stopRingtone();
         const data = new FormData();
         data.append("receiver_number", detail.notification?.data?.sender_phone);
@@ -115,52 +112,48 @@ const Home = ({ navigation }) => {
         hithangUpCallApi(data).then((response) => {
           Store.dispatch(hangupMeeting());
         });
-
       } else if (id === "accept") {
         InCallManager.stopRingtone();
-        navigation.navigate('CallScreen', {
-          voiceCall: detail?.notification?.data?.Type == 'A' ? true : false,
+        navigation.navigate("CallScreen", {
+          voiceCall: detail?.notification?.data?.Type == "A" ? true : false,
           fromNotification: true,
           callData: detail?.notification?.data?.sender_phone,
           meetimgUrl: detail?.notification?.data?.Meeting_url,
         });
       } else if (notification_type === "call" && id === "default") {
         console.log("inc=============2222", detail);
-        navigation.navigate('IncomingScreen', {
+        navigation.navigate("IncomingScreen", {
           callData: detail?.notification?.data,
         });
-      } else if (notification_type === 'SINGLE_CHAT') {
-        console.log('hererrerererNotiitiitit----------');
-        setTimeout(()=>{
-        navigation.navigate('UserChatsScreen', {
-          callData: detail?.notification?.data.sid,
-        });
-      },200)
-      } else if (notification_type === 'GROUP_CHAT') {
+      } else if (notification_type === "SINGLE_CHAT") {
+        console.log("hererrerererNotiitiitit----------");
+        setTimeout(() => {
+          navigation.navigate("UserChatsScreen", {
+            callData: detail?.notification?.data.sid,
+          });
+        }, 200);
+      } else if (notification_type === "GROUP_CHAT") {
         let participants = detail?.notification?.data.participants;
-  
-        let result = participants.split(',').map(function (value) {
+
+        let result = participants.split(",").map(function (value) {
           return value.trim();
         });
-        setTimeout(()=>{
-          navigation.navigate('UserChatsScreen', {
+        setTimeout(() => {
+          navigation.navigate("UserChatsScreen", {
             groupName: detail?.notification?.data.group_name,
             uniqueId: detail?.notification?.data.group_id,
             participants: result,
           });
-        },200)
-        
+        }, 200);
       }
-
     });
-
 
     navigateScreen(navigation);
   }, []);
 
   useEffect(() => {
     hitBalanceAPi();
-    const unsubscribe = navigation.addListener('focus', () => {
+    const unsubscribe = navigation.addListener("focus", () => {
       hitBalanceAPi();
     });
     return unsubscribe;
@@ -170,11 +163,11 @@ const Home = ({ navigation }) => {
 
   useEffect(() => {
     if (isFocused) {
-      BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+      BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
     }
     return () => {
       BackHandler.removeEventListener(
-        'hardwareBackPress',
+        "hardwareBackPress",
         handleBackButtonClick
       );
     };
@@ -188,212 +181,210 @@ const Home = ({ navigation }) => {
   const DATA = [
     {
       id: 0,
-      name: 'Invite Friends',
+      name: "Invite Friends",
       image: ic_users,
     },
     {
       id: 1,
-      name: 'My Balance',
+      name: "My Balance",
       image: ic_mybalance,
     },
     {
       id: 2,
-      name: 'Buy Credits',
+      name: "Buy Credits",
       image: ic_buycredit,
     },
     {
       id: 3,
-      name: 'Transfer Credit',
+      name: "Transfer Credit",
       image: ic_transfer_credit,
     },
     {
       id: 4,
-      name: 'Transfer History',
+      name: "Transfer History",
       image: ic_transfer,
     },
     {
       id: 5,
-      name: 'Voucher Recharge',
+      name: "Voucher Recharge",
       image: ic_voucher,
     },
     {
       id: 6,
-      name: 'Call Details Report',
+      name: "Call Details Report",
       image: ic_calldetails,
     },
     {
       id: 7,
-      name: 'Mobile Money',
+      name: "Mobile Money",
       image: ic_money,
     },
     {
       id: 8,
-      name: 'Mobile Topup',
+      name: "Mobile Topup",
       image: ic_popup,
     },
     {
       id: 9,
-      name: 'Data Bundle',
+      name: "Data Bundle",
       image: ic_databundle,
     },
     {
       id: 10,
-      name: 'Electricity Bill Pay',
+      name: "Electricity Bill Pay",
       image: ic_electricity,
     },
     {
       id: 11,
-      name: 'TV Recharge',
+      name: "TV Recharge",
       image: ic_tvrecharge,
     },
     {
       id: 12,
-      name: 'Logout',
+      name: "Logout",
       image: ic_logout,
     },
-
   ];
 
   const DATA2 = [
     {
       id: 0,
-      name: 'Invite Friends',
+      name: "Invite Friends",
       image: ic_users,
     },
     {
       id: 1,
-      name: 'My Balance',
+      name: "My Balance",
       image: ic_mybalance,
     },
 
     {
       id: 2,
-      name: 'Transfer Credit',
+      name: "Transfer Credit",
       image: ic_transfer_credit,
     },
     {
       id: 3,
-      name: 'Transfer History',
+      name: "Transfer History",
       image: ic_transfer,
     },
     {
       id: 4,
-      name: 'Voucher Recharge',
+      name: "Voucher Recharge",
       image: ic_voucher,
     },
     {
       id: 5,
-      name: 'Call Details Report',
+      name: "Call Details Report",
       image: ic_calldetails,
     },
 
-
     {
       id: 6,
-      name: 'Data Bundle',
+      name: "Data Bundle",
       image: ic_databundle,
     },
 
     {
       id: 7,
-      name: 'Logout',
+      name: "Logout",
       image: ic_logout,
     },
     {
       id: 8,
-      name: 'Delete Account',
+      name: "Delete Account",
       image: ic_logout,
     },
   ];
   const ViewItemClicked_Method = (name) => {
     switch (name) {
-      case 'Invite Friends':
+      case "Invite Friends":
         // navigation.navigate("InviteScreen");
-        navigation.navigate('InviteScreen');
+        navigation.navigate("InviteScreen");
         break;
 
-      case 'My Balance':
+      case "My Balance":
         setBalanceModal(true);
         break;
 
-      case 'Buy Credits':
-        navigation.navigate('WebViewScreen', {
+      case "Buy Credits":
+        navigation.navigate("WebViewScreen", {
           url: `https://billing.kokoafone.com/billing/customer/mobile_payment.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
-          title: 'Buy Credit',
+          title: "Buy Credit",
         });
         break;
 
-      case 'Transfer Credit':
+      case "Transfer Credit":
         setTransferModal(true);
         break;
 
-      case 'Transfer History':
-        navigation.navigate('TransferHistory');
+      case "Transfer History":
+        navigation.navigate("TransferHistory");
         break;
 
-      case 'Call Details Report':
-        navigation.navigate('CallReportsScreen');
+      case "Call Details Report":
+        navigation.navigate("CallReportsScreen");
         break;
 
-      case 'Mobile Money':
-        navigation.navigate('WebViewScreen', {
+      case "Mobile Money":
+        navigation.navigate("WebViewScreen", {
           url: `https://billing.kokoafone.com/billing/customer/billing_mobile_money.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
-          title: 'Mobile Money',
+          title: "Mobile Money",
         });
         break;
 
-      case 'Mobile Topup':
-        navigation.navigate('WebViewScreen', {
+      case "Mobile Topup":
+        navigation.navigate("WebViewScreen", {
           url: `https://billing.kokoafone.com/billing/customer/billing_airtime.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
-          title: 'Mobile Topup',
+          title: "Mobile Topup",
         });
         break;
 
-      case 'Data Bundle':
-        navigation.navigate('WebViewScreen', {
+      case "Data Bundle":
+        navigation.navigate("WebViewScreen", {
           url: `https://billing.kokoafone.com/billing/customer/billing_databundles.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
-          title: 'Data Bundle',
+          title: "Data Bundle",
         });
-      case 'Electricity Bill Pay':
-        navigation.navigate('WebViewScreen', {
+      case "Electricity Bill Pay":
+        navigation.navigate("WebViewScreen", {
           url: `https://billing.kokoafone.com/billing/customer/billing_electricity_bill.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
-          title: 'Electricity Bill Pay',
+          title: "Electricity Bill Pay",
         });
-      case 'TV Recharge':
-        navigation.navigate('WebViewScreen', {
+      case "TV Recharge":
+        navigation.navigate("WebViewScreen", {
           url: `https://billing.kokoafone.com/billing/customer/billing_dth.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
-          title: 'TV Recharge',
+          title: "TV Recharge",
         });
         break;
-      case 'Voucher Recharge':
+      case "Voucher Recharge":
         setVoucherModal(true);
         break;
 
-      case 'Logout':
+      case "Logout":
         LogoutMethod();
         break;
-      case 'Delete Account':
+      case "Delete Account":
         DeleteAccountMethod();
         break;
       default:
-        console.log('Voucher Recharge');
+        console.log("Voucher Recharge");
     }
   };
 
   const hitBalanceAPi = async () => {
-    console.log('herrreee=========');
+    console.log("herrreee=========");
 
     // setIsLoading(true);
 
     const data = new FormData();
-    data.append('source', did);
+    data.append("source", did);
     const myResponse = await hitEncryptionApi(data);
 
-    if (myResponse.data.result == 'success') {
+    if (myResponse.data.result == "success") {
       usernameEncryptedCode = myResponse.data.value;
       hitPhoneEncryptionAPi();
     } else {
-      alert('Please enter a valid phone number.');
+      alert("Please enter a valid phone number.");
     }
   };
 
@@ -401,11 +392,11 @@ const Home = ({ navigation }) => {
     const { username, password } = loginDetails;
 
     const data = new FormData();
-    data.append('source', password);
+    data.append("source", password);
 
     const myResponse = await hitEncryptionApi(data);
 
-    if (myResponse.data.result == 'success') {
+    if (myResponse.data.result == "success") {
       passwordEncryptedCode = myResponse?.data?.value;
       dispatch(
         saveEncrLoginDetails({
@@ -418,65 +409,65 @@ const Home = ({ navigation }) => {
     }
   };
   const hitFetchBalanceApi = async () => {
-    console.log('myDtaaaa___', usernameEncryptedCode, passwordEncryptedCode);
+    console.log("myDtaaaa___", usernameEncryptedCode, passwordEncryptedCode);
 
     // setIsLoading(false);
 
     const data = new FormData();
-    data.append('cust_id', usernameEncryptedCode);
-    data.append('cust_pass', passwordEncryptedCode);
-    console.log('myResponseData=====', data);
+    data.append("cust_id", usernameEncryptedCode);
+    data.append("cust_pass", passwordEncryptedCode);
+    console.log("myResponseData=====", data);
 
     myBalanceData = await hitFetchUserBalanceApi(data);
-    console.log('myResponseData=====', myBalanceData.data);
+    console.log("myResponseData=====", myBalanceData.data);
     dispatch(saveBalanceData(myBalanceData.data));
   };
 
   const RechargeMethod = async () => {
     const { voucherNum } = state;
-    console.log('aaaaaa', voucherNum);
+    console.log("aaaaaa", voucherNum);
     if (voucherNum.length != 0) {
       setVoucherModal(false);
       // setIsLoading(true);
 
       const data = new FormData();
-      data.append('source', voucherNum);
+      data.append("source", voucherNum);
       const myResponse = await hitEncryptionApi(data);
 
-      if (myResponse.data.result == 'success') {
+      if (myResponse.data.result == "success") {
         // setIsLoading(false);
         const vouchereEncryptedCode = myResponse.data.value;
         hitVoucherApi_Method(vouchereEncryptedCode);
       } else {
         // setIsLoading(false);
       }
-      setState({ voucherNum: '' });
+      setState({ voucherNum: "" });
     } else {
-      Alert.alert('', 'Please enter a voucher number.');
+      Alert.alert("", "Please enter a voucher number.");
     }
 
     //setRechargerModal(true);
   };
 
   const TransferCreditMethod = async () => {
-    console.log('rrrrrrrr--------', recepientNum);
+    console.log("rrrrrrrr--------", recepientNum);
     if (recepientNum.length >= 6 && transfreAmt.length > 0) {
-      console.log('numberr', recepientNum);
+      console.log("numberr", recepientNum);
 
       setTransferModal(false);
       const data = new FormData();
-      data.append('source', recepientNum);
+      data.append("source", recepientNum);
       const myResponse = await hitEncryptionApi(data);
 
-      console.log('myResponse', myResponse.data);
+      console.log("myResponse", myResponse.data);
 
-      if (myResponse.data.result == 'success') {
+      if (myResponse.data.result == "success") {
         const recepientEncryptedNumber = myResponse.data.value;
         hitTransferCreditApi(recepientEncryptedNumber);
       } else {
       }
     } else {
-      Alert.alert('', 'Please enter valid recepient number or amount.');
+      Alert.alert("", "Please enter valid recepient number or amount.");
     }
   };
 
@@ -484,13 +475,13 @@ const Home = ({ navigation }) => {
     const { transfreAmt } = state;
 
     const data = new FormData();
-    data.append('cust_id', usernameEncryptedCode);
-    data.append('cust_pass', passwordEncryptedCode);
-    data.append('credit', transfreAmt);
-    data.append('transferaccount', recepientAccount);
+    data.append("cust_id", usernameEncryptedCode);
+    data.append("cust_pass", passwordEncryptedCode);
+    data.append("credit", transfreAmt);
+    data.append("transferaccount", recepientAccount);
     const myResponse = await hitCreditTransferApi(data);
 
-    if (myResponse.data.result == 'sucess') {
+    if (myResponse.data.result == "sucess") {
       Show_Toast(myResponse.data.msg);
     } else {
       Show_Toast(myResponse.data.msg);
@@ -499,12 +490,12 @@ const Home = ({ navigation }) => {
 
   const hitVoucherApi_Method = async (vouchereCode) => {
     const data = new FormData();
-    data.append('username', usernameEncryptedCode);
-    data.append('password', passwordEncryptedCode);
-    data.append('voucher', vouchereCode);
+    data.append("username", usernameEncryptedCode);
+    data.append("password", passwordEncryptedCode);
+    data.append("voucher", vouchereCode);
     const myResponse = await hitVoucherApi(data);
 
-    if (myResponse.data.result == 'success') {
+    if (myResponse.data.result == "success") {
       // setIsLoading(false);
       Show_Toast(myResponse.data.msg);
     } else {
@@ -521,7 +512,7 @@ const Home = ({ navigation }) => {
     navigation?.dispatch(
       CommonActions.reset({
         index: 0,
-        routes: [{ name: 'Verify Screen' }],
+        routes: [{ name: "Verify Screen" }],
       })
     );
     dispatch(saveLoginDetails(null));
@@ -529,32 +520,28 @@ const Home = ({ navigation }) => {
     dispatch(removeLocalParticipant());
   };
   const DeleteAccountMethod = () => {
-    Alert.alert(
-      'Delete Account',
-      'Are you sure you want to Delete Account?',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel'
+    Alert.alert("Delete Account", "Are you sure you want to Delete Account?", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        onPress: () => {
+          setTimeout(() => {
+            navigation?.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: "Boarding Screen" }],
+              })
+            );
+          }, 100);
+          // dispatch(saveLoginDetails(null));
+          // dispatch(saveBalanceData(null));
         },
-        {
-          text: 'OK',
-          onPress: () => {
-            setTimeout(() => {
-              navigation?.dispatch(
-                CommonActions.reset({
-                  index: 0,
-                  routes: [{ name: "Boarding Screen" }],
-                })
-              );
-            }, 100);
-            // dispatch(saveLoginDetails(null));
-            // dispatch(saveBalanceData(null));
-          }
-        }
-      ]
-    );
-  }
+      },
+    ]);
+  };
 
   const RenderList = ({ item, index }) => {
     return (
@@ -565,10 +552,10 @@ const Home = ({ navigation }) => {
         <Image source={item.image} />
         <CustomText
           textColor={colors.secondary}
-          textAlign={'center'}
+          textAlign={"center"}
           marginTop={hp(1)}
           text={item.name}
-          fontWeight={'600'}
+          fontWeight={"600"}
           textSize={13}
         />
       </TouchableOpacity>
@@ -578,7 +565,6 @@ const Home = ({ navigation }) => {
   return (
     <SafeAreaView style={AppStyle.wrapper}>
       <View style={AppStyle.homeMainView}>
-
         <View style={AppStyle.secondWrapper}>
           <View style={styles.headerStyle}>
             <CustomText
@@ -626,7 +612,6 @@ const Home = ({ navigation }) => {
         <View style={styles.wrapper2}>
           {/* <TouchableOpacity onPress={()=>shownote()}> */}
 
-
           <CustomText
             text={" Services"}
             textSize={20}
@@ -639,7 +624,13 @@ const Home = ({ navigation }) => {
           <FlatList
             columnWrapperStyle={{ justifyContent: "space-between" }}
             // data={DATA2}
-            data={Platform.OS == "ios" ? saveStatus && saveStatus == 0 ? DATA2 : DATA : DATA}
+            data={
+              Platform.OS == "ios"
+                ? saveStatus && saveStatus == 0
+                  ? DATA2
+                  : DATA
+                : DATA
+            }
             renderItem={RenderList}
             keyExtractor={(item, index) => item.name}
             numColumns={3}
@@ -709,7 +700,7 @@ const Home = ({ navigation }) => {
                 <CustomText
                   text={"OK"}
                   textSize={16}
-                  fontWeight={'600'}
+                  fontWeight={"600"}
                   textColor={colors.dodgeBlue}
                   marginLeft={wp(10)}
                   textAlign={"right"}
