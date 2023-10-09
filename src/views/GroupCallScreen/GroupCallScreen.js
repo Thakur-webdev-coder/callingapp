@@ -5,6 +5,7 @@ import {
   FlatList,
   Image,
   SafeAreaView,
+  StatusBar,
   Text,
   TouchableOpacity,
   View,
@@ -48,7 +49,12 @@ import {
   DEFAULT_MEETING_URL,
   MEDIA_TYPE,
 } from "../../lib-jitsi-meet/constants";
-import { getTrackByMediaTypeAndParticipant } from "../../lib-jitsi-meet/functions";
+import {
+  getAvatarColor,
+  getInitials,
+  getParticipantById,
+  getTrackByMediaTypeAndParticipant,
+} from "../../lib-jitsi-meet/functions";
 import {
   hitJoinVideoCallApi,
   hithangUpCallApi,
@@ -64,6 +70,7 @@ import Loading from "react-native-whc-loading";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 import { Dimensions } from "react-native";
+import Avatar from "../../utils/avatar";
 const windowHeight = Dimensions.get("window").height;
 
 let roomId = null;
@@ -75,8 +82,14 @@ const GroupCallScreen = ({ navigation, route }) => {
   const [enableVideo, setEnableVideo] = useState(false);
   const [enableAudio, setEnableAudio] = useState(false);
   const [largeVideoId, setLargeVideoId] = useState(
-    participants.sortedRemoteParticipants[0] || ""
+    participants.sortedRemoteParticipants || ""
   );
+
+  const { remote, local } = useSelector((store) => store.participants);
+  const participant = useSelector((state) =>
+    getParticipantById(state, "local")
+  );
+
   const [isLoading, setIsLoading] = useState(false);
 
   console.log(
@@ -96,11 +109,6 @@ const GroupCallScreen = ({ navigation, route }) => {
   console.log("participantsss", participants);
 
   const dispatch = useDispatch();
-  var largeVideoTrack = getTrackByMediaTypeAndParticipant(
-    tracks,
-    MEDIA_TYPE.VIDEO,
-    largeVideoId
-  );
 
   var smallVideoTrack = getTrackByMediaTypeAndParticipant(
     tracks,
@@ -135,14 +143,14 @@ const GroupCallScreen = ({ navigation, route }) => {
     }
 
     setLargeVideoId(
-      participants.sortedRemoteParticipants[0] || participants.local.id
+      participants.sortedRemoteParticipants || participants.local.id
     );
-    if (participants.sortedRemoteParticipants[0]) {
-      setLargeVideoId(participants.sortedRemoteParticipants[0]);
+    if (participants.sortedRemoteParticipants) {
+      setLargeVideoId(participants.sortedRemoteParticipants);
       setSmallVideoId(participants.local.id);
     }
 
-    if (participants.sortedRemoteParticipants[0] && !voiceCall) {
+    if (participants.sortedRemoteParticipants && !voiceCall) {
       setTimeout(() => {
         setIsLoading(false);
       }, 6000);
@@ -153,7 +161,7 @@ const GroupCallScreen = ({ navigation, route }) => {
     return () => {
       clearInterval(interval);
     };
-  }, [participants.local.id, participants.sortedRemoteParticipants[0]]);
+  }, [participants.local.id, participants.sortedRemoteParticipants]);
 
   const videoEnable = () => {
     if (!enableVideo) {
@@ -184,6 +192,38 @@ const GroupCallScreen = ({ navigation, route }) => {
     setSmallVideoId(largeVideoId);
   };
 
+  useEffect(() => {
+    console.log("in2nduseeffect----->>>");
+    // roomId = generateRandomString();
+    roomId = "Test";
+
+    console.log("roomId==========>", roomId);
+    if (fromNotification) {
+      console.log("inif--------->>>>");
+      dispatch(startMeeting(fromNotification ? meetimgUrl : roomId));
+      // checkPeermission();
+    } else {
+      console.log("inelse--------->>>>");
+      hitJoinVideoApi();
+    }
+
+    console.log("myyyy_tracksss", tracks);
+
+    const handleAppStateChange = (nextAppState) => {
+      if (nextAppState === "inactive") {
+        console.log("hitHanupCall----->>111");
+        hitHanupCall();
+      }
+    };
+
+    AppState.addEventListener("change", handleAppStateChange);
+
+    return () => {
+      AppState.removeEventListener("change", handleAppStateChange);
+      // backHandler.remove();
+    };
+  }, []);
+
   const hitJoinVideoApi = async () => {
     const data = new FormData();
 
@@ -194,8 +234,6 @@ const GroupCallScreen = ({ navigation, route }) => {
 
     const participants = filteredList?.join(", ");
 
-    console.log(participants, "========184====>>>>>>>>>>>>", username);
-
     data.append("receiver_phone", participants);
     data.append("sender_phone", username);
     data.append("meeting_url", roomId);
@@ -205,7 +243,8 @@ const GroupCallScreen = ({ navigation, route }) => {
     console.log("data -->", data);
     hitgroupVideoCallNotify(data).then((response) => {
       if (response.data.result == "success") {
-        checkPeermission();
+        // checkPeermission();
+        dispatch(startMeeting(fromNotification ? meetimgUrl : roomId));
       } else {
         InCallManager.stopRingback();
         Show_Toast("Something went Wrong");
@@ -233,42 +272,6 @@ const GroupCallScreen = ({ navigation, route }) => {
       setSpeaker(false);
     }
   };
-
-  useEffect(() => {
-    roomId = generateRandomString();
-
-    if (fromNotification) {
-      checkPeermission();
-    } else {
-      hitJoinVideoApi();
-    }
-
-    console.log("myyyy_tracksss", tracks);
-
-    const handleAppStateChange = (nextAppState) => {
-      if (nextAppState === "inactive") {
-        hitHanupCall();
-      }
-    };
-
-    AppState.addEventListener("change", handleAppStateChange);
-
-    const backAction = () => {
-      console.log("Back button is pressed");
-      hitHanupCall();
-      return true;
-    };
-
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
-    );
-
-    return () => {
-      AppState.removeEventListener("change", handleAppStateChange);
-      backHandler.remove();
-    };
-  }, []);
 
   const permissions =
     Platform.OS === "ios" ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA;
@@ -318,193 +321,190 @@ const GroupCallScreen = ({ navigation, route }) => {
       });
   };
 
-  console.log(participants.sortedRemoteParticipants.length, "==========322");
-  return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "orange" }}>
-      <View style={{ flex: 4 }}>
-        {voiceCall ? (
+  const parcipanLength = participants?.sortedRemoteParticipants?.length;
+
+  console.log("lengthhthththht", parcipanLength);
+
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60)
+      .toString()
+      .padStart(2, "0");
+    const remainingSeconds = (time % 60).toString().padStart(2, "0");
+    return `${minutes}:${remainingSeconds}`;
+  };
+
+  const renderVideos = ({ item, index }) => {
+    let largeVideoTrack = getTrackByMediaTypeAndParticipant(
+      tracks,
+      MEDIA_TYPE.VIDEO,
+      item
+    );
+
+    console.log(largeVideoTrack?.muted, "item.index====>");
+
+    var activeParticipant = remote[item] || local;
+    // console.log(p, "p=========>")
+    const initials = getInitials(activeParticipant?.name);
+
+    return (
+      <TouchableOpacity
+        activeOpacity={1}
+        //   onPress={() => {
+        //     setShowButton(!showButton);
+        //   }
+        // }
+        style={{
+          height:
+            parcipanLength <= 1
+              ? Platform.OS === "android"
+                ? hp(95)
+                : hp(92)
+              : Platform.OS === "android"
+              ? hp(46)
+              : hp(42),
+          width:
+            index === 2 && parcipanLength === 2
+              ? wp("99.5%")
+              : parcipanLength <= 1
+              ? wp(99.5)
+              : wp("50%"),
+          backgroundColor: "white",
+        }}
+      >
+        {largeVideoTrack?.muted == false ? (
           <View>
-            <TouchableOpacity
-              onPress={() => hitHanupCall()}
-              style={styles.backArrowBox}
-            >
-              <Image source={ic_brownArrow} />
-            </TouchableOpacity>
-
-            <CustomText
-              textColor={colors.black}
-              text={"group Call"}
-              alignText={"center"}
-              textSize={20}
-              marginTop={hp(5)}
-              fontWeight={"500"}
-            />
-            <CustomText
-              textColor={colors.black}
-              text={timerCount > 0 ? secondsToHMS(timerCount) : "Connecting"}
-              alignText={"center"}
-              textSize={12}
-              marginTop={hp(1)}
-              fontWeight={"400"}
-            />
-
-            <Image style={styles.avatarStyle} source={ic_callAvatar} />
-          </View>
-        ) : (
-          <>
-            {/* <RTCView
-              style={{ height: "100%", backgroundColor: "teal" }}
+            <RTCView
+              style={{
+                height:
+                  parcipanLength < 1
+                    ? Platform.OS === "android"
+                      ? hp(95)
+                      : hp(92)
+                    : Platform.OS === "android"
+                    ? hp(46)
+                    : hp(42),
+                width:
+                  index === 2 && parcipanLength === 2
+                    ? wp("99.5%")
+                    : parcipanLength <= 1
+                    ? wp(99.5)
+                    : wp("50%"),
+                backgroundColor: "black",
+              }}
               objectFit="cover"
               mirror={largeVideoTrack?.mirror}
               streamURL={largeVideoTrack?.jitsiTrack?.stream.toURL()}
-            /> */}
+            />
+            {/* <Text
+            style={{
+              position: "absolute",
+              zIndex: 10,
+              bottom: 10,
+              left: 30,
+              color: "blue",
+              fontSize: 18,
+              fontWeight: "bold",
+            }}
+          >
+            {activeParticipant?.name?.split("_")[0]}
+          </Text> */}
+          </View>
+        ) : (
+          <View>
+            <Avatar
+              size={150}
+              url={participant?.avatarURL}
+              style={{
+                height:
+                  parcipanLength <= 1
+                    ? Platform.OS === "android"
+                      ? hp(95)
+                      : hp(92)
+                    : Platform.OS === "android"
+                    ? hp(46)
+                    : hp(42),
+                width:
+                  index === 2 && parcipanLength === 2
+                    ? wp("99.5%")
+                    : parcipanLength <= 1
+                    ? wp(99.5)
+                    : wp("50%"),
+                backgroundColor: getAvatarColor(initials),
+              }}
+              color={getAvatarColor(initials)}
+              initials={initials}
+            />
+            {/* <Text
+              style={{
+                position: "absolute",
+                zIndex: 10,
+                bottom: 10,
+                left: 30,
+                color: "blue",
+                fontSize: 18,
+                fontWeight: "bold",
+              }}
+            >
+              {activeParticipant.name.split("_")[0]}
+            </Text> */}
+          </View>
+        )}
+      </TouchableOpacity>
+    );
+  };
 
-            {/* {isLoading ? (
-              <Text
+  return (
+    <SafeAreaView style={styles.containerStyle}>
+      {/* <StatusBar backgroundColor={'#000000'}/> */}
+      {smallVideoTrack === "" || smallVideoTrack == undefined ? (
+        <View>
+          <Text>Connectinggg.......</Text>
+        </View>
+      ) : (
+        <View style={{ flex: 1, backgroundColor: "#000000" }}>
+          {
+            <View
+              style={{
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <FlatList
+                numColumns={2}
+                showsVerticalScrollIndicator={false}
+                scrollEnabled={parcipanLength <= 1 ? false : true}
+                data={AllIds}
+                keyExtractor={(_, index) => index.toString()}
+                renderItem={renderVideos}
+              />
+              <View
                 style={{
-                  color: colors.white,
-                  flex: 1,
-                  alignSelf: "center",
-                  justifyContent: "center",
-                  fontSize: 20,
-                  fontWeight: "bold",
                   position: "absolute",
-                  top: hp(40),
-                  bottom: hp(40),
+                  height: 40,
+                  width: "20%",
+                  backgroundColor: "transparent",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  left: 10,
+                  top: 20,
+                  borderRadius: 5,
                 }}
               >
-                Connecting
-              </Text>
-            ) : null} */}
-
-            {/* {participants.sortedRemoteParticipants.length > 0 &&
-            participants.sortedRemoteParticipants.length <
-              2 ? // <View style={{ height: "100%"}}>
-            //   <TouchableOpacity
-            //   style={{
-            //     height: "25%", width: "40%",
-            //     backgroundColor: "blue",
-            //     position: "absolute",
-            //     right: 10,
-            //     bottom: hp(5),
-            //     flex:1
-            //   }}
-            //   onPress={() => switchStreamUrl()}
-            // >
-            //   <RTCView
-            //     style={{ height: "605%", width: "40%" }}
-            //     objectFit="cover"
-            //     streamURL={smallVideoTrack?.jitsiTrack?.stream.toURL()}
-            //   />
-            //   </TouchableOpacity>
-            // </View>
-            null : (
-              <View style={{ flex: 1 }}>
-                <Text style={{ color: "black", fontSize: 20 }}>
-                  GROUP VIDEO IS IN TESTING MODE
+                <Text
+                  style={{ color: "red", fontSize: 18, fontWeight: "bold" }}
+                >
+                  {formatTime(timerCount)}
                 </Text>
+              </View>
+            </View>
+          }
+        </View>
+      )}
+      {/* {<GallaryManager   />} */}
 
-                {/* <FlatList
-                  // numColumns={2}
-                  data={[{name:"d"},{name:"g"},{name:"4"}]}
-                  keyExtractor={(item) => item?.id}
-                  renderItem={(item) => <MultiParticipants item={item} />}
-                />  */}
-            {/* </View>  */}
-
-            {/* ""
-            )} */}
-          </>
-        )}
-      </View>
-
-      <View style={styles.bottomStyle}>
-        {/* <Image source={ic_msg} style={styles.avatarStyle} />
-        <Image source={ic_speaker_small} style={styles.avatarStyle} /> */}
-        {!voiceCall ? (
-          <TouchableOpacity
-            style={styles.avatarStyle}
-            onPress={() => dispatch(toggleCamera())}
-          >
-            <Image source={ic_camera_switch} />
-          </TouchableOpacity>
-        ) : null}
-
-        {voiceCall ? (
-          <TouchableOpacity
-            style={styles.avatarStyle}
-            onPress={() => enableSpeaker()}
-          >
-            <Image source={!speaker ? ic_speaker : ic_speaker_fill} />
-          </TouchableOpacity>
-        ) : null}
-        <TouchableOpacity
-          style={styles.avatarStyle}
-          onPress={() => hitHanupCall()}
-        >
-          <Image source={ic_endcall} />
-        </TouchableOpacity>
-        {!voiceCall ? (
-          <TouchableOpacity
-            style={styles.avatarStyle}
-            onPress={() => videoEnable()}
-          >
-            <Image source={enableVideo ? ic_video_off : ic_video_on} />
-          </TouchableOpacity>
-        ) : null}
-
-        <TouchableOpacity
-          style={styles.avatarStyle}
-          onPress={() => audioEnable()}
-        >
-          <Image source={enableAudio ? ic_mic_off : ic_mic_on} />
-        </TouchableOpacity>
-      </View>
+      <StatusBar />
     </SafeAreaView>
-  );
-};
-
-const MultiParticipants = ({ item: { item } }) => {
-  console.log("DENDER HO RHA HAI");
-  const { tracks, participants }: any = useSelector((state) => state);
-  // const bottomTabHeight = useBottomTabBarHeight();
-  // const adjustFlot = bottomTabHeight;
-  // const editwindowHeight = windowHeight - adjustFlot;
-  const parcipanLength = participants?.sortedRemoteParticipants?.length;
-
-  InCallManager.stopRingback();
-  let AllVideoTrack = getTrackByMediaTypeAndParticipant(
-    tracks,
-    MEDIA_TYPE.VIDEO,
-    item
-  );
-  return (
-    <View
-      style={{
-        // flex: 1,
-        // Adjust the factor (100) according to your preference
-        borderWidth: 10,
-        height: "100%",
-        width: "100%",
-      }}
-    >
-      <RTCView
-        style={{
-          height: "100%",
-          width: "100%",
-          backgroundColor: "pink",
-          borderWidth: 2,
-          borderColor: "red",
-        }}
-        objectFit="cover"
-        mirror={AllVideoTrack?.mirror}
-        streamURL={AllVideoTrack?.jitsiTrack?.stream.toURL()}
-      />
-
-      {/* <View
-        style={{ padding: 30, backgroundColor: "red", height: 200, width: 300 }}
-      ></View> */}
-    </View>
   );
 };
 

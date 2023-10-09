@@ -147,21 +147,21 @@ export const getBooleanValue = async (key) => {
   }
 };
 
-export const showLocallotification = async (remoteMessage) => {
-  console.log("inactiivvv====>>>>>", remoteMessage);
+// export const showLocallotification = async (remoteMessage) => {
+//   console.log("inactiivvv====>>>>>", remoteMessage);
 
-  const channelId = await notifee.createChannel({
-    id: "12345",
-    name: "Important Notifications",
-    importance: 4,
-  });
-  await notifee.displayNotification({
-    title: remoteMessage?.notification?.title,
-    body: remoteMessage?.notification?.body,
-    id: "12345",
-    data: remoteMessage.data,
-  });
-};
+//   const channelId = await notifee.createChannel({
+//     id: "12345",
+//     name: "Important Notifications",
+//     importance: 4,
+//   });
+//   await notifee.displayNotification({
+//     title: remoteMessage?.notification?.title,
+//     body: remoteMessage?.notification?.body,
+//     id: "12345",
+//     data: remoteMessage.data,
+//   });
+// };
 
 export const fromInActiveState = async (remoteMessage) => {
   console.log("inactiivvv====>>>>>", remoteMessage);

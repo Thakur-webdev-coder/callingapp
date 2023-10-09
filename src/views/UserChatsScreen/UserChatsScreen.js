@@ -790,7 +790,7 @@ const UserChatsScreen = ({ navigation, route }) => {
               style={{ flexDirection: "row", alignItems: "center" }}
               onPress={() => {
                 if (callData || groupName) {
-                  if (!groupName) {
+                  if (callData || groupName) {
                     checkPeermission("videoCall");
                   }
                 }

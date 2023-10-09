@@ -1070,6 +1070,32 @@ export function getParticipantById(state: any, id: string): any {
     return remote[id] || (local?.id === id ? local : undefined);
 }
 
+
+import GraphemeSplitter from 'grapheme-splitter';
+
+const splitter = new GraphemeSplitter();
+
+const wordSplitRegex = (/\s+|\.+|_+|;+|-+|,+|\|+|\/+|\\+|"+|'+|\(+|\)+|#+|&+/);
+
+function getFirstGraphemeUpper(word?: string) {
+    if (!word?.length) {
+        return '';
+    }
+
+    return splitter.splitGraphemes(word)[0].toUpperCase();
+}
+
+export function getInitials(s?: string) {
+    // We don't want to use the domain part of an email address, if it is one
+    const initialsBasis = _.split(s, '@')[0];
+    const [firstWord, secondWord] = initialsBasis.split(wordSplitRegex).filter(Boolean);
+
+    return getFirstGraphemeUpper(firstWord) + getFirstGraphemeUpper(secondWord);
+}
+
+
+
+
 /**
  * Determines whether a specific videoTrack should be rendered.
  *

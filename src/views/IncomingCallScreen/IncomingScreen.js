@@ -21,11 +21,15 @@ import { PERMISSIONS, requestMultiple } from "react-native-permissions";
 
 const IncomingScreen = ({ navigation, route }) => {
   const notificationData = route.params.callData;
-  const cameraPermissions = Platform.OS == 'ios' ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA;
-  const micPermissions = Platform.OS == 'ios' ? PERMISSIONS.IOS.MICROPHONE : PERMISSIONS.ANDROID.RECORD_AUDIO;
-   console.log('notificationData------>>>',notificationData);
+  const cameraPermissions =
+    Platform.OS == "ios" ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA;
+  const micPermissions =
+    Platform.OS == "ios"
+      ? PERMISSIONS.IOS.MICROPHONE
+      : PERMISSIONS.ANDROID.RECORD_AUDIO;
+  console.log("notificationData------>>>", notificationData);
   useEffect(() => {
-    checkPeermission()
+    checkPeermission();
     const handleAppStateChange = (nextAppState) => {
       if (nextAppState === "inactive") {
         rejectCall();
@@ -51,49 +55,66 @@ const IncomingScreen = ({ navigation, route }) => {
     };
   }, []);
 
-
-
   const checkPeermission = () => {
-    console.log('checkPeermission------->>>');
-    requestMultiple([cameraPermissions, micPermissions]).then((result) => {
-      console.log(result[cameraPermissions], result[micPermissions], 'result--------->>>', result);
+    console.log("checkPeermission------->>>");
+    requestMultiple([cameraPermissions, micPermissions])
+      .then((result) => {
+        console.log(
+          result[cameraPermissions],
+          result[micPermissions],
+          "result--------->>>",
+          result
+        );
 
-      if (result[cameraPermissions] !== 'granted' || result[micPermissions] !== 'granted') {
-        Alert.alert('Insufficient permissions!', 'You need to grant camera and Microphone access permissions to use this app.', [
-          { text: 'Okay', onPress: () => openAppSettings() }
-        ]);
-        rejectCall();
-        return false;
-        
-      } 
-    })
+        if (
+          result[cameraPermissions] !== "granted" ||
+          result[micPermissions] !== "granted"
+        ) {
+          Alert.alert(
+            "Insufficient permissions!",
+            "You need to grant camera and Microphone access permissions to use this app.",
+            [{ text: "Okay", onPress: () => openAppSettings() }]
+          );
+          rejectCall();
+          return false;
+        }
+      })
       .catch((error) => {
-        console.log('errr----', error);
+        console.log("errr----", error);
       });
   };
 
   const openAppSettings = () => {
-    if (Platform.OS === 'android') {
+    if (Platform.OS === "android") {
       Linking.openSettings();
     } else {
-      Linking.openURL('app-settings:')
+      Linking.openURL("app-settings:");
     }
   };
 
   const acceptCall = () => {
     InCallManager.stopRingtone();
-    navigation.navigate("CallScreen", {
-      voiceCall: notificationData?.Type == "A" ? true : false,
-      fromNotification: true,
-      callData: notificationData?.sender_phone,
-      meetimgUrl: notificationData?.Meeting_url,
-    });
+    if (notificationData?.notification_type === "group_call") {
+      navigation.navigate("GroupCallScreen", {
+        voiceCall: notificationData?.Type == "A" ? true : false,
+        fromNotification: true,
+        callData: notificationData?.sender_phone,
+        meetimgUrl: notificationData?.Meeting_url,
+      });
+    } else {
+      navigation.navigate("CallScreen", {
+        voiceCall: notificationData?.Type == "A" ? true : false,
+        fromNotification: true,
+        callData: notificationData?.sender_phone,
+        meetimgUrl: notificationData?.Meeting_url,
+      });
+    }
   };
 
   const rejectCall = () => {
     InCallManager.stopRingtone();
     hitHanupCall();
-     navigation.goBack();
+    navigation.goBack();
   };
 
   const hitHanupCall = async () => {
@@ -148,7 +169,7 @@ const IncomingScreen = ({ navigation, route }) => {
           flexDirection: "row",
           justifyContent: "space-around",
           marginTop: hp(20),
-          paddingBottom:hp(5)
+          paddingBottom: hp(5),
         }}
       >
         <TouchableOpacity onPress={() => acceptCall()}>

@@ -12,7 +12,6 @@ import {
   setCategories,
   setToken,
   showIncVoiceCall,
-  showLocallotification,
 } from "./commonUtils";
 import PushNotification, { Importance } from "react-native-push-notification";
 
@@ -53,6 +52,12 @@ export const showNotification = () => {
       navigations.navigate("IncomingScreen", {
         callData: remoteMessage?.data,
       });
+    } else if (remoteMessage?.data?.notification_type == "group_call") {
+      console.log("callll====s");
+      InCallManager.startRingtone();
+      navigations.navigate("IncomingScreen", {
+        callData: remoteMessage?.data,
+      });
     } else if (remoteMessage?.data?.notification_type === "SINGLE_CHAT") {
       console.log("insinglechat");
       getBooleanValue("isFocused").then((data) => {
@@ -78,6 +83,26 @@ export const showNotification = () => {
   // NOTIFICATION FORGROUND  SECTION ENDS =======>>>>>>>>>>>>
 
   // NOTIFICATION BACKGROUND  SECTION STARTS =======>>>>>>>>>>>>
+
+  notifee.onBackgroundEvent(async ({ type, detail }) => {
+    console.log(
+      detail?.notification?.android?.channelId,
+      "=========>>>267",
+      detail?.pressAction?.id
+    );
+    if (
+      detail?.pressAction?.id === "decline" &&
+      detail?.notification?.android?.channelId === "voicecallBcg"
+    ) {
+      rejectCall(callingData);
+    } else if (
+      detail?.pressAction?.id === "accept" &&
+      detail?.notification?.android?.channelId === "voicecallBcg"
+    ) {
+      acceptVoiceCall(callingData);
+      InCallManager.stopRingtone();
+    }
+  });
 
   messaging().setBackgroundMessageHandler(async (remoteMessage) => {
     console.log("BACKGROUND HANDLERE", remoteMessage);
@@ -155,6 +180,36 @@ export const showNotification = () => {
     }
   });
 };
+
+const showLocallotification = (remoteMessage) => {
+  console.log("sln------------------------------------------->>");
+  PushNotification.localNotification({
+    title: remoteMessage?.notification?.title,
+    message: remoteMessage?.notification?.body,
+    playSound: true,
+    soundName: "default",
+    importance: Importance.HIGH,
+    id: "12345",
+    channelId: "12345",
+    data: remoteMessage,
+  });
+};
+
+// const showLocallotification = async (remoteMessage) => {
+//   console.log("inactiivvv====>>>>>", remoteMessage);
+
+//   const channelId = await notifee.createChannel({
+//     id: "12345",
+//     name: "Important Notifications",
+//     importance: 4,
+//   });
+//   await notifee.displayNotification({
+//     title: remoteMessage?.notification?.title,
+//     body: remoteMessage?.notification?.body,
+//     id: "12345",
+//     data: remoteMessage.data,
+//   });
+// };
 
 const mesageViewnavigation = () => {
   if (myMesaggeNotification?.data?.notification_type === "SINGLE_CHAT") {
@@ -269,26 +324,6 @@ export const changelCreated = () => {
     vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
   });
 };
-
-notifee.onBackgroundEvent(async ({ type, detail }) => {
-  console.log(
-    detail?.notification?.android?.channelId,
-    "=========>>>267",
-    detail?.pressAction?.id
-  );
-  if (
-    detail?.pressAction?.id === "decline" &&
-    detail?.notification?.android?.channelId === "voicecallBcg"
-  ) {
-    rejectCall(callingData);
-  } else if (
-    detail?.pressAction?.id === "accept" &&
-    detail?.notification?.android?.channelId === "voicecallBcg"
-  ) {
-    acceptVoiceCall(callingData);
-    InCallManager.stopRingtone();
-  }
-});
 
 const acceptVoiceCall = (call) => {
   const SipCallID = Sip.getFormattedCallId(call);

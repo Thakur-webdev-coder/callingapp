@@ -8,7 +8,7 @@ import colors from "../../../assets/colors";
 export default StyleSheet.create({
   wrapper: {
     flex: 1,
-    height:'100%'
+    height: "100%",
     // flexDirection: "column",
   },
   backArrowBox: {
@@ -37,5 +37,11 @@ export default StyleSheet.create({
 
     // alignContent:'flex-end',
     // /backgroundColor:'red'
+  },
+
+  containerStyle: {
+    flex: 1,
+    backgroundColor: "rgb(240,240,240)",
+    // position: "relative"
   },
 });

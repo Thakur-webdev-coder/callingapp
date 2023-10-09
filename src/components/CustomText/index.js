@@ -14,11 +14,8 @@ const CustomText = ({
   padding,
   textColor,
   width,
-  marginLeft
+  marginLeft,
 }) => {
-
-
-  console.log(text,"============21")
   return (
     <Text
       style={[
@@ -29,20 +26,18 @@ const CustomText = ({
           paddingHorizontal: horzontalPadding,
           fontSize: textSize,
           alignSelf: alignText,
-          color:textColor,
-          padding:padding,
+          color: textColor,
+          padding: padding,
           fontWeight: fontWeight,
           color: textColor,
           width: width,
           paddingVertical: paddingVertical,
-          marginLeft:marginLeft,
-        
-
+          marginLeft: marginLeft,
         },
       ]}
       allowFontScaling={false}
     >
-      {text} 
+      {text}
     </Text>
   );
 };
