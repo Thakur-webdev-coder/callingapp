@@ -1,4 +1,4 @@
-package com.kokoafone;
+package com.ngvoice;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -29,7 +29,7 @@ MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "kokoafone";
+    return "ngvoice";
   }
 
   @Override

@@ -23,6 +23,7 @@ import {
 } from "react-native-responsive-screen";
 import { ic_app_logo } from "../../routes/imageRoutes";
 import Loading from "react-native-whc-loading";
+import LinearGradient from "react-native-linear-gradient";
 
 let phoneEncryptedCode = null;
 let countryEncryptedCode = null;
@@ -107,7 +108,11 @@ const VerificationScreen = ({ navigation }) => {
           source={ic_app_logo}
         />
       </View>
-
+      <LinearGradient
+      colors={['#FD2A46', '#F8B502']}
+      start={{ x: 0, y: 0.2 }}
+      end={{ x: 0, y: 1 }}
+      style={styles.gradient}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={styles.wrapper2}
@@ -137,7 +142,8 @@ const VerificationScreen = ({ navigation }) => {
 
           <CustomButton
             title={"Continue"}
-            primary
+            // primary
+            icon
             horzontalPadding={wp(15)}
             marginTop={hp(8)}
             onPress={() => hitCountryEncryptionApi()}
@@ -145,7 +151,7 @@ const VerificationScreen = ({ navigation }) => {
           />
         </ScrollView>
       </KeyboardAvoidingView>
-
+      </LinearGradient>
       <Loading loading={isLoading} />
       {/* </ScrollView> */}
     </SafeAreaView>

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.kokoafone">
+    package="com.ngvoice">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -56,7 +56,7 @@
               <category android:name="android.intent.category.BROWSABLE" />
 
               <!-- Define your deep link scheme here -->
-              <data android:scheme="kokoafone" android:host="deeplink"   />
+              <data android:scheme="ngvoice" android:host="deeplink"   />
           </intent-filter>
       </activity>
 
@@ -66,7 +66,7 @@
         android:exported="true"
             android:permission="TODO">
         <intent-filter>
-            <action android:name="com.kokoafone.CLOSE_SYSTEM_DIALOGS" />
+            <action android:name="com.ngvoice.CLOSE_SYSTEM_DIALOGS" />
         </intent-filter>
     </receiver>
 

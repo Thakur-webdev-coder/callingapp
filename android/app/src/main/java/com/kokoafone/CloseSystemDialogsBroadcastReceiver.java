@@ -1,4 +1,4 @@
-package com.kokoafone;
+package com.ngvoice;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

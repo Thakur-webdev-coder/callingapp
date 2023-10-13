@@ -18,9 +18,10 @@ export default StyleSheet.create({
       },
     }),
     // marginTop:  (Platform.OS === 'ios') ? 80 : 100,
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.redheader,
+    // backgroundColor:/'#FF0000',
     alignItems: "center",
-    justifyContent: "space-between",
+    // justifyContent: "space-between",
     padding: 15
   },
 

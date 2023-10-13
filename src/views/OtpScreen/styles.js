@@ -18,6 +18,10 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: colors.secondary,
   },
+  gradient:{
+    flex: 1,
+
+  },
   wrapper2: {
     backgroundColor: colors.white,
     flex: 1,

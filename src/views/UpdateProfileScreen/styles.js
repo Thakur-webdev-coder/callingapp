@@ -15,9 +15,15 @@ export default StyleSheet.create({
         justifyContent: 'center', alignItems: 'center'
     },
     wrapper2: {
-        backgroundColor: colors.secondary,
+        // backgroundColor: colors.secondary,
         flex: 2.5,
-        borderTopLeftRadius: 50
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30
+    },
+    gradient:{
+        flex: 2.5,
+        borderTopLeftRadius: 50,
+        // borderTopRightRadius: 50
     },
     imgContainer: {
         marginTop: hp(10),

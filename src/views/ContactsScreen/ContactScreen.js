@@ -18,6 +18,7 @@ import {
   ic_contact_avatar,
   ic_menu,
   logo_contact_kokoa,
+  logo_small_ngvoice
 } from "../../routes/imageRoutes";
 import styles from "./styles";
 import ContactList from "react-native-contacts";
@@ -310,7 +311,7 @@ const Contacts = ({ navigation }) => {
             </Text>
 
             {commonGivenNames.includes(item?.phoneNumbers[0]?.number) ? (
-              <Image source={logo_contact_kokoa} />
+              <Image source={logo_small_ngvoice} style={{marginLeft:-10}} />
             ) : null}
           </>
         ) : (
@@ -339,8 +340,8 @@ const Contacts = ({ navigation }) => {
               </Text>
             </View>
             <Image
-              source={logo_contact_kokoa}
-              style={{ alignSelf: "center" }}
+              source={logo_small_ngvoice}
+              style={{ alignSelf: 'center',marginLeft:-10 }}
             />
           </View>
         )}
@@ -414,7 +415,7 @@ const Contacts = ({ navigation }) => {
                     >
                       {"Sync Contacts"}
                     </Text>
-                    {/* <Text style={{ fontSize: 14, color: colors.black,fontWeight:'bold'  }}>{'Kokoafone Contacts'}</Text> */}
+                    {/* <Text style={{ fontSize: 14, color: colors.black,fontWeight:'bold'  }}>{'ngvoiceContacts'}</Text> */}
                   </MenuOption>
                   <MenuOption value={2}>
                     <Text
@@ -426,7 +427,7 @@ const Contacts = ({ navigation }) => {
                       }}
                     >
                       {!state.showkokaContact
-                        ? "Kokoafone Contacts"
+                        ? "Ngvoice Contacts"
                         : "All Contacts"}
                     </Text>
                   </MenuOption>

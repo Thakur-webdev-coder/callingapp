@@ -36,8 +36,14 @@ export default StyleSheet.create({
     backgroundColor: "pink",
   },
   wrapper2: {
-    backgroundColor: colors.secondary,
+    // backgroundColor: colors.secondary,
     flex: 1,
-    borderTopLeftRadius: 50,
+    borderTopLeftRadius: 30,
+        borderTopRightRadius: 30
   },
+  gradient:{
+    flex: 1,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+  }
 });

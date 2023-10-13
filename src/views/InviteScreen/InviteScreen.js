@@ -20,7 +20,7 @@ const InviteScreen = ({navigation}) => {
     try {
       const result = await Share.share({
         message:
-          "Join me on Kokoafone, download Kokoafone app https://play.google.com/store/apps/details?id=com.kokoafone",
+          "Join me on ngvoice, download ngvoice app https://play.google.com/store/apps/details?id=com.ngvoice",
       });
       if (result.action === Share.sharedAction) {
         console.log("Invited successfully");
@@ -51,7 +51,7 @@ const InviteScreen = ({navigation}) => {
       <View style={styles.inviteText}>
         <CustomText
           text={
-            "Join me on Kokoafone, download Kokoafone app https://play.google.com/store/apps/details?id=com.kokoafone"
+            "Join me on NG Voice, download NG Voice app https://play.google.com/store/apps/details?id=com.ngvoice"
           }
           textColor={colors.black}
           horzontalPadding={10}

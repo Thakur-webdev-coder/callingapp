@@ -1,4 +1,4 @@
-package com.kokoafone;
+package com.ngvoice;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

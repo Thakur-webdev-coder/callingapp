@@ -9,6 +9,12 @@ export default StyleSheet.create({
     wrapper2: {
         backgroundColor: colors.secondary,
         flex: 1,
-        borderTopLeftRadius: 50
-    }
+        borderTopLeftRadius: 50,
+        borderTopRightRadius: 50
+    },
+    gradient: {
+        flex: 1,
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30
+       },
 });

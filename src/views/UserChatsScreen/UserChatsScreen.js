@@ -787,22 +787,32 @@ const UserChatsScreen = ({ navigation, route }) => {
               />
             </TouchableOpacity>
             <TouchableOpacity
-              style={{ flexDirection: "row", alignItems: "center" }}
-              onPress={() => {
-                if (callData || groupName) {
-                  if (callData || groupName) {
-                    checkPeermission("videoCall");
-                  }
-                }
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginLeft: -7,
               }}
-            >
+              // onPress={() => {
+              //   if (callData || groupName) {
+              //     if (callData || groupName) {
+              //       checkPeermission("videoCall");
+              //     }
+              //   }
+              // }}
+              onPress={() => {
+                if (callData) {
+                  checkPeermission("videoCall");
+                } else {
+                  return null;
+                }
+              }}>
               <Image source={ic_videocall} />
               <CustomText
                 //fontWeight={"bold"}
                 text={"Video Call"}
                 textColor={colors.secondary}
                 textSize={22}
-                marginLeft={wp(3)}
+                marginLeft={wp(0)}
               />
             </TouchableOpacity>
             <TouchableOpacity

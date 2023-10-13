@@ -9,8 +9,9 @@ const windoWidth= Dimensions.get('window').width
 export default StyleSheet.create({
   toolBar: {
     flexDirection: "row",
+    backgroundColor:'#FF0000',
 
-    backgroundColor: colors.secondary,
+    // backgroundColor: colors.secondary,
     alignItems: "center",
     //justifyContent: "space-between",
     paddingVertical: hp(1.4),
@@ -69,7 +70,9 @@ export default StyleSheet.create({
     height: 40,
     width: 40,
     borderRadius: 20,
-    backgroundColor: colors.secondary,
+    // backgroundColor: colors.secondary,
+    backgroundColor:'#FF0000',
+
     justifyContent: "center",
   },
   voucherModalStyle: {
@@ -90,7 +93,7 @@ export default StyleSheet.create({
     marginTop: hp(40),
     justifyContent: "center",
 
-    //elevation: 5,
+    elevation: 5,
   },
   callBoxStyle: {
     flexDirection: "row",

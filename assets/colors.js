@@ -31,8 +31,9 @@ export default {
   offWhite: "#FDFDFD",
   borderBottomColor: "#0071D9",
 
-  //kokoafone
+  //ngvoice
   secondary: "#4D3E3E",
+  secondaryText: "#FD762A",
   searchBar:'#D9D9D9',
   searchBarTxt:"#919191",
   searchBar: "#D9D9D9",
@@ -41,6 +42,7 @@ export default {
   white: "#ffffff",
   backColor: "#F2F2F2",
   buttonColor: "#FF0000",
+  buttonTextColor:'#FB5630',
   grayColor: "#403F3F",
   shadowColor:"#b0b0b0",
   keypadColor:"#FAFAFA",
@@ -49,5 +51,7 @@ export default {
   lightBlack: "#010101",
   disableColor: "#FBFBFB",
   darkGray:'#888888',
-  modalcolor:'#f2f3f4'
+  modalcolor:'#f2f3f4',
+  buttonBlack:'#000000',
+  redheader:'#FF0000'
 };

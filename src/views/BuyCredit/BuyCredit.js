@@ -15,7 +15,7 @@ const BuyCredit = ({ navigation }) => {
   const { username, password, did } = useSelector(
     (store) => store.sliceReducer.loginDetails
   );
-  const URL = `https://billing.kokoafone.com/billing/customer/mobile_payment.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`;
+  const URL = `https://billing.nextgen.ng/billing/customer/mobile_payment.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`;
 
   const [isLoading, setIsLoading] = useState(false);
 

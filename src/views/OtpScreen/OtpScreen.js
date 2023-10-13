@@ -31,6 +31,7 @@ import { checkToken } from "../../utils/notificationHandler";
 import messaging from "@react-native-firebase/messaging";
 import { CommonActions } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import LinearGradient from "react-native-linear-gradient";
 let otpEncryptedCode = null;
 
 const OtpScreen = ({ navigation, route }) => {
@@ -154,7 +155,11 @@ const OtpScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView style={styles.wrapper}>
       {/* <View style={{flex: 0.2}}> */}
-
+      <LinearGradient
+      colors={['#FD2A46', '#F8B502']}
+      start={{ x: 0.2, y: 0 }}
+      end={{ x: 0.1, y: 0.2 }}
+      style={styles.gradient}>
       <CustomText
         text={"Enter OTP Here"}
         textColor={colors.white}
@@ -197,7 +202,8 @@ const OtpScreen = ({ navigation, route }) => {
 
         <CustomButton
           title={"Verify"}
-          primary
+          // primary
+          icon
           horzontalPadding={wp(15)}
           marginTop={hp(8)}
           onPress={
@@ -209,6 +215,7 @@ const OtpScreen = ({ navigation, route }) => {
         <CustomButton
           title={"Resend"}
           primary
+          icon
           horzontalPadding={wp(15)}
           marginTop={hp(2)}
           //disabled={counter != 0}
@@ -216,6 +223,7 @@ const OtpScreen = ({ navigation, route }) => {
         />
       </ScrollView>
       <Loading loading={isLoading} />
+      </LinearGradient>
     </SafeAreaView>
   );
 };

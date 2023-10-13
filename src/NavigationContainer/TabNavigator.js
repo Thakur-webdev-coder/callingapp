@@ -36,9 +36,9 @@ const TabNavigator = () => {
     });
 
     Sip.register({
-      websocket: "wss://billing.kokoafone.com:8089/ws",
+      websocket: "wss://billing.nextgen.ng:8089/ws",
       username: did + "_web",
-      domain: "billing.kokoafone.com",
+      domain: "billing.nextgen.ng",
       password,
       name: did,
     });
@@ -93,7 +93,9 @@ const TabNavigator = () => {
           );
         },
         tabBarStyle: {
-          backgroundColor: colors.secondary,
+          // backgroundColor: colors.secondary,
+          backgroundColor: "#000000",
+
           height: hp(10),
           paddingBottom: hp(2),
         },

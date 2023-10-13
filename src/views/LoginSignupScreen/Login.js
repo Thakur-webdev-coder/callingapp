@@ -11,6 +11,7 @@ import CustomText from "../../components/CustomText";
 import colors from "../../../assets/colors";
 import CustomButton from "../../components/CustomButton";
 import { VERIFY_SCREEN } from "../../routes/routeNames";
+import LinearGradient from "react-native-linear-gradient";
 
 const Login = ({ navigation }) => {
   return (
@@ -23,6 +24,11 @@ const Login = ({ navigation }) => {
         />
       </View>
       <View style={styles.wrapper2}>
+      <LinearGradient
+      colors={['#FD2A46', '#F8B502']}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
+      style={styles.gradient}>
         <CustomText
           text={"Login / Signup"}
           textColor={colors.white}
@@ -41,20 +47,22 @@ const Login = ({ navigation }) => {
         />
 
         <CustomButton
-          title={"Phone Number"}
-          primary
-          horzontalPadding={wp(15)}
-          marginTop={hp(3)}
-          onPress={() => navigation.navigate(VERIFY_SCREEN)}
-        />
+        title={"Continue"}
+        // primary
+        icon
+        horzontalPadding={wp(15)}
+        marginTop={hp(5)}
+        onPress={() => navigation.navigate(VERIFY_SCREEN)}
+      />
 
-        <CustomButton
+        {/*<CustomButton
           title={"Existing User Login"}
           primary
           horzontalPadding={wp(15)}
           marginTop={hp(1)}
           onPress={() => navigation.navigate("ExistingUserLoginScreen")}
-        />
+  />*/}
+  </LinearGradient>
       </View>
     </SafeAreaView>
   );

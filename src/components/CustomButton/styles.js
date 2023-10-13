@@ -15,4 +15,10 @@ export default StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
   },
+  icon:{
+    position:'absolute',
+    right:15,
+   top:15,
+  
+  }
 });

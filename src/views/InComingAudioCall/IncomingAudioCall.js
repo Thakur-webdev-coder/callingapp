@@ -91,8 +91,9 @@ const IncomingAudioCall = ({ navigation, route }) => {
           fontWeight: "bold",
         }}
       >
-        Test
-        {/* {notificationData?.Subject} */}
+      {callerName || callerExtention || "Unknown"}
+        {/*Test
+        {notificationData?.Subject} */}
       </Text>
       <Image
         source={ic_avatar}

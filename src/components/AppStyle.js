@@ -7,7 +7,7 @@ import {
 export default StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: colors.secondary,
+    // backgroundColor: colors.secondary,
     flexDirection: "column",
   },
   secondWrapper: {

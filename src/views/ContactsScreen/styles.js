@@ -67,8 +67,9 @@ export default StyleSheet.create({
   },
   toolBar: {
     flexDirection: "row",
+    backgroundColor:'#FF0000',
 
-    backgroundColor: colors.secondary,
+    // backgroundColor: colors.secondary,
     alignItems: "center",
     //justifyContent: "space-between",
     paddingVertical: hp(1.4),

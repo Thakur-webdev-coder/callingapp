@@ -13,8 +13,6 @@ import {
 import colors from "../../../assets/colors";
 import {
   logo_smallfrog,
-  ic_setting,
-  ic_app_logo,
   ic_call,
   ic_callrate,
   ic_phonebook,
@@ -33,6 +31,8 @@ import {
   ic_money,
   ic_transfer_credit,
   ic_tvrecharge,
+  ic_whyus,
+  logo_small_ngvoice
 } from "../../routes/imageRoutes";
 import styles from "./styles";
 import AppStyle from "../../components/AppStyle";
@@ -46,7 +46,6 @@ import { Show_Toast } from "../../utils/toast";
 import { useDispatch, useSelector } from "react-redux";
 import InCallManager from "react-native-incall-manager";
 import notifee from "@notifee/react-native";
-
 import {
   hitCreditTransferApi,
   hitEncryptionApi,
@@ -68,6 +67,7 @@ import {
   navigateScreen,
 } from "../../utils/notificationHandler";
 import PushNotification from "react-native-push-notification";
+import LinearGradient from "react-native-linear-gradient";
 
 let myBalanceData = null;
 let usernameEncryptedCode = null;
@@ -216,31 +216,41 @@ const Home = ({ navigation }) => {
     },
     {
       id: 7,
+      name: "Call Rates",
+      image: ic_callrate,
+    },
+    {
+      id: 8,
       name: "Mobile Money",
       image: ic_money,
     },
     {
-      id: 8,
+      id: 9,
       name: "Mobile Topup",
       image: ic_popup,
     },
     {
-      id: 9,
+      id: 10,
       name: "Data Bundle",
       image: ic_databundle,
     },
     {
-      id: 10,
+      id: 11,
       name: "Electricity Bill Pay",
       image: ic_electricity,
     },
     {
-      id: 11,
+      id: 12,
       name: "TV Recharge",
       image: ic_tvrecharge,
     },
     {
-      id: 12,
+      id: 13,
+      name: "Why Us",
+      image: ic_whyus,
+    },
+    {
+      id: 14,
       name: "Logout",
       image: ic_logout,
     },
@@ -278,20 +288,28 @@ const Home = ({ navigation }) => {
       name: "Call Details Report",
       image: ic_calldetails,
     },
-
     {
       id: 6,
+      name: "Call Rates",
+      image: ic_callrate,
+    },
+    {
+      id: 7,
       name: "Data Bundle",
       image: ic_databundle,
     },
-
     {
-      id: 7,
+      id: 8,
+      name: "Why Us",
+      image: ic_whyus,
+    },
+    {
+      id: 9,
       name: "Logout",
       image: ic_logout,
     },
     {
-      id: 8,
+      id: 10,
       name: "Delete Account",
       image: ic_logout,
     },
@@ -309,7 +327,7 @@ const Home = ({ navigation }) => {
 
       case "Buy Credits":
         navigation.navigate("WebViewScreen", {
-          url: `https://billing.kokoafone.com/billing/customer/mobile_payment.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
+          url: `https://billing.nextgen.ng/billing/customer/mobile_payment.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
           title: "Buy Credit",
         });
         break;
@@ -325,35 +343,50 @@ const Home = ({ navigation }) => {
       case "Call Details Report":
         navigation.navigate("CallReportsScreen");
         break;
-
+      case "Call Rates":
+        navigation.navigate("WebViewScreen", {
+          url: `https://billing.nextgen.ng/billing/customer/billing_mobile_money.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
+          title: "Call Rates",
+        });
+        break;
       case "Mobile Money":
         navigation.navigate("WebViewScreen", {
-          url: `https://billing.kokoafone.com/billing/customer/billing_mobile_money.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
+          url: `https://billing.nextgen.ng/billing/customer/billing_mobile_money.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
           title: "Mobile Money",
         });
         break;
 
       case "Mobile Topup":
         navigation.navigate("WebViewScreen", {
-          url: `https://billing.kokoafone.com/billing/customer/billing_airtime.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
+          url: `https://billing.nextgen.ng/billing/customer/billing_airtime.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
           title: "Mobile Topup",
         });
         break;
 
       case "Data Bundle":
         navigation.navigate("WebViewScreen", {
-          url: `https://billing.kokoafone.com/billing/customer/billing_databundles.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
+          url: ` https://billing.nextgen.ng/billing/customer/billing_data.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
           title: "Data Bundle",
         });
+        break;
       case "Electricity Bill Pay":
         navigation.navigate("WebViewScreen", {
-          url: `https://billing.kokoafone.com/billing/customer/billing_electricity_bill.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
+          url: `https://billing.nextgen.ng/billing/customer/billing_electricity.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
           title: "Electricity Bill Pay",
         });
+        break;
       case "TV Recharge":
         navigation.navigate("WebViewScreen", {
-          url: `https://billing.kokoafone.com/billing/customer/billing_dth.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
+          url: `https://billing.nextgen.ng/billing/customer/billing_television.php?pr_login=${did}&pr_password=${password}&mobiledone=submit_log`,
           title: "TV Recharge",
+        });
+        break;
+      case "Why Us":
+        navigation.navigate("WebViewScreen", {
+          // url: `https://billing.nextgen.ng/billing/customer/billing_mobile_money.php?pr_login=[login]&pr_password=${password}&mobiledone=submit_log`,
+          url: `https://www.nextgen.ng/`,
+
+          title: "Why Us",
         });
         break;
       case "Voucher Recharge":
@@ -549,9 +582,9 @@ const Home = ({ navigation }) => {
         onPress={() => ViewItemClicked_Method(item.name)}
         style={styles.linearGradient}
       >
-        <Image source={item.image} />
-        <CustomText
-          textColor={colors.secondary}
+      <Image source={item.image} style={{tintColor:'#FD2A46'}}/>
+      <CustomText
+          textColor={colors.secondaryText}
           textAlign={"center"}
           marginTop={hp(1)}
           text={item.name}
@@ -574,7 +607,11 @@ const Home = ({ navigation }) => {
               textSize={20}
             />
           </View>
-          <View style={styles.cardStyle}>
+          <LinearGradient
+          colors={['#FD2A46', '#F8B502']}
+          start={{ x: 0, y: 0.4 }}
+          end={{ x: 0, y: 1.2 }}
+          style={styles.cardStyle}>
             <CustomText
               text={"Registered Number"}
               textColor={colors.white}
@@ -604,10 +641,10 @@ const Home = ({ navigation }) => {
                 />
               </View>
               <View style={styles.imgView}>
-                <Image source={logo_small_kokoa} />
+              <Image source={logo_small_ngvoice} />
               </View>
             </View>
-          </View>
+          </LinearGradient>
         </View>
         <View style={styles.wrapper2}>
           {/* <TouchableOpacity onPress={()=>shownote()}> */}
@@ -686,7 +723,7 @@ const Home = ({ navigation }) => {
           >
             <View style={styles.rechargeModalStyle}>
               <CustomText
-                text={"Kokoafone"}
+                text={"NG voice"}
                 textSize={20}
                 fontWeight={"bold"}
                 textColor={colors.appColor}

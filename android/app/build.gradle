@@ -95,9 +95,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.kokoafone"
+    namespace "com.ngvoice"
     defaultConfig {
-        applicationId "com.kokoafone"
+        applicationId "com.ngvoice"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 2

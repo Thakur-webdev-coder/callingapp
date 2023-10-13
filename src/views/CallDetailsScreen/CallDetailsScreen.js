@@ -7,7 +7,7 @@ import {
   Modal,
   FlatList,
   Alert,
-  Linking
+  Linking,
 } from "react-native";
 import React, { useState } from "react";
 import styles from "./styles";
@@ -18,7 +18,7 @@ import {
   ic_phone,
   ic_phoneforward,
   ic_rightArror,
-  ic_video
+  ic_video,
 } from "../../routes/imageRoutes";
 import CommonHeader from "../../components/Header/commonHeader";
 import { useSelector } from "react-redux";
@@ -32,97 +32,113 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
-import { openSettings, PERMISSIONS, request, requestMultiple, RESULTS } from "react-native-permissions";
+import {
+  openSettings,
+  PERMISSIONS,
+  request,
+  requestMultiple,
+  RESULTS,
+} from "react-native-permissions";
 import NetInfo from "@react-native-community/netinfo";
 import InCallManager from "react-native-incall-manager";
-
+import LinearGradient from "react-native-linear-gradient";
 
 const CallDetailsScreen = ({ navigation, route }) => {
   //  const [ratesModal,setRatesModal]= useState(false)
   const [state, setState] = useState({
     isLoading: false,
     ratesModal: false,
-    ratesData: []
+    ratesData: [],
   });
-  const { Name, phoneNumber, isKokaContact,avatarImg } = route.params;
+  const { Name, phoneNumber, isKokaContact, avatarImg } = route.params;
 
   const { balanceDetail = {} } = useSelector((store) => store.sliceReducer);
   console.log("route.params--->0", route.params);
 
-  const cameraPermissions = Platform.OS == 'ios' ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA;
-  const micPermissions = Platform.OS == 'ios' ? PERMISSIONS.IOS.MICROPHONE : PERMISSIONS.ANDROID.RECORD_AUDIO;
+  const cameraPermissions =
+    Platform.OS == "ios" ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA;
+  const micPermissions =
+    Platform.OS == "ios"
+      ? PERMISSIONS.IOS.MICROPHONE
+      : PERMISSIONS.ANDROID.RECORD_AUDIO;
 
   const openAppSettings = () => {
-    if (Platform.OS === 'android') {
+    if (Platform.OS === "android") {
       Linking.openSettings();
     } else {
-      Linking.openURL('app-settings:')
+      Linking.openURL("app-settings:");
     }
   };
 
   const CallRatesMethod = async () => {
-    console.log('-----nnnnnnn----', phoneNumber);
+    console.log("-----nnnnnnn----", phoneNumber);
     const data = new FormData();
     data.append("search_number", phoneNumber);
 
-    setState({ isLoading: true })
-    hitCallRatesNewApi(data).then((myResponse) => {
-      setState({
-        isLoading: false,
-        ratesModal: true,
-        ratesData: myResponse?.data?.rates
+    setState({ isLoading: true });
+    hitCallRatesNewApi(data)
+      .then((myResponse) => {
+        setState({
+          isLoading: false,
+          ratesModal: true,
+          ratesData: myResponse?.data?.rates,
+        });
+        // setRatesModal(true)
+
+        console.log("---res-->>>>>", myResponse.data.rates);
+
+        // let txt = Rate[0]
+        // console.log('------aa-----',Rate[0])
+        // Alert.alert('',Rate[0])
       })
-      // setRatesModal(true)
-
-      console.log('---res-->>>>>', myResponse.data.rates)
-
-      // let txt = Rate[0]
-      // console.log('------aa-----',Rate[0])
-      // Alert.alert('',Rate[0])
-    })
       .catch((err) => {
-        setState({ isLoading: false })
-        console.log('---res-->>>>>', err)
-      })
-  }
+        setState({ isLoading: false });
+        console.log("---res-->>>>>", err);
+      });
+  };
 
   const checkPeermission = (callType) => {
-    console.log('checkPeermission------->>>',callType);
-    requestMultiple([cameraPermissions, micPermissions]).then((result) => {
-      console.log(result[cameraPermissions], result[micPermissions], 'result--------->>>', result);
+    console.log("checkPeermission------->>>", callType);
+    requestMultiple([cameraPermissions, micPermissions])
+      .then((result) => {
+        console.log(
+          result[cameraPermissions],
+          result[micPermissions],
+          "result--------->>>",
+          result
+        );
 
-      if (result[cameraPermissions] !== 'granted' || result[micPermissions] !== 'granted') {
-        Alert.alert('Insufficient permissions!', 'You need to grant camera and Microphone access permissions to use this app.', [
-          { text: 'Okay', onPress: () => openAppSettings() }
-        ]);
-        return false;
-        
-      } else {
-        NetInfo.fetch().then((status)=>{
-          if(status.isConnected){
-            console.log('status.isConnected------>>>',status.isConnected);
-            callType =='voiceCall'?
-            navigation.navigate("CallScreen", {
-              voiceCall: true,
-              callData: phoneNumber,
-              
-            }):
-            navigation.navigate("CallScreen", {
-              voiceCall: false,
-              callData: phoneNumber,
-            
-            })
-          }else{
-            Show_Toast(
-              "Check your data connection and try again."
-            );
-          }
-        })
-       
-      }
-    })
+        if (
+          result[cameraPermissions] !== "granted" ||
+          result[micPermissions] !== "granted"
+        ) {
+          Alert.alert(
+            "Insufficient permissions!",
+            "You need to grant camera and Microphone access permissions to use this app.",
+            [{ text: "Okay", onPress: () => openAppSettings() }]
+          );
+          return false;
+        } else {
+          NetInfo.fetch().then((status) => {
+            if (status.isConnected) {
+              console.log("status.isConnected------>>>", status.isConnected);
+              callType == "voiceCall"
+                ? navigation.navigate("CallScreen", {
+                    voiceCall: true,
+                    callData: phoneNumber,
+                  })
+                : navigation.navigate("CallScreen", {
+                    voiceCall: false,
+                    callData: phoneNumber,
+                  });
+            } else {
+              Show_Toast("Check your data connection and try again.");
+            }
+          });
+        }
+      })
       .catch((error) => {
-        console.log('errr----', error);
+        console.log("errr----", error);
       });
   };
 
@@ -138,7 +154,6 @@ const CallDetailsScreen = ({ navigation, route }) => {
             textSize={18}
             fontWeight={"bold"}
             textColor={colors.appColor}
-
           />
           <CustomText
             text={destination}
@@ -154,7 +169,6 @@ const CallDetailsScreen = ({ navigation, route }) => {
             textSize={18}
             fontWeight={"bold"}
             textColor={colors.appColor}
-
           />
           <CustomText
             text={rate}
@@ -172,41 +186,67 @@ const CallDetailsScreen = ({ navigation, route }) => {
       <View style={AppStyle.homeMainView}>
         <CommonHeader
           headerText={"Contacts Details"}
-          onPress={() => navigation.goBack()} />
+          onPress={() => navigation.goBack()}
+        />
 
         <View style={styles.mainView}>
           <View style={styles.container_view}>
-            <Image style={styles.imgstyle} source={avatarImg?{ uri: avatarImg }: ic_contact_avatar} />
+            <Image
+              style={styles.imgstyle}
+              source={avatarImg ? { uri: avatarImg } : ic_contact_avatar}
+            />
             <Text style={styles.textStyle}>{Name}</Text>
           </View>
 
           <View style={styles.container_view2}>
             <View>
               <TouchableOpacity
-                onPress={() =>
-                  checkPeermission('voiceCall')
-                 
-                }
+                onPress={() => checkPeermission("voiceCall")}
                 disabled={isKokaContact}
-
               >
-                <View style={[styles.imgBoxStyle, { backgroundColor: !isKokaContact ? '#4D3E3E' : 'rgba(77, 62, 62, 0.6)' }]}>
+                {/*  <View style={[styles.imgBoxStyle, { backgroundColor: !isKokaContact ? '#4D3E3E' : 'rgba(77, 62, 62, 0.6)' }]}>
                   <Image source={ic_phone} />
-                </View>
+              </View>*/}
+                <LinearGradient
+                  colors={["#FD2A46", "#F8B502"]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 0, y: 1 }}
+                  style={styles.gradient}
+                >
+                  <View
+                    style={[
+                      styles.imgBoxStyle,
+                      // { backgroundColor: !isKokaContact ? '#4D3E3E' : 'rgba(77, 62, 62, 0.6)' }
+                    ]}
+                  >
+                    <Image source={ic_phone} />
+                  </View>
+                </LinearGradient>
                 <Text style={styles.iconTilteStle}>Call</Text>
               </TouchableOpacity>
             </View>
 
             <View>
               <TouchableOpacity
-                onPress={() =>
-                  checkPeermission('videoCall')
-                }
+                onPress={() => checkPeermission("videoCall")}
                 disabled={isKokaContact}
               >
-                <View style={[styles.imgBoxStyle, { backgroundColor: !isKokaContact ? "#4D3E3E" : 'rgba(77, 62, 62, 0.6)' }]}>
-                  <Image source={ic_video} />
-                </View>
+                <LinearGradient
+                  colors={["#FD2A46", "#F8B502"]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 0, y: 1 }}
+                  style={styles.gradient}
+                >
+                  <View
+                    style={[
+                      styles.imgBoxStyle,
+                      // { backgroundColor: !isKokaContact ? "#4D3E3E" : 'rgba(77, 62, 62, 0.6)' }
+                    ]}
+                  >
+                    <Image source={ic_video} />
+                  </View>
+                </LinearGradient>
+
                 <Text style={styles.iconTilteStle}>Video</Text>
               </TouchableOpacity>
             </View>
@@ -217,15 +257,25 @@ const CallDetailsScreen = ({ navigation, route }) => {
                   navigation.navigate("UserChatsScreen", {
                     Name: Name,
                     callData: phoneNumber,
-
                   })
                 }
                 disabled={isKokaContact}
               >
-                <View style={[styles.imgBoxStyle, { backgroundColor: !isKokaContact ? "#4D3E3E" : 'rgba(77, 62, 62, 0.6)' }]}>
-                  <Image source={ic_double_chat} />
-                </View>
-
+                <LinearGradient
+                  colors={["#FD2A46", "#F8B502"]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 0, y: 1 }}
+                  style={styles.gradient}
+                >
+                  <View
+                    style={[
+                      styles.imgBoxStyle,
+                      // { backgroundColor: !isKokaContact ? "#4D3E3E" : 'rgba(77, 62, 62, 0.6)' }
+                    ]}
+                  >
+                    <Image source={ic_double_chat} />
+                  </View>
+                </LinearGradient>
                 <Text style={styles.iconTilteStle}>Chat</Text>
               </TouchableOpacity>
             </View>
@@ -233,43 +283,40 @@ const CallDetailsScreen = ({ navigation, route }) => {
             <View>
               <TouchableOpacity
                 onPress={() => {
-
-
-
-                
-                  NetInfo.fetch().then((status)=>{
-                    if(status.isConnected){
+                  NetInfo.fetch().then((status) => {
+                    if (status.isConnected) {
                       if (balanceDetail.credit > 0) {
-                        if(Sip.isRegistered){
+                        if (Sip.isRegistered) {
                           InCallManager.startRingback();
-                          console.log('inhererrere------->>>><<<<<');
-                        Sip.makeCall(phoneNumber.replace(/ /g, ''));
-                        navigation.navigate("CallingScreen", {
-                          callData: { name: Name },
-                          avatarImg:avatarImg
-                        });
-                      }else{
-                        Show_Toast(
-                          "Something went wrong. Please wait..."
-                        );
-                      }
+                          console.log("inhererrere------->>>><<<<<");
+                          Sip.makeCall(phoneNumber.replace(/ /g, ""));
+                          navigation.navigate("CallingScreen", {
+                            callData: { name: Name },
+                            avatarImg: avatarImg,
+                          });
+                        } else {
+                          Show_Toast("Something went wrong. Please wait...");
+                        }
                       } else {
                         Show_Toast(
                           "Insufficient balance. Please recharge your account."
                         );
                       }
-                    }else {
-                      Show_Toast(
-                        "Check your data connection and try again."
-                      );
+                    } else {
+                      Show_Toast("Check your data connection and try again.");
                     }
-                  })
-              
+                  });
                 }}
               >
+              <LinearGradient
+              colors={['#FD2A46', '#F8B502']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 0, y: 1 }}
+              style={styles.gradient}>
                 <View style={styles.imgBoxStyle}>
                   <Image source={ic_phoneforward} />
                 </View>
+                </LinearGradient>
                 <Text style={styles.iconTilteStle}> paid call</Text>
               </TouchableOpacity>
             </View>
@@ -282,7 +329,8 @@ const CallDetailsScreen = ({ navigation, route }) => {
           </View>
           <TouchableOpacity
             style={styles.arrowRatesBox}
-            onPress={() => CallRatesMethod()}>
+            onPress={() => CallRatesMethod()}
+          >
             <Text style={styles.textStyle}>Rates</Text>
             <Image style={{ marginTop: 5 }} source={ic_rightArror} />
           </TouchableOpacity>
@@ -302,7 +350,7 @@ const CallDetailsScreen = ({ navigation, route }) => {
           </View>
         </Modal> */}
 
-        {state.ratesModal &&
+        {state.ratesModal && (
           <Modal
             animationIn="slideInUp"
             animationOut="slideOutDown"
@@ -314,7 +362,8 @@ const CallDetailsScreen = ({ navigation, route }) => {
               <FlatList
                 data={state?.ratesData}
                 // keyExtractor={keyExtractor}
-                renderItem={renderItem} />
+                renderItem={renderItem}
+              />
               <TouchableOpacity onPress={() => setState({ ratesModal: false })}>
                 <CustomText
                   text={"OK"}
@@ -325,10 +374,9 @@ const CallDetailsScreen = ({ navigation, route }) => {
                   textAlign={"right"}
                 />
               </TouchableOpacity>
-
             </View>
           </Modal>
-        }
+        )}
         <Loading loading={state.isLoading} />
       </View>
     </SafeAreaView>

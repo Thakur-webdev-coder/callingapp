@@ -122,7 +122,7 @@ const SelectScreen = ({ navigation, route }) => {
               color: colors.black,
             }}
           >
-            No KokoaFone Users Found!
+            No NG Voice Users Found!
           </Text>
         </View>
       )}

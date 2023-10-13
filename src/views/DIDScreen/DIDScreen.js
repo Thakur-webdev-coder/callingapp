@@ -40,7 +40,7 @@ const DIDScreen = ({ navigation, route }) => {
       <View style={styles.wrapper}>
         <Image style={styles.logoStyle} source={ic_app_logo} />
         <CustomText
-          text={"Kokoafone DID"}
+          text={"NG Voice DID"}
           textColor={colors.black}
           textSize={29}
           fontWeight={"bold"}
@@ -51,7 +51,7 @@ const DIDScreen = ({ navigation, route }) => {
 
         <CustomButton
           onPress={() => hitAssignDidApi()}
-          primary
+          // primary
           title={"Auto Assign DID"}
           horzontalPadding={wp(12)}
           marginTop={hp(7)}

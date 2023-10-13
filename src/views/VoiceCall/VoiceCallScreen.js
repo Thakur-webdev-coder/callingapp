@@ -33,6 +33,9 @@ import {
   ic_speaker_small,
   ic_video_off,
   ic_video_on,
+  ic_speakerred,
+  ic_micred,
+  ic_chatng,
 } from '../../routes/imageRoutes';
 import CustomText from '../../components/CustomText';
 import {
@@ -216,9 +219,9 @@ const CallScreen = ({ navigation, route }) => {
   };
 
   const hitHanupCall = async () => {
+    InCallManager.stopRingback();
     const data = new FormData();
     data.append('receiver_number', callData);
-
     console.log('dataasfhas -->', data);
     hithangUpCallApi(data).then((response) => {
       disconnectMeeting();
@@ -423,23 +426,38 @@ const CallScreen = ({ navigation, route }) => {
         <View style={styles.bottomStyle}>
           {/* <Image source={ic_msg} style={styles.avatarStyle} />
         <Image source={ic_speaker_small} style={styles.avatarStyle} /> */}
+        <Image
+        source={ic_chatng}
+        style={[styles.avatarStyle, { height: 48, width: 45 }]}
+      />
+      <TouchableOpacity
+      style={styles.avatarStyle}
+      onPress={() => enableSpeaker()}
+    >
+      <Image
+        source={!speaker ? ic_speaker : ic_speakerred}
+        style={{ height: 50, width: 50 }}
+      />
+    </TouchableOpacity>
+      
           {!voiceCall ? (
             <TouchableOpacity
               style={styles.avatarStyle}
               onPress={() => dispatch(toggleCamera())}
             >
-              <Image source={ic_camera_switch} />
+              <Image source={ic_camera_switch} style={{ height: 50, width: 50 }}
+              />
             </TouchableOpacity>
           ) : null}
 
-          {voiceCall ? (
+        {/*}  {voiceCall ? (
             <TouchableOpacity
               style={styles.avatarStyle}
               onPress={() => enableSpeaker()}
             >
               <Image source={!speaker ? ic_speaker : ic_speaker_fill} />
             </TouchableOpacity>
-          ) : null}
+        ) : null}*/}
           <TouchableOpacity
             style={styles.avatarStyle}
             onPress={() => hitHanupCall()}
@@ -451,7 +469,8 @@ const CallScreen = ({ navigation, route }) => {
               style={styles.avatarStyle}
               onPress={() => videoEnable()}
             >
-              <Image source={enableVideo ? ic_video_off : ic_video_on} />
+              <Image source={enableVideo ? ic_video_off : ic_video_on}
+              style={{ height: 50, width: 50 }} />
             </TouchableOpacity>
           ) : null}
 
@@ -459,7 +478,8 @@ const CallScreen = ({ navigation, route }) => {
             style={styles.avatarStyle}
             onPress={() => audioEnable()}
           >
-            <Image source={enableAudio ? ic_mic_off : ic_mic_on} />
+            <Image source={enableAudio ? ic_micred : ic_mic_on}
+            style={{ height: 40, width: 40 }} />
           </TouchableOpacity>
         </View>
       </View>

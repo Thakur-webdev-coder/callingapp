@@ -1,13 +1,14 @@
 import { Image, SafeAreaView, TextInput, View } from "react-native";
 import React from "react";
 import styles from "./styles";
-import { ic_app_logo } from "../../routes/imageRoutes";
+import { ic_app_logo,ic_upadteimg } from "../../routes/imageRoutes";
 import CustomText from "../../components/CustomText";
 import colors from "../../../assets/colors";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+import LinearGradient from "react-native-linear-gradient";
 import { CustomButton } from "../../components";
 const UpdateProfile = ({ navigation }) => {
   return (
@@ -16,12 +17,19 @@ const UpdateProfile = ({ navigation }) => {
         <Image source={ic_app_logo} />
       </View>
       <View style={styles.wrapper2}>
+      <LinearGradient
+      colors={['#FD2A46', '#F8B502']}
+      start={{ x: 0, y: 0.5 }}
+      end={{ x: 0, y: 1 }}
+      style={styles.gradient}>
         {/* <View style={styles.imgContainer}> */}
         <Image
           style={styles.profileImg}
-          source={{
-            uri: "https://images.dpsmiles.net/bts-kpop-bt21-zpp3k.webp",
-          }}
+          source={ic_upadteimg}
+
+          // source={{
+          //   uri: "https://images.dpsmiles.net/bts-kpop-bt21-zpp3k.webp",
+          // }}
         />
         {/* </View> */}
         <CustomText
@@ -39,7 +47,7 @@ const UpdateProfile = ({ navigation }) => {
         />
 
         <CustomText
-          text={"This name will visible to Kokoafone Contacts "}
+          text={"This name will visible to Ngvoice Contacts "}
           textColor={colors.white}
           textSize={22}
           marginTop={hp(5)}
@@ -48,11 +56,12 @@ const UpdateProfile = ({ navigation }) => {
 
         <CustomButton
           onPress={() => navigation.navigate("DIDScreen")}
-          primary
+          // primary
           title={"Save"}
           horzontalPadding={wp(18)}
           marginTop={hp(4)}
         />
+        </LinearGradient>
       </View>
     </SafeAreaView>
   );

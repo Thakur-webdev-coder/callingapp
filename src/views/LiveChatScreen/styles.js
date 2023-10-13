@@ -69,7 +69,9 @@ export default StyleSheet.create({
     height: 70,
     width: 70,
     borderRadius: 40,
-    backgroundColor: colors.secondary,
+    backgroundColor:'#FF0000',
+
+    // backgroundColor: colors.secondary,
     justifyContent: "center",
     position: "absolute",
     bottom: 10,

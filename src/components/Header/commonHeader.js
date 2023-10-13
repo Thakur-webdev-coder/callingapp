@@ -10,10 +10,11 @@ import CustomImage from "../CustomImage";
 const CommonHeader = ({ headerText, paddingHorizontal,onPress }) => {
   return (
     <View style={[styles.toolBar, { paddingHorizontal: paddingHorizontal }]}>
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity onPress={onPress} style={{ marginRight:12}}>
         <CustomImage
         imgSrc={ic_back}
         padding={10}
+       
          />
       </TouchableOpacity>
       <CustomText

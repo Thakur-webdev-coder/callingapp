@@ -99,8 +99,9 @@ export default StyleSheet.create({
   },
   toolBar: {
     flexDirection: "row",
+    backgroundColor:'#FF0000',
 
-    backgroundColor: colors.secondary,
+    // backgroundColor: colors.secondary,
     alignItems: "center",
     //justifyContent: "space-between",
     paddingVertical: hp(1.4),
@@ -134,11 +135,13 @@ export default StyleSheet.create({
     height: 70,
     width: 70,
     borderRadius: 40,
-    backgroundColor: colors.secondary,
+    // backgroundColor: colors.secondary,
     justifyContent: "center",
     position: "absolute",
     bottom: 20,
     right: 20,
     margin: 20,
+    backgroundColor:'#FF0000',
+
   },
 });

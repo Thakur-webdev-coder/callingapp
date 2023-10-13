@@ -1,5 +1,5 @@
 {
-  "name": "kokoafone",
+  "name": "ngvoice",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -46,7 +46,7 @@
     "react-native-document-picker": "^8.2.0",
     "react-native-incall-manager": "^4.0.1",
     "react-native-keep-awake": "^4.0.0",
-    "react-native-linear-gradient": "^2.6.2",
+    "react-native-linear-gradient": "^2.8.3",
     "react-native-localize": "^2.2.4",
     "react-native-modal": "^13.0.1",
     "react-native-otp-textinput": "^1.0.0",

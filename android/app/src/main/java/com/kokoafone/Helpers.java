@@ -1,4 +1,4 @@
-package com.kokoafone;
+package com.ngvoice;
 
 
 import android.content.Intent;
@@ -25,7 +25,7 @@ public class Helpers extends ReactContextBaseJavaModule {
     @ReactMethod
    public void openApp() {
         try {
-            Intent newIntent = new Intent(getReactApplicationContext(), Class.forName("com.kokoafone.MainActivity"));
+            Intent newIntent = new Intent(getReactApplicationContext(), Class.forName("com.ngvoice.MainActivity"));
             newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             Log.d("----openApp---", "success---");
             getReactApplicationContext().startActivity(newIntent);

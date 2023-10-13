@@ -20,6 +20,7 @@ import {
   ic_back,
   ic_contact_avatar,
   ic_tick,
+  ic_chat_search,
 } from "../../routes/imageRoutes";
 import { hitGetRegisteredNumberApi } from "../../constants/APi";
 import { useSelector } from "react-redux";
@@ -85,11 +86,14 @@ const StartChatScreen = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image source={ic_back} />
         </TouchableOpacity>
-
+        <View style={{flexDirection:'row',marginHorizontal:10,width:160}}>
+        <TouchableOpacity style={{marginRight:25}}>
+        <Image source={ic_chat_search} style={{height:30,width:30}}/>
+      </TouchableOpacity>
         <Text style={{ color: colors.white, fontWeight: "bold", fontSize: 20 }}>
           Start Chat
         </Text>
-        <View></View>
+        </View>
       </View>
       {kokoaContacts.length > 0 ? (
         <FlatList
@@ -112,7 +116,7 @@ const StartChatScreen = ({ navigation }) => {
               color: colors.black,
             }}
           >
-            No KokoaFone Users Found!
+            No NG Voice Users Found!
           </Text>
         </View>
       )}
@@ -126,6 +130,8 @@ const StartChatScreen = ({ navigation }) => {
             alignSelf: "center",
             height: 30,
             width: 30,
+            tintColor:'#fff'
+
           }}
           source={ic_AddGroup}
         />

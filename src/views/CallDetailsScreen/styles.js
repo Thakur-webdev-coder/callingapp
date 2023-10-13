@@ -40,7 +40,14 @@ export default StyleSheet.create({
     marginHorizontal: wp(5),
     fontWeight: '600'
   }, imgBoxStyle: {
-    backgroundColor: colors.secondary,
+    // backgroundColor: colors.secondary,
+    height: 70,
+    width: 70,
+    borderRadius: 40,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  gradient:{
     height: 70,
     width: 70,
     borderRadius: 40,

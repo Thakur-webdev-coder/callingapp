@@ -33,12 +33,14 @@ export default StyleSheet.create({
   },
   bottomRowStyle: {
     flex: 0.5,
-    backgroundColor: colors.secondary,
+    // backgroundColor: colors.secondary,
     flexDirection: "row",
     justifyContent: "space-between",
     // marginTop: hp(5),
     paddingHorizontal: wp(6),
-    paddingVertical:hp(1)
+    paddingVertical:hp(1),
+    backgroundColor:'#FF0000',
+
 
   },
   linearGradient: {

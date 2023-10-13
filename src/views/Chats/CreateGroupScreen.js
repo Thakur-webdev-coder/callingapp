@@ -144,7 +144,7 @@ const CreateGroup = ({ navigation }) => {
         {/* {!state?.search ? <View style={styles.nameContainer}>
           <Text style={styles.textStyleToolbar}>Contacts</Text>
         </View> : */}
-        <Text style={{ color: colors.white, fontWeight: "bold", fontSize: 20 }}>
+        <Text style={{ color: colors.white, fontWeight: "bold", fontSize: 20,marginHorizontal:15 }}>
           Create Group
         </Text>
         {/* } */}
@@ -188,7 +188,7 @@ const CreateGroup = ({ navigation }) => {
               color: colors.black,
             }}
           >
-            No KokoaFone Users Found!
+            No NG Voice Users Found!
           </Text>
         </View>
       )}

@@ -77,7 +77,7 @@ const CallingScreen = ({ navigation, route }) => {
     data.append("receiver_phone", callData);
     data.append("sender_phone", username);
     const apiUrl =
-      "https://billing.kokoafone.com/billing/kokofone_api/call_notification/silent_audio_notification.php";
+    "https://billing.nextgen.ng/billing/nextgen_api/call_notification/audio_notification.php";
     postFormData(apiUrl, data)
       .then((data) => {
   

@@ -267,7 +267,7 @@ const Keypad = ({ navigation }) => {
         </View>
         <View style={[styles.bottomRowStyle]}>
           <TouchableOpacity onPress={() => GetContacts(state?.dialedNumber)}>
-            <Image style={styles.bottomImgStyle} source={ic_people} />
+          <Image style={[styles.bottomImgStyle,{tintColor:'#000'}]} source={ic_people} />
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -309,7 +309,7 @@ const Keypad = ({ navigation }) => {
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => BackSpaceMethod()}>
-            <Image style={styles.bottomImgStyle} source={ic_delete} />
+          <Image style={[styles.bottomImgStyle,{tintColor:'#000'}]} source={ic_delete}  />
           </TouchableOpacity>
         </View>
       </View>

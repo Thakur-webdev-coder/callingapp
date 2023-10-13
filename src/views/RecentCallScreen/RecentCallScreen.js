@@ -61,14 +61,28 @@ const RecentCall = ({ navigation }) => {
     );
   };
   const renderItem = ({ item }) => (
+    // const formatPhoneNumber = (phoneNumber) => {
+    //   try {
+    //     const parsedPhoneNumber = parsePhoneNumber(phoneNumber);
+    //     if (parsedPhoneNumber && parsedPhoneNumber.isValid()) {
+    //       return parsedPhoneNumber.formatInternational();
+    //     }
+    //     return "Invalid Phone Number";
+    //   } catch (error) {
+    //     console.error("Phone number parsing error:", error);
+    //     return "Invalid Phone Number";
+    //   }
+    // };
     <View style={styles.flatListStyle}>
       <View style={styles.linearGradient}>
         <Image style={styles.imgstyle} source={ic_contact_avatar} />
       </View>
       <View style={styles.userDetailView}>
         <Text style={styles.nameTxtStyle}>
-          {" "}
-          {parsePhoneNumber("+" + item.called_user).formatInternational()}
+          {/*}  {" "}
+  {parsePhoneNumber("+" + item.called_user).formatInternational()}*/}
+          {/* {parsePhoneNumber("+" + item.called_user)}*/}
+          {"+" + item.called_user || "Not Found"}
         </Text>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Image source={ic_recent} />

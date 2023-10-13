@@ -113,6 +113,7 @@ const IncomingScreen = ({ navigation, route }) => {
 
   const rejectCall = () => {
     InCallManager.stopRingtone();
+    InCallManager.stopRingback();
     hitHanupCall();
     navigation.goBack();
   };

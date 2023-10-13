@@ -64,7 +64,7 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   headerStyle:{
-    backgroundColor: colors.secondary,
+    backgroundColor: "#FF0000",
     alignItems: "center",
     justifyContent: "space-between",
     padding: 15

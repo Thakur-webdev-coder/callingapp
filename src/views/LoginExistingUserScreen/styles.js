@@ -18,7 +18,8 @@ export default StyleSheet.create({
   wrapper2: {
     backgroundColor: colors.secondary,
     flex: 0.7,
-    borderTopLeftRadius: 50,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30
   },
   imgContainer: {
     marginTop: hp(10),

@@ -3,7 +3,9 @@ import { io } from "socket.io-client";
 import { Store } from "../redux";
 import { setChatMessage, setChatRoom } from "../redux/reducer";
 let socket = null;
-let SOCKET_URL = "wss://dev.cap-tek.com:9095";
+// let SOCKET_URL = "wss://dev.cap-tek.com:9095";
+let SOCKET_URL = "wss://dev.cap-tek.com:9096";
+
 console.log("SOCKET_URL--------", SOCKET_URL);
 export const _socketConnect = (paramObj) => {
   console.log("in manager--------", paramObj);

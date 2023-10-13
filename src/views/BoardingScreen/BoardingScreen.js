@@ -109,14 +109,11 @@ const BoardingScreen = ({ navigation }) => {
             >
               Agree to{" "}
             </Text>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("WebViewScreen", {
-                  url: `https://billing.kokoafone.com/privacy-policy.html`,
-                  title: "Privacy Policy",
-                })
-              }
-            >
+            <TouchableOpacity onPress={()=>navigation.navigate('WebViewScreen', {
+              url: `https://billing.nextgen.ng/privacy-policy.html`,
+  
+              title: 'Privacy Policy',
+            })}>
               <Text style={{ color: colors.buttonColor }}>Privacy Policy</Text>
             </TouchableOpacity>
           </View>
